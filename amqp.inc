@@ -34,10 +34,9 @@ class AMQPException extends Exception
         $this->amqp_reply_text = $reply_text;
         $this->amqp_method_sig = $method_sig;
 
-        global $METHOD_NAME_MAP;
         $ms=methodSig($method_sig);
-        if(array_key_exists($ms, $METHOD_NAME_MAP))
-            $mn = $METHOD_NAME_MAP[$ms];
+        if(array_key_exists($ms, AbstractChannel::$GLOBAL_METHOD_NAMES))
+            $mn = AbstractChannel::$GLOBAL_METHOD_NAMES[$ms];
         else
             $mn = "";
         $this->args = array(
@@ -66,8 +65,20 @@ class AMQPChannelException extends AMQPException
 
 }
 
+class AbstractChannel
+{
+    private static $CONTENT_METHODS = array(
+        "60,60", // Basic.deliver
+        "60,71", // Basic.get_ok
+    );
+    
+    private static $CLOSE_METHODS = array(
+        "10,60", // Connection.close
+        "20,40", // Channel.close
+    );
 
-$METHOD_NAME_MAP = array(
+    // All the method names
+    public static $GLOBAL_METHOD_NAMES = array(
     "10,10" => "Connection.start",
     "10,11" => "Connection.start_ok",
     "10,20" => "Connection.secure",
@@ -121,18 +132,6 @@ $METHOD_NAME_MAP = array(
     "90,21" => "Channel.tx_commit_ok",
     "90,30" => "Channel.tx_rollback",
     "90,31" => "Channel.tx_rollback_ok"
-);
-
-class AbstractChannel
-{
-    private static $CONTENT_METHODS = array(
-        "60,60", // Basic.deliver
-        "60,71", // Basic.get_ok
-    );
-    
-    private static $CLOSE_METHODS = array(
-        "10,60", // Connection.close
-        "20,40", // Channel.close
     );
     
     protected $debug;
@@ -266,7 +265,7 @@ class AbstractChannel
                 
                 if($this->debug)
                 {
-                  debug_msg("Executing queued method: $method_sig: " . $METHOD_NAME_MAP[methodSig($method_sig)]);
+                  debug_msg("Executing queued method: $method_sig: " . AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
                 }
                 
                 return $this->dispatch($queued_method[0],
@@ -292,10 +291,9 @@ class AbstractChannel
             $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2]; 
             $args = new AMQPReader(substr($payload,4));
 
-            global $METHOD_NAME_MAP;
             if($this->debug)
             {
-              debug_msg("> $method_sig: " . $METHOD_NAME_MAP[methodSig($method_sig)]);
+              debug_msg("> $method_sig: " . AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
             }
             
             
@@ -312,10 +310,9 @@ class AbstractChannel
             }
             
             // Wasn't what we were looking for? save it for later
-            global $METHOD_NAME_MAP;
             if($this->debug)
             {
-              debug_msg("Queueing for later: $method_sig: " . $METHOD_NAME_MAP[methodSig($method_sig)]);
+              debug_msg("Queueing for later: $method_sig: " . AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
             }
             array_push($this->method_queue,array($method_sig, $args, $content));
         }
@@ -534,10 +531,9 @@ class AMQPConnection extends AbstractChannel
         $pkt = $pkt->getvalue();
         $this->write($pkt);
 
-        global $METHOD_NAME_MAP;
         if($this->debug)
         {
-          debug_msg("< " . methodSig($method_sig) . ": " . $METHOD_NAME_MAP[methodSig($method_sig)]);
+          debug_msg("< " . methodSig($method_sig) . ": " . AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
         }
         
     }
@@ -1520,5 +1516,3 @@ class AMQPMessage extends GenericContent
         parent::__construct($properties, $prop_types=AMQPMessage::$PROPERTIES);
     }
 }
-
-?>
