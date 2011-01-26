@@ -434,7 +434,7 @@ class AMQPConnection extends AbstractChannel
         $len = strlen($data);
         while(true)
         {
-            if(false == ($written = fwrite($this->sock, $data)))
+            if(false === ($written = fwrite($this->sock, $data)))
             {
                 throw new Exception ("Error sending data");
             }
@@ -1441,6 +1441,15 @@ class AMQPChannel extends AbstractChannel
         $msg = $this->wait();
     }
 
+
+    public function tx_commit()
+    {
+        $this->send_method_frame(array(90, 20));
+        return $this->wait(array(
+                               "90,21"    //Channel.tx_commit_ok
+                           ));
+    }
+    
     /**
      * confirm a successful commit
      */
@@ -1516,3 +1525,5 @@ class AMQPMessage extends GenericContent
         parent::__construct($properties, $prop_types=AMQPMessage::$PROPERTIES);
     }
 }
+
+?>

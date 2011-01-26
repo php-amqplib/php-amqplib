@@ -73,7 +73,7 @@ class AMQPWriter
         {
             $b = bcmod($x,'256');
             array_unshift($res,(int)$b);
-            $x=bcdiv($x,'256');
+            $x=bcdiv($x,'256', 0);
         }
         if($x!=0)
             throw new Exception("Value too big!");
@@ -257,7 +257,13 @@ class AMQPReader
     public function __construct($str, $sock=NULL)
     {
         $this->str = $str;
-        $this->sock = $sock;
+        if ($sock !== NULL)
+        {
+            $this->sock = new BufferedInput($sock);
+        } else
+        {
+            $this->sock = NULL;
+        }
         $this->offset = 0;
 
         $this->bitcount = $this->bits = 0;
@@ -269,12 +275,14 @@ class AMQPReader
 
         if(!function_exists("bcmul"))
             throw new Exception("'bc math' module required");
+            
+        $this->buffer_read_timeout = 5; // in seconds
     }
 
     public function close()
     {
         if($this->sock)
-            fclose($this->sock);
+            $this->sock->close();
     }
 
     public function read($n)
@@ -290,8 +298,17 @@ class AMQPReader
             $res = '';
             $read = 0;
             
-            while ($read < $n && (false !== ($buf = fread($this->sock, $n - $read))))
+            $start = time();
+            while($read < $n && !feof($this->sock) &&
+                  (false !== ($buf = fread($this->sock, $n - $read))))
             {
+                if ($buf == '')
+                {
+                    usleep(100);
+                }
+                else
+                    $start = time();                
+                    
                 $read += strlen($buf);
                 $res .= $buf;
             }
@@ -449,7 +466,7 @@ class AMQPReader
             $ftype = $table_data->rawread(1);
             if($ftype == 'S') {
                 $val = $table_data->read_longstr();
-            } else if(ftype == 'I') {
+            } else if($ftype == 'I') {
                 $val = $table_data->read_signed_long();
             } else if($ftype == 'D')
             {
@@ -604,4 +621,73 @@ class GenericContent
     }
 }
 
+class BufferedInput
+{
+    public function __construct($sock)
+    {
+        $this->block_size = 8192;
+
+        $this->sock = $sock;
+        $this->reset("");
+        
+    }
+    
+    public function read($n)
+    {
+        if ($this->offset >= strlen($this->buffer))
+        {
+            if (!($rv = $this->populate_buffer()))
+            {
+                return $rv;
+            }
+        }
+        return $this->read_buffer($n);
+    }
+    
+    public function close()
+    {
+        fclose($this->sock);
+        $this->reset("");
+    }
+    
+    private function read_buffer($n)
+    {
+        $n = min($n, strlen($this->buffer) - $this->offset);
+        if ($n === 0)
+        {
+            // substr("", 0, 0) => FALSE, which screws up read loops that are
+            // expecting non-blocking reads to return "". This avoids that edge
+            // case when the buffer is empty/used up.
+            return "";
+        }
+        $block = substr($this->buffer, $this->offset, $n);
+        $this->offset += $n;
+        return $block;
+    }
+    
+    private function reset($block)
+    {
+        $this->buffer = $block;
+        $this->offset = 0;
+    }
+    
+    private function populate_buffer()
+    {
+        if(feof($this->sock))
+        {
+            $this->reset("");
+            return FALSE;
+        }
+        
+        $block = fread($this->sock, $this->block_size);
+        if ($block !== FALSE)
+        {
+            $this->reset($block);
+            return TRUE;
+        } else
+        {
+            return $block;
+        }
+    }
+}
 ?>
