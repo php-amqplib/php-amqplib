@@ -299,8 +299,8 @@ class AMQPReader
             $read = 0;
             
             $start = time();
-            while($read < $n && !feof($this->sock) &&
-                  (false !== ($buf = fread($this->sock, $n - $read))))
+            while($read < $n && !feof($this->sock->real_sock()) &&
+                  (false !== ($buf = fread($this->sock->real_sock(), $n - $read))))
             {
                 if ($buf == '')
                 {
@@ -630,6 +630,11 @@ class BufferedInput
         $this->sock = $sock;
         $this->reset("");
         
+    }
+    
+    public function real_sock()
+    {
+        return $this->sock;
     }
     
     public function read($n)
