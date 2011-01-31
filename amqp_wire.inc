@@ -38,7 +38,7 @@ class AMQPDecimal
 
     public function asBCvalue()
     {
-        return bcdiv($n, bcpow(10,$e));
+        return bcdiv($this->n, bcpow(10,$this->e));
     }
 }
 
@@ -240,7 +240,7 @@ class AMQPWriter
             {
                 $table_data->write('T');
                 $table_data->write_timestamp($v);
-            } else if($ftype='F')
+            } else if($ftype=='F')
             {
                 $table_data->write('F');
                 $table_data->write_table($v);
@@ -516,7 +516,7 @@ class GenericContent
         $d = array();
         if ($props)
             $d = array_intersect_key($props, $this->prop_types);
-        else    
+        else
             $d = array();
         $this->properties = $d;
     }

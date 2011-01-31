@@ -28,10 +28,10 @@ class AMQPException extends Exception
 {
     public function __construct($reply_code, $reply_text, $method_sig)
     {
-        parent::__construct(NULL,0);
+        parent::__construct($reply_text,$reply_code);
 
-        $this->amqp_reply_code = $reply_code;
-        $this->amqp_reply_text = $reply_text;
+        $this->amqp_reply_code = $reply_code; // redundant, but kept for BC
+        $this->amqp_reply_text = $reply_text; // redundant, but kept for BC
         $this->amqp_method_sig = $method_sig;
 
         $ms=methodSig($method_sig);
@@ -288,7 +288,7 @@ class AbstractChannel
                 throw new Exception("Method frame too short");
             
             $method_sig_array = unpack("n2", substr($payload,0,4));
-            $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2]; 
+            $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
             $args = new AMQPReader(substr($payload,4));
 
             if($this->debug)
@@ -381,7 +381,7 @@ class AMQPConnection extends AbstractChannel
             $this->input = new AMQPReader(null, $this->sock);
 
             $this->write(AMQPConnection::$AMQP_PROTOCOL_HEADER);
-            $this->wait(array("10,10"));        
+            $this->wait(array("10,10"));
             $this->x_start_ok($d, $login_method, $login_response, $locale);
         
             $this->wait_tune_ok = true;
@@ -1138,7 +1138,7 @@ class AMQPChannel extends AbstractChannel
             return $this->wait(array(
                                    "50,11"    // Channel.queue_declare_ok
                                ));
-    }        
+    }
 
     /**
      * confirms a queue definition
