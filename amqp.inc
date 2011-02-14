@@ -111,6 +111,8 @@ class AbstractChannel
     "50,31" => "Channel.queue_purge_ok",
     "50,40" => "Channel.queue_delete",
     "50,41" => "Channel.queue_delete_ok",
+    "50,50" => "Channel.queue_unbind",
+    "50,51" => "Channel.queue_unbind_ok",
     "60,10" => "Channel.basic_qos",
     "60,11" => "Channel.basic_qos_ok",
     "60,20" => "Channel.basic_consume",
@@ -804,6 +806,7 @@ class AMQPChannel extends AbstractChannel
         "50,21" => "queue_bind_ok",
         "50,31" => "queue_purge_ok",
         "50,41" => "queue_delete_ok",
+        "50,51" => "queue_unbind_ok",
         "60,11" => "basic_qos_ok",
         "60,21" => "basic_consume_ok",
         "60,31" => "basic_cancel_ok",
@@ -1102,6 +1105,38 @@ class AMQPChannel extends AbstractChannel
      * confirm bind successful
      */
     protected function queue_bind_ok($args)
+    {
+    }
+
+    /**
+     * unbind queue from an exchange
+     */
+    public function queue_unbind($queue, $exchange, $routing_key="",
+        $arguments=NULL, $ticket=NULL)
+    {
+        if($arguments == NULL)
+            $arguments = array();
+
+        $args = new AMQPWriter();
+        if($ticket != NULL)
+            $args->write_short($ticket);
+        else
+            $args->write_short($this->default_ticket);
+        $args->write_shortstr($queue);
+        $args->write_shortstr($exchange);
+        $args->write_shortstr($routing_key);
+        $args->write_table($arguments);
+        $this->send_method_frame(array(50, 50), $args);
+
+        return $this->wait(array(
+                               "50,51"    // Channel.queue_unbind_ok
+                           ));
+    }
+
+    /**
+     * confirm unbind successful
+     */
+    protected function queue_unbind_ok($args)
     {
     }
 
