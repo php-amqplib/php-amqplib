@@ -32,6 +32,18 @@ Then to stop the consumer, send to it the `quit` message:
 
     $ php amqp_publisher.php quit
 
+# Debugging #
+
+If you want to know what's going on at a protocol level then add the following constant to your code:
+
+    <?php
+    define('AMQP_DEBUG', true);
+
+    ... more code
+
+    ?>
+
+
 # Original README: #
 
 PHP library implementing Advanced Message Queuing Protocol (AMQP).
