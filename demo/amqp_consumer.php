@@ -1,53 +1,79 @@
-#!/usr/bin/php
 <?php
-/**
- * Repeatedly receive messages from queue until it receives a message with
- * 'quit' as the body.
- *
- * @author Sean Murphy<sean@iamseanmurphy.com>
- */
- 
-require_once('../amqp.inc');
 
-$HOST = 'localhost';
-$PORT = 5672;
-$USER = 'guest';
-$PASS = 'guest';
-$VHOST = '/';
-$EXCHANGE = 'router';
-$QUEUE = 'msgs';
-$CONSUMER_TAG = 'consumer';
+require_once(__DIR__ . '/../amqp.inc');
+include(__DIR__ . '/config.php');
 
-$conn = new AMQPConnection($HOST, $PORT, $USER, $PASS);
+$exchange = 'router';
+$queue = 'msgs';
+$consumer_tag = 'consumer';
+
+$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
-$ch->access_request($VHOST, false, false, true, true);
 
-$ch->queue_declare($QUEUE);
-$ch->exchange_declare($EXCHANGE, 'direct', false, false, false);
-$ch->queue_bind($QUEUE, $EXCHANGE);
+/*
+    The following code is the same both in the consumer and the producer.
+    In this way we are sure we always have a queue to consume from and an
+        exchange where to publish messages.
+*/
+
+/*
+    name: $queue
+    passive: false
+    durable: true // the queue will survive server restarts
+    exclusive: false // the queue can be accessed in other channels
+    auto_delete: false //the queue won't be deleted once the channel is closed.
+*/
+$ch->queue_declare($queue, false, true, false, false);
+
+/*
+    name: $exchange
+    type: direct
+    passive: false
+    durable: true // the exchange will survive server restarts
+    auto_delete: false //the exchange won't be deleted once the channel is closed.
+*/
+
+$ch->exchange_declare($exchange, 'direct', false, true, false);
+
+$ch->queue_bind($queue, $exchange);
 
 function process_message($msg) {
-    global $ch, $CONSUMER_TAG;
-    
+
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
-    
-    $ch->basic_ack($msg->delivery_info['delivery_tag']);
-    
-    // Cancel callback
+
+    $msg->delivery_info['channel']->
+        basic_ack($msg->delivery_info['delivery_tag']);
+
+    // Send a message with the string "quit" to cancel the consumer.
     if ($msg->body === 'quit') {
-        $ch->basic_cancel($CONSUMER_TAG);
+        $msg->delivery_info['channel']->
+            basic_cancel($msg->delivery_info['consumer_tag']);
     }
 }
 
-$ch->basic_consume($QUEUE, $CONSUMER_TAG, false, false, false, false, 'process_message');
+/*
+    queue: Queue from where to get the messages
+    consumer_tag: Consumer identifier
+    no_local: Don't receive messages published by this consumer.
+    no_ack: Tells the server if the consumer will acknowledge the messages.
+    exclusive: Request exclusive consumer access, meaning only this consumer can access the queue
+    nowait:
+    callback: A PHP Callback
+*/
+
+$ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
 // Loop as long as the channel has callbacks registered
 while(count($ch->callbacks)) {
     $ch->wait();
 }
 
-$ch->close();
-$conn->close();
+register_shutdown_function('shutdown', $ch, $conn);
+
+function shutdown($ch, $conn){
+    $ch->close();
+    $conn->close();
+}
 ?>

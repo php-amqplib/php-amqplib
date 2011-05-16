@@ -1,28 +1,44 @@
-#!/usr/bin/php
 <?php
-/**
- * Sends a message to a queue
- *
- * @author Sean Murphy<sean@iamseanmurphy.com>
- */
- 
-require_once('../amqp.inc');
 
-$HOST = 'localhost';
-$PORT = 5672;
-$USER = 'guest';
-$PASS = 'guest';
-$VHOST = '/';
-$EXCHANGE = 'router';
-$QUEUE = 'msgs';
+require_once(__DIR__ . '/../amqp.inc');
+include(__DIR__ . '/config.php');
 
-$conn = new AMQPConnection($HOST, $PORT, $USER, $PASS);
+$exchange = 'router';
+$queue = 'msgs';
+
+$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
-$ch->access_request($VHOST, false, false, true, true);
+
+/*
+    The following code is the same both in the consumer and the producer.
+    In this way we are sure we always have a queue to consume from and an
+        exchange where to publish messages.
+*/
+
+/*
+    name: $queue
+    passive: false
+    durable: true // the queue will survive server restarts
+    exclusive: false // the queue can be accessed in other channels
+    auto_delete: false //the queue won't be deleted once the channel is closed.
+*/
+$ch->queue_declare($queue, false, true, false, false);
+
+/*
+    name: $exchange
+    type: direct
+    passive: false
+    durable: true // the exchange will survive server restarts
+    auto_delete: false //the exchange won't be deleted once the channel is closed.
+*/
+
+$ch->exchange_declare($exchange, 'direct', false, true, false);
+
+$ch->queue_bind($queue, $exchange);
 
 $msg_body = implode(' ', array_slice($argv, 1));
 $msg = new AMQPMessage($msg_body, array('content_type' => 'text/plain'));
-$ch->basic_publish($msg, $EXCHANGE);
+$ch->basic_publish($msg, $exchange);
 
 $ch->close();
 $conn->close();
