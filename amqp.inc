@@ -622,6 +622,7 @@ class AMQPConnection extends AbstractChannel
                     break;
                 case 'F':
                     $val = '(' . self::dump_table($value[1]) . ')';
+                    break;
                 case 'T':
                     $val = date('Y-m-d H:i:s', $value[1]);
                     break;
