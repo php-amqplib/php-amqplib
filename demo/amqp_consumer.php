@@ -65,15 +65,15 @@ function process_message($msg) {
 
 $ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
-// Loop as long as the channel has callbacks registered
-while(count($ch->callbacks)) {
-    $ch->wait();
+function shutdown($ch, $conn){
+    $ch->close();
+    $conn->close();
 }
 
 register_shutdown_function('shutdown', $ch, $conn);
 
-function shutdown($ch, $conn){
-    $ch->close();
-    $conn->close();
+// Loop as long as the channel has callbacks registered
+while(count($ch->callbacks)) {
+    $ch->wait();
 }
 ?>
