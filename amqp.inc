@@ -457,7 +457,7 @@ class AMQPConnection extends AbstractChannel
             if($this->input)
                 $this->close();
 
-        if($this->sock)
+        if(is_resource($this->sock))
         {
           if($this->debug)
           {
@@ -499,7 +499,7 @@ class AMQPConnection extends AbstractChannel
                 $this->input = NULL;
             }
 
-        if($this->sock)
+        if(is_resource($this->sock))
         {
             if($this->debug)
             {
