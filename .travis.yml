@@ -1,6 +1,6 @@
 branches:
-  only:
-    - refactoring
+  except:
+    - master
 
 language: php
 
