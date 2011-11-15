@@ -1,0 +1,11 @@
+branches:
+  only:
+    - refactoring
+
+language: php
+
+php:
+  - 5.3
+  - 5.4
+
+script: phpunit tests/
