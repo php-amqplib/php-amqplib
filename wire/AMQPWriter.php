@@ -93,7 +93,7 @@ class AMQPWriter
     public function write_octet($n)
     {
         if($n < 0 || $n > 255)
-            throw new Exception('Octet out of range 0..255');
+            throw new InvalidArgumentException('Octet out of range 0..255');
         $this->flushbits();
         $this->out .= chr($n);
     }
@@ -104,7 +104,7 @@ class AMQPWriter
     public function write_short($n)
     {
         if($n < 0 ||  $n > 65535)
-            throw new Exception('Octet out of range 0..65535');
+            throw new InvalidArgumentException('Octet out of range 0..65535');
         $this->flushbits();
         $this->out .= pack('n', $n);
     }
@@ -143,7 +143,7 @@ class AMQPWriter
     {
         $this->flushbits();
         if(strlen($s) > 255)
-            throw new Exception('String too long');
+            throw new InvalidArgumentException('String too long');
         $this->write_octet(strlen($s));
         $this->out .= $s;
     }
