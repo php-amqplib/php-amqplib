@@ -19,5 +19,4 @@ require_once(__DIR__ . '/wire/AMQPWriter.php');
 require_once(__DIR__ . '/wire/AMQPReader.php');
 require_once(__DIR__ . '/wire/GenericContent.php');
 
-
 ?>
