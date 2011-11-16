@@ -1,8 +1,14 @@
+# php-amqplib #
+
+[![Build Status](https://secure.travis-ci.org/videlalvaro/php-amqplib.png)](http://travis-ci.org/videlalvaro/php-amqplib)
+
+This library is a _pure PHP_ implementation of the AMQP protocol. It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
+
 # NOTE #
 
 This library is a fork of the [php-amqplib](http://code.google.com/p/php-amqplib/) library.
 
-We modified that library in order to work with PHP 5.3 Strict.
+At The Netcircle we modified that library in order to work with PHP 5.3 Strict.
 
 Also we improved the debug method to increase performance.
 
