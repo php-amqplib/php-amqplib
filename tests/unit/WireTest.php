@@ -1,8 +1,8 @@
 <?php
 
-require_once(__DIR__.'/../hexdump.inc');
-require_once(__DIR__ . '/../wire/AMQPWriter.php');
-require_once(__DIR__ . '/../wire/AMQPReader.php');
+require_once(__DIR__.'/../../hexdump.inc');
+require_once(__DIR__ . '/../../wire/AMQPWriter.php');
+require_once(__DIR__ . '/../../wire/AMQPReader.php');
 
 class WireTest extends PHPUnit_Framework_TestCase
 {
