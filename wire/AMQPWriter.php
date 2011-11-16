@@ -35,14 +35,9 @@ class AMQPWriter
             $x = bcdiv($x,'256');
             $bytes--;
         }
+
         $res = array_reverse($res);
 
-        for($i=0;$i<$bytes;$i++)
-        {
-            $b = bcmod($x,'256');
-            array_unshift($res,(int)$b);
-            $x=bcdiv($x,'256', 0);
-        }
         if($x!=0)
             throw new Exception("Value too big!");
         return $res;
