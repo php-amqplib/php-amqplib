@@ -1,7 +1,3 @@
-branches:
-  except:
-    - master
-
 language: php
 
 php:
