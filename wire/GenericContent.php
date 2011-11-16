@@ -31,14 +31,13 @@ class GenericContent
      */
     public function get($name)
     {
-        if(array_key_exists($name,$this->properties))
+        if(isset($this->properties[$name]))
             return $this->properties[$name];
 
-        if(isset($this->delivery_info))
-            if(array_key_exists($name,$this->delivery_info))
-                return $this->delivery_info[$name];
+        if(isset($this->delivery_info) && isset($this->delivery_info[$name]))
+            return $this->delivery_info[$name];
 
-        throw new Exception("No such property");
+        throw new OutOfBoundsException("No such property");
     }
 
 
@@ -57,7 +56,7 @@ class GenericContent
         while(true)
         {
             $flag_bits = $r->read_short();
-            array_push($flags, $flag_bits);
+            $flags[] = $flag_bits;
             if(($flag_bits & 1) == 0)
                 break;
         }
@@ -74,7 +73,10 @@ class GenericContent
                 $shift = 15;
             }
             if($flag_bits & (1 << $shift))
-                $d[$key] = call_user_func(array($r,"read_".$proptype));
+            {
+                $d[$key] = $r->{'read_'.$proptype}();
+            }
+
             $shift -= 1;
         }
         $this->properties = $d;
@@ -92,29 +94,34 @@ class GenericContent
         $flag_bits = 0;
         $flags = array();
         $raw_bytes = new AMQPWriter();
+
         foreach ($this->prop_types as $key => $proptype)
         {
-            if(array_key_exists($key,$this->properties))
+            if(isset($this->properties[$key]))
                 $val = $this->properties[$key];
             else
                 $val = NULL;
+
             if($val != NULL)
             {
                 if($shift == 0)
                 {
-                    array_push($flags, $flag_bits);
+                    $flags[] = $flag_bits;
                     $flag_bits = 0;
                     $shift = 15;
                 }
 
                 $flag_bits |= (1 << $shift);
                 if($proptype != "bit")
-                    call_user_func(array($raw_bytes, "write_" . $proptype),
-                                   $val);
+                {
+                    $raw_bytes->{'write_'.$proptype}($val);
+                }
+
             }
             $shift -= 1;
         }
-        array_push($flags, $flag_bits);
+
+        $flags[] = $flag_bits;
         $result = new AMQPWriter();
         foreach($flags as $flag_bits)
             $result->write_short($flag_bits);
