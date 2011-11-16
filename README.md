@@ -1,3 +1,7 @@
+# MOVED #
+
+The development of this project has moved here: [https://github.com/videlalvaro/php-amqplib](https://github.com/videlalvaro/php-amqplib).
+
 # NOTE #
 
 This library is a fork of the [php-amqplib](http://code.google.com/p/php-amqplib/) library.
