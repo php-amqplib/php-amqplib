@@ -45,9 +45,9 @@ class AMQPWriter
 
     private function flushbits()
     {
-        if(count($this->bits))
+        if(!empty($this->bits))
         {
-            $this->out .= implode("", array_map('chr',$this->bits));
+            $this->out .= implode("", array_map('chr', $this->bits));
             $this->bits = array();
             $this->bitcount = 0;
         }
