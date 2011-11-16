@@ -27,6 +27,16 @@ class AMQPWriter
         }
 
         $res = array();
+
+        while($bytes > 0)
+        {
+            $b = bcmod($x,'256');
+            $res[] = (int)$b;
+            $x = bcdiv($x,'256');
+            $bytes--;
+        }
+        $res = array_reverse($res);
+
         for($i=0;$i<$bytes;$i++)
         {
             $b = bcmod($x,'256');
