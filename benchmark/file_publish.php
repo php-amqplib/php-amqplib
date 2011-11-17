@@ -7,6 +7,7 @@
  *  - Publish 1 5mb message:
  *      php file_publish.php
  *
+ * NOTE: The script will take some time while it reads data from /dev/urandom
  */
 
 //suboptimal function to generate random content
@@ -42,8 +43,10 @@ $ch->exchange_declare($exchange, 'direct', false, false, false);
 $ch->queue_bind($queue, $exchange);
 
 $max = isset($argv[1]) ? (int) $argv[1] : 1;
-$msg_size = 1024*1024*5+1
-$msg = new AMQPMessage(generate_random_content($msg_size));
+$msg_size = 1024*1024*5+1;
+$msg_body = generate_random_content($msg_size);
+
+$msg = new AMQPMessage($msg_body);
 
 $time = microtime(true);
 
