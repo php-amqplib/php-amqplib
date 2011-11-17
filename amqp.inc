@@ -316,7 +316,7 @@ class AbstractChannel
             {
               debug_msg("Queueing for later: $method_sig: " . AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
             }
-            array_push($this->method_queue,array($method_sig, $args, $content));
+            $this->method_queue[] = array($method_sig, $args, $content);
         }
     }
 
@@ -513,9 +513,14 @@ class AMQPConnection extends AbstractChannel
 
     public function get_free_channel_id()
     {
-        for($i=1;$i<=$this->channel_max;$i++)
-            if(!array_key_exists($i,$this->channels))
+        for ($i=1; $i <= $this->channel_max; $i++)
+        {
+            if (!isset($this->channels[$i]))
+            {
                 return $i;
+            }
+        }
+
         throw new Exception("No free channel ids");
     }
 
@@ -630,10 +635,9 @@ class AMQPConnection extends AbstractChannel
      */
     public function channel($channel_id=NULL)
     {
-        if(array_key_exists($channel_id,$this->channels))
-            return $this->channels[$channel_id];
-
-        return new AMQPChannel($this->connection, $channel_id);
+        return isset($this->channels[$channel_id])
+                ? $this->channels[$channel_id]
+                : new AMQPChannel($this->connection, $channel_id);
     }
 
     /**
@@ -1381,13 +1385,19 @@ class AMQPChannel extends AbstractChannel
             "routing_key" => $routing_key
         );
 
-        if(array_key_exists($consumer_tag, $this->callbacks))
+        if(isset($this->callbacks[$consumer_tag]))
+        {
             $func = $this->callbacks[$consumer_tag];
+        }
         else
+        {
             $func = NULL;
+        }
 
-        if($func!=NULL)
+        if($func != NULL)
+        {
             call_user_func($func, $msg);
+        }
     }
 
     /**
