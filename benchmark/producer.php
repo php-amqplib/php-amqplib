@@ -18,7 +18,6 @@ $ch = $conn->channel();
 $ch->queue_declare($queue, false, false, false, false);
 
 $ch->exchange_declare($exchange, 'direct', false, false, false);
-$ch->exchange_declare('control', 'fanout', false, false, false);
 
 $ch->queue_bind($queue, $exchange);
 
@@ -40,7 +39,7 @@ $msg = new AMQPMessage($msg_body);
 
 $time = microtime(true);
 
-$max = (int) $argv[1];
+$max = isset($argv[1]) ? (int) $argv[1] : 1;
 
 // Publishes $max messages using $msg_body as the content.
 for ($i = 0; $i < $max; $i++) {
