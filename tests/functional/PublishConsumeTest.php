@@ -1,6 +1,6 @@
 <?php
 
-include(__DIR__ . '/../config/config.php');
+include_once(__DIR__ . '/../config/config.php');
 require_once(__DIR__ . '/../../amqp.inc');
 
 class PublishConsumeTest extends PHPUnit_Framework_TestCase
@@ -10,8 +10,6 @@ class PublishConsumeTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-
-
         $this->conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
         $this->ch = $this->conn->channel();
 
@@ -48,7 +46,8 @@ class PublishConsumeTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    public function process_msg($msg) {
+    public function process_msg($msg)
+    {
         $delivery_info = $msg->delivery_info;
 
         $delivery_info['channel']->basic_ack($delivery_info['delivery_tag']);
@@ -73,6 +72,7 @@ class PublishConsumeTest extends PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
+        $this->ch->exchange_delete($this->exchange_name);
         $this->ch->close();
         $this->conn->close();
     }
