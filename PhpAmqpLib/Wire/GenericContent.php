@@ -1,5 +1,10 @@
 <?php
 
+namespace PhpAmqpLib\Wire;
+
+use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPWriter;
+
 /**
  * Abstract base class for AMQP content.  Subclasses should override
  * the PROPERTIES attribute.
@@ -15,7 +20,7 @@ class GenericContent
         if($prop_types)
             $this->prop_types = $prop_types;
         else
-            $this->prop_types = GenericContent::$PROPERTIES;
+            $this->prop_types = self::$PROPERTIES;
         $d = array();
         if ($props)
             $d = array_intersect_key($props, $this->prop_types);
@@ -37,7 +42,7 @@ class GenericContent
         if(isset($this->delivery_info) && isset($this->delivery_info[$name]))
             return $this->delivery_info[$name];
 
-        throw new OutOfBoundsException("No such property");
+        throw new \OutOfBoundsException("No such property");
     }
 
 

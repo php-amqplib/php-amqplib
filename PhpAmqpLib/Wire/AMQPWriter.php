@@ -1,5 +1,7 @@
 <?php
 
+namespace PhpAmqpLib\Wire;
+
 class AMQPWriter
 {
     public function __construct()
@@ -39,7 +41,7 @@ class AMQPWriter
         $res = array_reverse($res);
 
         if($x!=0)
-            throw new Exception("Value too big!");
+            throw new \Exception("Value too big!");
         return $res;
     }
 
@@ -69,6 +71,7 @@ class AMQPWriter
     {
         $this->flushbits();
         $this->out .= $s;
+        return $this;
     }
 
     /**
@@ -90,6 +93,7 @@ class AMQPWriter
         array_push($this->bits, $last);
 
         $this->bitcount += 1;
+        return $this;
     }
 
     /**
@@ -98,9 +102,10 @@ class AMQPWriter
     public function write_octet($n)
     {
         if($n < 0 || $n > 255)
-            throw new InvalidArgumentException('Octet out of range 0..255');
+            throw new \InvalidArgumentException('Octet out of range 0..255');
         $this->flushbits();
         $this->out .= chr($n);
+        return $this;
     }
 
     /**
@@ -109,9 +114,10 @@ class AMQPWriter
     public function write_short($n)
     {
         if($n < 0 ||  $n > 65535)
-            throw new InvalidArgumentException('Octet out of range 0..65535');
+            throw new \InvalidArgumentException('Octet out of range 0..65535');
         $this->flushbits();
         $this->out .= pack('n', $n);
+        return $this;
     }
 
     /**
@@ -121,6 +127,7 @@ class AMQPWriter
     {
         $this->flushbits();
         $this->out .= implode("", AMQPWriter::chrbytesplit($n,4));
+        return $this;
     }
 
     private function write_signed_long($n)
@@ -129,6 +136,7 @@ class AMQPWriter
         // although format spec for 'N' mentions unsigned
         // it will deal with sinned integers as well. tested.
         $this->out .= pack('N', $n);
+        return $this;
     }
 
     /**
@@ -138,6 +146,7 @@ class AMQPWriter
     {
         $this->flushbits();
         $this->out .= implode("", AMQPWriter::chrbytesplit($n,8));
+        return $this;
     }
 
     /**
@@ -148,9 +157,10 @@ class AMQPWriter
     {
         $this->flushbits();
         if(strlen($s) > 255)
-            throw new InvalidArgumentException('String too long');
+            throw new \InvalidArgumentException('String too long');
         $this->write_octet(strlen($s));
         $this->out .= $s;
+        return $this;
     }
 
 
@@ -162,6 +172,7 @@ class AMQPWriter
         $this->flushbits();
         $this->write_long(strlen($s));
         $this->out .= $s;
+        return $this;
     }
 
 
@@ -171,6 +182,7 @@ class AMQPWriter
    public function write_timestamp($v)
    {
        $this->write_longlong($v);
+       return $this;
    }
 
    /**
@@ -212,5 +224,6 @@ class AMQPWriter
         $table_data = $table_data->getvalue();
         $this->write_long(strlen($table_data));
         $this->write($table_data);
+        return $this;
     }
 }

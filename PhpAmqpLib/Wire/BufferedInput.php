@@ -1,5 +1,7 @@
 <?php
 
+namespace PhpAmqpLib\Wire;
+
 class BufferedInput
 {
     public function __construct($sock)

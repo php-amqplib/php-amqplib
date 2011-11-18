@@ -1,10 +1,11 @@
 <?php
 
-require_once(__DIR__.'/../../hexdump.inc');
-require_once(__DIR__ . '/../../wire/AMQPWriter.php');
-require_once(__DIR__ . '/../../wire/AMQPReader.php');
+namespace PhpAmqpLib\Tests\Unit;
 
-class WireTest extends PHPUnit_Framework_TestCase
+use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPWriter;
+
+class WireTest extends \PHPUnit_Framework_TestCase
 {
     public function testBitWriteRead()
     {

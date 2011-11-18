@@ -1,9 +1,11 @@
 <?php
 
-include_once(__DIR__ . '/../config/config.php');
-require_once(__DIR__ . '/../../amqp.inc');
+namespace PhpAmqpLib\Tests\Functional;
 
-class PublishConsumeTest extends PHPUnit_Framework_TestCase
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
+class FileTransferTest extends \PHPUnit_Framework_TestCase
 {
     protected $exchange_name = 'test_exchange';
     protected $queue_name = null;
@@ -18,22 +20,17 @@ class PublishConsumeTest extends PHPUnit_Framework_TestCase
         $this->ch->queue_bind($this->queue_name, $this->exchange_name, $this->queue_name);
     }
 
-    public function testPublishConsume()
+    public function testSendFile()
     {
-        $this->msg_body = 'foo bar baz äëïöü';
+        $this->msg_body = file_get_contents(__DIR__.'/fixtures/data_1mb.bin');
 
-        $msg = new AMQPMessage($this->msg_body, array(
-            'content_type' => 'text/plain',
-            'delivery-mode' => 1,
-            'correlation_id' => 'my_correlation_id',
-            'reply_to' => 'my_reply_to'
-        ));
+        $msg = new AMQPMessage($this->msg_body, array('delivery-mode' => 1));
 
         $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name);
 
         $this->ch->basic_consume(
             $this->queue_name,
-            getmypid(),
+            '',
             false,
             false,
             false,
@@ -54,20 +51,6 @@ class PublishConsumeTest extends PHPUnit_Framework_TestCase
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
 
         $this->assertEquals($this->msg_body, $msg->body);
-
-        //delivery tests
-        $this->assertEquals(getmypid(), $delivery_info['consumer_tag']);
-        $this->assertEquals($this->queue_name, $delivery_info['routing_key']);
-        $this->assertEquals($this->exchange_name, $delivery_info['exchange']);
-        $this->assertEquals(false, $delivery_info['redelivered']);
-
-        //msg property tests
-        $this->assertEquals('text/plain', $msg->get('content_type'));
-        $this->assertEquals('my_correlation_id', $msg->get('correlation_id'));
-        $this->assertEquals('my_reply_to', $msg->get('reply_to'));
-
-        $this->setExpectedException('OutOfBoundsException');
-        $msg->get('no_property');
     }
 
     public function tearDown()

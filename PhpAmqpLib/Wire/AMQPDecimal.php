@@ -1,5 +1,7 @@
 <?php
 
+namespace PhpAmqpLib\Wire;
+
   /**
    * AMQP protocol decimal value.
    *
@@ -16,7 +18,7 @@ class AMQPDecimal
     public function __construct($n, $e)
     {
         if($e < 0)
-            throw new Exception("Decimal exponent value must be unsigned!");
+            throw new \Exception("Decimal exponent value must be unsigned!");
         $this->n = $n;
         $this->e = $e;
     }
