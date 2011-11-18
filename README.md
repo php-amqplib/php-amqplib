@@ -26,11 +26,16 @@ To be sure that what you are downloading _works™_ you can always check the bui
 
 ## Usage ##
 
-Start your RabbitMQ server, then get the library source code:
+Get the library source code:
 
     $ git clone git://github.com/tnc/php-amqplib.git
 
-Open two Terminals and on the first one execute the following commands to start the consumer:
+Init submodules dependencies:
+
+    $ git submodule init
+    $ git submodule update
+
+Start your RabbitMQ server and then open two Terminals and on the first one execute the following commands to start the consumer:
 
     $ cd php-amqplib/demo
     $ php amqp_consumer.php
