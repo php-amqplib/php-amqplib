@@ -123,6 +123,7 @@ class AbstractChannel
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
 
+    //TODO add visibility keywords
     function wait_content()
     {
         $frm = $this->next_frame();
@@ -207,7 +208,8 @@ class AbstractChannel
 
                 if($this->debug)
                 {
-                  debug_msg("Executing queued method: $method_sig: " . self::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
+                  debug_msg("Executing queued method: $method_sig: " .
+                            self::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
                 }
 
                 return $this->dispatch($queued_method[0],

@@ -15,7 +15,7 @@ class AMQPException extends \Exception
         $this->amqp_reply_text = $reply_text; // redundant, but kept for BC
         $this->amqp_method_sig = $method_sig;
 
-        $ms=methodSig($method_sig);
+        $ms = methodSig($method_sig);
         if(array_key_exists($ms, AbstractChannel::$GLOBAL_METHOD_NAMES))
             $mn = AbstractChannel::$GLOBAL_METHOD_NAMES[$ms];
         else

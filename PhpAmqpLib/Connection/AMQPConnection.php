@@ -241,7 +241,8 @@ class AMQPConnection extends AbstractChannel
 
         if($this->debug)
         {
-          debug_msg("< " . methodSig($method_sig) . ": " . AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
+          debug_msg("< " . methodSig($method_sig) . ": " .
+                           AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
         }
 
     }
