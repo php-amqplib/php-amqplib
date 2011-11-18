@@ -4,8 +4,9 @@
  * Usage: php file_consume.php 100
  */
 
-require_once(__DIR__ . '/../amqp.inc');
 include(__DIR__ . '/config.php');
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'file_exchange';
 $queue = 'file_queue';

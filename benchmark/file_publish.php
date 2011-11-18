@@ -10,6 +10,10 @@
  * NOTE: The script will take some time while it reads data from /dev/urandom
  */
 
+include(__DIR__ . '/config.php');
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+
 //suboptimal function to generate random content
 function generate_random_content($bytes)
 {
@@ -28,9 +32,6 @@ function generate_random_content($bytes)
 
     return $buffer;
 }
-
-require_once(__DIR__ . '/../amqp.inc');
-include(__DIR__ . '/config.php');
 
 $exchange = 'file_exchange';
 $queue = 'file_queue';
