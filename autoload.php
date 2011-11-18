@@ -1,6 +1,5 @@
 <?php
 
-//TODO add make target to get the UniversalClassLoader maybe as git submodule.
 require_once(__DIR__ . '/vendor/symfony/Symfony/Component/ClassLoader/UniversalClassLoader.php');
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;

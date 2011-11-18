@@ -24,18 +24,23 @@ Besides that the library has been refactored to use PHP 5.3 `namespaces`. The cl
 
 To be sure that what you are downloading _works™_ you can always check the build status of the library on [travis-ci](http://travis-ci.org/#!/videlalvaro/php-amqplib).
 
-## Usage ##
+## Setup ##
 
 Get the library source code:
 
     $ git clone git://github.com/tnc/php-amqplib.git
 
-Init submodules dependencies:
+This library uses the `Symfony` default `UniversalClassLoader` so you will have to run the following command to download it as a submodule:
 
-    $ git submodule init
-    $ git submodule update
+    $ make
 
-Start your RabbitMQ server and then open two Terminals and on the first one execute the following commands to start the consumer:
+Start your RabbitMQ server and run tests:
+
+    $ make test
+
+## Usage ##
+
+With RabbitMQ running open two Terminals and on the first one execute the following commands to start the consumer:
 
     $ cd php-amqplib/demo
     $ php amqp_consumer.php
