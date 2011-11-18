@@ -4,7 +4,7 @@
 
 This library is a _pure PHP_ implementation of the AMQP protocol. It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
 
-# NOTE #
+## NOTE ##
 
 This library is a fork of the [php-amqplib](http://code.google.com/p/php-amqplib/) library.
 
@@ -14,11 +14,19 @@ Also we improved the debug method to increase performance.
 
 We use it daily in prod for sending/consuming 600K + messages per day.
 
-Below is the original README file content. Credits goes to the original authors.
+## BC BREAKING CHANGES ##
+
+As of November 2011 I retook the development of this library therefore I tagged the previous version of the library [here](https://github.com/videlalvaro/php-amqplib/tarball/v1.0). If you are looking for the old library then use the code on that tag.
+
+If you are going to use it in a new project I advice that you use the current master branch. There are many performance improvements in that branch and I'm adding more and more tests to it.
+
+Besides that the library has been refactored to use PHP 5.3 `namespaces`. The classes have been split into their separate files and so on. The idea is to make the library easier to test.
+
+To be sure that what you are downloading _works™_ you can always check the build status of the library on [travis-ci](http://travis-ci.org/#!/videlalvaro/php-amqplib).
 
 ## Usage ##
 
-Start your RabbitMQ server, then get the source:
+Start your RabbitMQ server, then get the library source code:
 
     $ git clone git://github.com/tnc/php-amqplib.git
 
@@ -49,8 +57,9 @@ If you want to know what's going on at a protocol level then add the following c
 
     ?>
 
-
 # Original README: #
+
+Below is the original README file content. Credits goes to the original authors.
 
 PHP library implementing Advanced Message Queuing Protocol (AMQP).
 
