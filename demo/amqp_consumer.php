@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/../amqp.inc');
 include(__DIR__ . '/config.php');
+use PhpAmqpLib\Connection\AMQPConnection;
 
 $exchange = 'router';
 $queue = 'msgs';
