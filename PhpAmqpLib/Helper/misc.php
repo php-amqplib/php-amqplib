@@ -12,3 +12,10 @@ function methodSig($a)
     else
         return sprintf("%d,%d",$a[0] ,$a[1]);
 }
+
+function saveBytes($bytes)
+{
+    $fh = fopen('/tmp/bytes', 'wb');
+    fwrite($fh, $bytes);
+    fclose($fh);
+}

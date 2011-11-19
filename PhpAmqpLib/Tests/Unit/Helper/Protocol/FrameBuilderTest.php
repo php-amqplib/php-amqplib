@@ -11,13 +11,6 @@ class FrameBuilderTest extends \PHPUnit_Framework_TestCase
         $this->frameBuilder = new FrameBuilder();
     }
 
-    public function saveBytes($bytes)
-    {
-        $fh = fopen('/tmp/bytes', 'wb');
-        fwrite($fh, $bytes);
-        fclose($fh);
-    }
-
     public function testChannelClose()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00";
