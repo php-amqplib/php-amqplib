@@ -17,10 +17,11 @@ class AMQPException extends \Exception
         $this->amqp_method_sig = $method_sig;
 
         $ms = MiscHelper::methodSig($method_sig);
-        if(array_key_exists($ms, AbstractChannel::$GLOBAL_METHOD_NAMES))
-            $mn = AbstractChannel::$GLOBAL_METHOD_NAMES[$ms];
-        else
-            $mn = "";
+
+        $mn = isset(AbstractChannel::$GLOBAL_METHOD_NAMES[$ms])
+                ? AbstractChannel::$GLOBAL_METHOD_NAMES[$ms]
+                : $mn = "";
+
         $this->args = array(
             $reply_code,
             $reply_text,
