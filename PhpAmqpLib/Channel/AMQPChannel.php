@@ -4,6 +4,7 @@ namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Exception\AMQPChannelException;
+use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\FrameBuilder;
 
 class AMQPChannel extends AbstractChannel
@@ -49,7 +50,7 @@ class AMQPChannel extends AbstractChannel
 
         if($this->debug)
         {
-          debug_msg("using channel_id: " . $channel_id);
+          MiscHelper::debug_msg("using channel_id: " . $channel_id);
         }
 
         $this->default_ticket = 0;
@@ -184,7 +185,7 @@ class AMQPChannel extends AbstractChannel
         $this->is_open = true;
         if($this->debug)
         {
-          debug_msg("Channel open");
+          MiscHelper::debug_msg("Channel open");
         }
     }
 

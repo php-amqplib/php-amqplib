@@ -6,6 +6,7 @@ use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Exception\AMQPConnectionException;
+use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
 
@@ -103,7 +104,7 @@ class AMQPConnection extends AbstractChannel
             // we were redirected, close the socket, loop and try again
             if($this->debug)
             {
-              debug_msg("closing socket");
+              MiscHelper::debug_msg("closing socket");
             }
 
             @fclose($this->sock); $this->sock=NULL;
@@ -120,7 +121,7 @@ class AMQPConnection extends AbstractChannel
         {
           if($this->debug)
           {
-            debug_msg("closing socket");
+            MiscHelper::debug_msg("closing socket");
           }
 
           @fclose($this->sock);
@@ -131,7 +132,7 @@ class AMQPConnection extends AbstractChannel
     {
         if($this->debug)
         {
-          debug_msg("< [hex]:\n" . hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
+          MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
         }
 
         $len = strlen($data);
@@ -162,7 +163,7 @@ class AMQPConnection extends AbstractChannel
         {
             if($this->debug)
             {
-              debug_msg("closing socket");
+              MiscHelper::debug_msg("closing socket");
             }
 
             @fclose($this->sock);
@@ -241,8 +242,8 @@ class AMQPConnection extends AbstractChannel
 
         if($this->debug)
         {
-          debug_msg("< " . methodSig($method_sig) . ": " .
-                           AbstractChannel::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
+          MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
+                           AbstractChannel::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
         }
 
     }
@@ -393,7 +394,7 @@ class AMQPConnection extends AbstractChannel
         $this->known_hosts = $args->read_shortstr();
         if($this->debug)
         {
-          debug_msg("Open OK! known_hosts: " . $this->known_hosts);
+          MiscHelper::debug_msg("Open OK! known_hosts: " . $this->known_hosts);
         }
 
         return NULL;
@@ -409,7 +410,7 @@ class AMQPConnection extends AbstractChannel
         $this->known_hosts = $args->read_shortstr();
         if($this->debug)
         {
-          debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]" );
+          MiscHelper::debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]" );
         }
         return $host;
     }
@@ -445,7 +446,7 @@ class AMQPConnection extends AbstractChannel
 
         if($this->debug)
         {
-          debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
+          MiscHelper::debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
                             $this->version_major,
                             $this->version_minor,
                             self::dump_table($this->server_properties),

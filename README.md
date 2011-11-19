@@ -56,6 +56,25 @@ Then to stop the consumer, send to it the `quit` message:
 
     $ php amqp_publisher.php quit
 
+## Loading Classes ##
+
+The library uses the [Symfony ClassLoader component](https://github.com/symfony/ClassLoader) in order to use a standard way of class loading.
+
+If you want to see how to use the component with this library you can take a look at the file `demo/autoload.php`:
+
+    <?php
+
+    require_once(__DIR__ . '/../vendor/symfony/Symfony/Component/ClassLoader/UniversalClassLoader.php');
+
+    use Symfony\Component\ClassLoader\UniversalClassLoader;
+
+    $loader = new UniversalClassLoader();
+    $loader->registerNamespaces(array(
+                'PhpAmqpLib' => __DIR__ . '/..',
+            ));
+
+    $loader->register();
+
 # Debugging #
 
 If you want to know what's going on at a protocol level then add the following constant to your code:

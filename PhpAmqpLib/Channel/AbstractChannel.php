@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Channel;
 
+use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -111,7 +112,7 @@ class AbstractChannel
     {
         if($this->debug)
         {
-          debug_msg("waiting for a new frame");
+          MiscHelper::debug_msg("waiting for a new frame");
         }
         if($this->frame_queue != NULL)
             return array_pop($this->frame_queue);
@@ -163,7 +164,7 @@ class AbstractChannel
             } catch (Exception $e) {
               if($this->debug)
               {
-                debug_msg("Ignoring body decoding exception: " . $e->getMessage());
+                MiscHelper::debug_msg("Ignoring body decoding exception: " . $e->getMessage());
               }
             }
         }
@@ -182,14 +183,14 @@ class AbstractChannel
         {
           if($this->debug)
           {
-            debug_msg("waiting for " . implode(", ", $allowed_methods));
+            MiscHelper::debug_msg("waiting for " . implode(", ", $allowed_methods));
           }
         }
         else
         {
           if($this->debug)
           {
-            debug_msg("waiting for any method");
+            MiscHelper::debug_msg("waiting for any method");
           }
         }
 
@@ -198,7 +199,7 @@ class AbstractChannel
         {
           if($this->debug)
           {
-            debug_msg("checking queue method " . $qk);
+            MiscHelper::debug_msg("checking queue method " . $qk);
           }
 
             $method_sig = $queued_method[0];
@@ -208,8 +209,8 @@ class AbstractChannel
 
                 if($this->debug)
                 {
-                  debug_msg("Executing queued method: $method_sig: " .
-                            self::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
+                  MiscHelper::debug_msg("Executing queued method: $method_sig: " .
+                            self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
                 }
 
                 return $this->dispatch($queued_method[0],
@@ -237,7 +238,7 @@ class AbstractChannel
 
             if($this->debug)
             {
-              debug_msg("> $method_sig: " . self::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
+              MiscHelper::debug_msg("> $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
 
 
@@ -256,7 +257,7 @@ class AbstractChannel
             // Wasn't what we were looking for? save it for later
             if($this->debug)
             {
-              debug_msg("Queueing for later: $method_sig: " . self::$GLOBAL_METHOD_NAMES[methodSig($method_sig)]);
+              MiscHelper::debug_msg("Queueing for later: $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
             $this->method_queue[] = array($method_sig, $args, $content);
         }

@@ -10,6 +10,3 @@ $loader->registerNamespaces(array(
         ));
 
 $loader->register();
-
-require_once(__DIR__ . '/../hexdump.inc');
-require_once(__DIR__ . '/../PhpAmqpLib/Helper/misc.php');
