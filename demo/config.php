@@ -1,6 +1,5 @@
 <?php
-require_once(__DIR__.'/../hexdump.inc');
-include_once(__DIR__.'/../autoload.php');
+include_once(__DIR__.'/autoload.php');
 
 define('HOST', 'localhost');
 define('PORT', 5672);
