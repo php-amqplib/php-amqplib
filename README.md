@@ -75,7 +75,7 @@ If you want to see how to use the component with this library you can take a loo
 
     $loader->register();
 
-# Debugging #
+## Debugging ##
 
 If you want to know what's going on at a protocol level then add the following constant to your code:
 
@@ -86,7 +86,13 @@ If you want to know what's going on at a protocol level then add the following c
 
     ?>
 
-# Original README: #
+## Benchmarks ##
+
+To run the publishing/consume benchmark type:
+
+    $ make benchmark
+
+## Original README: ##
 
 Below is the original README file content. Credits goes to the original authors.
 
