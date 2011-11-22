@@ -142,6 +142,10 @@ class AMQPConnection extends AbstractChannel
             {
                 throw new \Exception ("Error sending data");
             }
+            if($written === 0)
+            {
+                throw new \Exception ("Broken pipe or closed connection");
+            }
             $len = $len - $written;
             if($len>0)
                 $data=substr($data,0-$len);
