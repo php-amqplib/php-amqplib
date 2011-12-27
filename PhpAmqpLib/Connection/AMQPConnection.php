@@ -66,13 +66,13 @@ class AMQPConnection extends AbstractChannel
             //TODO clean up
             if($context)
             {
-              $remote = sprintf('ssl://%s:%s', $host, $port);
-              $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT, $context);
+                $remote = sprintf('ssl://%s:%s', $host, $port);
+                $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT, $context);
             }
             else
             {
-              $remote = sprintf('tcp://%s:%s', $host, $port);
-              $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT);
+                $remote = sprintf('tcp://%s:%s', $host, $port);
+                $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT);
             }
 
             if (!$this->sock)
@@ -104,7 +104,7 @@ class AMQPConnection extends AbstractChannel
             // we were redirected, close the socket, loop and try again
             if($this->debug)
             {
-              MiscHelper::debug_msg("closing socket");
+                MiscHelper::debug_msg("closing socket");
             }
 
             @fclose($this->sock); $this->sock=NULL;
@@ -119,12 +119,12 @@ class AMQPConnection extends AbstractChannel
 
         if(is_resource($this->sock))
         {
-          if($this->debug)
-          {
-            MiscHelper::debug_msg("closing socket");
-          }
+            if($this->debug)
+            {
+                MiscHelper::debug_msg("closing socket");
+            }
 
-          @fclose($this->sock);
+            @fclose($this->sock);
         }
     }
 
@@ -132,7 +132,7 @@ class AMQPConnection extends AbstractChannel
     {
         if($this->debug)
         {
-          MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
+            MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
         }
 
         $len = strlen($data);
@@ -246,7 +246,7 @@ class AMQPConnection extends AbstractChannel
 
         if($this->debug)
         {
-          MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
+            MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
                            AbstractChannel::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
         }
 
@@ -450,7 +450,7 @@ class AMQPConnection extends AbstractChannel
 
         if($this->debug)
         {
-          MiscHelper::debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
+            MiscHelper::debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
                             $this->version_major,
                             $this->version_minor,
                             self::dump_table($this->server_properties),

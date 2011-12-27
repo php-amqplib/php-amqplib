@@ -92,7 +92,7 @@ class AbstractChannel
 
     public function getChannelId()
     {
-      return $this->channel_id;
+        return $this->channel_id;
     }
 
 
@@ -112,7 +112,7 @@ class AbstractChannel
     {
         if($this->debug)
         {
-          MiscHelper::debug_msg("waiting for a new frame");
+            MiscHelper::debug_msg("waiting for a new frame");
         }
         if($this->frame_queue != NULL)
             return array_pop($this->frame_queue);
@@ -162,10 +162,10 @@ class AbstractChannel
             {
                 $msg->body = $msg->body->decode($msg->content_encoding);
             } catch (Exception $e) {
-              if($this->debug)
-              {
-                MiscHelper::debug_msg("Ignoring body decoding exception: " . $e->getMessage());
-              }
+                if($this->debug)
+                {
+                    MiscHelper::debug_msg("Ignoring body decoding exception: " . $e->getMessage());
+                }
             }
         }
 
@@ -181,26 +181,26 @@ class AbstractChannel
     {
         if($allowed_methods)
         {
-          if($this->debug)
-          {
-            MiscHelper::debug_msg("waiting for " . implode(", ", $allowed_methods));
-          }
+            if($this->debug)
+            {
+                MiscHelper::debug_msg("waiting for " . implode(", ", $allowed_methods));
+            }
         }
         else
         {
-          if($this->debug)
-          {
-            MiscHelper::debug_msg("waiting for any method");
-          }
+            if($this->debug)
+            {
+                MiscHelper::debug_msg("waiting for any method");
+            }
         }
 
         //Process deferred methods
         foreach($this->method_queue as $qk=>$queued_method)
         {
-          if($this->debug)
-          {
-            MiscHelper::debug_msg("checking queue method " . $qk);
-          }
+            if($this->debug)
+            {
+                MiscHelper::debug_msg("checking queue method " . $qk);
+            }
 
             $method_sig = $queued_method[0];
             if($allowed_methods==NULL || in_array($method_sig, $allowed_methods))
@@ -209,7 +209,7 @@ class AbstractChannel
 
                 if($this->debug)
                 {
-                  MiscHelper::debug_msg("Executing queued method: $method_sig: " .
+                    MiscHelper::debug_msg("Executing queued method: $method_sig: " .
                             self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
                 }
 
@@ -238,7 +238,7 @@ class AbstractChannel
 
             if($this->debug)
             {
-              MiscHelper::debug_msg("> $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+                MiscHelper::debug_msg("> $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
 
 
@@ -257,7 +257,7 @@ class AbstractChannel
             // Wasn't what we were looking for? save it for later
             if($this->debug)
             {
-              MiscHelper::debug_msg("Queueing for later: $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+                MiscHelper::debug_msg("Queueing for later: $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
             $this->method_queue[] = array($method_sig, $args, $content);
         }

@@ -50,7 +50,7 @@ class AMQPChannel extends AbstractChannel
 
         if($this->debug)
         {
-          MiscHelper::debug_msg("using channel_id: " . $channel_id);
+            MiscHelper::debug_msg("using channel_id: " . $channel_id);
         }
 
         $this->default_ticket = 0;
@@ -185,7 +185,7 @@ class AMQPChannel extends AbstractChannel
         $this->is_open = true;
         if($this->debug)
         {
-          MiscHelper::debug_msg("Channel open");
+            MiscHelper::debug_msg("Channel open");
         }
     }
 
