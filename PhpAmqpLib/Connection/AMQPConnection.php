@@ -109,9 +109,8 @@ class AMQPConnection extends AbstractChannel
 
     public function __destruct()
     {
-        if(isset($this->input))
-            if($this->input)
-                $this->close();
+        if(!empty($this->input))
+            $this->close();
 
         if(is_resource($this->sock))
         {
@@ -145,12 +144,11 @@ class AMQPConnection extends AbstractChannel
 
     protected function do_close()
     {
-        if(isset($this->input))
-            if($this->input)
-            {
-                $this->input->close();
-                $this->input = NULL;
-            }
+        if(!empty($this->input))
+        {
+            $this->input->close();
+            $this->input = NULL;
+        }
 
         if(is_resource($this->sock))
         {
