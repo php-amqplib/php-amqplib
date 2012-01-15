@@ -20,7 +20,7 @@ class BufferedInput
 
     public function read($n)
     {
-        if ($this->offset >= strlen($this->buffer))
+        if ($this->offset >= mb_strlen($this->buffer,'ASCII'))
         {
             if (!($rv = $this->populate_buffer()))
             {
@@ -38,7 +38,7 @@ class BufferedInput
 
     private function read_buffer($n)
     {
-        $n = min($n, strlen($this->buffer) - $this->offset);
+        $n = min($n, mb_strlen($this->buffer,'ASCII') - $this->offset);
         if ($n === 0)
         {
             // substr("", 0, 0) => FALSE, which screws up read loops that are
@@ -46,7 +46,7 @@ class BufferedInput
             // case when the buffer is empty/used up.
             return "";
         }
-        $block = substr($this->buffer, $this->offset, $n);
+        $block = mb_substr($this->buffer, $this->offset, $n, 'ASCII');
         $this->offset += $n;
         return $block;
     }

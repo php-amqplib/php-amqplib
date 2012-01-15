@@ -56,21 +56,21 @@ class AMQPReader
             while($read < $n && !feof($this->sock->real_sock()) &&
                   (false !== ($buf = fread($this->sock->real_sock(), $n - $read))))
             {
-                $read += strlen($buf);
+                $read += mb_strlen($buf,'ASCII');
                 $res .= $buf;
             }
 
-            if(strlen($res)!=$n)
+            if(mb_strlen($res,'ASCII')!=$n)
                 throw new \Exception("Error reading data. Recevived " .
-                                     strlen($res) . " instead of expected $n bytes");
+                                     mb_strlen($res,'ASCII') . " instead of expected $n bytes");
             $this->offset += $n;
         } else
         {
-            if(strlen($this->str) < $n)
+            if(mb_strlen($this->str,'ASCII') < $n)
                 throw new \Exception("Error reading data. Requested $n bytes while string buffer has only " .
-                                     strlen($this->str));
-            $res = substr($this->str,0,$n);
-            $this->str = substr($this->str,$n);
+                                     mb_strlen($this->str,'ASCII'));
+            $res = mb_substr($this->str,0,$n,'ASCII');
+            $this->str = mb_substr($this->str,$n,mb_strlen($this->str,'ASCII')-$n,'ASCII');
             $this->offset += $n;
         }
         return $res;
