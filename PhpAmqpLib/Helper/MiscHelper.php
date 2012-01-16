@@ -47,7 +47,7 @@ class MiscHelper
         $ascii  = '';
         $dump   = ($htmloutput === true) ? '<pre>' : '';
         $offset = 0;
-        $len    = strlen($data);
+        $len    = mb_strlen($data,'ASCII');
 
         // Upper or lower case hexidecimal
         $x = ($uppercase === false) ? 'x' : 'X';

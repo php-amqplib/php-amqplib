@@ -573,7 +573,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array(60, 40), $args);
 
         $this->connection->send_content($this->channel_id, 60, 0,
-                                        strlen($msg->body),
+                                        mb_strlen($msg->body, 'ASCII'),
                                         $msg->serialize_properties(),
                                         $msg->body);
     }
