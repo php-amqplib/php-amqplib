@@ -156,9 +156,9 @@ class AMQPWriter
     public function write_shortstr($s)
     {
         $this->flushbits();
-        if(strlen($s) > 255)
+        if(mb_strlen($s,'ASCII') > 255)
             throw new \InvalidArgumentException('String too long');
-        $this->write_octet(strlen($s));
+        $this->write_octet(mb_strlen($s,'ASCII'));
         $this->out .= $s;
         return $this;
     }
@@ -170,7 +170,7 @@ class AMQPWriter
     public function write_longstr($s)
     {
         $this->flushbits();
-        $this->write_long(strlen($s));
+        $this->write_long(mb_strlen($s,'ASCII'));
         $this->out .= $s;
         return $this;
     }
@@ -222,7 +222,7 @@ class AMQPWriter
             }
         }
         $table_data = $table_data->getvalue();
-        $this->write_long(strlen($table_data));
+        $this->write_long(mb_strlen($table_data,'ASCII'));
         $this->write($table_data);
         return $this;
     }
