@@ -139,7 +139,7 @@ class AbstractChannel
 
         $body_size = $payload_reader->read_longlong();
         $msg = new AMQPMessage();
-        $msg->load_properties(mb_substr($payload,12,mb_strlen($payload,'ASCII')-12));
+        $msg->load_properties(mb_substr($payload,12,mb_strlen($payload,'ASCII')-12,'ASCII'));
 
         $body_parts = array();
         $body_received = 0;
