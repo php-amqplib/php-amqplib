@@ -133,13 +133,13 @@ class AbstractChannel
         if($frame_type != 2)
             throw new \Exception("Expecting Content header");
 
-        $payload_reader = new AMQPReader(substr($payload,0,12));
+        $payload_reader = new AMQPReader(mb_substr($payload,0,12,'ASCII'));
         $class_id = $payload_reader->read_short();
         $weight = $payload_reader->read_short();
 
         $body_size = $payload_reader->read_longlong();
         $msg = new AMQPMessage();
-        $msg->load_properties(substr($payload,12));
+        $msg->load_properties(mb_substr($payload,12,mb_strlen($payload,'ASCII')-12,'ASCII'));
 
         $body_parts = array();
         $body_received = 0;
@@ -151,7 +151,7 @@ class AbstractChannel
             if($frame_type != 3)
                 throw new \Exception("Expecting Content body, received frame type $frame_type");
             $body_parts[] = $payload;
-            $body_received = bcadd($body_received, strlen($payload));
+            $body_received = bcadd($body_received, mb_strlen($payload,'ASCII'));
         }
 
         $msg->body = implode("",$body_parts);
@@ -229,12 +229,12 @@ class AbstractChannel
             if($frame_type != 1)
                 throw new \Exception("Expecting AMQP method, received frame type: $frame_type");
 
-            if(strlen($payload) < 4)
+            if(mb_strlen($payload,'ASCII') < 4)
                 throw new \Exception("Method frame too short");
 
-            $method_sig_array = unpack("n2", substr($payload,0,4));
+            $method_sig_array = unpack("n2", mb_substr($payload,0,4,'ASCII'));
             $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
-            $args = new AMQPReader(substr($payload,4));
+            $args = new AMQPReader(mb_substr($payload,4,mb_strlen($payload,'ASCII')-4,'ASCII'));
 
             if($this->debug)
             {
