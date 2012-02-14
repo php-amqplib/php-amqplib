@@ -500,4 +500,12 @@ class AMQPConnection extends AbstractChannel
         $this->wait_tune_ok = False;
     }
 
+    /**
+     * get socket from current connection
+     */
+    public function getSocket()
+    {
+        return $this->sock;
+    }
+
 }

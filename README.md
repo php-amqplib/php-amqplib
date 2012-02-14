@@ -56,6 +56,10 @@ Then to stop the consumer, send to it the `quit` message:
 
     $ php amqp_publisher.php quit
 
+If you need to attent your sockets try non blocking consumer.
+
+    $ php amqp_consumer_non_blocking.php
+
 ## Loading Classes ##
 
 The library uses the [Symfony ClassLoader component](https://github.com/symfony/ClassLoader) in order to use a standard way of class loading.

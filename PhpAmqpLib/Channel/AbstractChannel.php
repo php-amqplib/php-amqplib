@@ -177,7 +177,7 @@ class AbstractChannel
      * Unexpected methods are queued up for later calls to this Python
      * method.
      */
-    public function wait($allowed_methods=NULL)
+    public function wait($allowed_methods=NULL, $non_blocking = false)
     {
         if($allowed_methods)
         {
@@ -260,6 +260,8 @@ class AbstractChannel
               MiscHelper::debug_msg("Queueing for later: $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
             $this->method_queue[] = array($method_sig, $args, $content);
+
+            if($non_blocking) break;
         }
     }
 
