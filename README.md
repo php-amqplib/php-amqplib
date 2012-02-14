@@ -56,7 +56,7 @@ Then to stop the consumer, send to it the `quit` message:
 
     $ php amqp_publisher.php quit
 
-If you need to attent your sockets try non blocking consumer.
+If you need to listen to the sockets used to connect to RabbitMQ then see the example in the non blocking consumer.
 
     $ php amqp_consumer_non_blocking.php
 
