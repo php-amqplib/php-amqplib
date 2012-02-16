@@ -28,7 +28,7 @@ To be sure that what you are downloading _works™_ you can always check the bui
 
 Get the library source code:
 
-    $ git clone git://github.com/tnc/php-amqplib.git
+    $ git clone git://github.com/videlalvaro/php-amqplib.git
 
 This library uses the `Symfony` default `UniversalClassLoader` so you will have to run the following command to download it as a submodule:
 
@@ -55,6 +55,10 @@ You should see the message arriving to the process on the other Terminal
 Then to stop the consumer, send to it the `quit` message:
 
     $ php amqp_publisher.php quit
+
+If you need to attent your sockets try non blocking consumer.
+
+    $ php amqp_consumer_non_blocking.php
 
 ## Loading Classes ##
 
@@ -111,7 +115,7 @@ http://groups.google.com/group/php-amqplib-devel
 
 For bug reports, please use bug tracking system at the project page.
 
-Patched are very welcome!
+Patches are very welcome!
 
 Author: Vadim Zaliva <lord@crocodile.org>
 
