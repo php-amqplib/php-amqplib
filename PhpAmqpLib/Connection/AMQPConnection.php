@@ -66,13 +66,13 @@ class AMQPConnection extends AbstractChannel
             //TODO clean up
             if($context)
             {
-              $remote = sprintf('ssl://%s:%s', $host, $port);
-              $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT, $context);
+                $remote = sprintf('ssl://%s:%s', $host, $port);
+                $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT, $context);
             }
             else
             {
-              $remote = sprintf('tcp://%s:%s', $host, $port);
-              $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT);
+                $remote = sprintf('tcp://%s:%s', $host, $port);
+                $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT);
             }
 
             if (!$this->sock)
@@ -102,38 +102,26 @@ class AMQPConnection extends AbstractChannel
                 return; // we weren't redirected
 
             // we were redirected, close the socket, loop and try again
-            if($this->debug)
-            {
-              MiscHelper::debug_msg("closing socket");
-            }
-
+            $this->debug_msg("closing socket");
             @fclose($this->sock); $this->sock=NULL;
         }
     }
 
     public function __destruct()
     {
-        if(isset($this->input))
-            if($this->input)
-                $this->close();
+        if(!empty($this->input))
+            $this->close();
 
         if(is_resource($this->sock))
         {
-          if($this->debug)
-          {
-            MiscHelper::debug_msg("closing socket");
-          }
-
-          @fclose($this->sock);
+            $this->debug_msg("closing socket");
+            @fclose($this->sock);
         }
     }
 
     protected function write($data)
     {
-        if($this->debug)
-        {
-          MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
-        }
+        $this->debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
 
         $len = strlen($data);
         while(true)
@@ -156,20 +144,15 @@ class AMQPConnection extends AbstractChannel
 
     protected function do_close()
     {
-        if(isset($this->input))
-            if($this->input)
-            {
-                $this->input->close();
-                $this->input = NULL;
-            }
+        if(!empty($this->input))
+        {
+            $this->input->close();
+            $this->input = NULL;
+        }
 
         if(is_resource($this->sock))
         {
-            if($this->debug)
-            {
-              MiscHelper::debug_msg("closing socket");
-            }
-
+            $this->debug_msg("closing socket");
             @fclose($this->sock);
             $this->sock = NULL;
         }
@@ -244,12 +227,8 @@ class AMQPConnection extends AbstractChannel
         $pkt = $pkt->getvalue();
         $this->write($pkt);
 
-        if($this->debug)
-        {
-          MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-                           AbstractChannel::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
-        }
-
+        $this->debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
+                                   AbstractChannel::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
     }
 
     /**
@@ -396,11 +375,7 @@ class AMQPConnection extends AbstractChannel
     protected function open_ok($args)
     {
         $this->known_hosts = $args->read_shortstr();
-        if($this->debug)
-        {
-          MiscHelper::debug_msg("Open OK! known_hosts: " . $this->known_hosts);
-        }
-
+        $this->debug_msg("Open OK! known_hosts: " . $this->known_hosts);
         return NULL;
     }
 
@@ -412,10 +387,7 @@ class AMQPConnection extends AbstractChannel
     {
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
-        if($this->debug)
-        {
-          MiscHelper::debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]" );
-        }
+        $this->debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]");
         return $host;
     }
 
@@ -448,16 +420,12 @@ class AMQPConnection extends AbstractChannel
         $this->mechanisms = explode(" ", $args->read_longstr());
         $this->locales = explode(" ", $args->read_longstr());
 
-        if($this->debug)
-        {
-          MiscHelper::debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
-                            $this->version_major,
-                            $this->version_minor,
-                            self::dump_table($this->server_properties),
-                            implode(', ', $this->mechanisms),
-                            implode(', ', $this->locales)));
-        }
-
+        $this->debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
+                                    $this->version_major,
+                                    $this->version_minor,
+                                    self::dump_table($this->server_properties),
+                                    implode(', ', $this->mechanisms),
+                                    implode(', ', $this->locales)));
     }
 
 

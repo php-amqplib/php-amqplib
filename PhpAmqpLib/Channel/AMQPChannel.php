@@ -48,10 +48,7 @@ class AMQPChannel extends AbstractChannel
 
         parent::__construct($connection, $channel_id);
 
-        if($this->debug)
-        {
-          MiscHelper::debug_msg("using channel_id: " . $channel_id);
-        }
+        $this->debug_msg("using channel_id: " . $channel_id);
 
         $this->default_ticket = 0;
         $this->is_open = false;
@@ -183,10 +180,7 @@ class AMQPChannel extends AbstractChannel
     protected function open_ok($args)
     {
         $this->is_open = true;
-        if($this->debug)
-        {
-          MiscHelper::debug_msg("Channel open");
-        }
+        $this->debug_msg("Channel open");
     }
 
     /**
