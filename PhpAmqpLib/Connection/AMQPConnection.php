@@ -67,12 +67,12 @@ class AMQPConnection extends AbstractChannel
             if($context)
             {
               $remote = sprintf('ssl://%s:%s', $host, $port);
-              $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT, $context);
+              $this->sock = stream_socket_client($remote, $errno, $errstr, $connection_timeout, STREAM_CLIENT_CONNECT, $context);
             }
             else
             {
               $remote = sprintf('tcp://%s:%s', $host, $port);
-              $this->sock = stream_socket_client($remote, $errno, $errstr, 60, STREAM_CLIENT_CONNECT);
+              $this->sock = stream_socket_client($remote, $errno, $errstr, $connection_timeout, STREAM_CLIENT_CONNECT);
             }
 
             if (!$this->sock)
