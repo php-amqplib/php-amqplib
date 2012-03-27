@@ -95,14 +95,8 @@ class AMQPConnection extends AbstractChannel
                 return; // we weren't redirected
             }
 
-            //TODO refactor socket close into its own function
             // we were redirected, close the socket, loop and try again
-            if ($this->debug) {
-              MiscHelper::debug_msg("closing socket");
-            }
-
-            @fclose($this->sock);
-            $this->sock=null;
+            $this->close_socket();
         }
     }
 
@@ -112,14 +106,17 @@ class AMQPConnection extends AbstractChannel
             $this->close();
         }
 
-        //TODO refactor socket close into its own function. search for calls to fclose
-        if (is_resource($this->sock)) {
-          if ($this->debug) {
-            MiscHelper::debug_msg("closing socket");
-          }
+        $this->close_socket();
+    }
 
-          @fclose($this->sock);
+    protected function close_socket()
+    {
+        if ($this->debug) {
+          MiscHelper::debug_msg("closing socket");
         }
+
+        @fclose($this->sock);
+        $this->sock = null;
     }
 
     protected function write($data)
@@ -137,8 +134,8 @@ class AMQPConnection extends AbstractChannel
                 throw new \Exception ("Broken pipe or closed connection");
             }
             $len = $len - $written;
-            if ($len>0) {
-                $data=substr($data,0-$len);
+            if ($len > 0) {
+                $data = substr($data,0-$len);
             } else {
                 break;
             }
@@ -152,14 +149,7 @@ class AMQPConnection extends AbstractChannel
             $this->input = null;
         }
 
-        if (is_resource($this->sock)) {
-            if ($this->debug) {
-              MiscHelper::debug_msg("closing socket");
-            }
-
-            @fclose($this->sock);
-            $this->sock = null;
-        }
+        $this->close_socket();
     }
 
     public function get_free_channel_id()
