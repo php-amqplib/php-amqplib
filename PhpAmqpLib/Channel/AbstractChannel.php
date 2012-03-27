@@ -104,7 +104,7 @@ class AbstractChannel
 
         $amqp_method = $this->method_map[$method_sig];
 
-        if ($content == NULL) {
+        if ($content == null) {
             return call_user_func(array($this,$amqp_method), $args);
         } else {
             return call_user_func(array($this,$amqp_method), $args, $content);
@@ -117,7 +117,7 @@ class AbstractChannel
           MiscHelper::debug_msg("waiting for a new frame");
         }
 
-        if($this->frame_queue != NULL) {
+        if($this->frame_queue != null) {
             return array_pop($this->frame_queue);
         }
 
@@ -129,8 +129,7 @@ class AbstractChannel
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
 
-    //TODO add visibility keywords
-    function wait_content()
+    public function wait_content()
     {
         $frm = $this->next_frame();
         $frame_type = $frm[0];
@@ -183,7 +182,7 @@ class AbstractChannel
      * Unexpected methods are queued up for later calls to this PHP
      * method.
      */
-    public function wait($allowed_methods=NULL, $non_blocking = false)
+    public function wait($allowed_methods=null, $non_blocking = false)
     {
         if ($allowed_methods) {
           if ($this->debug) {
@@ -202,7 +201,7 @@ class AbstractChannel
           }
 
             $method_sig = $queued_method[0];
-            if ($allowed_methods==NULL || in_array($method_sig, $allowed_methods)) {
+            if ($allowed_methods==null || in_array($method_sig, $allowed_methods)) {
                 unset($this->method_queue[$qk]);
 
                 if ($this->debug) {
@@ -242,7 +241,7 @@ class AbstractChannel
             if (in_array($method_sig, self::$CONTENT_METHODS)) {
                 $content = $this->wait_content();
             } else {
-                $content = NULL;
+                $content = null;
             }
 
             if ($allowed_methods == null ||

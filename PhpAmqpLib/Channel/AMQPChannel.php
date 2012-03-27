@@ -37,13 +37,13 @@ class AMQPChannel extends AbstractChannel
     );
 
     public function __construct($connection,
-                                $channel_id=NULL,
+                                $channel_id=null,
                                 $auto_decode=true)
     {
 
         $this->frameBuilder = new FrameBuilder();
 
-        if ($channel_id == NULL) {
+        if ($channel_id == null) {
             $channel_id = $connection->get_free_channel_id();
         }
 
@@ -76,7 +76,7 @@ class AMQPChannel extends AbstractChannel
     {
         $this->is_open = false;
         unset($this->connection->channels[$this->channel_id]);
-        $this->channel_id = $this->connection = NULL;
+        $this->channel_id = $this->connection = null;
     }
 
     /**
@@ -225,8 +225,8 @@ class AMQPChannel extends AbstractChannel
                                      $auto_delete=true,
                                      $internal=false,
                                      $nowait=false,
-                                     $arguments=NULL,
-                                     $ticket=NULL)
+                                     $arguments=null,
+                                     $ticket=null)
     {
 
         $arguments = $this->getArguments($arguments);
@@ -260,7 +260,7 @@ class AMQPChannel extends AbstractChannel
      * delete an exchange
      */
     public function exchange_delete($exchange, $if_unused=false,
-        $nowait=false, $ticket=NULL)
+        $nowait=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
         $args = $this->frameBuilder->exchangeDelete($exchange, $if_unused, $nowait, $ticket);
@@ -285,7 +285,7 @@ class AMQPChannel extends AbstractChannel
      * bind queue to an exchange
      */
     public function queue_bind($queue, $exchange, $routing_key="",
-        $nowait=false, $arguments=NULL, $ticket=NULL)
+        $nowait=false, $arguments=null, $ticket=null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -312,7 +312,7 @@ class AMQPChannel extends AbstractChannel
      * unbind queue from an exchange
      */
     public function queue_unbind($queue, $exchange, $routing_key="",
-        $arguments=NULL, $ticket=NULL)
+        $arguments=null, $ticket=null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -342,8 +342,8 @@ class AMQPChannel extends AbstractChannel
                                    $exclusive=false,
                                    $auto_delete=true,
                                    $nowait=false,
-                                   $arguments=NULL,
-                                   $ticket=NULL)
+                                   $arguments=null,
+                                   $ticket=null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -377,7 +377,7 @@ class AMQPChannel extends AbstractChannel
      * delete a queue
      */
     public function queue_delete($queue="", $if_unused=false, $if_empty=false,
-        $nowait=false, $ticket=NULL)
+        $nowait=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
 
@@ -403,7 +403,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * purge a queue
      */
-    public function queue_purge($queue="", $nowait=false, $ticket=NULL)
+    public function queue_purge($queue="", $nowait=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
         $args = $this->frameBuilder->queuePurge($queue, $nowait, $ticket);
@@ -460,7 +460,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_consume($queue="", $consumer_tag="", $no_local=false,
                                   $no_ack=false, $exclusive=false, $nowait=false,
-                                  $callback=NULL, $ticket=NULL)
+                                  $callback=null, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
         $args = $this->frameBuilder->basicConsume(
@@ -510,10 +510,10 @@ class AMQPChannel extends AbstractChannel
         if (isset($this->callbacks[$consumer_tag])) {
             $func = $this->callbacks[$consumer_tag];
         } else {
-            $func = NULL;
+            $func = null;
         }
 
-        if ($func != NULL) {
+        if ($func != null) {
             call_user_func($func, $msg);
         }
     }
@@ -521,7 +521,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * direct access to a queue
      */
-    public function basic_get($queue="", $no_ack=false, $ticket=NULL)
+    public function basic_get($queue="", $no_ack=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
         $args = $this->frameBuilder->basicGet($queue, $no_ack, $ticket);
@@ -567,7 +567,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_publish($msg, $exchange="", $routing_key="",
                                   $mandatory=false, $immediate=false,
-                                  $ticket=NULL)
+                                  $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
         $args = $this->frameBuilder->basicPublish(

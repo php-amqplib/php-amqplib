@@ -33,7 +33,7 @@ class AMQPConnection extends AbstractChannel
                                 $user, $password,
                                 $vhost="/",$insist=false,
                                 $login_method="AMQPLAIN",
-                                $login_response=NULL,
+                                $login_response=null,
                                 $locale="en_US",
                                 $connection_timeout = 3,
                                 $read_write_timeout = 3,
@@ -46,7 +46,7 @@ class AMQPConnection extends AbstractChannel
                                                "PASSWORD" => array('S',$password)));
             $login_response = substr($login_response->getvalue(),4); //Skip the length
         } else {
-            $login_response = NULL;
+            $login_response = null;
         }
 
         $d = self::$LIBRARY_PROPERTIES;
@@ -58,8 +58,8 @@ class AMQPConnection extends AbstractChannel
             $this->channel_max = 65535;
             $this->frame_max = 131072;
 
-            $errstr = $errno = NULL;
-            $this->sock = NULL;
+            $errstr = $errno = null;
+            $this->sock = null;
 
             //TODO clean up
             if ($context) {
@@ -102,7 +102,7 @@ class AMQPConnection extends AbstractChannel
             }
 
             @fclose($this->sock);
-            $this->sock=NULL;
+            $this->sock=null;
         }
     }
 
@@ -149,7 +149,7 @@ class AMQPConnection extends AbstractChannel
     {
         if (isset($this->input) && $this->input) {
             $this->input->close();
-            $this->input = NULL;
+            $this->input = null;
         }
 
         if (is_resource($this->sock)) {
@@ -158,7 +158,7 @@ class AMQPConnection extends AbstractChannel
             }
 
             @fclose($this->sock);
-            $this->sock = NULL;
+            $this->sock = null;
         }
     }
 
@@ -284,7 +284,7 @@ class AMQPConnection extends AbstractChannel
      * Fetch a Channel object identified by the numeric channel_id, or
      * create that object if it doesn't already exist.
      */
-    public function channel($channel_id=NULL)
+    public function channel($channel_id=null)
     {
         return isset($this->channels[$channel_id])
                 ? $this->channels[$channel_id]
@@ -384,7 +384,7 @@ class AMQPConnection extends AbstractChannel
           MiscHelper::debug_msg("Open OK! known_hosts: " . $this->known_hosts);
         }
 
-        return NULL;
+        return null;
     }
 
 

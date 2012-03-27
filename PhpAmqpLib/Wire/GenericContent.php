@@ -15,7 +15,7 @@ class GenericContent
         "dummy" => "shortstr"
     );
 
-    public function __construct($props, $prop_types=NULL)
+    public function __construct($props, $prop_types=null)
     {
         if($prop_types)
             $this->prop_types = $prop_types;
@@ -101,10 +101,10 @@ class GenericContent
             if (isset($this->properties[$key])) {
                 $val = $this->properties[$key];
             } else {
-                $val = NULL;
+                $val = null;
             }
 
-            if ($val != NULL) {
+            if ($val != null) {
                 if ($shift == 0) {
                     $flags[] = $flag_bits;
                     $flag_bits = 0;
