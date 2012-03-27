@@ -43,13 +43,13 @@ class AMQPChannel extends AbstractChannel
 
         $this->frameBuilder = new FrameBuilder();
 
-        if($channel_id == NULL)
+        if ($channel_id == NULL) {
             $channel_id = $connection->get_free_channel_id();
+        }
 
         parent::__construct($connection, $channel_id);
 
-        if($this->debug)
-        {
+        if ($this->debug) {
           MiscHelper::debug_msg("using channel_id: " . $channel_id);
         }
 
@@ -170,8 +170,9 @@ class AMQPChannel extends AbstractChannel
 
     protected function x_open($out_of_band="")
     {
-        if($this->is_open)
+        if ($this->is_open) {
             return;
+        }
 
         $args = $this->frameBuilder->xOpen($out_of_band);
         $this->send_method_frame(array(20, 10), $args);
@@ -183,8 +184,7 @@ class AMQPChannel extends AbstractChannel
     protected function open_ok($args)
     {
         $this->is_open = true;
-        if($this->debug)
-        {
+        if ($this->debug) {
           MiscHelper::debug_msg("Channel open");
         }
     }
@@ -241,10 +241,12 @@ class AMQPChannel extends AbstractChannel
 
         $this->send_method_frame(array(40, 10), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             return $this->wait(array(
                                    "40,11"    //Channel.exchange_declare_ok
                                ));
+        }
+
     }
 
     /**
@@ -264,10 +266,11 @@ class AMQPChannel extends AbstractChannel
         $args = $this->frameBuilder->exchangeDelete($exchange, $if_unused, $nowait, $ticket);
         $this->send_method_frame(array(40, 20), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             return $this->wait(array(
                                    "40,21"    //Channel.exchange_delete_ok
                                ));
+        }
     }
 
     /**
@@ -291,10 +294,11 @@ class AMQPChannel extends AbstractChannel
 
         $this->send_method_frame(array(50, 20), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             return $this->wait(array(
                                    "50,21"    // Channel.queue_bind_ok
                                ));
+        }
     }
 
     /**
@@ -350,10 +354,11 @@ class AMQPChannel extends AbstractChannel
                                        $arguments, $ticket);
         $this->send_method_frame(array(50, 10), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             return $this->wait(array(
                                    "50,11"    // Channel.queue_declare_ok
                                ));
+        }
     }
 
     /**
@@ -380,10 +385,11 @@ class AMQPChannel extends AbstractChannel
 
         $this->send_method_frame(array(50, 40), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             return $this->wait(array(
                                    "50,41"    //Channel.queue_delete_ok
                                ));
+        }
     }
 
     /**
@@ -404,10 +410,11 @@ class AMQPChannel extends AbstractChannel
 
         $this->send_method_frame(array(50, 30), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             return $this->wait(array(
                                    "50,31"    //Channel.queue_purge_ok
                                ));
+        }
     }
 
     /**
@@ -462,10 +469,11 @@ class AMQPChannel extends AbstractChannel
 
         $this->send_method_frame(array(60, 20), $args);
 
-        if(!$nowait)
+        if (!$nowait) {
             $consumer_tag = $this->wait(array(
                                             "60,21"    //Channel.basic_consume_ok
                                         ));
+        }
 
         $this->callbacks[$consumer_tag] = $callback;
         return $consumer_tag;
@@ -499,17 +507,13 @@ class AMQPChannel extends AbstractChannel
             "routing_key" => $routing_key
         );
 
-        if(isset($this->callbacks[$consumer_tag]))
-        {
+        if (isset($this->callbacks[$consumer_tag])) {
             $func = $this->callbacks[$consumer_tag];
-        }
-        else
-        {
+        } else {
             $func = NULL;
         }
 
-        if($func != NULL)
-        {
+        if ($func != NULL) {
             call_user_func($func, $msg);
         }
     }

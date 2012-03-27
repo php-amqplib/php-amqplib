@@ -48,24 +48,23 @@ class AMQPReader
 
     private function rawread($n)
     {
-        if($this->sock)
-        {
+        if ($this->sock) {
             $res = '';
             $read = 0;
 
-            while($read < $n && !feof($this->sock->real_sock()) &&
-                  (false !== ($buf = fread($this->sock->real_sock(), $n - $read))))
-            {
+            while ($read < $n && !feof($this->sock->real_sock()) &&
+                    (false !== ($buf = fread($this->sock->real_sock(), $n - $read)))) {
                 $read += strlen($buf);
                 $res .= $buf;
             }
 
-            if(strlen($res)!=$n)
+            if(strlen($res)!=$n) {
                 throw new \Exception("Error reading data. Recevived " .
                                      strlen($res) . " instead of expected $n bytes");
+            }
+
             $this->offset += $n;
-        } else
-        {
+        } else {
             if(strlen($this->str) < $n)
                 throw new \Exception("Error reading data. Requested $n bytes while string buffer has only " .
                                      strlen($this->str));
@@ -207,8 +206,7 @@ class AMQPReader
             throw new \Exception("Table is longer than supported");
         $table_data = new AMQPReader($this->rawread($tlen));
         $result = array();
-        while($table_data->tell() < $tlen)
-        {
+        while ($table_data->tell() < $tlen) {
             $name = $table_data->read_shortstr();
             $ftype = $table_data->rawread(1);
             if($ftype == 'S') {

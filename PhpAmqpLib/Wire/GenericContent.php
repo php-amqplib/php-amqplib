@@ -58,8 +58,7 @@ class GenericContent
 
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();
-        while(true)
-        {
+        while (true) {
             $flag_bits = $r->read_short();
             $flags[] = $flag_bits;
             if(($flag_bits & 1) == 0)
@@ -68,17 +67,15 @@ class GenericContent
 
         $shift = 0;
         $d = array();
-        foreach ($this->prop_types as $key => $proptype)
-        {
-            if($shift == 0) {
-                if(!$flags) {
+        foreach ($this->prop_types as $key => $proptype) {
+            if ($shift == 0) {
+                if (!$flags) {
                     break;
                 }
                 $flag_bits = array_shift($flags);
                 $shift = 15;
             }
-            if($flag_bits & (1 << $shift))
-            {
+            if ($flag_bits & (1 << $shift)) {
                 $d[$key] = $r->{'read_'.$proptype}();
             }
 
@@ -100,25 +97,22 @@ class GenericContent
         $flags = array();
         $raw_bytes = new AMQPWriter();
 
-        foreach ($this->prop_types as $key => $proptype)
-        {
-            if(isset($this->properties[$key]))
+        foreach ($this->prop_types as $key => $proptype) {
+            if (isset($this->properties[$key])) {
                 $val = $this->properties[$key];
-            else
+            } else {
                 $val = NULL;
+            }
 
-            if($val != NULL)
-            {
-                if($shift == 0)
-                {
+            if ($val != NULL) {
+                if ($shift == 0) {
                     $flags[] = $flag_bits;
                     $flag_bits = 0;
                     $shift = 15;
                 }
 
                 $flag_bits |= (1 << $shift);
-                if($proptype != "bit")
-                {
+                if ($proptype != "bit") {
                     $raw_bytes->{'write_'.$proptype}($val);
                 }
 
@@ -128,8 +122,10 @@ class GenericContent
 
         $flags[] = $flag_bits;
         $result = new AMQPWriter();
-        foreach($flags as $flag_bits)
+        foreach ($flags as $flag_bits) {
             $result->write_short($flag_bits);
+        }
+
         $result->write($raw_bytes->getvalue());
 
         return $result->getvalue();

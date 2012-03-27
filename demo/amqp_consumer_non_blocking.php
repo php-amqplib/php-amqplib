@@ -72,7 +72,7 @@ function shutdown($ch, $conn){
 register_shutdown_function('shutdown', $ch, $conn);
 
 // Loop as long as the channel has callbacks registered
-while(count($ch->callbacks)) {
+while (count($ch->callbacks)) {
     $read   = array($conn->getSocket()); // add here other sockets that you need to attend
     $write  = NULL;
     $except = NULL;
