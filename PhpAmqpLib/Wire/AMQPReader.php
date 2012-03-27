@@ -163,7 +163,7 @@ class AMQPReader
 
     /**
      * Read a utf-8 encoded string that's stored in up to
-     * 255 bytes.  Return it decoded as a Python unicode object.
+     * 255 bytes.  Return it decoded as a PHP unicode object.
      */
     public function read_shortstr()
     {

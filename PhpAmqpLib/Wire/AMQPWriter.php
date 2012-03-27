@@ -65,7 +65,7 @@ class AMQPWriter
     }
 
     /**
-     * Write a plain Python string, with no special encoding.
+     * Write a plain PHP string, with no special encoding.
      */
     public function write($s)
     {

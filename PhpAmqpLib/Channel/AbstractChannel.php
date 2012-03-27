@@ -174,7 +174,7 @@ class AbstractChannel
 
     /**
      * Wait for some expected AMQP methods and dispatch to them.
-     * Unexpected methods are queued up for later calls to this Python
+     * Unexpected methods are queued up for later calls to this PHP
      * method.
      */
     public function wait($allowed_methods=NULL, $non_blocking = false)
