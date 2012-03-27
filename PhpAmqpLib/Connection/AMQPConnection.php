@@ -274,11 +274,15 @@ class AMQPConnection extends AbstractChannel
      * Fetch a Channel object identified by the numeric channel_id, or
      * create that object if it doesn't already exist.
      */
-    public function channel($channel_id=null)
+    public function channel($channel_id = null)
     {
-        return isset($this->channels[$channel_id])
-                ? $this->channels[$channel_id]
-                : new AMQPChannel($this->connection, $channel_id);
+        if (isset($this->channels[$channel_id])) {
+            return $this->channels[$channel_id];
+        } else {
+            $ch = new AMQPChannel($this->connection, $channel_id);
+            $this->channels[$channel_id] =  $ch;
+            return $ch;
+        }
     }
 
     /**
