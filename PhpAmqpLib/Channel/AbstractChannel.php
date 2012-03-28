@@ -96,26 +96,31 @@ class AbstractChannel
     }
 
 
-    function dispatch($method_sig, $args, $content)
+    public function dispatch($method_sig, $args, $content)
     {
-        if(!array_key_exists($method_sig, $this->method_map))
+        if (!array_key_exists($method_sig, $this->method_map)) {
             throw new \Exception("Unknown AMQP method $method_sig");
+        }
 
         $amqp_method = $this->method_map[$method_sig];
-        if($content == NULL)
+
+        if ($content == null) {
             return call_user_func(array($this,$amqp_method), $args);
-        else
+        } else {
             return call_user_func(array($this,$amqp_method), $args, $content);
+        }
     }
 
-    function next_frame()
+    public function next_frame()
     {
-        if($this->debug)
-        {
+        if ($this->debug) {
           MiscHelper::debug_msg("waiting for a new frame");
         }
-        if($this->frame_queue != NULL)
+
+        if($this->frame_queue != null) {
             return array_pop($this->frame_queue);
+        }
+
         return $this->connection->wait_channel($this->channel_id);
     }
 
@@ -124,14 +129,15 @@ class AbstractChannel
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
 
-    //TODO add visibility keywords
-    function wait_content()
+    public function wait_content()
     {
         $frm = $this->next_frame();
         $frame_type = $frm[0];
         $payload = $frm[1];
-        if($frame_type != 2)
+
+        if ($frame_type != 2) {
             throw new \Exception("Expecting Content header");
+        }
 
         $payload_reader = new AMQPReader(substr($payload,0,12));
         $class_id = $payload_reader->read_short();
@@ -143,27 +149,26 @@ class AbstractChannel
 
         $body_parts = array();
         $body_received = 0;
-        while(bccomp($body_size,$body_received)==1)
-        {
+        while (bccomp($body_size,$body_received) == 1) {
             $frm = $this->next_frame();
             $frame_type = $frm[0];
             $payload = $frm[1];
-            if($frame_type != 3)
+
+            if ($frame_type != 3) {
                 throw new \Exception("Expecting Content body, received frame type $frame_type");
+            }
+
             $body_parts[] = $payload;
             $body_received = bcadd($body_received, strlen($payload));
         }
 
         $msg->body = implode("",$body_parts);
 
-        if($this->auto_decode and isset($msg->content_encoding))
-        {
-            try
-            {
+        if ($this->auto_decode && isset($msg->content_encoding)) {
+            try {
                 $msg->body = $msg->body->decode($msg->content_encoding);
             } catch (Exception $e) {
-              if($this->debug)
-              {
+              if ($this->debug) {
                 MiscHelper::debug_msg("Ignoring body decoding exception: " . $e->getMessage());
               }
             }
@@ -174,41 +179,32 @@ class AbstractChannel
 
     /**
      * Wait for some expected AMQP methods and dispatch to them.
-     * Unexpected methods are queued up for later calls to this Python
+     * Unexpected methods are queued up for later calls to this PHP
      * method.
      */
-    public function wait($allowed_methods=NULL, $non_blocking = false)
+    public function wait($allowed_methods=null, $non_blocking = false)
     {
-        if($allowed_methods)
-        {
-          if($this->debug)
-          {
+        if ($allowed_methods) {
+          if ($this->debug) {
             MiscHelper::debug_msg("waiting for " . implode(", ", $allowed_methods));
           }
-        }
-        else
-        {
-          if($this->debug)
-          {
+        } else {
+          if ($this->debug) {
             MiscHelper::debug_msg("waiting for any method");
           }
         }
 
         //Process deferred methods
-        foreach($this->method_queue as $qk=>$queued_method)
-        {
-          if($this->debug)
-          {
+        foreach ($this->method_queue as $qk=>$queued_method) {
+          if ($this->debug) {
             MiscHelper::debug_msg("checking queue method " . $qk);
           }
 
             $method_sig = $queued_method[0];
-            if($allowed_methods==NULL || in_array($method_sig, $allowed_methods))
-            {
+            if ($allowed_methods==null || in_array($method_sig, $allowed_methods)) {
                 unset($this->method_queue[$qk]);
 
-                if($this->debug)
-                {
+                if ($this->debug) {
                   MiscHelper::debug_msg("Executing queued method: $method_sig: " .
                             self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
                 }
@@ -220,48 +216,50 @@ class AbstractChannel
         }
 
         // No deferred methods?  wait for new ones
-        while(true)
-        {
+        while (true) {
             $frm = $this->next_frame();
             $frame_type = $frm[0];
             $payload = $frm[1];
 
-            if($frame_type != 1)
+            if ($frame_type != 1) {
                 throw new \Exception("Expecting AMQP method, received frame type: $frame_type");
+            }
 
-            if(strlen($payload) < 4)
+            if (strlen($payload) < 4) {
                 throw new \Exception("Method frame too short");
+            }
 
             $method_sig_array = unpack("n2", substr($payload,0,4));
             $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
             $args = new AMQPReader(substr($payload,4));
 
-            if($this->debug)
-            {
+            if ($this->debug) {
               MiscHelper::debug_msg("> $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
 
 
-            if(in_array($method_sig, self::$CONTENT_METHODS))
+            if (in_array($method_sig, self::$CONTENT_METHODS)) {
                 $content = $this->wait_content();
-            else
-                $content = NULL;
+            } else {
+                $content = null;
+            }
 
-            if($allowed_methods==NULL ||
-               in_array($method_sig,$allowed_methods) ||
-               in_array($method_sig, self::$CLOSE_METHODS))
-            {
+            if ($allowed_methods == null ||
+                in_array($method_sig,$allowed_methods) ||
+                in_array($method_sig, self::$CLOSE_METHODS)
+                ) {
                 return $this->dispatch($method_sig, $args, $content);
             }
 
             // Wasn't what we were looking for? save it for later
-            if($this->debug)
-            {
+            if ($this->debug) {
               MiscHelper::debug_msg("Queueing for later: $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
             $this->method_queue[] = array($method_sig, $args, $content);
 
-            if($non_blocking) break;
+            if ($non_blocking) {
+                break;
+            };
         }
     }
 

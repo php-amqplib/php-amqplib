@@ -41,7 +41,7 @@ class BufferedInput
         $n = min($n, strlen($this->buffer) - $this->offset);
         if ($n === 0)
         {
-            // substr("", 0, 0) => FALSE, which screws up read loops that are
+            // substr("", 0, 0) => false, which screws up read loops that are
             // expecting non-blocking reads to return "". This avoids that edge
             // case when the buffer is empty/used up.
             return "";
@@ -62,14 +62,14 @@ class BufferedInput
         if(feof($this->sock))
         {
             $this->reset("");
-            return FALSE;
+            return false;
         }
 
         $block = fread($this->sock, $this->block_size);
-        if ($block !== FALSE)
+        if ($block !== false)
         {
             $this->reset($block);
-            return TRUE;
+            return true;
         } else
         {
             return $block;

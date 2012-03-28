@@ -38,7 +38,7 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
             array($this, 'process_msg')
         );
 
-        while(count($this->ch->callbacks)) {
+        while (count($this->ch->callbacks)) {
             $this->ch->wait();
         }
     }

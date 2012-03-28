@@ -11,10 +11,11 @@ class MiscHelper
 
     public static function methodSig($a)
     {
-        if(is_string($a))
+        if (is_string($a)) {
             return $a;
-        else
+        } else {
             return sprintf("%d,%d",$a[0] ,$a[1]);
+        }
     }
 
     public static function saveBytes($bytes)

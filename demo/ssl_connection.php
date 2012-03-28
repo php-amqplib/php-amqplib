@@ -20,4 +20,4 @@ function shutdown($conn){
 
 register_shutdown_function('shutdown', $conn);
 
-while(1){}
+while (true) {}
