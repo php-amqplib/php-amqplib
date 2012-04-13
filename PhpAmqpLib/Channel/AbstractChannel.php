@@ -117,7 +117,7 @@ class AbstractChannel
           MiscHelper::debug_msg("waiting for a new frame");
         }
 
-        if($this->frame_queue != null) {
+        if(!empty($this->frame_queue)) {
             return array_pop($this->frame_queue);
         }
 

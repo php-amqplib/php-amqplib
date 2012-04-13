@@ -33,7 +33,7 @@ class AMQPWriter
         while ($bytes > 0) {
             $b = bcmod($x,'256');
             $res[] = (int)$b;
-            $x = bcdiv($x,'256',0);
+            $x = bcdiv($x,'256', 0);
             $bytes--;
         }
 
