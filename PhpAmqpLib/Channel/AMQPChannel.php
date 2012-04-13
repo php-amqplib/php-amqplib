@@ -617,7 +617,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_reject($delivery_tag, $requeue)
     {
-        $args = $this->frameBuilder->basicRecover($delivery_tag, $requeue);
+        $args = $this->frameBuilder->basicReject($delivery_tag, $requeue);
         $this->send_method_frame(array(60, 90), $args);
     }
 
