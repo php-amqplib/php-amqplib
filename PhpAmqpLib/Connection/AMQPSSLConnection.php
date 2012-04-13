@@ -11,7 +11,7 @@ class AMQPSSLConnection extends AMQPConnection
     {
         $ssl_context = empty($ssl_options) ? null : $this->create_ssl_context($ssl_options);
 
-        parent::__construct($host, $port, $user, $password, $vhost="/",
+        parent::__construct($host, $port, $user, $password, $vhost,
                             isset($options['insist']) ? $options['insist'] : false,
                             isset($options['login_method']) ? $options['login_method'] : "AMQPLAIN",
                             isset($options['login_response']) ? $options['login_response'] : null,
