@@ -37,7 +37,7 @@ class AMQPChannel extends AbstractChannel
     );
 
     public function __construct($connection,
-                                $channel_id=null,
+                                &$channel_id=null,
                                 $auto_decode=true)
     {
 
