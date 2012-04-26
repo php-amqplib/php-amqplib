@@ -1,3 +1,5 @@
 .project
 .buildpath
 .settings/
+.idea
+
