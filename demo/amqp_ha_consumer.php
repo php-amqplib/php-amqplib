@@ -30,7 +30,7 @@ $ha_specific_connection = array(
 	),
 	'x-ha-policy-params' => array(
 		'A', array(
-			'rabbit@cthos' . HOST,
+			'rabbit@' . HOST,
 			'hare@' . HOST,
 		),
 	),
