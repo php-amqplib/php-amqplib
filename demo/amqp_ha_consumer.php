@@ -26,11 +26,11 @@ $ha_connection = array(
 
 $ha_specific_connection = array(
 	'x-ha-policy' => array(
-		'S', 'all'
+		'S', 'nodes'
 	),
 	'x-ha-policy-params' => array(
 		'A', array(
-			'rabbit@' . HOST,
+			'rabbit@cthos' . HOST,
 			'hare@' . HOST,
 		),
 	),
