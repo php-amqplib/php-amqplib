@@ -184,8 +184,43 @@ class AMQPWriter
         $this->out .= $s;
         return $this;
     }
-
-
+	
+	/**
+	 * Supports the writing of Array types, so that you can implement
+	 * array methods, like Rabbitmq's HA parameters
+	 * 
+	 * @param array $a
+	 * 
+	 * @return self
+	 */
+	public function write_array($a)
+	{
+		$this->flushbits();
+		$data = new AMQPWriter();
+		
+		foreach ($a as $v) {
+			if (is_string($v)) {
+				$data->write('S');
+				$data->write_longstr($v);
+			} else if (is_int($v)) {
+				$data->write('I');
+				$data->write_signed_long($v);
+			} else if ($v instanceof AMQPDecimal) {
+				$data->write('D');
+				$data->write_octet($v->e);
+				$data->write_signed_long($v->n);
+			} else if (is_array($v)) {
+				$data->write('A');
+				$data->write_array($v);
+			}
+		}
+		
+		$data = $data->getvalue();
+        $this->write_long(strlen($data));
+        $this->write($data);
+        return $this;
+	}
+	
     /**
      * Write unix time_t value as 64 bit timestamp.
      */
@@ -223,8 +258,12 @@ class AMQPWriter
             } else if ($ftype=='F') {
                 $table_data->write('F');
                 $table_data->write_table($v);
-            }
+            } else if ($ftype = 'A') {
+				$table_data->write('A');
+                $table_data->write_array($v);
+			}
         }
+        
         $table_data = $table_data->getvalue();
         $this->write_long(strlen($table_data));
         $this->write($table_data);
