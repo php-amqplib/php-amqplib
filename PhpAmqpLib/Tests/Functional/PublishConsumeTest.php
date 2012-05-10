@@ -1,3 +1,4 @@
+
 <?php
 
 namespace PhpAmqpLib\Tests\Functional;
@@ -26,7 +27,7 @@ class PublishConsumeTest extends \PHPUnit_Framework_TestCase
 
         $msg = new AMQPMessage($this->msg_body, array(
             'content_type' => 'text/plain',
-            'delivery-mode' => 1,
+            'delivery_mode' => 1,
             'correlation_id' => 'my_correlation_id',
             'reply_to' => 'my_reply_to'
         ));
