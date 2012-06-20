@@ -1,6 +1,7 @@
 <?php
 
-// Run multiple instances of this consumer to test
+// Run multiple instances of amqp_consumer_fanout_1.php and 
+// amqp_consumer_fanout_2.php to test
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPConnection;

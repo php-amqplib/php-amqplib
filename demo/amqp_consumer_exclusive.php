@@ -1,6 +1,7 @@
 <?php
 
 // Only one consumer per queue is allowed.
+// Set $queue name to test exclusiveness
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPConnection;
