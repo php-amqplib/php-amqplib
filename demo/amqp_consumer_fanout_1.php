@@ -1,10 +1,12 @@
 <?php
 
+// Run multiple instances of this consumer to test
+
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPConnection;
 
 $exchange = 'fanout_example_exchange';
-$queue = ''; // Let RabbitMQ create a queue name
+$queue = 'fanout_group_1'; 
 $consumer_tag = 'consumer'. getmypid ();
 
 $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
@@ -14,11 +16,11 @@ $ch = $conn->channel();
     name: $queue    // should be unique in fanout exchange. Let RabbitMQ create 
                     // a queue name for us
     passive: false  // don't check if a queue with the same name exists
-    durable: false // the queue will survive server restarts
-    exclusive: true // the queue can not be accessed by other channels
+    durable: false // the queue will not survive server restarts
+    exclusive: false // the queue might be accessed by other channels
     auto_delete: true //the queue will be deleted once the channel is closed.
 */
-list($queue_name, ,)=$ch->queue_declare($queue, false, false, true, true);
+$ch->queue_declare($queue, false, false, false, true);
 
 /*
     name: $exchange
@@ -30,7 +32,7 @@ list($queue_name, ,)=$ch->queue_declare($queue, false, false, true, true);
 
 $ch->exchange_declare($exchange, 'fanout', false, false, true);
 
-$ch->queue_bind($queue_name, $exchange);
+$ch->queue_bind($queue, $exchange);
 
 function process_message($msg) {
 
@@ -59,7 +61,7 @@ function process_message($msg) {
     callback: A PHP Callback
 */
 
-$ch->basic_consume($queue_name, $consumer_tag, false, false, true, false, 'process_message');
+$ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
 function shutdown($ch, $conn){
     $ch->close();
