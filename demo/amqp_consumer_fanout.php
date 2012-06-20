@@ -16,7 +16,7 @@ $ch = $conn->channel();
     passive: false  // don't check if a queue with the same name exists
     durable: false // the queue will survive server restarts
     exclusive: true // the queue can not be accessed by other channels
-    auto_delete: true //the queue won't be deleted once the channel is closed.
+    auto_delete: true //the queue will be deleted once the channel is closed.
 */
 list($queue_name, ,)=$ch->queue_declare($queue, false, false, true, true);
 
