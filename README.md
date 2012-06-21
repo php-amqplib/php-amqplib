@@ -56,6 +56,13 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 
     $ php amqp_consumer_non_blocking.php
 
+## More Examples ##
+
+- `amqp_ha_consumer.php`: demoes the use of mirrored queues
+- `amqp_consumer_exclusive.php` and `amqp_publisher_exclusive.php`: demoes fanout exchanges using exclusive queues.
+- `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demoes fanout exchanges with named queues.
+- `basic_get.php`: demoes obtaining messages from the queues by using the _basic get_ AMQP call.
+
 ## Loading Classes ##
 
 The library uses the [Symfony ClassLoader component](https://github.com/symfony/ClassLoader) in order to use a standard way of class loading.
