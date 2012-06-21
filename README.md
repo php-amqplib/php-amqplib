@@ -96,6 +96,16 @@ To run the publishing/consume benchmark type:
 
     $ make benchmark
 
+## Tests ##
+
+To successfully run the tests you need to first setup the test user and test virtual host.
+
+You can do that by running the following commands:
+
+    rabbitmqctl add_vhost phpamqplib_testbed
+    rabbitmqctl add_user phpamqplib phpamqplib_password
+    rabbitmqctl set_permissions -p phpamqplib_testbed phpamqplib ".*" ".*" ".*"
+
 ## Original README: ##
 
 Below is the original README file content. Credits goes to the original authors.
