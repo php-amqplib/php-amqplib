@@ -1,6 +1,6 @@
 <?php
 
-// Run multiple instances of amqp_consumer_fanout_1.php and 
+// Run multiple instances of amqp_consumer_fanout_1.php and
 // amqp_consumer_fanout_2.php to test
 
 include(__DIR__ . '/config.php');
@@ -14,8 +14,7 @@ $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 /*
-    name: $queue    // should be unique in fanout exchange. Let RabbitMQ create 
-                    // a queue name for us
+    name: $queue    // should be unique in fanout exchange.
     passive: false  // don't check if a queue with the same name exists
     durable: false // the queue will not survive server restarts
     exclusive: false // the queue might be accessed by other channels
@@ -57,7 +56,7 @@ function process_message($msg) {
     no_local: Don't receive messages published by this consumer.
     no_ack: Tells the server if the consumer will acknowledge the messages.
     exclusive: Request exclusive consumer access, meaning only this consumer can access the queue
-    nowait: don't wait for a server response. In case of error the server will raise a channel 
+    nowait: don't wait for a server response. In case of error the server will raise a channel
             exception
     callback: A PHP Callback
 */
