@@ -34,10 +34,6 @@ This library uses the `Symfony` default `UniversalClassLoader` so you will have 
 
     $ make
 
-Start your RabbitMQ server and run tests:
-
-    $ make test
-
 ## Usage ##
 
 With RabbitMQ running open two Terminals and on the first one execute the following commands to start the consumer:
@@ -100,11 +96,15 @@ To run the publishing/consume benchmark type:
 
 To successfully run the tests you need to first setup the test user and test virtual host.
 
-You can do that by running the following commands:
+You can do that by running the following commands after starting RabbitMQ:
 
-    rabbitmqctl add_vhost phpamqplib_testbed
-    rabbitmqctl add_user phpamqplib phpamqplib_password
-    rabbitmqctl set_permissions -p phpamqplib_testbed phpamqplib ".*" ".*" ".*"
+    $ rabbitmqctl add_vhost phpamqplib_testbed
+    $ rabbitmqctl add_user phpamqplib phpamqplib_password
+    $ rabbitmqctl set_permissions -p phpamqplib_testbed phpamqplib ".*" ".*" ".*"
+
+Once your environment is set up you can run your tests like this:
+
+    $ make test
 
 ## Original README: ##
 
