@@ -280,7 +280,7 @@ class AMQPConnection extends AbstractChannel
         if (isset($this->channels[$channel_id])) {
             return $this->channels[$channel_id];
         } else {
-            $channel_id = $channel_id ? $this->get_free_channel_id() : $channel_id;
+            $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
             $ch = new AMQPChannel($this->connection, $channel_id);
             $this->channels[$channel_id] =  $ch;
             return $ch;
