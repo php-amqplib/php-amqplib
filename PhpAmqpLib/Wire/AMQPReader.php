@@ -209,30 +209,75 @@ class AMQPReader
         while ($table_data->tell() < $tlen) {
             $name = $table_data->read_shortstr();
             $ftype = $table_data->rawread(1);
-            if($ftype == 'S') {
-                $val = $table_data->read_longstr();
-            } else if($ftype == 'I') {
-                $val = $table_data->read_signed_long();
-            } else if($ftype == 'D')
-            {
-                $e = $table_data->read_octet();
-                $n = $table_data->read_signed_long();
-                $val = new AMQPDecimal($n, $e);
-            } else if($ftype == 'T')
-            {
-                $val = $table_data->read_timestamp();
-            } else if($ftype == 'F')
-            {
-                $val = $table_data->read_table(); // recursion
-            } else {
-                error_log("Usupported table field type $ftype");
-                $val = null;
-            }
+            $val = $table_data->read_value($ftype);
             $result[$name] = array($ftype,$val);
         }
         return $result;
     }
 
+    /**
+     * Reads the array in the next value.
+     *
+     * @return array
+     */
+    public function read_array()
+    {
+        $this->bitcount = $this->bits = 0;
+
+        // Determine array length and its end position
+        $arrayLength = $this->read_php_int();
+        $endOffset = $this->offset + $arrayLength;
+
+        $result = array();
+        // Read values until we reach the end of the array
+        while($this->offset < $endOffset) {
+            $fieldType = $this->rawread(1);
+            $result[] = $this->read_value($fieldType);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Reads the next value as the provided field type.
+     *
+     * @param string $fieldType the char field type
+     * @return mixed
+     */
+    public function read_value($fieldType)
+    {
+        $this->bitcount = $this->bits = 0;
+
+        $val = NULL;
+        switch($fieldType) {
+            case 'S': // Long string
+                $val = $this->read_longstr();
+                break;
+            case 'I': // Signed 32-bit
+                $val = $this->read_signed_long();
+                break;
+            case 'D': // Decimal
+                $e = $this->read_octet();
+                $n = $this->read_signed_long();
+                $val = new AMQPDecimal($n, $e);
+                break;
+            case 'T': // Timestamp
+                $val = $this->read_timestamp();
+                break;
+            case 'F': // Table
+                $val = $this->read_table();
+                break;
+            case 'A': // Array
+                $val = $this->read_array();
+                break;
+            default:
+                // UNKNOWN TYPE
+                error_log("Usupported table field type $fieldType");
+                break;
+        }
+
+        return $val;
+    }
 
     protected function tell()
     {
