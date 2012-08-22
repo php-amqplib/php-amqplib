@@ -261,6 +261,12 @@ class AMQPReader
                 $n = $this->read_signed_long();
                 $val = new AMQPDecimal($n, $e);
                 break;
+            case 't':
+                $val = $this->read_octet();
+                break;
+            case 'l':
+                $val = $this->read_longlong();
+                break;
             case 'T': // Timestamp
                 $val = $this->read_timestamp();
                 break;
