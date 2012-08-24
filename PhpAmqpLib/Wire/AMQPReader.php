@@ -278,7 +278,7 @@ class AMQPReader
                 break;
             default:
                 // UNKNOWN TYPE
-                error_log("Usupported table field type $fieldType");
+                throw new \RuntimeException("Usupported table field type {$fieldType}");
                 break;
         }
 
