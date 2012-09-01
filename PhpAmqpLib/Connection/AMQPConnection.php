@@ -102,7 +102,13 @@ class AMQPConnection extends AbstractChannel
     public function __destruct()
     {
         if (isset($this->input) && $this->input) {
-            $this->close();
+            // if the connection has gane away then when
+            // close() is called and tries to connect to the server
+            // it will cause a fatal error, so catch error
+            // and shutdown quietly
+            try {
+               $this->close();
+            } catch (\Exception $e) { }
         }
 
         $this->close_socket();
