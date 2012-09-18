@@ -59,7 +59,7 @@ class AMQPReader
             }
 
             if(strlen($res)!=$n) {
-                throw new \Exception("Error reading data. Recevived " .
+                throw new \Exception("Error reading data. Received " .
                                      strlen($res) . " instead of expected $n bytes");
             }
 
