@@ -101,8 +101,16 @@ class AMQPConnection extends AbstractChannel
 
     public function __destruct()
     {
-        if (isset($this->input) && $this->input) {
-            $this->close();
+        try{
+            if (isset($this->input) && $this->input) {
+                $this->close();
+            }
+        }catch(\Exception $e){
+            // We cant be throwing exceptions here as destructor is called by the shutdown process
+            // if exception is thrown here it causes fatal error, depending on config it may have not stack
+            // This causes error if you get disconnected from server and then script tries to disconnect by
+            // writing to socket on shutdown.
+            error_log("AMQPConnection was not able to close connections nicely, possibly server has gone away: ".$e->getMessage());
         }
 
         $this->close_socket();
@@ -403,6 +411,7 @@ class AMQPConnection extends AbstractChannel
     protected function secure($args)
     {
         $challenge = $args->read_longstr();
+        // FIXME - $challenge variable is not used
     }
 
     /**
