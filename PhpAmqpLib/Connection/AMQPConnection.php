@@ -102,7 +102,13 @@ class AMQPConnection extends AbstractChannel
     public function __destruct()
     {
         if (isset($this->input) && $this->input) {
-            $this->close();
+            // close() always tries to connect to the server to shutdown 
+            // the connection. If the server has gone away, it will 
+            // throw an error in the connection class, so catch it 
+            // and shutdown quietly
+            try {
+               $this->close();
+            } catch (\Exception $e) { }
         }
 
         $this->close_socket();
