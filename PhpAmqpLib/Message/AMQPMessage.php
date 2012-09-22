@@ -23,7 +23,7 @@ class AMQPMessage extends GenericContent
         "type" => "shortstr",
         "user_id" => "shortstr",
         "app_id" => "shortstr",
-        "cluster_id" => "shortst"
+        "cluster_id" => "shortstr"
     );
 
     public function __construct($body = '', $properties = null)
