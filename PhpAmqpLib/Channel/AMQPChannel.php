@@ -35,6 +35,17 @@ class AMQPChannel extends AbstractChannel
         "90,21" => "tx_commit_ok",
         "90,31" => "tx_rollback_ok"
     );
+    /**
+     * 
+     * @var callable these parameters will be passed to function 
+     * 		in case of basic_return:
+	 * 	param int $reply_code
+	 * 	param string $reply_text
+	 * 	param string $exchange
+	 * 	param string $routing_key
+	 * 	param AMQPMessage $msg
+     */
+    protected $basic_return_callback = null;
 
     public function __construct($connection,
                                 $channel_id=null,
@@ -624,16 +635,25 @@ class AMQPChannel extends AbstractChannel
     /**
      * return a failed message
      */
-    protected function basic_return($args)
+    protected function basic_return($args, $msg)
     {
         $reply_code = $args->read_short();
         $reply_text = $args->read_shortstr();
         $exchange = $args->read_shortstr();
         $routing_key = $args->read_shortstr();
-        $msg = $this->wait();
+        
+        if( !is_null($this->basic_return_callback )){
+        	call_user_func_array($this->basic_return_callback, array(
+        			$reply_code,
+        			$reply_text,
+        			$exchange,
+        			$routing_key,
+        			$msg,
+        			));
+        } else if ($this->debug) {
+        	MiscHelper::debug_msg("Skipping unhandled basic_return message");
+        }
     }
-
-
     public function tx_commit()
     {
         $this->send_method_frame(array(90, 20));
@@ -695,5 +715,15 @@ class AMQPChannel extends AbstractChannel
     {
         return (null === $ticket) ? $this->default_ticket : $ticket;
     }
-
+    /**
+     * set callback for basic_return
+     * @param callable $callback 
+     * @throws \InvalidArgumentException if $callback is not callable
+     */
+    public function set_return_listener($callback){
+    	if(!is_callable($callback))
+    		throw new \InvalidArgumentException('$callback should be callable.');
+    	$this->basic_return_callback = $callback;
+    }
+    
 }

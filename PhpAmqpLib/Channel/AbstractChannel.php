@@ -2,15 +2,28 @@
 
 namespace PhpAmqpLib\Channel;
 
+use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class AbstractChannel
 {
+	/**
+	 * taken from http://www.rabbitmq.com/amqp-0-9-1-reference.html#constants
+	 * @var array
+	 */
+	protected static $FRAME_TYPES = array(
+			1 => 'frame-method',
+			2 => 'frame-header',
+			3 => 'frame-body',
+			8 => 'frame-heartbeat',
+	);
+	
     private static $CONTENT_METHODS = array(
         "60,60", // Basic.deliver
         "60,71", // Basic.get_ok
+        "60,50", // Channel.basic_return
     );
 
     private static $CLOSE_METHODS = array(
@@ -76,8 +89,13 @@ class AbstractChannel
     "90,30" => "Channel.tx_rollback",
     "90,31" => "Channel.tx_rollback_ok"
     );
-
+    
     protected $debug;
+    /**
+     * 
+     * @var AMQPConnection
+     */
+    protected $connection;
 
     public function __construct($connection, $channel_id)
     {
@@ -155,7 +173,8 @@ class AbstractChannel
             $payload = $frm[1];
 
             if ($frame_type != 3) {
-                throw new \Exception("Expecting Content body, received frame type $frame_type");
+                throw new \Exception("Expecting Content body, received frame type $frame_type ("
+                		.self::$FRAME_TYPES[$frame_type].")");
             }
 
             $body_parts[] = $payload;
@@ -167,7 +186,7 @@ class AbstractChannel
         if ($this->auto_decode && isset($msg->content_encoding)) {
             try {
                 $msg->body = $msg->body->decode($msg->content_encoding);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
               if ($this->debug) {
                 MiscHelper::debug_msg("Ignoring body decoding exception: " . $e->getMessage());
               }
@@ -220,9 +239,10 @@ class AbstractChannel
             $frm = $this->next_frame();
             $frame_type = $frm[0];
             $payload = $frm[1];
-
+            
             if ($frame_type != 1) {
-                throw new \Exception("Expecting AMQP method, received frame type: $frame_type");
+                throw new \Exception("Expecting AMQP method, received frame type: $frame_type ("
+                		.self::$FRAME_TYPES[$frame_type].")");
             }
 
             if (strlen($payload) < 4) {
@@ -236,8 +256,8 @@ class AbstractChannel
             if ($this->debug) {
               MiscHelper::debug_msg("> $method_sig: " . self::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
-
-
+            
+            
             if (in_array($method_sig, self::$CONTENT_METHODS)) {
                 $content = $this->wait_content();
             } else {
