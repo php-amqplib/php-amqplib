@@ -27,7 +27,17 @@ class AMQPConnection extends AbstractChannel
         "10,60" => "_close",
         "10,61" => "close_ok"
     );
-
+    /**
+     * contructor parameters for clone
+     * @var array
+     */
+	protected $construct_params ;
+	/**
+	 * close the connection in destructur
+	 * @var bool
+	 */
+	protected $close_on_destruct = true ;
+	
     public function __construct($host, $port,
                                 $user, $password,
                                 $vhost="/",$insist=false,
@@ -38,7 +48,8 @@ class AMQPConnection extends AbstractChannel
                                 $read_write_timeout = 3,
                                 $context = null)
     {
-
+		$this->construct_params = func_get_args();
+		
         if ($user && $password) {
             $login_response = new AMQPWriter();
             $login_response->write_table(array("LOGIN" => array('S',$user),
@@ -98,16 +109,32 @@ class AMQPConnection extends AbstractChannel
             $this->close_socket();
         }
     }
-
+    /**
+     * clossing will use the old properties to make a new connection to the same server
+     */
+    function __clone()
+    {
+    	call_user_func_array(array($this, '__construct'), $this->construct_params);
+    }
+    
     public function __destruct()
     {
-        if (isset($this->input) && $this->input) {
-            $this->close();
-        }
-
-        $this->close_socket();
+    	if($this->close_on_destruct){
+	        if (isset($this->input) && $this->input) {
+	            $this->close();
+	        }
+        	$this->close_socket();
+    	}
     }
-
+    /**
+     * allows to not close the connection
+     * it`s useful after the fork when you don`t want to close parent process connection
+     * @param bool $close
+     */
+	public function set_close_on_destruct($close = true){
+		$this->close_on_destruct = (bool) $close;
+	}
+	
     protected function close_socket()
     {
         if ($this->debug) {
@@ -256,8 +283,8 @@ class AMQPConnection extends AbstractChannel
             if ($frame_channel == $channel_id) {
                 return array($frame_type, $payload);
             }
-
-            // Not the channel we were looking for.  Queue this frame
+            
+			// Not the channel we were looking for.  Queue this frame
             //for later, when the other channel is looking for frames.
             array_push($this->channels[$frame_channel]->frame_queue,
                        array($frame_type, $payload));
