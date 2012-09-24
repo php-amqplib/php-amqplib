@@ -30,6 +30,6 @@ class AMQPMessage extends GenericContent
     {
         $this->body = $body;
 
-        parent::__construct($properties, $prop_types= self::$PROPERTIES);
+        parent::__construct($properties, static::$PROPERTIES);
     }
 }

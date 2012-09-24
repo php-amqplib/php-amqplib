@@ -9,7 +9,7 @@ use PhpAmqpLib\Wire\AMQPWriter;
  * Abstract base class for AMQP content.  Subclasses should override
  * the PROPERTIES attribute.
  */
-class GenericContent
+abstract class GenericContent
 {
     protected static $PROPERTIES = array(
         "dummy" => "shortstr"
@@ -42,10 +42,18 @@ class GenericContent
         if(isset($this->delivery_info) && isset($this->delivery_info[$name]))
             return $this->delivery_info[$name];
 
-        throw new \OutOfBoundsException("No such property");
+        throw new \OutOfBoundsException("No '$name' property");
     }
 
-
+	/**
+	 * allows to set the property after creation of the object 
+	 */
+    public function set($name, $value){
+    	if(array_key_exists($name, $this->prop_types))
+    		$this->properties[$name] = $value;
+    	else
+    		throw new \OutOfBoundsException("No '$name' property");
+    }
     /**
      * Given the raw bytes containing the property-flags and
      * property-list from a content-frame-header, parse and insert
