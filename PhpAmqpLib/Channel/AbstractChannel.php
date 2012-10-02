@@ -118,7 +118,7 @@ class AbstractChannel
         }
 
         if(!empty($this->frame_queue)) {
-            return array_pop($this->frame_queue);
+            return array_shift($this->frame_queue);
         }
 
         return $this->connection->wait_channel($this->channel_id);
