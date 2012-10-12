@@ -36,10 +36,10 @@ class MiscHelper
      * @author      Aidan Lister <aidan@php.net>
      * @author      Peter Waller <iridum@php.net>
      * @link        http://aidanlister.com/repos/v/function.hexdump.php
-     * @param       string  $data        The string to be dumped
-     * @param       bool    $htmloutput  Set to false for non-HTML output
-     * @param       bool    $uppercase   Set to true for uppercase hex
-     * @param       bool    $return      Set to true to return the dump
+     * @param string $data       The string to be dumped
+     * @param bool   $htmloutput Set to false for non-HTML output
+     * @param bool   $uppercase  Set to true for uppercase hex
+     * @param bool   $return     Set to true to return the dump
      */
     public static function hexdump($data, $htmloutput = true, $uppercase = false, $return = false)
     {
@@ -54,8 +54,7 @@ class MiscHelper
         $x = ($uppercase === false) ? 'x' : 'X';
 
         // Iterate string
-        for ($i = $j = 0; $i < $len; $i++)
-        {
+        for ($i = $j = 0; $i < $len; $i++) {
             // Convert to hexidecimal
             $hexi .= sprintf("%02$x ", ord($data[$i]));
 

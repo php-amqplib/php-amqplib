@@ -62,5 +62,3 @@ $ch->basic_publish(new AMQPMessage('quit'), $exchange);
 
 $ch->close();
 $conn->close();
-
-?>

@@ -37,8 +37,8 @@ $ch->exchange_declare($exchange, 'direct', false, true, false);
 
 $ch->queue_bind($queue, $exchange);
 
-function process_message($msg) {
-
+function process_message($msg)
+{
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
@@ -65,7 +65,8 @@ function process_message($msg) {
 
 $ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
-function shutdown($ch, $conn){
+function shutdown($ch, $conn)
+{
     $ch->close();
     $conn->close();
 }
@@ -82,4 +83,3 @@ while (count($ch->callbacks)) {
         $ch->wait();
     }
 }
-?>

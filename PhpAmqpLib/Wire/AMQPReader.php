@@ -12,18 +12,16 @@ class AMQPReader
     public function __construct($str, $sock=null)
     {
         $this->str = $str;
-        if ($sock !== null)
-        {
+        if ($sock !== null) {
             $this->sock = new BufferedInput($sock);
-        } else
-        {
+        } else {
             $this->sock = null;
         }
         $this->offset = 0;
 
         $this->bitcount = $this->bits = 0;
 
-        if(((int)4294967296)!=0)
+        if(((int) 4294967296)!=0)
             $this->is64bits = true;
         else
             $this->is64bits = false;
@@ -43,6 +41,7 @@ class AMQPReader
     public function read($n)
     {
         $this->bitcount = $this->bits = 0;
+
         return $this->rawread($n);
     }
 
@@ -58,7 +57,7 @@ class AMQPReader
                 $res .= $buf;
             }
 
-            if(strlen($res)!=$n) {
+            if (strlen($res)!=$n) {
                 throw new \Exception("Error reading data. Received " .
                                      strlen($res) . " instead of expected $n bytes");
             }
@@ -72,19 +71,20 @@ class AMQPReader
             $this->str = substr($this->str,$n);
             $this->offset += $n;
         }
+
         return $res;
     }
 
     public function read_bit()
     {
-        if(!$this->bitcount)
-        {
+        if (!$this->bitcount) {
             $this->bits = ord($this->rawread(1));
             $this->bitcount = 8;
         }
         $result = ($this->bits & 1) == 1;
         $this->bits >>= 1;
         $this->bitcount -= 1;
+
         return $result;
     }
 
@@ -92,6 +92,7 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
         list(,$res) = unpack('C', $this->rawread(1));
+
         return $res;
     }
 
@@ -99,6 +100,7 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
         list(,$res) = unpack('n', $this->rawread(2));
+
         return $res;
     }
 
@@ -116,10 +118,10 @@ class AMQPReader
     public function read_php_int()
     {
         list(,$res) = unpack('N', $this->rawread(4));
-        if($this->is64bits)
-        {
+        if ($this->is64bits) {
             $sres = sprintf ( "%u", $res );
-            return (int)$sres;
+
+            return (int) $sres;
         } else {
             return $res;
         }
@@ -132,6 +134,7 @@ class AMQPReader
         $this->bitcount = $this->bits = 0;
         list(,$res) = unpack('N', $this->rawread(4));
         $sres = sprintf ( "%u", $res );
+
         return $sres;
     }
 
@@ -141,6 +144,7 @@ class AMQPReader
         // In PHP unpack('N') always return signed value,
         // on both 32 and 64 bit systems!
         list(,$res) = unpack('N', $this->rawread(4));
+
         return $res;
     }
 
@@ -168,6 +172,7 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
         list(,$slen) = unpack('C', $this->rawread(1));
+
         return $this->rawread($slen);
     }
 
@@ -182,6 +187,7 @@ class AMQPReader
         $slen = $this->read_php_int();
         if($slen<0)
             throw new \Exception("Strings longer than supported on this platform");
+
         return $this->rawread($slen);
     }
 
@@ -212,6 +218,7 @@ class AMQPReader
             $val = $table_data->read_value($ftype);
             $result[$name] = array($ftype,$val);
         }
+
         return $result;
     }
 
@@ -230,7 +237,7 @@ class AMQPReader
 
         $result = array();
         // Read values until we reach the end of the array
-        while($this->offset < $endOffset) {
+        while ($this->offset < $endOffset) {
             $fieldType = $this->rawread(1);
             $result[] = $this->read_value($fieldType);
         }
@@ -241,7 +248,7 @@ class AMQPReader
     /**
      * Reads the next value as the provided field type.
      *
-     * @param string $fieldType the char field type
+     * @param  string $fieldType the char field type
      * @return mixed
      */
     public function read_value($fieldType)
@@ -249,7 +256,7 @@ class AMQPReader
         $this->bitcount = $this->bits = 0;
 
         $val = NULL;
-        switch($fieldType) {
+        switch ($fieldType) {
             case 'S': // Long string
                 $val = $this->read_longstr();
                 break;

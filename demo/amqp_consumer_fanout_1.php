@@ -34,8 +34,8 @@ $ch->exchange_declare($exchange, 'fanout', false, false, true);
 
 $ch->queue_bind($queue, $exchange);
 
-function process_message($msg) {
-
+function process_message($msg)
+{
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
@@ -63,14 +63,14 @@ function process_message($msg) {
 
 $ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
-function shutdown($ch, $conn){
+function shutdown($ch, $conn)
+{
     $ch->close();
     $conn->close();
 }
 register_shutdown_function('shutdown', $ch, $conn);
 
 // Loop as long as the channel has callbacks registered
-while(count($ch->callbacks)) {
+while (count($ch->callbacks)) {
     $ch->wait();
 }
-?>

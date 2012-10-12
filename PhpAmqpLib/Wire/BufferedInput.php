@@ -20,13 +20,12 @@ class BufferedInput
 
     public function read($n)
     {
-        if ($this->offset >= strlen($this->buffer))
-        {
-            if (!($rv = $this->populate_buffer()))
-            {
+        if ($this->offset >= strlen($this->buffer)) {
+            if (!($rv = $this->populate_buffer())) {
                 return $rv;
             }
         }
+
         return $this->read_buffer($n);
     }
 
@@ -39,8 +38,7 @@ class BufferedInput
     private function read_buffer($n)
     {
         $n = min($n, strlen($this->buffer) - $this->offset);
-        if ($n === 0)
-        {
+        if ($n === 0) {
             // substr("", 0, 0) => false, which screws up read loops that are
             // expecting non-blocking reads to return "". This avoids that edge
             // case when the buffer is empty/used up.
@@ -48,6 +46,7 @@ class BufferedInput
         }
         $block = substr($this->buffer, $this->offset, $n);
         $this->offset += $n;
+
         return $block;
     }
 
@@ -59,19 +58,18 @@ class BufferedInput
 
     private function populate_buffer()
     {
-        if(feof($this->sock))
-        {
+        if (feof($this->sock)) {
             $this->reset("");
+
             return false;
         }
 
         $block = fread($this->sock, $this->block_size);
-        if ($block !== false)
-        {
+        if ($block !== false) {
             $this->reset($block);
+
             return true;
-        } else
-        {
+        } else {
             return $block;
         }
     }

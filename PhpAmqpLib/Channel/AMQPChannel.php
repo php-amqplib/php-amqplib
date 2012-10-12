@@ -36,14 +36,14 @@ class AMQPChannel extends AbstractChannel
         "90,31" => "tx_rollback_ok"
     );
     /**
-     * 
-     * @var callable these parameters will be passed to function 
+     *
+     * @var callable these parameters will be passed to function
      * 		in case of basic_return:
-	 * 	param int $reply_code
-	 * 	param string $reply_text
-	 * 	param string $exchange
-	 * 	param string $routing_key
-	 * 	param AMQPMessage $msg
+     * 	param int $reply_code
+     * 	param string $reply_text
+     * 	param string $exchange
+     * 	param string $routing_key
+     * 	param AMQPMessage $msg
      */
     protected $basic_return_callback = null;
 
@@ -122,6 +122,7 @@ class AMQPChannel extends AbstractChannel
                                       );
 
         $this->send_method_frame(array(20, 40), $args);
+
         return $this->wait(array(
                                "20,41"    // Channel.close_ok
                            ));
@@ -157,6 +158,7 @@ class AMQPChannel extends AbstractChannel
     {
         $args = $this->frameBuilder->flow($active);
         $this->send_method_frame(array(20, 20), $args);
+
         return $this->wait(array(
                                "20,21"    //Channel.flow_ok
                            ));
@@ -187,6 +189,7 @@ class AMQPChannel extends AbstractChannel
 
         $args = $this->frameBuilder->xOpen($out_of_band);
         $this->send_method_frame(array(20, 10), $args);
+
         return $this->wait(array(
                                "20,11"    //Channel.open_ok
                            ));
@@ -211,6 +214,7 @@ class AMQPChannel extends AbstractChannel
                                      $passive, $active,
                                      $write, $read);
         $this->send_method_frame(array(30, 10), $args);
+
         return $this->wait(array(
                                "30,11"    //Channel.access_request_ok
                            ));
@@ -222,6 +226,7 @@ class AMQPChannel extends AbstractChannel
     protected function access_request_ok($args)
     {
         $this->default_ticket = $args->read_short();
+
         return $this->default_ticket;
     }
 
@@ -452,6 +457,7 @@ class AMQPChannel extends AbstractChannel
     {
         $args = $this->frameBuilder->basicCancel($consumer_tag, $nowait);
         $this->send_method_frame(array(60, 30), $args);
+
         return $this->wait(array(
                                "60,31"    // Channel.basic_cancel_ok
                            ));
@@ -487,6 +493,7 @@ class AMQPChannel extends AbstractChannel
         }
 
         $this->callbacks[$consumer_tag] = $callback;
+
         return $consumer_tag;
     }
 
@@ -538,6 +545,7 @@ class AMQPChannel extends AbstractChannel
         $args = $this->frameBuilder->basicGet($queue, $no_ack, $ticket);
 
         $this->send_method_frame(array(60, 70), $args);
+
         return $this->wait(array(
                                "60,71",    //Channel.basic_get_ok
                                "60,72"     // Channel.basic_get_empty
@@ -570,6 +578,7 @@ class AMQPChannel extends AbstractChannel
             "routing_key" => $routing_key,
             "message_count" => $message_count
         );
+
         return $msg;
     }
 
@@ -601,6 +610,7 @@ class AMQPChannel extends AbstractChannel
     {
         $args = $this->frameBuilder->basicQos($prefetch_size, $prefetch_count, $a_global);
         $this->send_method_frame(array(60, 10), $args);
+
         return $this->wait(array(
                                "60,11"    //Channel.basic_qos_ok
                            ));
@@ -641,22 +651,23 @@ class AMQPChannel extends AbstractChannel
         $reply_text = $args->read_shortstr();
         $exchange = $args->read_shortstr();
         $routing_key = $args->read_shortstr();
-        
-        if( !is_null($this->basic_return_callback )){
-        	call_user_func_array($this->basic_return_callback, array(
-        			$reply_code,
-        			$reply_text,
-        			$exchange,
-        			$routing_key,
-        			$msg,
-        			));
-        } else if ($this->debug) {
-        	MiscHelper::debug_msg("Skipping unhandled basic_return message");
+
+        if ( !is_null($this->basic_return_callback )) {
+            call_user_func_array($this->basic_return_callback, array(
+                    $reply_code,
+                    $reply_text,
+                    $exchange,
+                    $routing_key,
+                    $msg,
+                    ));
+        } elseif ($this->debug) {
+            MiscHelper::debug_msg("Skipping unhandled basic_return message");
         }
     }
     public function tx_commit()
     {
         $this->send_method_frame(array(90, 20));
+
         return $this->wait(array(
                                "90,21"    //Channel.tx_commit_ok
                            ));
@@ -676,6 +687,7 @@ class AMQPChannel extends AbstractChannel
     public function tx_rollback()
     {
         $this->send_method_frame(array(90, 30));
+
         return $this->wait(array(
                                "90,31"    //Channel.tx_rollback_ok
                            ));
@@ -694,6 +706,7 @@ class AMQPChannel extends AbstractChannel
     public function tx_select()
     {
         $this->send_method_frame(array(90, 10));
+
         return $this->wait(array(
                                "90,11"    //Channel.tx_select_ok
                            ));
@@ -717,13 +730,14 @@ class AMQPChannel extends AbstractChannel
     }
     /**
      * set callback for basic_return
-     * @param callable $callback 
+     * @param  callable                  $callback
      * @throws \InvalidArgumentException if $callback is not callable
      */
-    public function set_return_listener($callback){
-    	if(!is_callable($callback))
-    		throw new \InvalidArgumentException('$callback should be callable.');
-    	$this->basic_return_callback = $callback;
+    public function set_return_listener($callback)
+    {
+        if(!is_callable($callback))
+            throw new \InvalidArgumentException('$callback should be callable.');
+        $this->basic_return_callback = $callback;
     }
-    
+
 }
