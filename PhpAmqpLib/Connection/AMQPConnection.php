@@ -31,12 +31,12 @@ class AMQPConnection extends AbstractChannel
      * contructor parameters for clone
      * @var array
      */
-	protected $construct_params ;
-	/**
-	 * close the connection in destructur
-	 * @var bool
-	 */
-	protected $close_on_destruct = true ;
+    protected $construct_params ;
+    /**
+     * close the connection in destructur
+     * @var bool
+     */
+    protected $close_on_destruct = true ;
 
     public function __construct($host, $port,
                                 $user, $password,
@@ -48,7 +48,7 @@ class AMQPConnection extends AbstractChannel
                                 $read_write_timeout = 3,
                                 $context = null)
     {
-		$this->construct_params = func_get_args();
+        $this->construct_params = func_get_args();
 
         if ($user && $password) {
             $login_response = new AMQPWriter();
@@ -112,14 +112,14 @@ class AMQPConnection extends AbstractChannel
     /**
      * clossing will use the old properties to make a new connection to the same server
      */
-    function __clone()
+    public function __clone()
     {
-    	call_user_func_array(array($this, '__construct'), $this->construct_params);
+        call_user_func_array(array($this, '__construct'), $this->construct_params);
     }
 
     public function __destruct()
     {
-    	if($this->close_on_destruct){
+        if ($this->close_on_destruct) {
             if (isset($this->input) && $this->input) {
                 // close() always tries to connect to the server to shutdown
                 // the connection. If the server has gone away, it will
@@ -136,9 +136,10 @@ class AMQPConnection extends AbstractChannel
      * it`s useful after the fork when you don`t want to close parent process connection
      * @param bool $close
      */
-	public function set_close_on_destruct($close = true){
-		$this->close_on_destruct = (bool) $close;
-	}
+    public function set_close_on_destruct($close = true)
+    {
+        $this->close_on_destruct = (bool) $close;
+    }
 
     protected function close_socket()
     {
@@ -146,7 +147,7 @@ class AMQPConnection extends AbstractChannel
           MiscHelper::debug_msg("closing socket");
         }
 
-        if(is_resource($this->sock)) {
+        if (is_resource($this->sock)) {
           fclose($this->sock);
         }
         $this->sock = null;
@@ -214,7 +215,7 @@ class AMQPConnection extends AbstractChannel
         $pkt = $pkt->getvalue();
         $this->write($pkt);
 
-        while($body) {
+        while ($body) {
             $payload = substr($body,0, $this->frame_max-8);
             $body = substr($body,$this->frame_max-8);
             $pkt = new AMQPWriter();
@@ -289,7 +290,7 @@ class AMQPConnection extends AbstractChannel
                 return array($frame_type, $payload);
             }
 
-			// Not the channel we were looking for.  Queue this frame
+            // Not the channel we were looking for.  Queue this frame
             //for later, when the other channel is looking for frames.
             array_push($this->channels[$frame_channel]->frame_queue,
                        array($frame_type, $payload));
@@ -315,6 +316,7 @@ class AMQPConnection extends AbstractChannel
             $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
             $ch = new AMQPChannel($this->connection, $channel_id);
             $this->channels[$channel_id] =  $ch;
+
             return $ch;
         }
     }
@@ -330,6 +332,7 @@ class AMQPConnection extends AbstractChannel
         $args->write_short($method_sig[0]); // class_id
         $args->write_short($method_sig[1]); // method_id
         $this->send_method_frame(array(10, 60), $args);
+
         return $this->wait(array(
                                "10,61",    // Connection.close_ok
                            ));
@@ -354,6 +357,7 @@ class AMQPConnection extends AbstractChannel
             }
             $tokens[] = $name . '=' . $val;
         }
+
         return implode(', ', $tokens);
 
     }
@@ -395,6 +399,7 @@ class AMQPConnection extends AbstractChannel
         $args->write_shortstr($capabilities);
         $args->write_bit($insist);
         $this->send_method_frame(array(10, 40), $args);
+
         return $this->wait(array(
                                "10,41", // Connection.open_ok
                                "10,50"  // Connection.redirect
@@ -426,6 +431,7 @@ class AMQPConnection extends AbstractChannel
         if ($this->debug) {
           MiscHelper::debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]" );
         }
+
         return $host;
     }
 
@@ -468,7 +474,6 @@ class AMQPConnection extends AbstractChannel
         }
 
     }
-
 
     protected function x_start_ok($client_properties, $mechanism, $response, $locale)
     {

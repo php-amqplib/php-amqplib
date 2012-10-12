@@ -23,7 +23,6 @@ $ch->exchange_declare($exchange, 'direct', false, false, false);
 
 $ch->queue_bind($queue, $exchange);
 
-
 $msg_body = <<<EOT
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
@@ -54,4 +53,3 @@ $ch->basic_publish(new AMQPMessage('quit'), $exchange);
 
 $ch->close();
 $conn->close();
-?>

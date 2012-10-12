@@ -22,7 +22,7 @@ echo " done.\n";
 $wait = true;
 
 $return_listener = function ($reply_code, $reply_text,
-    $exchange, $routing_key, $msg) use ($wait){
+    $exchange, $routing_key, $msg) use ($wait) {
     $GLOBALS['wait'] = false;
 
     echo "return: ",
@@ -42,7 +42,7 @@ $channel->basic_publish($msg,
     true );
 echo " done.\n";
 
-while($wait) {
+while ($wait) {
     $channel->wait();
 }
 
