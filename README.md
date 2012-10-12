@@ -63,25 +63,6 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demoes fanout exchanges with named queues.
 - `basic_get.php`: demoes obtaining messages from the queues by using the _basic get_ AMQP call.
 
-## Loading Classes ##
-
-The library uses the [Symfony ClassLoader component](https://github.com/symfony/ClassLoader) in order to use a standard way of class loading.
-
-If you want to see how to use the component with this library you can take a look at the file `demo/autoload.php`:
-
-    <?php
-
-    require_once(__DIR__ . '/../vendor/symfony/Symfony/Component/ClassLoader/UniversalClassLoader.php');
-
-    use Symfony\Component\ClassLoader\UniversalClassLoader;
-
-    $loader = new UniversalClassLoader();
-    $loader->registerNamespaces(array(
-                'PhpAmqpLib' => __DIR__ . '/..',
-            ));
-
-    $loader->register();
-
 ## Debugging ##
 
 If you want to know what's going on at a protocol level then add the following constant to your code:
@@ -135,5 +116,3 @@ For bug reports, please use bug tracking system at the project page.
 Patches are very welcome!
 
 Author: Vadim Zaliva <lord@crocodile.org>
-
-
