@@ -30,9 +30,10 @@ Get the library source code:
 
     $ git clone git://github.com/videlalvaro/php-amqplib.git
 
-This library uses the `Symfony` default `UniversalClassLoader` so you will have to run the following command to download it as a submodule:
+Class autoloading and dependencies are managed by `composer` so install it:
 
-    $ make
+    $ curl --silent https://getcomposer.org/installer | php
+    $ php composer.phar install
 
 ## Usage ##
 
