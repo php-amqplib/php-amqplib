@@ -6,7 +6,6 @@
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'file_exchange';
 $queue = 'file_queue';
@@ -26,7 +25,7 @@ class Consumer
 
     public function process_message($msg)
     {
-        if($this->startTime === null) {
+        if ($this->startTime === null) {
             $this->startTime = microtime(true);
         }
 
@@ -40,7 +39,8 @@ class Consumer
 
 $ch->basic_consume($queue, '', false, true, false, false, array(new Consumer(), 'process_message'));
 
-function shutdown($ch, $conn){
+function shutdown($ch, $conn)
+{
     $ch->close();
     $conn->close();
 }
@@ -49,4 +49,3 @@ register_shutdown_function('shutdown', $ch, $conn);
 while (count($ch->callbacks)) {
     $ch->wait();
 }
-?>

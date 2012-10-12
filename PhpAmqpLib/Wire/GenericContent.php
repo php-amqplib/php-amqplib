@@ -29,7 +29,6 @@ abstract class GenericContent
         $this->properties = $d;
     }
 
-
     /**
      * Look for additional properties in the 'properties' dictionary,
      * and if present - the 'delivery_info' dictionary.
@@ -37,22 +36,25 @@ abstract class GenericContent
     public function get($name)
     {
         if(isset($this->properties[$name]))
+
             return $this->properties[$name];
 
         if(isset($this->delivery_info) && isset($this->delivery_info[$name]))
+
             return $this->delivery_info[$name];
 
         throw new \OutOfBoundsException("No '$name' property");
     }
 
-	/**
-	 * allows to set the property after creation of the object 
-	 */
-    public function set($name, $value){
-    	if(array_key_exists($name, $this->prop_types))
-    		$this->properties[$name] = $value;
-    	else
-    		throw new \OutOfBoundsException("No '$name' property");
+    /**
+     * allows to set the property after creation of the object
+     */
+    public function set($name, $value)
+    {
+        if(array_key_exists($name, $this->prop_types))
+            $this->properties[$name] = $value;
+        else
+            throw new \OutOfBoundsException("No '$name' property");
     }
     /**
      * Given the raw bytes containing the property-flags and
@@ -91,7 +93,6 @@ abstract class GenericContent
         }
         $this->properties = $d;
     }
-
 
     /**
      * serialize the 'properties' attribute (a dictionary) into the

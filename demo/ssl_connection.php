@@ -14,7 +14,8 @@ $ssl_options = array(
 
 $conn = new AMQPSSLConnection(HOST, PORT, USER, PASS, VHOST, $ssl_options);
 
-function shutdown($conn){
+function shutdown($conn)
+{
     $conn->close();
 }
 

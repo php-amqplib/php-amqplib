@@ -103,7 +103,6 @@ class FrameBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
     public function testQueueDeclare()
     {
         $expected = "\x00\x00\x03foo\x00\x00\x00\x00\x00";

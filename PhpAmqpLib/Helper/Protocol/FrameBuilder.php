@@ -13,6 +13,7 @@ class FrameBuilder
              ->write_shortstr($reply_text)
              ->write_short($class_id)
              ->write_short($method_id);
+
         return $args;
     }
 
@@ -20,6 +21,7 @@ class FrameBuilder
     {
         $args = new AMQPWriter();
         $args->write_bit($active);
+
         return $args;
     }
 
@@ -27,6 +29,7 @@ class FrameBuilder
     {
         $args = new AMQPWriter();
         $args->write_bit($active);
+
         return $args;
     }
 
@@ -34,6 +37,7 @@ class FrameBuilder
     {
         $args = new AMQPWriter();
         $args->write_shortstr($out_of_band);
+
         return $args;
     }
 
@@ -51,6 +55,7 @@ class FrameBuilder
              ->write_bit($active)
              ->write_bit($write)
              ->write_bit($read);
+
         return $args;
     }
 
@@ -74,6 +79,7 @@ class FrameBuilder
              ->write_bit($internal)
              ->write_bit($nowait)
              ->write_table($arguments);
+
         return $args;
     }
 
@@ -84,6 +90,7 @@ class FrameBuilder
              ->write_shortstr($exchange)
              ->write_bit($if_unused)
              ->write_bit($nowait);
+
         return $args;
     }
 
@@ -97,6 +104,7 @@ class FrameBuilder
              ->write_bit($nowait)
              ->write_table($arguments)
              ;
+
         return $args;
     }
 
@@ -109,6 +117,7 @@ class FrameBuilder
              ->write_shortstr($routing_key)
              ->write_table($arguments)
              ;
+
         return $args;
     }
 
@@ -130,6 +139,7 @@ class FrameBuilder
              ->write_bit($auto_delete)
              ->write_bit($nowait)
              ->write_table($arguments);
+
         return $args;
     }
 
@@ -142,6 +152,7 @@ class FrameBuilder
              ->write_bit($if_empty)
              ->write_bit($nowait)
              ;
+
         return $args;
     }
 
@@ -152,6 +163,7 @@ class FrameBuilder
              ->write_shortstr($queue)
              ->write_bit($nowait)
              ;
+
         return $args;
     }
 
@@ -161,6 +173,7 @@ class FrameBuilder
         $args->write_longlong($delivery_tag)
              ->write_bit($multiple)
              ;
+
         return $args;
     }
 
@@ -170,6 +183,7 @@ class FrameBuilder
         $args->write_shortstr($consumer_tag)
              ->write_bit($nowait)
              ;
+
         return $args;
     }
 
@@ -185,6 +199,7 @@ class FrameBuilder
              ->write_bit($exclusive)
              ->write_bit($nowait)
              ;
+
         return $args;
     }
 
@@ -195,6 +210,7 @@ class FrameBuilder
              ->write_shortstr($queue)
              ->write_bit($no_ack)
              ;
+
         return $args;
     }
 
@@ -207,6 +223,7 @@ class FrameBuilder
              ->write_bit($mandatory)
              ->write_bit($immediate)
              ;
+
         return $args;
     }
 
@@ -217,6 +234,7 @@ class FrameBuilder
              ->write_short($prefetch_count)
              ->write_bit($a_global)
              ;
+
         return $args;
     }
 
@@ -224,6 +242,7 @@ class FrameBuilder
     {
         $args = new AMQPWriter();
         $args->write_bit($requeue);
+
         return $args;
     }
 
@@ -233,6 +252,7 @@ class FrameBuilder
         $args->write_longlong($delivery_tag)
              ->write_bit($requeue)
              ;
+
         return $args;
     }
 }

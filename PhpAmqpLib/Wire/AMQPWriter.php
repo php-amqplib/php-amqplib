@@ -32,7 +32,7 @@ class AMQPWriter
 
         while ($bytes > 0) {
             $b = bcmod($x,'256');
-            $res[] = (int)$b;
+            $res[] = (int) $b;
             $x = bcdiv($x,'256', 0);
             $bytes--;
         }
@@ -61,6 +61,7 @@ class AMQPWriter
     public function getvalue()
     {
         $this->flushbits();
+
         return $this->out;
     }
 
@@ -71,6 +72,7 @@ class AMQPWriter
     {
         $this->flushbits();
         $this->out .= $s;
+
         return $this;
     }
 
@@ -97,6 +99,7 @@ class AMQPWriter
         array_push($this->bits, $last);
 
         $this->bitcount += 1;
+
         return $this;
     }
 
@@ -111,6 +114,7 @@ class AMQPWriter
 
         $this->flushbits();
         $this->out .= chr($n);
+
         return $this;
     }
 
@@ -125,6 +129,7 @@ class AMQPWriter
 
         $this->flushbits();
         $this->out .= pack('n', $n);
+
         return $this;
     }
 
@@ -135,6 +140,7 @@ class AMQPWriter
     {
         $this->flushbits();
         $this->out .= implode("", AMQPWriter::chrbytesplit($n,4));
+
         return $this;
     }
 
@@ -144,6 +150,7 @@ class AMQPWriter
         // although format spec for 'N' mentions unsigned
         // it will deal with sinned integers as well. tested.
         $this->out .= pack('N', $n);
+
         return $this;
     }
 
@@ -154,6 +161,7 @@ class AMQPWriter
     {
         $this->flushbits();
         $this->out .= implode("", AMQPWriter::chrbytesplit($n,8));
+
         return $this;
     }
 
@@ -170,6 +178,7 @@ class AMQPWriter
 
         $this->write_octet(strlen($s));
         $this->out .= $s;
+
         return $this;
     }
 
@@ -182,51 +191,54 @@ class AMQPWriter
         $this->flushbits();
         $this->write_long(strlen($s));
         $this->out .= $s;
+
         return $this;
     }
-    
+
     /**
      * Supports the writing of Array types, so that you can implement
      * array methods, like Rabbitmq's HA parameters
-     * 
+     *
      * @param array $a
-     * 
+     *
      * @return self
      */
     public function write_array($a)
     {
         $this->flushbits();
         $data = new AMQPWriter();
-        
+
         foreach ($a as $v) {
             if (is_string($v)) {
                 $data->write('S');
                 $data->write_longstr($v);
-            } else if (is_int($v)) {
+            } elseif (is_int($v)) {
                 $data->write('I');
                 $data->write_signed_long($v);
-            } else if ($v instanceof AMQPDecimal) {
+            } elseif ($v instanceof AMQPDecimal) {
                 $data->write('D');
                 $data->write_octet($v->e);
                 $data->write_signed_long($v->n);
-            } else if (is_array($v)) {
+            } elseif (is_array($v)) {
                 $data->write('A');
                 $data->write_array($v);
             }
         }
-        
+
         $data = $data->getvalue();
         $this->write_long(strlen($data));
         $this->write($data);
+
         return $this;
     }
-    
+
     /**
      * Write unix time_t value as 64 bit timestamp.
      */
    public function write_timestamp($v)
    {
        $this->write_longlong($v);
+
        return $this;
    }
 
@@ -244,29 +256,30 @@ class AMQPWriter
             if ($ftype=='S') {
                 $table_data->write('S');
                 $table_data->write_longstr($v);
-            } else if ($ftype=='I') {
+            } elseif ($ftype=='I') {
                 $table_data->write('I');
                 $table_data->write_signed_long($v);
-            } else if ($ftype=='D') {
+            } elseif ($ftype=='D') {
                 // 'D' type values are passed AMQPDecimal instances.
                 $table_data->write('D');
                 $table_data->write_octet($v->e);
                 $table_data->write_signed_long($v->n);
-            } else if ($ftype=='T') {
+            } elseif ($ftype=='T') {
                 $table_data->write('T');
                 $table_data->write_timestamp($v);
-            } else if ($ftype=='F') {
+            } elseif ($ftype=='F') {
                 $table_data->write('F');
                 $table_data->write_table($v);
-            } else if ($ftype = 'A') {
+            } elseif ($ftype = 'A') {
                 $table_data->write('A');
                 $table_data->write_array($v);
             }
         }
-        
+
         $table_data = $table_data->getvalue();
         $this->write_long(strlen($table_data));
         $this->write($table_data);
+
         return $this;
     }
 }

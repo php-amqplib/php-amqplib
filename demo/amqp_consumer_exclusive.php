@@ -16,7 +16,7 @@ $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 /*
-    name: $queue    // should be unique in fanout exchange. Let RabbitMQ create 
+    name: $queue    // should be unique in fanout exchange. Let RabbitMQ create
                     // a queue name for us
     passive: false  // don't check if a queue with the same name exists
     durable: false // the queue will not survive server restarts
@@ -37,8 +37,8 @@ $ch->exchange_declare($exchange, 'fanout', false, false, true);
 
 $ch->queue_bind($queue_name, $exchange);
 
-function process_message($msg) {
-
+function process_message($msg)
+{
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
@@ -59,21 +59,21 @@ function process_message($msg) {
     no_local: Don't receive messages published by this consumer.
     no_ack: Tells the server if the consumer will acknowledge the messages.
     exclusive: Request exclusive consumer access, meaning only this consumer can access the queue
-    nowait: don't wait for a server response. In case of error the server will raise a channel 
+    nowait: don't wait for a server response. In case of error the server will raise a channel
             exception
     callback: A PHP Callback
 */
 
 $ch->basic_consume($queue_name, $consumer_tag, false, false, true, false, 'process_message');
 
-function shutdown($ch, $conn){
+function shutdown($ch, $conn)
+{
     $ch->close();
     $conn->close();
 }
 register_shutdown_function('shutdown', $ch, $conn);
 
 // Loop as long as the channel has callbacks registered
-while(count($ch->callbacks)) {
+while (count($ch->callbacks)) {
     $ch->wait();
 }
-?>

@@ -92,8 +92,6 @@ class WireTest extends \PHPUnit_Framework_TestCase
         $this->writeAndRead($v, 'write_longstr', 'read_longstr');
     }
 
-
-
     public function testLongLongWriteRead()
     {
         // First test with values represented as strings

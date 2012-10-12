@@ -27,6 +27,7 @@ class AMQPSSLConnection extends AMQPConnection
         foreach ($options as $k => $v) {
             stream_context_set_option($ssl_context, 'ssl', $k, $v);
         }
+
         return $ssl_context;
     }
 }

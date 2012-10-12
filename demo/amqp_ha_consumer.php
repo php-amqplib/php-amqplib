@@ -19,21 +19,21 @@ $ch = $conn->channel();
 */
 
 $ha_connection = array(
-	'x-ha-policy' => array(
-		'S', 'all'
-	),
+    'x-ha-policy' => array(
+        'S', 'all'
+    ),
 );
 
 $ha_specific_connection = array(
-	'x-ha-policy' => array(
-		'S', 'nodes'
-	),
-	'x-ha-policy-params' => array(
-		'A', array(
-			'rabbit@' . HOST,
-			'hare@' . HOST,
-		),
-	),
+    'x-ha-policy' => array(
+        'S', 'nodes'
+    ),
+    'x-ha-policy-params' => array(
+        'A', array(
+            'rabbit@' . HOST,
+            'hare@' . HOST,
+        ),
+    ),
 );
 
 /*
@@ -61,8 +61,8 @@ $ch->exchange_declare($exchange, 'direct', false, true, false);
 $ch->queue_bind($queue, $exchange);
 $ch->queue_bind($specific_queue, $exchange);
 
-function process_message($msg) {
-
+function process_message($msg)
+{
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
@@ -89,7 +89,8 @@ function process_message($msg) {
 
 $ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
-function shutdown($ch, $conn){
+function shutdown($ch, $conn)
+{
     $ch->close();
     $conn->close();
 }
@@ -99,4 +100,3 @@ register_shutdown_function('shutdown', $ch, $conn);
 while (count($ch->callbacks)) {
     $ch->wait();
 }
-?>
