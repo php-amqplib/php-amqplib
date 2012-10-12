@@ -30,9 +30,10 @@ Get the library source code:
 
     $ git clone git://github.com/videlalvaro/php-amqplib.git
 
-This library uses the `Symfony` default `UniversalClassLoader` so you will have to run the following command to download it as a submodule:
+Class autoloading and dependencies are managed by `composer` so install it:
 
-    $ make
+    $ curl --silent https://getcomposer.org/installer | php
+    $ php composer.phar install
 
 ## Usage ##
 
@@ -62,25 +63,6 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 - `amqp_consumer_exclusive.php` and `amqp_publisher_exclusive.php`: demoes fanout exchanges using exclusive queues.
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demoes fanout exchanges with named queues.
 - `basic_get.php`: demoes obtaining messages from the queues by using the _basic get_ AMQP call.
-
-## Loading Classes ##
-
-The library uses the [Symfony ClassLoader component](https://github.com/symfony/ClassLoader) in order to use a standard way of class loading.
-
-If you want to see how to use the component with this library you can take a look at the file `demo/autoload.php`:
-
-    <?php
-
-    require_once(__DIR__ . '/../vendor/symfony/Symfony/Component/ClassLoader/UniversalClassLoader.php');
-
-    use Symfony\Component\ClassLoader\UniversalClassLoader;
-
-    $loader = new UniversalClassLoader();
-    $loader->registerNamespaces(array(
-                'PhpAmqpLib' => __DIR__ . '/..',
-            ));
-
-    $loader->register();
 
 ## Debugging ##
 
@@ -135,5 +117,3 @@ For bug reports, please use bug tracking system at the project page.
 Patches are very welcome!
 
 Author: Vadim Zaliva <lord@crocodile.org>
-
-
