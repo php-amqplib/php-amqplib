@@ -602,7 +602,6 @@ class AMQPChannel extends AbstractChannel
                                         $msg->body);
     }
 
-
     /**
      * specify quality of service
      */
@@ -612,10 +611,9 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array(60, 10), $args);
 
         return $this->wait(array(
-                               "60,11"    //Channel.basic_qos_ok
-                           ));
+            "60,11" //Channel.basic_qos_ok
+        ));
     }
-
 
     /**
      * confirm the requested qos
@@ -654,12 +652,12 @@ class AMQPChannel extends AbstractChannel
 
         if ( !is_null($this->basic_return_callback )) {
             call_user_func_array($this->basic_return_callback, array(
-                    $reply_code,
-                    $reply_text,
-                    $exchange,
-                    $routing_key,
-                    $msg,
-                    ));
+                $reply_code,
+                $reply_text,
+                $exchange,
+                $routing_key,
+                $msg,
+            ));
         } elseif ($this->debug) {
             MiscHelper::debug_msg("Skipping unhandled basic_return message");
         }
@@ -669,8 +667,8 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array(90, 20));
 
         return $this->wait(array(
-                               "90,21"    //Channel.tx_commit_ok
-                           ));
+            "90,21" //Channel.tx_commit_ok
+        ));
     }
 
     /**
@@ -680,7 +678,6 @@ class AMQPChannel extends AbstractChannel
     {
     }
 
-
     /**
      * abandon the current transaction
      */
@@ -689,8 +686,8 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array(90, 30));
 
         return $this->wait(array(
-                               "90,31"    //Channel.tx_rollback_ok
-                           ));
+            "90,31" //Channel.tx_rollback_ok
+        ));
     }
 
     /**
@@ -708,8 +705,8 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array(90, 10));
 
         return $this->wait(array(
-                               "90,11"    //Channel.tx_select_ok
-                           ));
+            "90,11" //Channel.tx_select_ok
+        ));
     }
 
     /**
@@ -735,9 +732,9 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_return_listener($callback)
     {
-        if(!is_callable($callback))
-            throw new \InvalidArgumentException('$callback should be callable.');
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException("$callback should be callable.");
+        }
         $this->basic_return_callback = $callback;
     }
-
 }
