@@ -1,5 +1,6 @@
 <?php
-include_once(__DIR__.'/autoload.php');
+
+require_once __DIR__.'/../vendor/autoload.php';
 
 define('HOST', 'localhost');
 define('PORT', 5672);
