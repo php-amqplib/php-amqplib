@@ -31,6 +31,7 @@ class AMQPChannel extends AbstractChannel
         "60,60" => "basic_deliver",
         "60,71" => "basic_get_ok",
         "60,72" => "basic_get_empty",
+        "60,111" => "basic_recover_ok",
         "90,11" => "tx_select_ok",
         "90,21" => "tx_commit_ok",
         "90,31" => "tx_rollback_ok"
@@ -628,7 +629,18 @@ class AMQPChannel extends AbstractChannel
     public function basic_recover($requeue=false)
     {
         $args = $this->frameBuilder->basicRecover($requeue);
-        $this->send_method_frame(array(60, 100), $args);
+        $this->send_method_frame(array(60, 110), $args);
+
+        return $this->wait(array(
+            "60,111" //Channel.basic_recover_ok
+        ));
+    }
+
+    /**
+     * confirm the requested recover
+     */
+    protected function basic_recover_ok($args)
+    {
     }
 
     /**
