@@ -177,6 +177,17 @@ class FrameBuilder
         return $args;
     }
 
+    public function basicNack($delivery_tag, $multiple, $requeue)
+    {
+        $args = new AMQPWriter();
+        $args->write_longlong($delivery_tag)
+             ->write_bit($multiple)
+             ->write_bit($requeue)
+             ;
+
+        return $args;
+    }
+
     public function basicCancel($consumer_tag, $nowait)
     {
         $args = new AMQPWriter();

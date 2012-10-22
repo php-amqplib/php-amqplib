@@ -36,6 +36,7 @@ class AMQPChannel extends AbstractChannel
         "90,21" => "tx_commit_ok",
         "90,31" => "tx_rollback_ok"
     );
+
     /**
      *
      * @var callable these parameters will be passed to function
@@ -452,9 +453,18 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
+     * reject one or several received messages.
+     */
+    public function basic_nack($delivery_tag, $multiple=false, $requeue=false)
+    {
+        $args = $this->frameBuilder->basicNack($delivery_tag, $multiple, $requeue);
+        $this->send_method_frame(array(60, 120), $args);
+    }
+
+    /**
      * end a queue consumer
      */
-    public function  basic_cancel($consumer_tag, $nowait=false)
+    public function basic_cancel($consumer_tag, $nowait=false)
     {
         $args = $this->frameBuilder->basicCancel($consumer_tag, $nowait);
         $this->send_method_frame(array(60, 30), $args);

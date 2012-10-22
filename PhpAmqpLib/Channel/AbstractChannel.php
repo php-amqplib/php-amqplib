@@ -83,6 +83,7 @@ class AbstractChannel
         "60,90" => "Channel.basic_reject",
         "60,110" => "Channel.basic_recover",
         "60,111" => "Channel.basic_recover_ok",
+        "60,120" => "Channel.basic_nack",
         "90,10" => "Channel.tx_select",
         "90,11" => "Channel.tx_select_ok",
         "90,20" => "Channel.tx_commit",
