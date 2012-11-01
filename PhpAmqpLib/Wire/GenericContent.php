@@ -30,6 +30,15 @@ abstract class GenericContent
     }
 
     /**
+     * Check wheter a property exists in the 'properties' dictionary
+     * or if present - in the 'delivery_info' dictionary.
+     */
+    public function has($name)
+    {
+        return isset($this->properties[$name]) || (isset($this->delivery_info) && isset($this->delivery_info[$name]));
+    }
+
+    /**
      * Look for additional properties in the 'properties' dictionary,
      * and if present - the 'delivery_info' dictionary.
      */
