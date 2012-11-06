@@ -9,6 +9,8 @@ use PhpAmqpLib\Wire\GenericContent;
  */
 class AMQPMessage extends GenericContent
 {
+    public $body;
+
     protected static $PROPERTIES = array(
         "content_type" => "shortstr",
         "content_encoding" => "shortstr",
