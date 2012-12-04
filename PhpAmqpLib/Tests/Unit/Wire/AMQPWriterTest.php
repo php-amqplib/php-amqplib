@@ -37,8 +37,8 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
     public function testWriteTable()
     {
         $this->_writer->write_table(array(
-            'x-foo' => ['S', 'bar'],
-            'x-bar' => ['A', ['baz', 'qux']],
+                'x-foo' => array('S', 'bar'),
+                'x-bar' => array('A', array('baz', 'qux')),
         ));
 
         $out = $this->_writer->getvalue();
@@ -54,7 +54,7 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('InvalidArgumentException', "Invalid type '_'");
 
         $this->_writer->write_table(array(
-            'x-foo' => ['_', 'bar'],
+                'x-foo' => array('_', 'bar'),
         ));
     }
 }
