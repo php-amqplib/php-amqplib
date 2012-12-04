@@ -270,9 +270,11 @@ class AMQPWriter
             } elseif ($ftype=='F') {
                 $table_data->write('F');
                 $table_data->write_table($v);
-            } elseif ($ftype = 'A') {
+            } elseif ($ftype=='A') {
                 $table_data->write('A');
                 $table_data->write_array($v);
+            } else {
+                throw new \InvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
             }
         }
 
