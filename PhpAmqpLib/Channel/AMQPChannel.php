@@ -3,14 +3,14 @@
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Channel\AbstractChannel;
-use PhpAmqpLib\Exception\AMQPChannelException;
+use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\FrameBuilder;
 
 class AMQPChannel extends AbstractChannel
 {
     public $callbacks = array();
-    
+
     protected $method_map = array(
         "20,11" => "open_ok",
         "20,20" => "flow",
@@ -143,7 +143,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array(20, 41));
         $this->do_close();
 
-        throw new AMQPChannelException($reply_code, $reply_text,
+        throw new AMQPProtocolChannelException($reply_code, $reply_text,
                                        array($class_id, $method_id));
     }
 

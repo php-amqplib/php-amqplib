@@ -3,6 +3,8 @@
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -118,7 +120,7 @@ class AbstractChannel
     public function dispatch($method_sig, $args, $content)
     {
         if (!array_key_exists($method_sig, $this->method_map)) {
-            throw new \Exception("Unknown AMQP method $method_sig");
+            throw new AMQPRuntimeException("Unknown AMQP method $method_sig");
         }
 
         $amqp_method = $this->method_map[$method_sig];
@@ -155,7 +157,7 @@ class AbstractChannel
         $payload = $frm[1];
 
         if ($frame_type != 2) {
-            throw new \Exception("Expecting Content header");
+            throw new AMQPRuntimeException("Expecting Content header");
         }
 
         $payload_reader = new AMQPReader(substr($payload,0,12));
@@ -174,7 +176,7 @@ class AbstractChannel
             $payload = $frm[1];
 
             if ($frame_type != 3) {
-                throw new \Exception("Expecting Content body, received frame type $frame_type ("
+                throw new AMQPRuntimeException("Expecting Content body, received frame type $frame_type ("
                         .self::$FRAME_TYPES[$frame_type].")");
             }
 
@@ -242,12 +244,12 @@ class AbstractChannel
             $payload = $frm[1];
 
             if ($frame_type != 1) {
-                throw new \Exception("Expecting AMQP method, received frame type: $frame_type ("
+                throw new AMQPRuntimeException("Expecting AMQP method, received frame type: $frame_type ("
                         .self::$FRAME_TYPES[$frame_type].")");
             }
 
             if (strlen($payload) < 4) {
-                throw new \Exception("Method frame too short");
+                throw new AMQPOutOfBoundsException("Method frame too short");
             }
 
             $method_sig_array = unpack("n2", substr($payload,0,4));
