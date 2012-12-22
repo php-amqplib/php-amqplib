@@ -4,7 +4,8 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Exception\AMQPConnectionException;
+use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
@@ -81,7 +82,7 @@ class AMQPConnection extends AbstractChannel
             }
 
             if (!$this->sock) {
-                throw new \Exception ("Error Connecting to server($errno): $errstr ");
+                throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
             }
 
             if(!stream_set_timeout($this->sock, $read_write_timeout)) {
@@ -165,10 +166,10 @@ class AMQPConnection extends AbstractChannel
         $len = strlen($data);
         while (true) {
             if (false === ($written = fwrite($this->sock, $data))) {
-                throw new \Exception ("Error sending data");
+                throw new AMQPRuntimeException("Error sending data");
             }
             if ($written === 0) {
-                throw new \Exception ("Broken pipe or closed connection");
+                throw new AMQPRuntimeException("Broken pipe or closed connection");
             }
 
             // get status of socket to determine whether or not it has timed out
@@ -204,7 +205,7 @@ class AMQPConnection extends AbstractChannel
             }
         }
 
-        throw new \Exception("No free channel ids");
+        throw new AMQPRuntimeException("No free channel ids");
     }
 
     public function send_content($channel, $class_id, $weight, $body_size,
@@ -282,7 +283,7 @@ class AMQPConnection extends AbstractChannel
 
         $ch = $this->input->read_octet();
         if ($ch != 0xCE) {
-            throw new \Exception(sprintf("Framing error, unexpected byte: %x", $ch));
+            throw new AMQPRuntimeException(sprintf("Framing error, unexpected byte: %x", $ch));
         }
 
         return array($frame_type, $channel, $payload);
@@ -381,7 +382,7 @@ class AMQPConnection extends AbstractChannel
 
         $this->x_close_ok();
 
-        throw new AMQPConnectionException($reply_code, $reply_text, array($class_id, $method_id));
+        throw new AMQPProtocolConnectionException($reply_code, $reply_text, array($class_id, $method_id));
     }
 
 

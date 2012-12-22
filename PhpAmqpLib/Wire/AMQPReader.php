@@ -4,8 +4,8 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Wire\AMQPDecimal;
 use PhpAmqpLib\Wire\BufferedInput;
-
-require_once(__DIR__ . '/BufferedInput.php');
+use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 
 class AMQPReader
 {
@@ -26,8 +26,9 @@ class AMQPReader
         else
             $this->is64bits = false;
 
-        if(!function_exists("bcmul"))
-            throw new \Exception("'bc math' module required");
+        if(!function_exists("bcmul")) {
+            throw new AMQPRuntimeException("'bc math' module required");
+        }
 
         $this->buffer_read_timeout = 5; // in seconds
     }
@@ -65,14 +66,14 @@ class AMQPReader
             }
 
             if (strlen($res)!=$n) {
-                throw new \Exception("Error reading data. Received " .
+                throw new AMQPRuntimeException("Error reading data. Received " .
                                      strlen($res) . " instead of expected $n bytes");
             }
 
             $this->offset += $n;
         } else {
             if(strlen($this->str) < $n)
-                throw new \Exception("Error reading data. Requested $n bytes while string buffer has only " .
+                throw new AMQPRuntimeException("Error reading data. Requested $n bytes while string buffer has only " .
                                      strlen($this->str));
             $res = substr($this->str,0,$n);
             $this->str = substr($this->str,$n);
@@ -193,7 +194,7 @@ class AMQPReader
         $this->bitcount = $this->bits = 0;
         $slen = $this->read_php_int();
         if($slen<0)
-            throw new \Exception("Strings longer than supported on this platform");
+            throw new AMQPOutOfBoundsException("Strings longer than supported on this platform");
 
         return $this->rawread($slen);
     }
@@ -215,8 +216,11 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
         $tlen = $this->read_php_int();
-        if($tlen<0)
-            throw new \Exception("Table is longer than supported");
+
+        if($tlen<0) {
+            throw new AMQPOutOfBoundsException("Table is longer than supported");
+        }
+
         $table_data = new AMQPReader($this->rawread($tlen));
         $result = array();
         while ($table_data->tell() < $tlen) {
