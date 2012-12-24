@@ -101,7 +101,7 @@ class AbstractChannel
      */
     protected $connection;
 
-    public function __construct($connection, $channel_id)
+    public function __construct(AMQPConnection $connection, $channel_id)
     {
         $this->connection = $connection;
         $this->channel_id = $channel_id;
