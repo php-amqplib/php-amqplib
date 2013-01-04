@@ -167,6 +167,13 @@ class AMQPConnection extends AbstractChannel
             if ($written === 0) {
                 throw new \Exception ("Broken pipe or closed connection");
             }
+
+            // get status of socket to determine whether or not it has timed out
+            $info = stream_get_meta_data($this->sock);
+            if($info['timed_out']) {
+                throw new \Exception("Error sending data. Socket connection timed out");
+            }
+
             $len = $len - $written;
             if ($len > 0) {
                 $data = substr($data,0-$len);
