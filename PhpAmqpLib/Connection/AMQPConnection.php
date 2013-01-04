@@ -84,7 +84,10 @@ class AMQPConnection extends AbstractChannel
                 throw new \Exception ("Error Connecting to server($errno): $errstr ");
             }
 
-            stream_set_timeout($this->sock, $read_write_timeout);
+            if(!stream_set_timeout($this->sock, $read_write_timeout)) {
+                throw new \Exception ("Timeout could not be set");
+            }
+
             stream_set_blocking($this->sock, 1);
             $this->input = new AMQPReader(null, $this->sock);
 
