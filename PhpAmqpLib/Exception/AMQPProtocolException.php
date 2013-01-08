@@ -6,7 +6,7 @@ namespace PhpAmqpLib\Exception;
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Helper\MiscHelper;
 
-class AMQPException extends \Exception
+class AMQPProtocolException extends \Exception implements AMQPExceptionInterface
 {
     public function __construct($reply_code, $reply_text, $method_sig)
     {
