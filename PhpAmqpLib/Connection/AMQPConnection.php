@@ -84,7 +84,10 @@ class AMQPConnection extends AbstractChannel
                 throw new \Exception ("Error Connecting to server($errno): $errstr ");
             }
 
-            stream_set_timeout($this->sock, $read_write_timeout);
+            if(!stream_set_timeout($this->sock, $read_write_timeout)) {
+                throw new \Exception ("Timeout could not be set");
+            }
+
             stream_set_blocking($this->sock, 1);
             $this->input = new AMQPReader(null, $this->sock);
 
@@ -167,6 +170,13 @@ class AMQPConnection extends AbstractChannel
             if ($written === 0) {
                 throw new \Exception ("Broken pipe or closed connection");
             }
+
+            // get status of socket to determine whether or not it has timed out
+            $info = stream_get_meta_data($this->sock);
+            if($info['timed_out']) {
+                throw new \Exception("Error sending data. Socket connection timed out");
+            }
+
             $len = $len - $written;
             if ($len > 0) {
                 $data = substr($data,0-$len);
