@@ -54,12 +54,6 @@ class AMQPReader
             while ($read < $n && !feof($this->sock->real_sock()) &&
                     (false !== ($buf = fread($this->sock->real_sock(), $n - $read)))) {
 
-                // get status of socket to determine whether or not it has timed out
-                $info = stream_get_meta_data($this->sock->real_sock());
-                if($info['timed_out']) {
-                    throw new \Exception('Error reading data. Socket connection timed out');
-                }
-
                 $read += strlen($buf);
                 $res .= $buf;
             }
