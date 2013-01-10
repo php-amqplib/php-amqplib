@@ -11,6 +11,9 @@ use PhpAmqpLib\Wire\AMQPWriter;
  */
 abstract class GenericContent
 {
+    public $delivery_info = array();
+    private $properties = array();
+
     protected static $PROPERTIES = array(
         "dummy" => "shortstr"
     );
@@ -35,7 +38,7 @@ abstract class GenericContent
      */
     public function has($name)
     {
-        return isset($this->properties[$name]) || (isset($this->delivery_info) && isset($this->delivery_info[$name]));
+        return isset($this->properties[$name]) || isset($this->delivery_info[$name]);
     }
 
     /**
@@ -44,13 +47,12 @@ abstract class GenericContent
      */
     public function get($name)
     {
-        if(isset($this->properties[$name]))
-
+        if(isset($this->properties[$name])) {
             return $this->properties[$name];
-
-        if(isset($this->delivery_info) && isset($this->delivery_info[$name]))
-
+        }
+        if(isset($this->delivery_info[$name])) {
             return $this->delivery_info[$name];
+        }
 
         throw new \OutOfBoundsException("No '$name' property");
     }
