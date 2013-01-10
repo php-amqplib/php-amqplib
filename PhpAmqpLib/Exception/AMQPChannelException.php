@@ -4,10 +4,9 @@ namespace PhpAmqpLib\Exception;
 
 use PhpAmqpLib\Exception\AMQPException;
 
+/**
+ * @deprecated use AMQPProtocolChannelException instead
+ */
 class AMQPChannelException extends AMQPException
 {
-    public function __construct($reply_code, $reply_text, $method_sig)
-    {
-        parent::__construct($reply_code, $reply_text, $method_sig);
-    }
 }

@@ -2,6 +2,8 @@
 
 namespace PhpAmqpLib\Wire;
 
+use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+
 class AMQPWriter
 {
     public function __construct()
@@ -40,7 +42,7 @@ class AMQPWriter
         $res = array_reverse($res);
 
         if ($x!=0) {
-            throw new \Exception("Value too big!");
+            throw new AMQPOutOfBoundsException("Value too big!");
         }
 
         return $res;
