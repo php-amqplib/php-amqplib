@@ -9,6 +9,8 @@ use PhpAmqpLib\Helper\Protocol\FrameBuilder;
 
 class AMQPChannel extends AbstractChannel
 {
+    public $callbacks = array();
+    
     protected $method_map = array(
         "20,11" => "open_ok",
         "20,20" => "flow",
