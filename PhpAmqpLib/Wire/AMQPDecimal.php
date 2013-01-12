@@ -2,23 +2,27 @@
 
 namespace PhpAmqpLib\Wire;
 
-  /**
-   * AMQP protocol decimal value.
-   *
-   * Values are represented as (n,e) pairs. The actual value
-   * is n * 10^(-e).
-   *
-   * From 0.8 spec: Decimal values are
-   * not intended to support floating point values, but rather
-   * business values such as currency rates and amounts. The
-   * 'decimals' octet is not signed.
-  */
+use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+
+/**
+ * AMQP protocol decimal value.
+ *
+ * Values are represented as (n,e) pairs. The actual value
+ * is n * 10^(-e).
+ *
+ * From 0.8 spec: Decimal values are
+ * not intended to support floating point values, but rather
+ * business values such as currency rates and amounts. The
+ * 'decimals' octet is not signed.
+ */
 class AMQPDecimal
 {
     public function __construct($n, $e)
     {
-        if($e < 0)
-            throw new \Exception("Decimal exponent value must be unsigned!");
+        if($e < 0) {
+            throw new AMQPOutOfBoundsException("Decimal exponent value must be unsigned!");
+        }
+        
         $this->n = $n;
         $this->e = $e;
     }
