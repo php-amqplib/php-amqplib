@@ -7,6 +7,8 @@ use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\FrameBuilder;
 
+use PhpAmqpLib\Helper\Protocol\Protocol091;
+
 class AMQPChannel extends AbstractChannel
 {
     public $callbacks = array();
@@ -120,14 +122,14 @@ class AMQPChannel extends AbstractChannel
                           $reply_text="",
                           $method_sig=array(0, 0))
     {
-        $args = $this->frameBuilder->channelClose(
+        list($class_id, $method_id, $args) = Protocol091::channelClose(
                                          $reply_code,
                                          $reply_text,
                                          $method_sig[0],
                                          $method_sig[1]
                                       );
 
-        $this->send_method_frame(array(20, 40), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "20,41"    // Channel.close_ok
@@ -162,8 +164,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function flow($active)
     {
-        $args = $this->frameBuilder->flow($active);
-        $this->send_method_frame(array(20, 20), $args);
+        list($class_id, $method_id, $args) = Protocol091::channelFlow($active);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "20,21"    //Channel.flow_ok
@@ -178,8 +180,8 @@ class AMQPChannel extends AbstractChannel
 
     protected function x_flow_ok($active)
     {
-        $args = $this->frameBuilder->flow($active);
-        $this->send_method_frame(array(20, 21), $args);
+        list($class_id, $method_id, $args) = Protocol091::channelFlow($active);
+        $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
     protected function flow_ok($args)
@@ -193,8 +195,8 @@ class AMQPChannel extends AbstractChannel
             return;
         }
 
-        $args = $this->frameBuilder->xOpen($out_of_band);
-        $this->send_method_frame(array(20, 10), $args);
+        list($class_id, $method_id, $args) = Protocol091::channelOpen($out_of_band);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "20,11"    //Channel.open_ok
@@ -215,11 +217,10 @@ class AMQPChannel extends AbstractChannel
     public function access_request($realm, $exclusive=false,
         $passive=false, $active=false, $write=false, $read=false)
     {
-        $args = $this->frameBuilder
-                     ->accessRequest($realm, $exclusive,
+        list($class_id, $method_id, $args) = Protocol091::accessRequest($realm, $exclusive,
                                      $passive, $active,
                                      $write, $read);
-        $this->send_method_frame(array(30, 10), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "30,11"    //Channel.access_request_ok
@@ -254,14 +255,13 @@ class AMQPChannel extends AbstractChannel
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->exchangeDeclare(
-                                            $exchange, $type, $passive,
-                                            $durable, $auto_delete,
-                                            $internal, $nowait,
-                                            $arguments, $ticket
-                                         );
+        list($class_id, $method_id, $args) =
+            Protocol091::exchangeDeclare(
+                $ticket, $exchange, $type, $passive, $durable,
+                $auto_delete, $internal, $nowait, $arguments
+            );
 
-        $this->send_method_frame(array(40, 10), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -285,8 +285,8 @@ class AMQPChannel extends AbstractChannel
         $nowait=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
-        $args = $this->frameBuilder->exchangeDelete($exchange, $if_unused, $nowait, $ticket);
-        $this->send_method_frame(array(40, 20), $args);
+        list($class_id, $method_id, $args) = Protocol091::exchangeDelete($ticket, $exchange, $if_unused, $nowait);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -308,14 +308,12 @@ class AMQPChannel extends AbstractChannel
     public function exchange_bind($source, $destination, $routing_key="",
         $nowait=false, $arguments=null, $ticket=null)
     {
-        throw new \Exception("Method not supported on version 0.8 of the protocol");
-
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->exchangeBind($source, $destination, $routing_key, $nowait, $arguments, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::exchangeBind($ticket, $source, $destination, $routing_key, $nowait, $arguments);
 
-        $this->send_method_frame(array(40, 30), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -337,14 +335,12 @@ class AMQPChannel extends AbstractChannel
     public function exchange_unbind($source, $destination, $routing_key="",
         $arguments=null, $ticket=null)
     {
-        throw new \Exception("Method not supported on version 0.8 of the protocol");
-
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->exchangeUnbind($source, $destination, $routing_key, $arguments, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::exchangeUnbind($ticket, $source, $destination, $routing_key, $arguments);
 
-        $this->send_method_frame(array(40, 40), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "40,41"    // Channel.exchange_unbind_ok
@@ -368,9 +364,9 @@ class AMQPChannel extends AbstractChannel
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->queueBind($queue, $exchange, $routing_key, $nowait, $arguments, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::queueBind($ticket, $queue, $exchange, $routing_key, $nowait, $arguments);
 
-        $this->send_method_frame(array(50, 20), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -395,9 +391,9 @@ class AMQPChannel extends AbstractChannel
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->queueUnbind($queue, $exchange, $routing_key, $arguments, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::queueUnbind($ticket, $queue, $exchange, $routing_key, $arguments);
 
-        $this->send_method_frame(array(50, 50), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "50,51"    // Channel.queue_unbind_ok
@@ -426,11 +422,12 @@ class AMQPChannel extends AbstractChannel
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->queueDeclare(
-                                       $queue, $passive, $durable,
-                                       $exclusive, $auto_delete, $nowait,
-                                       $arguments, $ticket);
-        $this->send_method_frame(array(50, 10), $args);
+        list($class_id, $method_id, $args) =
+            Protocol091::queueDeclare(
+                $ticket, $queue, $passive, $durable, $exclusive,
+                $auto_delete, $nowait, $arguments
+            );
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -459,9 +456,9 @@ class AMQPChannel extends AbstractChannel
     {
         $ticket = $this->getTicket($ticket);
 
-        $args = $this->frameBuilder->queueDelete($queue, $if_unused, $if_empty, $nowait, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::queueDelete($ticket, $queue, $if_unused, $if_empty, $nowait);
 
-        $this->send_method_frame(array(50, 40), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -484,9 +481,9 @@ class AMQPChannel extends AbstractChannel
     public function queue_purge($queue="", $nowait=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
-        $args = $this->frameBuilder->queuePurge($queue, $nowait, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::queuePurge($ticket, $queue, $nowait);
 
-        $this->send_method_frame(array(50, 30), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             return $this->wait(array(
@@ -508,8 +505,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_ack($delivery_tag, $multiple=false)
     {
-        $args = $this->frameBuilder->basicAck($delivery_tag, $multiple);
-        $this->send_method_frame(array(60, 80), $args);
+        list($class_id, $method_id, $args) = Protocol091::basicAck($delivery_tag, $multiple);
+        $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
     /**
@@ -517,8 +514,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_nack($delivery_tag, $multiple=false, $requeue=false)
     {
-        $args = $this->frameBuilder->basicNack($delivery_tag, $multiple, $requeue);
-        $this->send_method_frame(array(60, 120), $args);
+        list($class_id, $method_id, $args) = Protocol091::basicNack($delivery_tag, $multiple, $requeue);
+        $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
     /**
@@ -526,8 +523,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_cancel($consumer_tag, $nowait=false)
     {
-        $args = $this->frameBuilder->basicCancel($consumer_tag, $nowait);
-        $this->send_method_frame(array(60, 30), $args);
+        list($class_id, $method_id, $args) = Protocol091::basicCancel($consumer_tag, $nowait);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "60,31"    // Channel.basic_cancel_ok
@@ -551,11 +548,13 @@ class AMQPChannel extends AbstractChannel
                                   $callback=null, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
-        $args = $this->frameBuilder->basicConsume(
-                                        $queue, $consumer_tag, $no_local,
-                                        $no_ack, $exclusive, $nowait, $ticket);
+        list($class_id, $method_id, $args) =
+            Protocol091::basicConsume(
+                $ticket, $queue, $consumer_tag, $no_local,
+                $no_ack, $exclusive, $nowait
+            );
 
-        $this->send_method_frame(array(60, 20), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         if (!$nowait) {
             $consumer_tag = $this->wait(array(
@@ -613,9 +612,9 @@ class AMQPChannel extends AbstractChannel
     public function basic_get($queue="", $no_ack=false, $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
-        $args = $this->frameBuilder->basicGet($queue, $no_ack, $ticket);
+        list($class_id, $method_id, $args) = Protocol091::basicGet($ticket, $queue, $no_ack);
 
-        $this->send_method_frame(array(60, 70), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
                                "60,71",    //Channel.basic_get_ok
@@ -661,11 +660,10 @@ class AMQPChannel extends AbstractChannel
                                   $ticket=null)
     {
         $ticket = $this->getTicket($ticket);
-        $args = $this->frameBuilder->basicPublish(
-                                      $exchange, $routing_key, $mandatory,
-                                      $immediate, $ticket);
+        list($class_id, $method_id, $args) =
+            Protocol091::basicPublish($ticket, $exchange, $routing_key, $mandatory, $immediate);
 
-        $this->send_method_frame(array(60, 40), $args);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         $this->connection->send_content($this->channel_id, 60, 0,
                                         strlen($msg->body),
@@ -678,8 +676,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_qos($prefetch_size, $prefetch_count, $a_global)
     {
-        $args = $this->frameBuilder->basicQos($prefetch_size, $prefetch_count, $a_global);
-        $this->send_method_frame(array(60, 10), $args);
+        list($class_id, $method_id, $args) = Protocol091::basicQos($prefetch_size, $prefetch_count, $a_global);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
             "60,11" //Channel.basic_qos_ok
@@ -698,8 +696,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_recover($requeue=false)
     {
-        $args = $this->frameBuilder->basicRecover($requeue);
-        $this->send_method_frame(array(60, 110), $args);
+        list($class_id, $method_id, $args) = Protocol091::basicRecover($requeue);
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
             "60,111" //Channel.basic_recover_ok
@@ -718,8 +716,8 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_reject($delivery_tag, $requeue)
     {
-        $args = $this->frameBuilder->basicReject($delivery_tag, $requeue);
-        $this->send_method_frame(array(60, 90), $args);
+        list($class_id, $method_id, $args) = Protocol091::basicReject($delivery_tag, $requeue);
+        $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
     /**

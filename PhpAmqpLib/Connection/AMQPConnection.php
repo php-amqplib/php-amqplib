@@ -10,9 +10,12 @@ use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
 
+use PhpAmqpLib\Helper\Protocol\Protocol091;
+
 class AMQPConnection extends AbstractChannel
 {
-    public static $AMQP_PROTOCOL_HEADER = "AMQP\x01\x01\x09\x01";
+    // public static $AMQP_PROTOCOL_HEADER = "AMQP\x01\x01\x09\x01";
+    public static $AMQP_PROTOCOL_HEADER = "AMQP\x00\x00\x09\x01";
 
     public static $LIBRARY_PROPERTIES = array(
         "library" => array('S', "PHP Simple AMQP lib"),
@@ -24,15 +27,14 @@ class AMQPConnection extends AbstractChannel
         "10,20" => "secure",
         "10,30" => "tune",
         "10,41" => "open_ok",
-        "10,50" => "redirect",
-        "10,60" => "_close",
-        "10,61" => "close_ok"
+        "10,50" => "_close",
+        "10,51" => "close_ok"
     );
     /**
      * contructor parameters for clone
      * @var array
      */
-    protected $construct_params ;
+    protected $construct_params;
     /**
      * close the connection in destructur
      * @var bool
@@ -337,15 +339,16 @@ class AMQPConnection extends AbstractChannel
      */
     public function close($reply_code=0, $reply_text="", $method_sig=array(0, 0))
     {
-        $args = new AMQPWriter();
-        $args->write_short($reply_code);
-        $args->write_shortstr($reply_text);
-        $args->write_short($method_sig[0]); // class_id
-        $args->write_short($method_sig[1]); // method_id
-        $this->send_method_frame(array(10, 60), $args);
+        list($class_id, $method_id, $args) = Protocol091::connectionClose(
+            $reply_code,
+            $reply_text,
+            $method_sig[0],
+            $method_sig[1]
+        );
+        $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
-                               "10,61",    // Connection.close_ok
+                               "10,51",    // Connection.close_ok
                            ));
     }
 
@@ -413,7 +416,6 @@ class AMQPConnection extends AbstractChannel
 
         return $this->wait(array(
                                "10,41", // Connection.open_ok
-                               "10,50"  // Connection.redirect
                            ));
     }
 
