@@ -308,6 +308,8 @@ class AMQPChannel extends AbstractChannel
     public function exchange_bind($source, $destination, $routing_key="",
         $nowait=false, $arguments=null, $ticket=null)
     {
+        throw new \Exception("Method not supported on version 0.8 of the protocol");
+
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
@@ -335,6 +337,8 @@ class AMQPChannel extends AbstractChannel
     public function exchange_unbind($source, $destination, $routing_key="",
         $arguments=null, $ticket=null)
     {
+        throw new \Exception("Method not supported on version 0.8 of the protocol");
+
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
