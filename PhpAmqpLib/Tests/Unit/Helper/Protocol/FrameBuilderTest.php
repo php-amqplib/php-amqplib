@@ -89,6 +89,20 @@ class FrameBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
+    public function testExchangeBind()
+    {
+        $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00\x00";
+        $args = $this->frameBuilder->exchangeBind('foo', 'bar', 'baz', false, array(), 0);
+        $this->assertEquals($expected, $args->getvalue());
+    }
+
+    public function testExchangeUnbind()
+    {
+        $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00";
+        $args = $this->frameBuilder->exchangeUnbind('foo', 'bar', 'baz', array(), 0);
+        $this->assertEquals($expected, $args->getvalue());
+    }
+
     public function testQueueBind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00\x00";

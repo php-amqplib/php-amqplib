@@ -10,7 +10,7 @@ use PhpAmqpLib\Helper\Protocol\FrameBuilder;
 class AMQPChannel extends AbstractChannel
 {
     public $callbacks = array();
-    
+
     protected $method_map = array(
         "20,11" => "open_ok",
         "20,20" => "flow",
@@ -21,6 +21,8 @@ class AMQPChannel extends AbstractChannel
         "30,11" => "access_request_ok",
         "40,11" => "exchange_declare_ok",
         "40,21" => "exchange_delete_ok",
+        "40,31" => "exchange_bind_ok",
+        "40,41" => "exchange_unbind_ok",
         "50,11" => "queue_declare_ok",
         "50,21" => "queue_bind_ok",
         "50,31" => "queue_purge_ok",
@@ -297,6 +299,58 @@ class AMQPChannel extends AbstractChannel
      * confirm deletion of an exchange
      */
     protected function exchange_delete_ok($args)
+    {
+    }
+
+    /**
+     * bind dest exchange to source exchange
+     */
+    public function exchange_bind($source, $destination, $routing_key="",
+        $nowait=false, $arguments=null, $ticket=null)
+    {
+        $arguments = $this->getArguments($arguments);
+        $ticket = $this->getTicket($ticket);
+
+        $args = $this->frameBuilder->exchangeBind($source, $destination, $routing_key, $nowait, $arguments, $ticket);
+
+        $this->send_method_frame(array(40, 30), $args);
+
+        if (!$nowait) {
+            return $this->wait(array(
+                                   "40,31"    // Channel.exchange_bind_ok
+                               ));
+        }
+    }
+
+    /**
+     * confirm bind successful
+     */
+    protected function exchange_bind_ok($args)
+    {
+    }
+
+    /**
+     * unbind dest exchange from source exchange
+     */
+    public function exchange_unbind($source, $destination, $routing_key="",
+        $arguments=null, $ticket=null)
+    {
+        $arguments = $this->getArguments($arguments);
+        $ticket = $this->getTicket($ticket);
+
+        $args = $this->frameBuilder->exchangeUnbind($source, $destination, $routing_key, $arguments, $ticket);
+
+        $this->send_method_frame(array(40, 40), $args);
+
+        return $this->wait(array(
+                               "40,41"    // Channel.exchange_unbind_ok
+                           ));
+    }
+
+    /**
+     * confirm unbind successful
+     */
+    protected function exchange_unbind_ok($args)
     {
     }
 

@@ -94,6 +94,33 @@ class FrameBuilder
         return $args;
     }
 
+    public function exchangeBind($source, $destination, $routing_key, $nowait, $arguments, $ticket)
+    {
+        $args = new AMQPWriter();
+        $args->write_short($ticket)
+             ->write_shortstr($source)
+             ->write_shortstr($destination)
+             ->write_shortstr($routing_key)
+             ->write_bit($nowait)
+             ->write_table($arguments)
+             ;
+
+        return $args;
+    }
+
+    public function exchangeUnbind($source, $destination, $routing_key, $arguments, $ticket)
+    {
+        $args = new AMQPWriter();
+        $args->write_short($ticket)
+             ->write_shortstr($source)
+             ->write_shortstr($destination)
+             ->write_shortstr($routing_key)
+             ->write_table($arguments)
+             ;
+
+        return $args;
+    }
+
     public function queueBind($queue, $exchange, $routing_key, $nowait, $arguments, $ticket)
     {
         $args = new AMQPWriter();
