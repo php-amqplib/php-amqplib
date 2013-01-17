@@ -20,9 +20,9 @@ class AMQPException extends \Exception
         $this->amqp_method_sig = $method_sig;
 
         $ms = MiscHelper::methodSig($method_sig);
-
-        $mn = isset(AbstractChannel::$GLOBAL_METHOD_NAMES[$ms])
-                ? AbstractChannel::$GLOBAL_METHOD_NAMES[$ms]
+        $PROTOCOL_CONSTANTS_CLASS = AbstractChannel::$PROTOCOL_CONSTANTS_CLASS;
+        $mn = isset($PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms])
+                ? $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms]
                 : $mn = "";
 
         $this->args = array(

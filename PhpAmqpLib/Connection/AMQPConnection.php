@@ -267,8 +267,9 @@ class AMQPConnection extends AbstractChannel
         $this->write($pkt);
 
         if ($this->debug) {
-          MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-                           AbstractChannel::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+                MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
+                           $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
         }
 
     }
