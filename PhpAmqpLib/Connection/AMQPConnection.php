@@ -81,7 +81,7 @@ class AMQPConnection extends AbstractChannel
             stream_set_blocking($this->sock, 1);
             $this->input = new AMQPReader(null, $this->sock);
 
-            $this->write(self::$AMQP_PROTOCOL_HEADER);
+            $this->write($this->amqp_protocol_header);
             $this->wait(array($this->waitHelper->get_wait('connection.start')));
             $this->x_start_ok($d, $login_method, $login_response, $locale);
 

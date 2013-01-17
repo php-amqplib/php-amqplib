@@ -9,6 +9,8 @@ use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Message\AMQPMessage;
 
+use PhpAmqpLib\Helper\Protocol\Protocol080;
+use PhpAmqpLib\Helper\Protocol\Protocol091;
 use PhpAmqpLib\Helper\Protocol\Wait080;
 use PhpAmqpLib\Helper\Protocol\Wait091;
 use PhpAmqpLib\Helper\Protocol\MethodMap080;
@@ -16,7 +18,7 @@ use PhpAmqpLib\Helper\Protocol\MethodMap091;
 
 class AbstractChannel
 {
-    public static $PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
+    public static $PROTOCOL_CONSTANTS_CLASS;
 
     protected $debug;
     /**
@@ -24,6 +26,10 @@ class AbstractChannel
      * @var AMQPConnection
      */
     protected $connection;
+
+    protected $protocolVersion;
+
+    protected $protocolWriter;
 
     protected $waitHelper;
 
@@ -38,9 +44,28 @@ class AbstractChannel
         $this->method_queue = array(); // Higher level queue for methods
         $this->auto_decode = false;
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
-        // TODO check protocol version during constructor
-        $this->waitHelper = new Wait091();
-        $this->methodMap = new MethodMap091();
+
+        $this->protocolVersion = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : '091';
+        switch ($this->protocolVersion) {
+        case '091':
+            self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
+            $c = self::$PROTOCOL_CONSTANTS_CLASS;
+            $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
+            $this->protocolWriter = new Protocol091();
+            $this->waitHelper = new Wait091();
+            $this->methodMap = new MethodMap091();
+            break;
+        case '08':
+            self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants080';
+            $c = self::$PROTOCOL_CONSTANTS_CLASS;
+            $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
+            $this->protocolWriter = new Protocol080();
+            $this->waitHelper = new Wait080();
+            $this->methodMap = new MethodMap080();
+            break;
+        default:
+            throw new AMQPRuntimeException('Protocol: ' . $this->protocolVersion . ' not implemented.');
+        }
     }
 
     public function getChannelId()
