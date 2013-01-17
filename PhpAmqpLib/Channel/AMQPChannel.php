@@ -305,13 +305,13 @@ class AMQPChannel extends AbstractChannel
     /**
      * bind dest exchange to source exchange
      */
-    public function exchange_bind($source, $destination, $routing_key="",
+    public function exchange_bind($destination, $source, $routing_key="",
         $nowait=false, $arguments=null, $ticket=null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        list($class_id, $method_id, $args) = Protocol091::exchangeBind($ticket, $source, $destination, $routing_key, $nowait, $arguments);
+        list($class_id, $method_id, $args) = Protocol091::exchangeBind($ticket, $destination, $source, $routing_key, $nowait, $arguments);
 
         $this->send_method_frame(array($class_id, $method_id), $args);
 
@@ -414,7 +414,7 @@ class AMQPChannel extends AbstractChannel
                                    $passive=false,
                                    $durable=false,
                                    $exclusive=false,
-                                   $auto_delete=true,
+                                   $auto_delete=false,
                                    $nowait=false,
                                    $arguments=null,
                                    $ticket=null)
