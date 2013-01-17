@@ -4,25 +4,18 @@
 
 This library is a _pure PHP_ implementation of the AMQP protocol. It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
 
-## NOTE ##
-
-This library is a fork of the [php-amqplib](http://code.google.com/p/php-amqplib/) library.
-
-At The Netcircle we modified that library in order to work with PHP 5.3 Strict.
-
-Also we improved the debug method to increase performance.
-
-We use it daily in prod for sending/consuming 600K + messages per day.
+**Requirements: PHP 5.3** due to the use of `namespaces`.
 
 ## BC BREAKING CHANGES ##
 
-As of November 2011 I retook the development of this library therefore I __tagged__ the __previous version__ of the library [here](https://github.com/videlalvaro/php-amqplib/tarball/v1.0). If you are looking for the old library then use the code on that tag.
+Since version 2.0 this library uses `AMQP 0.9.1` by default. You shouldn't need to change your code, but test before upgrading.
 
-If you are going to use it in a new project I advice that you use the current master branch. There are many performance improvements in that branch and I'm adding more and more tests to it.
+## New since version 2.0 ##
 
-Besides that the library has been refactored to use PHP 5.3 `namespaces`. The classes have been split into their separate files and so on. The idea is to make the library easier to test.
+Since now the library uses `AMQP 0.9.1` we added support for the following RabbitMQ extensions:
 
-To be sure that what you are downloading _works™_ you can always check the build status of the library on [travis-ci](http://travis-ci.org/#!/videlalvaro/php-amqplib).
+* Exchange to Exchange Bindings
+* Basic Nack
 
 ## Setup ##
 
@@ -83,7 +76,7 @@ To run the publishing/consume benchmark type:
 
 ## Tests ##
 
-To successfully run the tests you need to first setup the test user and test virtual host.
+To successfully run the tests you need to first setup the test `user` and test `virtual host`.
 
 You can do that by running the following commands after starting RabbitMQ:
 
@@ -94,6 +87,16 @@ You can do that by running the following commands after starting RabbitMQ:
 Once your environment is set up you can run your tests like this:
 
     $ make test
+
+## Using AMQP 0.8 ##
+
+If you still want to use the old version of the protcol then you can do it by settings the following constant in your configuration code:
+
+```php
+define('AMQP_PROTOCOL', '0.8');
+```
+
+The default value is `'0.9.1'`.
 
 ## Original README: ##
 
