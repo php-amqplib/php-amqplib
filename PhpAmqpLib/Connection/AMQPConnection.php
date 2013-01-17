@@ -95,15 +95,15 @@ class AMQPConnection extends AbstractChannel
             $this->input = new AMQPReader(null, $this->sock);
 
             $this->write(self::$AMQP_PROTOCOL_HEADER);
-            $this->wait(array("10,10"));
+            $this->wait(array($this->waitHelper->get_wait('connection.start')));
             $this->x_start_ok($d, $login_method, $login_response, $locale);
 
             $this->wait_tune_ok = true;
             while ($this->wait_tune_ok) {
                 $this->wait(array(
-                                "10,20", // secure
-                                "10,30", // tune
-                            ));
+                        $this->waitHelper->get_wait('connection.secure'),
+                        $this->waitHelper->get_wait('connection.tune')
+                    ));
             }
 
             $host = $this->x_open($vhost,"", $insist);
@@ -349,8 +349,8 @@ class AMQPConnection extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
-                               "10,51",    // Connection.close_ok
-                           ));
+                $this->waitHelper->get_wait('connection.close_ok')
+            ));
     }
 
     public static function dump_table($table)
@@ -416,8 +416,8 @@ class AMQPConnection extends AbstractChannel
         $this->send_method_frame(array(10, 40), $args);
 
         return $this->wait(array(
-                               "10,41", // Connection.open_ok
-                           ));
+                $this->waitHelper->get_wait('connection.open_ok')
+            ));
     }
 
 
@@ -530,7 +530,7 @@ class AMQPConnection extends AbstractChannel
         $args->write_long($frame_max);
         $args->write_short($heartbeat);
         $this->send_method_frame(array(10, 31), $args);
-        $this->wait_tune_ok = False;
+        $this->wait_tune_ok = false;
     }
 
     /**
