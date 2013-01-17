@@ -76,13 +76,21 @@ $ php amqp_consumer_non_blocking.php
 
 ## Debugging ##
 
-If you want to know what's going on at a protocol level then add the following constant to your code:
+If you want to know what's going on at a protocol level then call the enableDebug() method in the AMQPChannel object:
 
 ```php
 <?php
-define('AMQP_DEBUG', true);
+$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$ch = $conn->channel();
+
+// Enable debug at the protocol level
+$ch->enableDebug();
 
 ... more code
+
+// Disable debug
+$ch->disableDebug();
+
 
 ?>
 ```
