@@ -17,6 +17,8 @@ Since now the library uses `AMQP 0.9.1` we added support for the following Rabbi
 * Exchange to Exchange Bindings
 * Basic Nack
 
+Extensions that modify existing methods like `alternate exchanges` are also supported.
+
 ## Setup ##
 
 Get the library source code:
