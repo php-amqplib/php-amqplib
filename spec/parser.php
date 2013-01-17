@@ -85,7 +85,7 @@ foreach ($json_spec['classes'] as $c) {
     foreach ($c['methods'] as $m) {
 
         if ($m['id'] % 10 == 0) {
-            $out .= "\n\tpublic static function " . method_name($c['name'], $m['name']) . "(";
+            $out .= "\n\tpublic function " . method_name($c['name'], $m['name']) . "(";
             $out .= add_method_arguments($m['arguments']);
             $out .= ") {\n";
             $out .= "\t\t\$args = new AMQPWriter();\n";
