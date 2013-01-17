@@ -68,9 +68,9 @@ function protocol_version($json_spec) {
 
 function protocol_header($json_spec) {
     if (isset($json_spec['revision'])) {
-        return sprintf("AMQPx%02xx%02xx%02xx%02x", 0, $json_spec['major-version'], $json_spec['minor-version'], $json_spec['revision']);
+        return sprintf("AMQP\x%02x\x%02x\x%02x\x%02x", 0, $json_spec['major-version'], $json_spec['minor-version'], $json_spec['revision']);
     } else {
-        return sprintf("AMQPx%02xx%02xx%02xx%02x", 1, 1, $json_spec['major-version'],$json_spec['minor-version']);
+        return sprintf("AMQP\x%02x\x%02x\x%02x\x%02x", 1, 1, $json_spec['major-version'],$json_spec['minor-version']);
     }
 }
 
