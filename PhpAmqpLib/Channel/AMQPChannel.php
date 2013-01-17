@@ -8,8 +8,6 @@ use PhpAmqpLib\Helper\MiscHelper;
 
 use PhpAmqpLib\Helper\Protocol\Protocol080;
 use PhpAmqpLib\Helper\Protocol\Protocol091;
-use PhpAmqpLib\Helper\Protocol\Wait080;
-use PhpAmqpLib\Helper\Protocol\Wait091;
 
 class AMQPChannel extends AbstractChannel
 {
@@ -57,15 +55,10 @@ class AMQPChannel extends AbstractChannel
      */
     protected $basic_return_callback = null;
 
-    protected $waitHelper;
-
     public function __construct($connection,
                                 $channel_id=null,
                                 $auto_decode=true)
     {
-
-        $this->waitHelper = new Wait091();
-
         if ($channel_id == null) {
             $channel_id = $connection->get_free_channel_id();
         }

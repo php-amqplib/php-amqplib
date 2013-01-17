@@ -9,6 +9,9 @@ use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Message\AMQPMessage;
 
+use PhpAmqpLib\Helper\Protocol\Wait080;
+use PhpAmqpLib\Helper\Protocol\Wait091;
+
 class AbstractChannel
 {
     public static $PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
@@ -20,6 +23,8 @@ class AbstractChannel
      */
     protected $connection;
 
+    protected $waitHelper;
+
     public function __construct(AMQPConnection $connection, $channel_id)
     {
         $this->connection = $connection;
@@ -29,6 +34,8 @@ class AbstractChannel
         $this->method_queue = array(); // Higher level queue for methods
         $this->auto_decode = false;
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
+        // TODO check protocol version during constructor
+        $this->waitHelper = new Wait091();
     }
 
     public function getChannelId()
