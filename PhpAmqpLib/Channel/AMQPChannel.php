@@ -13,36 +13,6 @@ class AMQPChannel extends AbstractChannel
 {
     public $callbacks = array();
 
-    protected $method_map = array(
-        "20,11" => "open_ok",
-        "20,20" => "flow",
-        "20,21" => "flow_ok",
-        "20,30" => "alert",
-        "20,40" => "_close",
-        "20,41" => "close_ok",
-        "30,11" => "access_request_ok",
-        "40,11" => "exchange_declare_ok",
-        "40,21" => "exchange_delete_ok",
-        "40,31" => "exchange_bind_ok",
-        "40,41" => "exchange_unbind_ok",
-        "50,11" => "queue_declare_ok",
-        "50,21" => "queue_bind_ok",
-        "50,31" => "queue_purge_ok",
-        "50,41" => "queue_delete_ok",
-        "50,51" => "queue_unbind_ok",
-        "60,11" => "basic_qos_ok",
-        "60,21" => "basic_consume_ok",
-        "60,31" => "basic_cancel_ok",
-        "60,50" => "basic_return",
-        "60,60" => "basic_deliver",
-        "60,71" => "basic_get_ok",
-        "60,72" => "basic_get_empty",
-        "60,111" => "basic_recover_ok",
-        "90,11" => "tx_select_ok",
-        "90,21" => "tx_commit_ok",
-        "90,31" => "tx_rollback_ok"
-    );
-
     /**
      *
      * @var callable these parameters will be passed to function
@@ -96,6 +66,7 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
+     * Only for AMQP0.8.0
      * This method allows the server to send a non-fatal warning to
      * the client.  This is used for methods that are normally
      * asynchronous and thus do not have confirmations, and for which
@@ -103,7 +74,7 @@ class AMQPChannel extends AbstractChannel
      * errors are handled as channel or connection exceptions; non-
      * fatal errors are sent through this method.
      */
-    protected function alert($args)
+    protected function channel_alert($args)
     {
         $reply_code = $args->read_short();
         $reply_text = $args->read_shortstr();
@@ -134,7 +105,7 @@ class AMQPChannel extends AbstractChannel
     }
 
 
-    protected function _close($args)
+    protected function channel_close($args)
     {
         $reply_code = $args->read_short();
         $reply_text = $args->read_shortstr();
@@ -151,7 +122,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * confirm a channel close
      */
-    protected function close_ok($args)
+    protected function channel_close_ok($args)
     {
         $this->do_close();
     }
@@ -169,7 +140,7 @@ class AMQPChannel extends AbstractChannel
             ));
     }
 
-    protected function _flow($args)
+    protected function channel_flow($args)
     {
         $this->active = $args->read_bit();
         $this->x_flow_ok($this->active);
@@ -181,7 +152,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
-    protected function flow_ok($args)
+    protected function channel_flow_ok($args)
     {
         return $args->read_bit();
     }
@@ -200,7 +171,7 @@ class AMQPChannel extends AbstractChannel
             ));
     }
 
-    protected function open_ok($args)
+    protected function channel_open_ok($args)
     {
         $this->is_open = true;
         if ($this->debug) {

@@ -22,14 +22,6 @@ class AMQPConnection extends AbstractChannel
         "library_version" => array('S', "0.1")
     );
 
-    protected $method_map = array(
-        "10,10" => "start",
-        "10,20" => "secure",
-        "10,30" => "tune",
-        "10,41" => "open_ok",
-        "10,50" => "_close",
-        "10,51" => "close_ok"
-    );
     /**
      * contructor parameters for clone
      * @var array
@@ -377,7 +369,7 @@ class AMQPConnection extends AbstractChannel
 
     }
 
-    protected function _close($args)
+    protected function connection_close($args)
     {
         $reply_code = $args->read_short();
         $reply_text = $args->read_shortstr();
@@ -402,7 +394,7 @@ class AMQPConnection extends AbstractChannel
     /**
      * confirm a connection close
      */
-    protected function close_ok($args)
+    protected function connection_close_ok($args)
     {
         $this->do_close();
     }
@@ -424,7 +416,7 @@ class AMQPConnection extends AbstractChannel
     /**
      * signal that the connection is ready
      */
-    protected function open_ok($args)
+    protected function connection_open_ok($args)
     {
         $this->known_hosts = $args->read_shortstr();
         if ($this->debug) {
@@ -452,7 +444,7 @@ class AMQPConnection extends AbstractChannel
     /**
      * security mechanism challenge
      */
-    protected function secure($args)
+    protected function connection_secure($args)
     {
         $challenge = $args->read_longstr();
     }
@@ -470,7 +462,7 @@ class AMQPConnection extends AbstractChannel
     /**
      * start connection negotiation
      */
-    protected function start($args)
+    protected function connection_start($args)
     {
         $this->version_major = $args->read_octet();
         $this->version_minor = $args->read_octet();
@@ -502,7 +494,7 @@ class AMQPConnection extends AbstractChannel
     /**
      * propose connection tuning parameters
      */
-    protected function tune($args)
+    protected function connection_tune($args)
     {
         $v = $args->read_short();
         if ($v) {

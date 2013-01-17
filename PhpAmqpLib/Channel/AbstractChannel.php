@@ -11,6 +11,8 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 use PhpAmqpLib\Helper\Protocol\Wait080;
 use PhpAmqpLib\Helper\Protocol\Wait091;
+use PhpAmqpLib\Helper\Protocol\MethodMap080;
+use PhpAmqpLib\Helper\Protocol\MethodMap091;
 
 class AbstractChannel
 {
@@ -25,6 +27,8 @@ class AbstractChannel
 
     protected $waitHelper;
 
+    protected $methodMap;
+
     public function __construct(AMQPConnection $connection, $channel_id)
     {
         $this->connection = $connection;
@@ -36,6 +40,7 @@ class AbstractChannel
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
         // TODO check protocol version during constructor
         $this->waitHelper = new Wait091();
+        $this->methodMap = new MethodMap091();
     }
 
     public function getChannelId()
@@ -45,16 +50,20 @@ class AbstractChannel
 
     public function dispatch($method_sig, $args, $content)
     {
-        if (!array_key_exists($method_sig, $this->method_map)) {
+        if (!$this->methodMap->valid_method($method_sig)) {
             throw new AMQPRuntimeException("Unknown AMQP method $method_sig");
         }
 
-        $amqp_method = $this->method_map[$method_sig];
+        $amqp_method = $this->methodMap->get_method($method_sig);
+
+        if (!method_exists($this, $amqp_method)) {
+            throw new AMQPRuntimeException("Method: $amqp_method not implemented by class: " . get_class($this));
+        }
 
         if ($content == null) {
-            return call_user_func(array($this,$amqp_method), $args);
+            return call_user_func(array($this, $amqp_method), $args);
         } else {
-            return call_user_func(array($this,$amqp_method), $args, $content);
+            return call_user_func(array($this, $amqp_method), $args, $content);
         }
     }
 
