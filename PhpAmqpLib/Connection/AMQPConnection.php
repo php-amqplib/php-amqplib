@@ -332,7 +332,7 @@ class AMQPConnection extends AbstractChannel
      */
     public function close($reply_code=0, $reply_text="", $method_sig=array(0, 0))
     {
-        list($class_id, $method_id, $args) = Protocol091::connectionClose(
+        list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
             $reply_code,
             $reply_text,
             $method_sig[0],
