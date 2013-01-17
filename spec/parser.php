@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Usage:
+ * php spec/parser.php path.to.spec.json:
+ *   - php spec/parser.php amqp-rabbitmq-0.8.json
+ *   - php spec/parser.php amqp-rabbitmq-0.9.1.json
+ */
+
 $spec = file_get_contents(__DIR__ . "/" . $argv[1]);
 
 $json_spec = json_decode($spec, true);
