@@ -10,16 +10,11 @@ use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
 
-use PhpAmqpLib\Helper\Protocol\Protocol091;
-
 class AMQPConnection extends AbstractChannel
 {
-    // public static $AMQP_PROTOCOL_HEADER = "AMQP\x01\x01\x09\x01";
-    public static $AMQP_PROTOCOL_HEADER = "AMQP\x00\x00\x09\x01";
-
     public static $LIBRARY_PROPERTIES = array(
-        "library" => array('S', "PHP Simple AMQP lib"),
-        "library_version" => array('S', "0.1")
+        "library" => array('S', "PHP AMQP Lib"),
+        "library_version" => array('S', "2.0")
     );
 
     /**
