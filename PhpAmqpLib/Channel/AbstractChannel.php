@@ -45,9 +45,9 @@ class AbstractChannel
         $this->auto_decode = false;
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
 
-        $this->protocolVersion = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : '091';
+        $this->protocolVersion = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : '0.9.1';
         switch ($this->protocolVersion) {
-        case '091':
+        case '0.9.1':
             self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
             $c = self::$PROTOCOL_CONSTANTS_CLASS;
             $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
@@ -55,7 +55,7 @@ class AbstractChannel
             $this->waitHelper = new Wait091();
             $this->methodMap = new MethodMap091();
             break;
-        case '08':
+        case '0.8':
             self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants080';
             $c = self::$PROTOCOL_CONSTANTS_CLASS;
             $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
