@@ -21,34 +21,49 @@ Since now the library uses `AMQP 0.9.1` we added support for the following Rabbi
 
 Get the library source code:
 
-    $ git clone git://github.com/videlalvaro/php-amqplib.git
+```bash
+$ git clone git://github.com/videlalvaro/php-amqplib.git
+```
 
 Class autoloading and dependencies are managed by `composer` so install it:
 
-    $ curl --silent https://getcomposer.org/installer | php
+```bash
+$ curl --silent https://getcomposer.org/installer | php
+```
+
+And then install the library dependencies and genereta the `autoload.php` file:
+
     $ php composer.phar install
 
 ## Usage ##
 
 With RabbitMQ running open two Terminals and on the first one execute the following commands to start the consumer:
 
-    $ cd php-amqplib/demo
-    $ php amqp_consumer.php
+```bash
+$ cd php-amqplib/demo
+$ php amqp_consumer.php
+```
 
 Then on the other Terminal do:
 
-    $ cd php-amqplib/demo
-    $ php amqp_publisher.php some text to publish
+```bash
+$ cd php-amqplib/demo
+$ php amqp_publisher.php some text to publish
+```
 
 You should see the message arriving to the process on the other Terminal
 
 Then to stop the consumer, send to it the `quit` message:
 
-    $ php amqp_publisher.php quit
+```bash
+$ php amqp_publisher.php quit
+```
 
 If you need to listen to the sockets used to connect to RabbitMQ then see the example in the non blocking consumer.
 
-    $ php amqp_consumer_non_blocking.php
+```bash
+$ php amqp_consumer_non_blocking.php
+```
 
 ## More Examples ##
 
@@ -61,18 +76,22 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 
 If you want to know what's going on at a protocol level then add the following constant to your code:
 
-    <?php
-    define('AMQP_DEBUG', true);
+```php
+<?php
+define('AMQP_DEBUG', true);
 
-    ... more code
+... more code
 
-    ?>
+?>
+```
 
 ## Benchmarks ##
 
 To run the publishing/consume benchmark type:
 
-    $ make benchmark
+```bash
+$ make benchmark
+```
 
 ## Tests ##
 
@@ -80,13 +99,17 @@ To successfully run the tests you need to first setup the test `user` and test `
 
 You can do that by running the following commands after starting RabbitMQ:
 
-    $ rabbitmqctl add_vhost phpamqplib_testbed
-    $ rabbitmqctl add_user phpamqplib phpamqplib_password
-    $ rabbitmqctl set_permissions -p phpamqplib_testbed phpamqplib ".*" ".*" ".*"
+```bash
+$ rabbitmqctl add_vhost phpamqplib_testbed
+$ rabbitmqctl add_user phpamqplib phpamqplib_password
+$ rabbitmqctl set_permissions -p phpamqplib_testbed phpamqplib ".*" ".*" ".*"
+```
 
 Once your environment is set up you can run your tests like this:
 
-    $ make test
+```bash
+$ make test
+```
 
 ## Using AMQP 0.8 ##
 
