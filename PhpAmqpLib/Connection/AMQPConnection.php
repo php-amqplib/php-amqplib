@@ -402,9 +402,15 @@ class AMQPConnection extends AbstractChannel
         $args->write_bit($insist);
         $this->send_method_frame(array(10, 40), $args);
 
-        return $this->wait(array(
-                $this->waitHelper->get_wait('connection.open_ok')
-            ));
+        $wait = array(
+            $this->waitHelper->get_wait('connection.open_ok')
+        );
+
+        if ($this->protocolVersion == '0.8') {
+            $wait[] = $this->waitHelper->get_wait('connection.redirect');
+        }
+
+        return $this->wait($wait);
     }
 
 
@@ -425,7 +431,7 @@ class AMQPConnection extends AbstractChannel
     /**
      * asks the client to use a different server
      */
-    protected function redirect($args)
+    protected function connection_redirect($args)
     {
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
