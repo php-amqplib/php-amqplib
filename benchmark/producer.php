@@ -2,7 +2,7 @@
 
 /**
  * Usage:
- *  php producer.php 10000
+ *	php producer.php 10000
  * The integer arguments tells the script how many messages to publish.
  */
 
@@ -44,7 +44,7 @@ $max = (int) $argv[1];
 
 // Publishes $max messages using $msg_body as the content.
 for ($i = 0; $i < $max; $i++) {
-    $ch->basic_publish($msg, $exchange);
+		$ch->basic_publish($msg, $exchange);
 }
 
 echo microtime(true) - $time, "\n";

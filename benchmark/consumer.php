@@ -16,32 +16,32 @@ $ch->queue_bind($queue, $exchange);
 
 class Consumer
 {
-    protected $msgCount = 0;
-    protected $startTime = null;
+		protected $msgCount = 0;
+		protected $startTime = null;
 
-    public function process_message($msg)
-    {
-        if($this->startTime === null) {
-            $this->startTime = microtime(true);
-        }
+		public function process_message($msg)
+		{
+				if($this->startTime === null) {
+						$this->startTime = microtime(true);
+				}
 
-        if ($msg->body == 'quit') {
-            echo sprintf("Pid: %s, Count: %s, Time: %.4f\n", getmypid(), $this->msgCount, microtime(true) -  $this->startTime);
-            die;
-        }
-        $this->msgCount++;
-    }
+				if ($msg->body == 'quit') {
+						echo sprintf("Pid: %s, Count: %s, Time: %.4f\n", getmypid(), $this->msgCount, microtime(true) -	$this->startTime);
+						die;
+				}
+				$this->msgCount++;
+		}
 }
 
 $ch->basic_consume($queue, '', false, true, false, false, array(new Consumer(), 'process_message'));
 
 function shutdown($ch, $conn){
-    $ch->close();
-    $conn->close();
+		$ch->close();
+		$conn->close();
 }
 register_shutdown_function('shutdown', $ch, $conn);
 
 while(count($ch->callbacks)) {
-    $ch->wait();
+		$ch->wait();
 }
 ?>
