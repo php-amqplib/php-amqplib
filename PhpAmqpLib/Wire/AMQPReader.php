@@ -67,6 +67,35 @@ class AMQPReader
     }
 
     /**
+     * Wait until some data is retrieved from the socket.
+     * 
+     * AMQPTimeoutException can be raised if the timeout is set
+     *
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     */
+    protected function wait()
+    {
+        if ($this->timeout == 0 && $this->sock) {
+            return;
+        }
+
+        $read   = array($this->sock->real_sock());
+        $write  = null;
+        $except = null;
+
+        // wait ..
+        $result = stream_select($read, $write, $except, $this->timeout);
+
+        if ($result === false) {
+            throw new AMQPRuntimeException(sprintf("An error occurs", $this->timeout));
+        }
+
+        if ($result === 0) {
+            throw new AMQPTimeoutException(sprintf("A timeout occurs while waiting for incoming data", $this->timeout));
+        }
+    }
+
+    /**
      * @param $n
      *
      * @return string
@@ -79,8 +108,9 @@ class AMQPReader
             $res = '';
             $read = 0;
 
-            $start = time();
             while (true) {
+                $this->wait();
+
                 $buf = fread($this->sock->real_sock(), $n - $read);
 
                 if ($buf !== false) {
@@ -91,12 +121,6 @@ class AMQPReader
                 if (feof($this->sock->real_sock()) || ($n - $read) === 0) {
                     break;
                 }
-
-                if ($this->timeout > 0 && time() - $start > $this->timeout) {
-                    throw new AMQPTimeoutException(sprintf("Timeout - %s", $this->timeout));
-                }
-
-                usleep(10000);
             }
 
             if (strlen($res) != $n) {
