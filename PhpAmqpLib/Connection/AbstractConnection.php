@@ -10,8 +10,9 @@ use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\IO\AbstractIO;
 
-class AMQPConnection extends AbstractChannel
+class AbstractConnection extends AbstractChannel
 {
     public static $LIBRARY_PROPERTIES = array(
         "library" => array('S', "PHP AMQP Lib"),
@@ -29,22 +30,21 @@ class AMQPConnection extends AbstractChannel
      */
     protected $close_on_destruct = true ;
 
-    public function __construct($host, $port,
-                                $user, $password,
+    protected $io = null;
+
+    public function __construct($user, $password,
                                 $vhost="/",$insist=false,
                                 $login_method="AMQPLAIN",
                                 $login_response=null,
                                 $locale="en_US",
-                                $connection_timeout = 3,
-                                $read_write_timeout = 3,
-                                $context = null)
+                                AbstractIO $io)
     {
         $this->construct_params = func_get_args();
 
         if ($user && $password) {
             $login_response = new AMQPWriter();
             $login_response->write_table(array("LOGIN" => array('S',$user),
-                                               "PASSWORD" => array('S',$password)));
+                "PASSWORD" => array('S',$password)));
             $login_response = substr($login_response->getvalue(),4); //Skip the length
         } else {
             $login_response = null;
@@ -59,28 +59,8 @@ class AMQPConnection extends AbstractChannel
             $this->channel_max = 65535;
             $this->frame_max = 131072;
 
-            $errstr = $errno = null;
-            $this->sock = null;
-
-            //TODO clean up
-            if ($context) {
-              $remote = sprintf('ssl://%s:%s', $host, $port);
-              $this->sock = @stream_socket_client($remote, $errno, $errstr, $connection_timeout, STREAM_CLIENT_CONNECT, $context);
-            } else {
-              $remote = sprintf('tcp://%s:%s', $host, $port);
-              $this->sock = @stream_socket_client($remote, $errno, $errstr, $connection_timeout, STREAM_CLIENT_CONNECT);
-            }
-
-            if (!$this->sock) {
-                throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
-            }
-
-            if (!stream_set_timeout($this->sock, $read_write_timeout)) {
-                throw new \Exception ("Timeout could not be set");
-            }
-
-            stream_set_blocking($this->sock, 1);
-            $this->input = new AMQPReader(null, $this->sock);
+            $this->io = $io;
+            $this->input = new AMQPReader(null, $this->io);
 
             $this->write($this->amqp_protocol_header);
             $this->wait(array($this->waitHelper->get_wait('connection.start')));
@@ -89,9 +69,9 @@ class AMQPConnection extends AbstractChannel
             $this->wait_tune_ok = true;
             while ($this->wait_tune_ok) {
                 $this->wait(array(
-                        $this->waitHelper->get_wait('connection.secure'),
-                        $this->waitHelper->get_wait('connection.tune')
-                    ));
+                    $this->waitHelper->get_wait('connection.secure'),
+                    $this->waitHelper->get_wait('connection.tune')
+                ));
             }
 
             $host = $this->x_open($vhost,"", $insist);
@@ -125,6 +105,12 @@ class AMQPConnection extends AbstractChannel
             }
         }
     }
+
+    public function select($sec, $usec = 0)
+    {
+        return $this->io->select($sec, $usec);
+    }
+
     /**
      * allows to not close the connection
      * it`s useful after the fork when you don`t want to close parent process connection
@@ -138,43 +124,19 @@ class AMQPConnection extends AbstractChannel
     protected function close_socket()
     {
         if ($this->debug) {
-          MiscHelper::debug_msg("closing socket");
+            MiscHelper::debug_msg("closing socket");
         }
 
-        if (is_resource($this->sock)) {
-          fclose($this->sock);
-        }
-        $this->sock = null;
+        $this->io->close();
     }
 
     protected function write($data)
     {
         if ($this->debug) {
-          MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
+            MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
         }
 
-        $len = strlen($data);
-        while (true) {
-            if (false === ($written = fwrite($this->sock, $data))) {
-                throw new AMQPRuntimeException("Error sending data");
-            }
-            if ($written === 0) {
-                throw new AMQPRuntimeException("Broken pipe or closed connection");
-            }
-
-            // get status of socket to determine whether or not it has timed out
-            $info = stream_get_meta_data($this->sock);
-            if($info['timed_out']) {
-                throw new AMQPTimeoutException("Error sending data. Socket connection timed out");
-            }
-
-            $len = $len - $written;
-            if ($len > 0) {
-                $data = substr($data,0-$len);
-            } else {
-                break;
-            }
-        }
+        $this->io->write($data);
     }
 
     protected function do_close()
@@ -274,7 +236,7 @@ class AMQPConnection extends AbstractChannel
             $frame_type = $this->input->read_octet();
             $channel = $this->input->read_short();
             $size = $this->input->read_long();
-            $payload = $this->input->read($size, $timeout);
+            $payload = $this->input->read($size);
 
             $ch = $this->input->read_octet();
         } catch(AMQPTimeoutException $e) {

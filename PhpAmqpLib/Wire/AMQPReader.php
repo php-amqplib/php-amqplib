@@ -4,9 +4,9 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Wire\AMQPDecimal;
-use PhpAmqpLib\Wire\BufferedInput;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use PhpAmqpLib\Wire\IO\AbstractIO;
 
 
 /**
@@ -17,26 +17,26 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 class AMQPReader
 {
     protected $str;
-    protected $sock;
     protected $offset;
     protected $bitcount;
     protected $is64bits;
     protected $timeout;
     protected $bits;
+    protected $io = null;
 
     /**
      * @param string $str
      * @param null   $sock
      * @param int    $timeout
      */
-    public function __construct($str, $sock = null, $timeout = 0)
+    public function __construct($str, AbstractIO $io = null, $timeout = 0)
     {
         if (!function_exists("bcmul")) {
             throw new AMQPRuntimeException("'bc math' module required");
         }
 
         $this->str = $str;
-        $this->sock = $sock !== null ? new BufferedInput($sock) : null;
+        $this->io = $io;
         $this->offset = 0;
         $this->bitcount = $this->bits = 0;
         $this->timeout = $timeout;
@@ -49,8 +49,8 @@ class AMQPReader
      */
     public function close()
     {
-        if ($this->sock) {
-            $this->sock->close();
+        if($this->io) {
+            $this->io->close();
         }
     }
 
@@ -68,23 +68,19 @@ class AMQPReader
 
     /**
      * Wait until some data is retrieved from the socket.
-     * 
+     *
      * AMQPTimeoutException can be raised if the timeout is set
      *
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      */
     protected function wait()
     {
-        if ($this->timeout == 0 && $this->sock) {
+        if ($this->timeout == 0) {
             return;
         }
 
-        $read   = array($this->sock->real_sock());
-        $write  = null;
-        $except = null;
-
         // wait ..
-        $result = stream_select($read, $write, $except, $this->timeout);
+        $result = $this->io->select($this->timeout, 0);
 
         if ($result === false) {
             throw new AMQPRuntimeException(sprintf("An error occurs", $this->timeout));
@@ -102,32 +98,12 @@ class AMQPReader
      * @throws \RuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    private function rawread($n)
+
+    protected function rawread($n)
     {
-        if ($this->sock) {
-            $res = '';
-            $read = 0;
-
-            while (true) {
-                $this->wait();
-
-                $buf = fread($this->sock->real_sock(), $n - $read);
-
-                if ($buf !== false) {
-                    $read += strlen($buf);
-                    $res .= $buf;
-                }
-
-                if (feof($this->sock->real_sock()) || ($n - $read) === 0) {
-                    break;
-                }
-            }
-
-            if (strlen($res) != $n) {
-                throw new AMQPRuntimeException("Error reading data. Received " .
-                    strlen($res) . " instead of expected $n bytes");
-            }
-
+        if ($this->io) {
+            $this->wait();
+            $res = $this->io->read($n);
             $this->offset += $n;
         } else {
             if (strlen($this->str) < $n) {
