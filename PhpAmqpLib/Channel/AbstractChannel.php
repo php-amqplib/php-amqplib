@@ -35,6 +35,12 @@ class AbstractChannel
 
     protected $methodMap;
 
+    protected $channel_id;
+    
+    /**
+     * @param \PhpAmqpLib\Connection\AMQPConnection $connection
+     * @param                                       $channel_id
+     */
     public function __construct(AMQPConnection $connection, $channel_id)
     {
         $this->connection = $connection;
@@ -70,7 +76,7 @@ class AbstractChannel
 
     public function getChannelId()
     {
-      return $this->channel_id;
+        return $this->channel_id;
     }
 
     public function dispatch($method_sig, $args, $content)
@@ -87,12 +93,12 @@ class AbstractChannel
 
         if ($content == null) {
             return call_user_func(array($this, $amqp_method), $args);
-        } else {
-            return call_user_func(array($this, $amqp_method), $args, $content);
         }
+
+        return call_user_func(array($this, $amqp_method), $args, $content);
     }
 
-    public function next_frame()
+    public function next_frame($timeout = 0)
     {
         if ($this->debug) {
           MiscHelper::debug_msg("waiting for a new frame");
@@ -102,7 +108,7 @@ class AbstractChannel
             return array_shift($this->frame_queue);
         }
 
-        return $this->connection->wait_channel($this->channel_id);
+        return $this->connection->wait_channel($this->channel_id, $timeout);
     }
 
     protected function send_method_frame($method_sig, $args="")
@@ -165,17 +171,14 @@ class AbstractChannel
      * Unexpected methods are queued up for later calls to this PHP
      * method.
      */
-    public function wait($allowed_methods=null, $non_blocking = false)
+    public function wait($allowed_methods=null, $non_blocking = false, $timeout = 0)
     {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-        if ($allowed_methods) {
-          if ($this->debug) {
+
+        if ($allowed_methods && $this->debug) {
             MiscHelper::debug_msg("waiting for " . implode(", ", $allowed_methods));
-          }
-        } else {
-          if ($this->debug) {
+        } elseif ($this->debug) {
             MiscHelper::debug_msg("waiting for any method");
-          }
         }
 
         //Process deferred methods
@@ -201,7 +204,7 @@ class AbstractChannel
 
         // No deferred methods?  wait for new ones
         while (true) {
-            $frm = $this->next_frame();
+            $frm = $this->next_frame($timeout);
             $frame_type = $frm[0];
             $payload = $frm[1];
 

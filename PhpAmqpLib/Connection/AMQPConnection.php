@@ -6,6 +6,7 @@ use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
@@ -74,7 +75,7 @@ class AMQPConnection extends AbstractChannel
                 throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
             }
 
-            if(!stream_set_timeout($this->sock, $read_write_timeout)) {
+            if (!stream_set_timeout($this->sock, $read_write_timeout)) {
                 throw new \Exception ("Timeout could not be set");
             }
 
@@ -164,7 +165,7 @@ class AMQPConnection extends AbstractChannel
             // get status of socket to determine whether or not it has timed out
             $info = stream_get_meta_data($this->sock);
             if($info['timed_out']) {
-                throw new \Exception("Error sending data. Socket connection timed out");
+                throw new AMQPTimeoutException("Error sending data. Socket connection timed out");
             }
 
             $len = $len - $written;
@@ -264,14 +265,26 @@ class AMQPConnection extends AbstractChannel
     /**
      * Wait for a frame from the server
      */
-    protected function wait_frame()
+    protected function wait_frame($timeout = 0)
     {
-        $frame_type = $this->input->read_octet();
-        $channel = $this->input->read_short();
-        $size = $this->input->read_long();
-        $payload = $this->input->read($size);
+        $currentTimeout = $this->input->getTimeout();
+        $this->input->setTimeout($timeout);
 
-        $ch = $this->input->read_octet();
+        try {
+            $frame_type = $this->input->read_octet();
+            $channel = $this->input->read_short();
+            $size = $this->input->read_long();
+            $payload = $this->input->read($size, $timeout);
+
+            $ch = $this->input->read_octet();
+        } catch(AMQPTimeoutException $e) {
+            $this->input->setTimeout($currentTimeout);
+
+            throw $e;
+        }
+
+        $this->input->setTimeout($currentTimeout);
+
         if ($ch != 0xCE) {
             throw new AMQPRuntimeException(sprintf("Framing error, unexpected byte: %x", $ch));
         }
@@ -283,10 +296,10 @@ class AMQPConnection extends AbstractChannel
      * Wait for a frame from the server destined for
      * a particular channel.
      */
-    protected function wait_channel($channel_id)
+    protected function wait_channel($channel_id, $timeout = 0)
     {
         while (true) {
-            list($frame_type, $frame_channel, $payload) = $this->wait_frame();
+            list($frame_type, $frame_channel, $payload) = $this->wait_frame($timeout);
             if ($frame_channel == $channel_id) {
                 return array($frame_type, $payload);
             }
