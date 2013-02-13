@@ -5,20 +5,22 @@ namespace PhpAmqpLib\Tests\Functional;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-class PublishConsumeTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 {
     protected $exchange_name = 'test_exchange';
     protected $queue_name = null;
 
     public function setUp()
     {
-        $this->conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->conn = $this->createConnection();
         $this->ch = $this->conn->channel();
 
         $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
         list($this->queue_name,,) = $this->ch->queue_declare();
         $this->ch->queue_bind($this->queue_name, $this->exchange_name, $this->queue_name);
     }
+
+    abstract protected function createConnection();
 
     public function testPublishConsume()
     {

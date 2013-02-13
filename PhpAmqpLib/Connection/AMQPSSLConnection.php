@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Connection\AMQPConnection;
 
-class AMQPSSLConnection extends AMQPConnection
+class AMQPSSLConnection extends AMQPStreamConnection
 {
     public function __construct($host, $port, $user, $password,
                                 $vhost="/", $ssl_options = array(), $options = array())
