@@ -39,6 +39,7 @@ class AbstractConnection extends AbstractChannel
                                 $locale="en_US",
                                 AbstractIO $io)
     {
+    	// save the params for the use of __clone
         $this->construct_params = func_get_args();
 
         if ($user && $password) {
@@ -84,7 +85,7 @@ class AbstractConnection extends AbstractChannel
         }
     }
     /**
-     * clossing will use the old properties to make a new connection to the same server
+     * cloning will use the old properties to make a new connection to the same server
      */
     public function __clone()
     {
