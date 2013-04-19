@@ -56,7 +56,13 @@ abstract class GenericContent
 
         throw new \OutOfBoundsException("No '$name' property");
     }
-
+    /**
+     * just return the $this::properties array.
+     */
+    public function get_properties()
+    {
+   		return $this->properties;
+    }
     /**
      * allows to set the property after creation of the object
      */
