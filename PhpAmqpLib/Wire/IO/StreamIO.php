@@ -58,7 +58,10 @@ class StreamIO extends AbstractIO
     {
         $len = strlen($data);
         while (true) {
-            if (false === ($written = fwrite($this->sock, $data))) {
+    		if( $this->sock === null ) {
+				throw new AMQPRuntimeException("The socket did not properly open, or has already been closed.");
+			}
+    		if (false === ($written = fwrite($this->sock, $data))) {
                 throw new AMQPRuntimeException("Error sending data");
             }
             if ($written === 0) {
