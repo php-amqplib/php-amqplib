@@ -69,10 +69,10 @@ $ php amqp_consumer_non_blocking.php
 
 ## More Examples ##
 
-- `amqp_ha_consumer.php`: demoes the use of mirrored queues
-- `amqp_consumer_exclusive.php` and `amqp_publisher_exclusive.php`: demoes fanout exchanges using exclusive queues.
-- `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demoes fanout exchanges with named queues.
-- `basic_get.php`: demoes obtaining messages from the queues by using the _basic get_ AMQP call.
+- `amqp_ha_consumer.php`: demos the use of mirrored queues
+- `amqp_consumer_exclusive.php` and `amqp_publisher_exclusive.php`: demos fanout exchanges using exclusive queues.
+- `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demos fanout exchanges with named queues.
+- `basic_get.php`: demos obtaining messages from the queues by using the _basic get_ AMQP call.
 
 ## Debugging ##
 
