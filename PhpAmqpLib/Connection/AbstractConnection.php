@@ -303,17 +303,20 @@ class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code=0, $reply_text="", $method_sig=array(0, 0))
     {
-        list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
-            $reply_code,
-            $reply_text,
-            $method_sig[0],
-            $method_sig[1]
-        );
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        // IO must be connected before closing the AMQP connection
+        if ($this->io->isConnected()) {
+            list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
+                $reply_code,
+                $reply_text,
+                $method_sig[0],
+                $method_sig[1]
+            );
+            $this->send_method_frame(array($class_id, $method_id), $args);
 
-        return $this->wait(array(
-                $this->waitHelper->get_wait('connection.close_ok')
-            ));
+            return $this->wait(array(
+                    $this->waitHelper->get_wait('connection.close_ok')
+                ));
+        }
     }
 
     public static function dump_table($table)

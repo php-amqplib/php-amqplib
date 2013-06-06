@@ -100,4 +100,12 @@ class StreamIO extends AbstractIO
         $except = null;
         return stream_select($read, $write, $except, $sec, $usec);
     }
+
+    /**
+     * Check to see if the socket is valid
+     */
+    public function isConnected()
+    {
+        return is_resource($this->sock);
+    }
 }
