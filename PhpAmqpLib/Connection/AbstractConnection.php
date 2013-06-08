@@ -12,7 +12,7 @@ use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
-class AbstractConnection extends AbstractChannel
+abstract class AbstractConnection extends AbstractChannel
 {
     public static $LIBRARY_PROPERTIES = array(
         "library" => array('S', "PHP AMQP Lib"),
@@ -30,6 +30,9 @@ class AbstractConnection extends AbstractChannel
      */
     protected $close_on_destruct = true ;
 
+    /**
+     * @var null|\PhpAmqpLib\Wire\IO\AbstractIO
+     */
     protected $io = null;
 
     public function __construct($user, $password,
@@ -109,7 +112,7 @@ class AbstractConnection extends AbstractChannel
 
     public function select($sec, $usec = 0)
     {
-        return $this->io->select($sec, $usec);
+        return $this->getIO()->select($sec, $usec);
     }
 
     /**
@@ -128,7 +131,7 @@ class AbstractConnection extends AbstractChannel
             MiscHelper::debug_msg("closing socket");
         }
 
-        $this->io->close();
+        $this->getIO()->close();
     }
 
     protected function write($data)
@@ -137,7 +140,7 @@ class AbstractConnection extends AbstractChannel
             MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
         }
 
-        $this->io->write($data);
+        $this->getIO()->write($data);
     }
 
     protected function do_close()
@@ -509,5 +512,10 @@ class AbstractConnection extends AbstractChannel
     {
         return $this->sock;
     }
+
+    /**
+     * @return \PhpAmqpLib\Wire\IO\AbstractIO
+     */
+    protected abstract function getIO();
 
 }

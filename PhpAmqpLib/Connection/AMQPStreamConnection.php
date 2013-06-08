@@ -37,4 +37,12 @@ class AMQPStreamConnection extends AbstractConnection
         return $this->sock;
     }
 
+    /**
+     * @return null|\PhpAmqpLib\Wire\IO\AbstractIO
+     */
+    protected function getIO()
+    {
+        return $this->io;
+    }
+
 }
