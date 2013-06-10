@@ -8,12 +8,24 @@ class SocketIO extends AbstractIO
 
     public function __construct($host, $port, $timeout)
     {
+        $this->host = $host;
+        $this->port = $port;
+        $this->timeout = $timeout;
+    }
+
+    /**
+     * Setup the socket connection
+     *
+     * @throws \Exception
+     */
+    public function connect()
+    {
         $this->sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $timeout, 'usec' => 0));
-        socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $timeout, 'usec' => 0));
+        socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $this->timeout, 'usec' => 0));
+        socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $this->timeout, 'usec' => 0));
 
-        if (!socket_connect($this->sock, $host, $port)) {
+        if (!socket_connect($this->sock, $this->host, $this->port)) {
             $errno = socket_last_error($this->sock);
             $errstr = socket_strerror($errno);
             throw new \Exception ("Error Connecting to server($errno): $errstr ");
@@ -21,6 +33,15 @@ class SocketIO extends AbstractIO
 
         socket_set_block($this->sock);
         socket_set_option($this->sock, SOL_TCP, TCP_NODELAY, 1);
+    }
+
+    /**
+     * Reconnect the socket
+     */
+    public function reconnect()
+    {
+        $this->close();
+        $this->connect();
     }
 
     public function read($n)
@@ -37,7 +58,7 @@ class SocketIO extends AbstractIO
 
         if (strlen($res)!=$n) {
             throw new \Exception("Error reading data. Received " .
-                strlen($res) . " instead of expected $n bytes");
+            strlen($res) . " instead of expected $n bytes");
         }
 
         return $res;
