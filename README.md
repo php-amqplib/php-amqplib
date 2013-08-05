@@ -29,7 +29,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
       "videlalvaro/php-amqplib": "v2.1.0"
   }
 }
-
+```
 
 Then provided you have [composer](http://getcomposer.org) installed, you can run the following command:
 
