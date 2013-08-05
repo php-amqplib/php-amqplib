@@ -21,21 +21,35 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 
 ## Setup ##
 
-Get the library source code:
+ Add a `composer.json` file to your project:
+
+```javascript
+{
+  "require": {
+      "videlalvaro/php-amqplib": "v2.1.0"
+  }
+}
+
+
+Then provided you have [composer](http://getcomposer.org) installed, you can run the following command:
 
 ```bash
-$ git clone git://github.com/videlalvaro/php-amqplib.git
+$ composer.phar install
 ```
 
-Class autoloading and dependencies are managed by `composer` so install it:
+That will fetch the library and its dependencies inside your vendor folder. Then you can add the following to your
+.php files in order to use the library
 
-```bash
-$ curl --silent https://getcomposer.org/installer | php
+```php
+require_once __DIR__.'/vendor/autoload.php';
 ```
 
-And then install the library dependencies and genereta the `autoload.php` file:
+Then you need to `use` the relevant classes, for example:
 
-    $ php composer.phar install
+```php
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+```
 
 ## Usage ##
 
