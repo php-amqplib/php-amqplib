@@ -493,6 +493,12 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
+    /**
+     * Called when the server sends a basic.ack
+     *
+     * @param \PhpAmqpLib\Wire\AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     protected function basic_ack_from_server(\PhpAmqpLib\Wire\AMQPReader $args)
     {
         $delivery_tag = $args->read_longlong();
@@ -509,6 +515,12 @@ class AMQPChannel extends AbstractChannel
         $this->internal_ack_handler($delivery_tag, $multiple, $this->ackHandler);
     }
 
+    /**
+     * Called when the server sends a basic.nack
+     *
+     * @param $args
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     protected function basic_nack_from_server($args)
     {
         $delivery_tag = $args->read_longlong();
@@ -525,6 +537,13 @@ class AMQPChannel extends AbstractChannel
         $this->internal_ack_handler($delivery_tag, $multiple, $this->nackHandler);
     }
 
+    /**
+     * Handles the deletion of messages from this->publishedMessages and dispatches them to the $handler
+     *
+     * @param $delivery_tag
+     * @param $multiple
+     * @param $handler
+     */
     protected function internal_ack_handler($delivery_tag, $multiple, $handler)
     {
         if ($multiple) {
