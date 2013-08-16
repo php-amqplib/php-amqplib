@@ -23,6 +23,8 @@ class AMQPChannel extends AbstractChannel
     private $nackHandler = null;
 
     /**
+     * If the channel is in confirm_publish mode this array will store all published messages
+     * until they get ack'ed or nack'ed
      * @var \PhpAmqpLib\Message\AMQPMessage[]
      */
     private $publishedMessages = array();
@@ -834,6 +836,13 @@ class AMQPChannel extends AbstractChannel
     {
     }
 
+    /**
+     * Puts the channel into confirm mode. Beware that only non-transactional channels may be put into confirm mode
+     * and vice versa
+     *
+     * @param bool $nowait if nowait is true the method will not wait for an answer of the server and return immediately.
+     *                     defaults to false
+     */
     public function confirm_select($nowait = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->confirmSelect($nowait);
@@ -854,6 +863,11 @@ class AMQPChannel extends AbstractChannel
     {
     }
 
+    /**
+     * Waits for pending acks and nacks from the server. If there are no pending acks, the method returns immediately.
+     *
+     * @param int $timeout If set to value > 0 the method will wait at most $timeout seconds for pending acks.
+     */
     public function wait_for_pending_acks($timeout = 0)
     {
         $functions = array(
@@ -899,6 +913,12 @@ class AMQPChannel extends AbstractChannel
         return (null === $ticket) ? $this->default_ticket : $ticket;
     }
 
+    /**
+     * Helper method to get a particular method from $this->publishedMessages, removes it from the array and returns it.
+     *
+     * @param $index
+     * @return \PhpAmqpLib\Message\AMQPMessage
+     */
     protected function getAndUnsetMessage($index)
     {
         $message = $this->publishedMessages[$index];
@@ -920,11 +940,21 @@ class AMQPChannel extends AbstractChannel
         $this->basic_return_callback = $callback;
     }
 
+    /**
+     * Sets a handler which called for any message nack'ed by the server, with the AMQPMessage as first argument.
+     *
+     * @param callable $callback
+     */
     public function set_nack_handler(Callable $callback)
     {
         $this->nackHandler = $callback;
     }
 
+    /**
+     * Sets a handler which called for any message ack'ed by the server, with the AMQPMessage as first argument.
+     *
+     * @param callable $callback
+     */
     public function set_ack_handler(Callable $callback)
     {
         $this->ackHandler = $callback;
