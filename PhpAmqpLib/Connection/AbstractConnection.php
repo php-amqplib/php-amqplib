@@ -8,15 +8,19 @@ use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
-use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
 class AbstractConnection extends AbstractChannel
 {
     public static $LIBRARY_PROPERTIES = array(
         "library" => array('S', "PHP AMQP Lib"),
-        "library_version" => array('S', "2.0")
+        "library_version" => array('S', "2.0"),
+        "capabilities"    => array(
+            'S',
+            '{publisher_confirms=true}'
+        ),
     );
 
     /**
