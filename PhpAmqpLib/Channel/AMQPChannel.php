@@ -10,6 +10,23 @@ class AMQPChannel extends AbstractChannel
 {
     public $callbacks = array();
 
+    private $nextDeliveryTag = 0;
+
+    /**
+     * @var Callable
+     */
+    private $ackHandler = null;
+
+    /**
+     * @var Callable
+     */
+    private $nackHandler = null;
+
+    /**
+     * @var \PhpAmqpLib\Message\AMQPMessage[]
+     */
+    private $publishedMessages = array();
+
     /**
      *
      * @var callable these parameters will be passed to function
@@ -474,6 +491,76 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
+    protected function basic_ack_from_server(\PhpAmqpLib\Wire\AMQPReader $args)
+    {
+        $delivery_tag = $args->read_longlong();
+        $multiple     = (bool) $args->read_bit();
+
+        if (!isset($this->publishedMessages[$delivery_tag])) {
+            throw new \PhpAmqpLib\Exception\AMQPRuntimeException(sprintf(
+                    'Server ack\'ed unknown delivery_tag %s',
+                    $delivery_tag
+                )
+            );
+        }
+
+        $this->internal_ack_handler($delivery_tag, $multiple, $this->ackHandler);
+    }
+
+    protected function basic_nack_from_server($args)
+    {
+        $delivery_tag = $args->read_longlong();
+        $multiple     = (bool) $args->read_bit();
+
+        if (!isset($this->publishedMessages[$delivery_tag])) {
+            throw new \PhpAmqpLib\Exception\AMQPRuntimeException(sprintf(
+                    'Server nack\'ed unknown delivery_tag %s',
+                    $delivery_tag
+                )
+            );
+        }
+
+        $this->internal_ack_handler($delivery_tag, $multiple, $this->nackHandler);
+    }
+
+    protected function internal_ack_handler($delivery_tag, $multiple, $handler)
+    {
+        if ($multiple) {
+            $keys = $this->getKeysLessOrEqual($this->publishedMessages, $delivery_tag);
+
+            foreach ($keys as $key) {
+                $this->internal_ack_handler($key, false, $handler);
+            }
+        } else {
+            $message = $this->getAndUnsetMessage($delivery_tag);
+            $this->dispatchToHandler($handler, array($message));
+        }
+    }
+
+    protected function getKeysLessOrEqual(array $array, $value)
+    {
+        $keys = array_reduce(
+            array_keys($array),
+            function ($keys, $key) use ($value) {
+                if (bccomp($key, $value) <= 0) {
+                    $keys[] = $key;
+                }
+
+                return $keys;
+            },
+            array()
+        );
+
+        return $keys;
+    }
+
+    protected function dispatchToHandler($handler, array $arguments)
+    {
+        if (is_callable($handler)) {
+            call_user_func_array($handler, $arguments);
+        }
+    }
+
     /**
      * reject one or several received messages.
      */
@@ -634,6 +721,11 @@ class AMQPChannel extends AbstractChannel
                                         strlen($msg->body),
                                         $msg->serialize_properties(),
                                         $msg->body);
+
+        if ($this->nextDeliveryTag > 0) {
+            $this->publishedMessages[$this->nextDeliveryTag] = $msg;
+            $this->nextDeliveryTag                           = bcadd($this->nextDeliveryTag, '1');
+        }
     }
 
     /**
@@ -742,6 +834,42 @@ class AMQPChannel extends AbstractChannel
     {
     }
 
+    public function confirm_select($nowait = false)
+    {
+        list($class_id, $method_id, $args) = $this->protocolWriter->confirmSelect($nowait);
+
+        $this->send_method_frame(array($class_id, $method_id), $args);
+
+        if (!$nowait) {
+            $this->wait(
+                array(
+                    $this->waitHelper->get_wait('confirm.select_ok')
+                )
+            );
+            $this->nextDeliveryTag = 1;
+        }
+    }
+
+    public function confirm_select_ok()
+    {
+    }
+
+    public function wait_for_pending_acks($timeout = 0)
+    {
+        $functions = array(
+            $this->waitHelper->get_wait('basic.ack'),
+            $this->waitHelper->get_wait('basic.nack'),
+        );
+
+        while (count($this->publishedMessages) !== 0) {
+            if ($timeout > 0) {
+                $this->wait($functions, true, $timeout);
+            } else {
+                $this->wait($functions);
+            }
+        }
+    }
+
     /**
      * select standard transaction mode
      */
@@ -770,6 +898,15 @@ class AMQPChannel extends AbstractChannel
     {
         return (null === $ticket) ? $this->default_ticket : $ticket;
     }
+
+    protected function getAndUnsetMessage($index)
+    {
+        $message = $this->publishedMessages[$index];
+        unset($this->publishedMessages[$index]);
+
+        return $message;
+    }
+
     /**
      * set callback for basic_return
      * @param  callable                  $callback
@@ -781,5 +918,15 @@ class AMQPChannel extends AbstractChannel
             throw new \InvalidArgumentException("$callback should be callable.");
         }
         $this->basic_return_callback = $callback;
+    }
+
+    public function set_nack_handler(Callable $callback)
+    {
+        $this->nackHandler = $callback;
+    }
+
+    public function set_ack_handler(Callable $callback)
+    {
+        $this->ackHandler = $callback;
     }
 }
