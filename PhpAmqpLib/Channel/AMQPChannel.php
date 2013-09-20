@@ -573,6 +573,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * direct access to a queue
+     * if no message was available in the queue, return null
+     * @return null|mixed
      */
     public function basic_get($queue="", $no_ack=false, $ticket=null)
     {
