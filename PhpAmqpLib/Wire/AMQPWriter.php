@@ -141,7 +141,7 @@ class AMQPWriter
     public function write_long($n)
     {
         $this->flushbits();
-        $this->out .= implode("", AMQPWriter::chrbytesplit($n,4));
+        $this->out .= pack('N', $n);
 
         return $this;
     }
