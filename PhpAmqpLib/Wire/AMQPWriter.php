@@ -162,7 +162,17 @@ class AMQPWriter
     public function write_longlong($n)
     {
         $this->flushbits();
-        $this->out .= implode("", AMQPWriter::chrbytesplit($n,8));
+
+        // if PHP_INT_MAX is big enough for that
+        // (always on 64 bits, with smaller values in 32 bits)
+        if ($n <= PHP_INT_MAX) {
+            // trick explained in http://www.php.net/manual/fr/function.pack.php#109328
+            $n1 = ($n & 0xffffffff00000000) >> 32;
+            $n2 = ($n & 0x00000000ffffffff);
+            $this->out .= pack('NN', $n1, $n2);
+        } else {
+            $this->out .= implode("", AMQPWriter::chrbytesplit($n, 8));
+        }
 
         return $this;
     }
