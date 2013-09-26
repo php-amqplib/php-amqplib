@@ -6,6 +6,8 @@ This library is a _pure PHP_ implementation of the AMQP protocol. It's been test
 
 **Requirements: PHP 5.3** due to the use of `namespaces`.
 
+The library was used for the PHP examples of [RabbitMQ in Action](http://manning.com/videla/) and the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
+
 ## BC BREAKING CHANGES ##
 
 Since version 2.0 this library uses `AMQP 0.9.1` by default. You shouldn't need to change your code, but test before upgrading.
@@ -21,21 +23,35 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 
 ## Setup ##
 
-Get the library source code:
+ Add a `composer.json` file to your project:
 
-```bash
-$ git clone git://github.com/videlalvaro/php-amqplib.git
+```javascript
+{
+  "require": {
+      "videlalvaro/php-amqplib": "v2.1.0"
+  }
+}
 ```
 
-Class autoloading and dependencies are managed by `composer` so install it:
+Then provided you have [composer](http://getcomposer.org) installed, you can run the following command:
 
 ```bash
-$ curl --silent https://getcomposer.org/installer | php
+$ composer.phar install
 ```
 
-And then install the library dependencies and genereta the `autoload.php` file:
+That will fetch the library and its dependencies inside your vendor folder. Then you can add the following to your
+.php files in order to use the library
 
-    $ php composer.phar install
+```php
+require_once __DIR__.'/vendor/autoload.php';
+```
+
+Then you need to `use` the relevant classes, for example:
+
+```php
+use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Message\AMQPMessage;
+```
 
 ## Usage ##
 
@@ -66,6 +82,9 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 ```bash
 $ php amqp_consumer_non_blocking.php
 ```
+
+To not repeat ourselves, if you want to learn more about this library, 
+please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
 ## More Examples ##
 

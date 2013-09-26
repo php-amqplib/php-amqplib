@@ -12,7 +12,7 @@ use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
-abstract class AbstractConnection extends AbstractChannel
+class AbstractConnection extends AbstractChannel
 {
     public static $LIBRARY_PROPERTIES = array(
         "library" => array('S', "PHP AMQP Lib"),
@@ -556,5 +556,7 @@ abstract class AbstractConnection extends AbstractChannel
     /**
      * @return \PhpAmqpLib\Wire\IO\AbstractIO
      */
-    protected abstract function getIO();
+    protected function getIO() {
+        return $this->io;
+    }
 }
