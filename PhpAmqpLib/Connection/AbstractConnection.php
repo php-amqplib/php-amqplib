@@ -378,7 +378,7 @@ class AbstractConnection extends AbstractChannel
         $args = new AMQPWriter();
         $args->write_shortstr($virtual_host);
         $args->write_shortstr($capabilities);
-        $args->write_bit($insist);
+        $args->write_bits(array($insist));
         $this->send_method_frame(array(10, 40), $args);
 
         $wait = array(
