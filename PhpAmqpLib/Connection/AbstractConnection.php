@@ -21,7 +21,9 @@ class AbstractConnection extends AbstractChannel
             'F',
             array(
                 'publisher_confirms' => array('t', true),
-                'consumer_cancel_notify' => array('t', true)
+                'consumer_cancel_notify' => array('t', true),
+                'exchange_exchange_bindings' => array('t', true),
+                'basic.nack' => array('t', true)
             )
         )
     );
