@@ -293,6 +293,9 @@ class AMQPWriter
             } elseif ($ftype=='A') {
                 $table_data->write('A');
                 $table_data->write_array($v);
+            } elseif ($ftype=='t') {
+                $table_data->write('t');
+                $table_data->write_bit($v);
             } else {
                 throw new \InvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
             }
