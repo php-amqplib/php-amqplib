@@ -3,8 +3,10 @@
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Channel\AbstractChannel;
+use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Wire\AMQPReader;
 
 class AMQPChannel extends AbstractChannel
 {
@@ -602,6 +604,13 @@ class AMQPChannel extends AbstractChannel
         return $this->wait(array(
                 $this->waitHelper->get_wait('basic.cancel_ok')
             ));
+    }
+
+    protected function basic_cancel_by_server(AMQPReader $args)
+    {
+        $consumerTag = $args->read_shortstr();
+
+        throw new AMQPBasicCancelException($consumerTag);
     }
 
     /**

@@ -19,8 +19,11 @@ class AbstractConnection extends AbstractChannel
         "library_version" => array('S', "2.0"),
         "capabilities" => array(
             'F',
-            array('publisher_confirms' => array('t', true))
-        ),
+            array(
+                'publisher_confirms' => array('t', true),
+                'consumer_cancel_notify' => array('t', true)
+            )
+        )
     );
 
     /**
