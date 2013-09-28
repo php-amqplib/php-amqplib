@@ -295,7 +295,7 @@ class AMQPWriter
                 $table_data->write_array($v);
             } elseif ($ftype=='t') {
                 $table_data->write('t');
-                $table_data->write_bit($v);
+                $table_data->write_bits(array($v));
             } else {
                 throw new \InvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
             }
