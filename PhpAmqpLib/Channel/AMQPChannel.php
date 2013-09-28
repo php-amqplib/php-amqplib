@@ -10,6 +10,25 @@ class AMQPChannel extends AbstractChannel
 {
     public $callbacks = array();
 
+    private $next_delivery_tag = 0;
+
+    /**
+     * @var Callable
+     */
+    private $ack_handler = null;
+
+    /**
+     * @var Callable
+     */
+    private $nack_handler = null;
+
+    /**
+     * If the channel is in confirm_publish mode this array will store all published messages
+     * until they get ack'ed or nack'ed
+     * @var \PhpAmqpLib\Message\AMQPMessage[]
+     */
+    private $published_messages = array();
+
     /**
      *
      * @var callable these parameters will be passed to function
@@ -475,6 +494,95 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
+     * Called when the server sends a basic.ack
+     *
+     * @param \PhpAmqpLib\Wire\AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
+    protected function basic_ack_from_server(\PhpAmqpLib\Wire\AMQPReader $args)
+    {
+        $delivery_tag = $args->read_longlong();
+        $multiple     = (bool) $args->read_bit();
+
+        if (!isset($this->published_messages[$delivery_tag])) {
+            throw new \PhpAmqpLib\Exception\AMQPRuntimeException(sprintf(
+                    'Server ack\'ed unknown delivery_tag %s',
+                    $delivery_tag
+                )
+            );
+        }
+
+        $this->internal_ack_handler($delivery_tag, $multiple, $this->ack_handler);
+    }
+
+    /**
+     * Called when the server sends a basic.nack
+     *
+     * @param $args
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
+    protected function basic_nack_from_server($args)
+    {
+        $delivery_tag = $args->read_longlong();
+        $multiple     = (bool) $args->read_bit();
+
+        if (!isset($this->published_messages[$delivery_tag])) {
+            throw new \PhpAmqpLib\Exception\AMQPRuntimeException(sprintf(
+                    'Server nack\'ed unknown delivery_tag %s',
+                    $delivery_tag
+                )
+            );
+        }
+
+        $this->internal_ack_handler($delivery_tag, $multiple, $this->nack_handler);
+    }
+
+    /**
+     * Handles the deletion of messages from this->publishedMessages and dispatches them to the $handler
+     *
+     * @param $delivery_tag
+     * @param $multiple
+     * @param $handler
+     */
+    protected function internal_ack_handler($delivery_tag, $multiple, $handler)
+    {
+        if ($multiple) {
+            $keys = $this->get_keys_less_or_equal($this->published_messages, $delivery_tag);
+
+            foreach ($keys as $key) {
+                $this->internal_ack_handler($key, false, $handler);
+            }
+        } else {
+            $message = $this->get_and_unset_message($delivery_tag);
+            $this->dispatch_to_handler($handler, array($message));
+        }
+    }
+
+    protected function get_keys_less_or_equal(array $array, $value)
+    {
+        $keys = array_reduce(
+            array_keys($array),
+            function ($keys, $key) use ($value) {
+                if (bccomp($key, $value) <= 0) {
+                    $keys[] = $key;
+                }
+
+                return $keys;
+            },
+            array()
+        );
+
+        return $keys;
+    }
+
+    protected function dispatch_to_handler($handler, array $arguments)
+    {
+        if (is_callable($handler)) {
+            call_user_func_array($handler, $arguments);
+        }
+    }
+
+    /**
      * reject one or several received messages.
      */
     public function basic_nack($delivery_tag, $multiple=false, $requeue=false)
@@ -634,6 +742,11 @@ class AMQPChannel extends AbstractChannel
                                         strlen($msg->body),
                                         $msg->serialize_properties(),
                                         $msg->body);
+
+        if ($this->next_delivery_tag > 0) {
+            $this->published_messages[$this->next_delivery_tag] = $msg;
+            $this->next_delivery_tag                           = bcadd($this->next_delivery_tag, '1');
+        }
     }
 
     /**
@@ -743,6 +856,54 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
+     * Puts the channel into confirm mode. Beware that only non-transactional channels may be put into confirm mode
+     * and vice versa
+     *
+     * @param bool $nowait if nowait is true the method will not wait for an answer of the server and return immediately.
+     *                     defaults to false
+     */
+    public function confirm_select($nowait = false)
+    {
+        list($class_id, $method_id, $args) = $this->protocolWriter->confirmSelect($nowait);
+
+        $this->send_method_frame(array($class_id, $method_id), $args);
+
+        if (!$nowait) {
+            $this->wait(
+                array(
+                    $this->waitHelper->get_wait('confirm.select_ok')
+                )
+            );
+            $this->next_delivery_tag = 1;
+        }
+    }
+
+    public function confirm_select_ok()
+    {
+    }
+
+    /**
+     * Waits for pending acks and nacks from the server. If there are no pending acks, the method returns immediately.
+     *
+     * @param int $timeout If set to value > 0 the method will wait at most $timeout seconds for pending acks.
+     */
+    public function wait_for_pending_acks($timeout = 0)
+    {
+        $functions = array(
+            $this->waitHelper->get_wait('basic.ack'),
+            $this->waitHelper->get_wait('basic.nack'),
+        );
+
+        while (count($this->published_messages) !== 0) {
+            if ($timeout > 0) {
+                $this->wait($functions, true, $timeout);
+            } else {
+                $this->wait($functions);
+            }
+        }
+    }
+
+    /**
      * select standard transaction mode
      */
     public function tx_select()
@@ -770,6 +931,21 @@ class AMQPChannel extends AbstractChannel
     {
         return (null === $ticket) ? $this->default_ticket : $ticket;
     }
+
+    /**
+     * Helper method to get a particular method from $this->publishedMessages, removes it from the array and returns it.
+     *
+     * @param $index
+     * @return \PhpAmqpLib\Message\AMQPMessage
+     */
+    protected function get_and_unset_message($index)
+    {
+        $message = $this->published_messages[$index];
+        unset($this->published_messages[$index]);
+
+        return $message;
+    }
+
     /**
      * set callback for basic_return
      * @param  callable                  $callback
@@ -781,5 +957,25 @@ class AMQPChannel extends AbstractChannel
             throw new \InvalidArgumentException("$callback should be callable.");
         }
         $this->basic_return_callback = $callback;
+    }
+
+    /**
+     * Sets a handler which called for any message nack'ed by the server, with the AMQPMessage as first argument.
+     *
+     * @param callable $callback
+     */
+    public function set_nack_handler(Callable $callback)
+    {
+        $this->nack_handler = $callback;
+    }
+
+    /**
+     * Sets a handler which called for any message ack'ed by the server, with the AMQPMessage as first argument.
+     *
+     * @param callable $callback
+     */
+    public function set_ack_handler(Callable $callback)
+    {
+        $this->ack_handler = $callback;
     }
 }
