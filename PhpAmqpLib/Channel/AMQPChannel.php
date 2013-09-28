@@ -318,13 +318,13 @@ class AMQPChannel extends AbstractChannel
     /**
      * unbind dest exchange from source exchange
      */
-    public function exchange_unbind($source, $destination, $routing_key="",
+    public function exchange_unbind($destination, $source, $routing_key="",
         $arguments=null, $ticket=null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
 
-        list($class_id, $method_id, $args) = $this->protocolWriter->exchangeUnbind($ticket, $source, $destination, $routing_key, $arguments);
+        list($class_id, $method_id, $args) = $this->protocolWriter->exchangeUnbind($ticket, $destination, $source, $routing_key, $arguments);
 
         $this->send_method_frame(array($class_id, $method_id), $args);
 
