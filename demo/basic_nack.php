@@ -1,4 +1,12 @@
 <?php
+/**
+ * - Start this consumer in one window by calling: php demo/basic_nack.php
+ * - Then on a separate window publish a message like this: php demo/amqp_publisher.php good
+ *   that message should be "ack'ed"
+ * - Then publish a message like this: php demo/amqp_publisher.php bad
+ *   that message should be "nack'ed"
+ */
+
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPConnection;
