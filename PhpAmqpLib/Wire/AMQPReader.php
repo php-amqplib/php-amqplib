@@ -16,9 +16,15 @@ use PhpAmqpLib\Wire\IO\AbstractIO;
  */
 class AMQPReader
 {
+    const BIT = 1;
     const OCTET = 1;
+    const SHORTSTR = 1;
     const SHORT = 2;
     const LONG  = 4;
+    const SIGNED_LONG = 4;
+    const READ_PHP_INT = 4; // use READ_ to avoid possible clashes with PHP
+    const LONGLONG = 8;
+    const TIMESTAMP = 8;
 
     protected $str;
     protected $offset;
