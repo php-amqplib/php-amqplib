@@ -205,7 +205,6 @@ class AbstractConnection extends AbstractChannel
         while ($body) {
             $payload = substr($body,0, $this->frame_max-8);
             $body = substr($body,$this->frame_max-8);
-            // $pkt = new AMQPWriter();
 
             $pkt->write_octet(3);
             $pkt->write_short($channel);
