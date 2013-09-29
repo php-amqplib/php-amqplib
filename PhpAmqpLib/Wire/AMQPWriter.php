@@ -195,11 +195,12 @@ class AMQPWriter
      */
     public function write_shortstr($s)
     {
-        if (strlen($s) > 255) {
+        $len = strlen($s);
+        if ($len > 255) {
             throw new \InvalidArgumentException('String too long');
         }
 
-        $this->write_octet(strlen($s));
+        $this->write_octet($len);
         $this->out .= $s;
 
         return $this;
