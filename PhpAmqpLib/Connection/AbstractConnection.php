@@ -275,12 +275,18 @@ class AbstractConnection extends AbstractChannel
         $this->input->setTimeout($timeout);
 
         try {
-            $frame_type = $this->input->read_octet();
-            $channel = $this->input->read_short();
-            $size = $this->input->read_long();
-            $payload = $this->input->read($size);
-
-            $ch = $this->input->read_octet();
+            // frame_type + channel_id + size
+            $acc = AMQPReader::OCTET + AMQPReader::SHORT + AMQPReader::LONG;
+            $reader = new AMQPReader($this->input->read($acc));
+            
+            $frame_type = $reader->read_octet();
+            $channel = $reader->read_short();
+            $size = $reader->read_long();
+            
+            $reader2 = new AMQPReader($this->input->read($size + AMQPReader::OCTET));
+            
+            $payload = $reader2->read($size);
+            $ch = $reader2->read_octet();
         } catch(AMQPTimeoutException $e) {
             $this->input->setTimeout($currentTimeout);
 
