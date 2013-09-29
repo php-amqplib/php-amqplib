@@ -172,11 +172,24 @@ class AbstractConnection extends AbstractChannel
 
         throw new AMQPRuntimeException("No free channel ids");
     }
-
+    
     public function send_content($channel, $class_id, $weight, $body_size,
-                        $packed_properties, $body)
+                        $packed_properties, $body, $pkt = null)
     {
-        $pkt = new AMQPWriter();
+        $this->prepare_content($channel, $class_id, $weight, $body_size,
+                        $packed_properties, $body, $pkt);
+        $this->write($pkt->getvalue());
+    }
+    
+    /**
+     * returns a new AMQPWriter or mutates the provided $pkt
+     */
+    protected function prepare_content($channel, $class_id, $weight, $body_size,
+                        $packed_properties, $body, $pkt = null)
+    {
+        if (empty($pkt)) {
+            $pkt = new AMQPWriter();
+        }
 
         $pkt->write_octet(2);
         $pkt->write_short($channel);
@@ -188,13 +201,11 @@ class AbstractConnection extends AbstractChannel
         $pkt->write($packed_properties);
 
         $pkt->write_octet(0xCE);
-        $pkt = $pkt->getvalue();
-        $this->write($pkt);
 
         while ($body) {
             $payload = substr($body,0, $this->frame_max-8);
             $body = substr($body,$this->frame_max-8);
-            $pkt = new AMQPWriter();
+            // $pkt = new AMQPWriter();
 
             $pkt->write_octet(3);
             $pkt->write_short($channel);
@@ -203,18 +214,37 @@ class AbstractConnection extends AbstractChannel
             $pkt->write($payload);
 
             $pkt->write_octet(0xCE);
-            $pkt = $pkt->getvalue();
-            $this->write($pkt);
         }
+        
+        return $pkt;
+    }
+    
+    protected function send_channel_method_frame($channel, $method_sig, $args="", $pkt=null)
+    {
+        $pkt = $this->prepare_channel_method_frame($channel, $method_sig, $args, $pkt);
+
+        $this->write($pkt->getvalue());
+
+        if ($this->debug) {
+            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+                MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
+                           $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+        }
+
     }
 
-    protected function send_channel_method_frame($channel, $method_sig, $args="")
+    /**
+     * returns the AMQPWriter
+     */    
+    protected function prepare_channel_method_frame($channel, $method_sig, $args="")
     {
         if ($args instanceof AMQPWriter) {
             $args = $args->getvalue();
         }
-
-        $pkt = new AMQPWriter();
+        
+        if (empty($pkt)) {
+            $pkt = new AMQPWriter();
+        }
 
         $pkt->write_octet(1);
         $pkt->write_short($channel);
@@ -226,15 +256,14 @@ class AbstractConnection extends AbstractChannel
         $pkt->write($args);
 
         $pkt->write_octet(0xCE);
-        $pkt = $pkt->getvalue();
-        $this->write($pkt);
 
         if ($this->debug) {
             $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
                 MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
                            $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
         }
-
+        
+        return $pkt;
     }
 
     /**

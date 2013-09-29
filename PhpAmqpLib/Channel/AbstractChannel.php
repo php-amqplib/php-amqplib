@@ -115,6 +115,14 @@ class AbstractChannel
     {
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
+    
+    /**
+     * This is here for performance reasons to batch calls to fwrite from basic.publish
+     */
+    protected function prepare_method_frame($method_sig, $args="")
+    {
+        return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args);
+    }
 
     public function wait_content()
     {

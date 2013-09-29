@@ -747,12 +747,12 @@ class AMQPChannel extends AbstractChannel
         list($class_id, $method_id, $args) =
             $this->protocolWriter->basicPublish($ticket, $exchange, $routing_key, $mandatory, $immediate);
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $pkt = $this->prepare_method_frame(array($class_id, $method_id), $args);
 
         $this->connection->send_content($this->channel_id, 60, 0,
                                         strlen($msg->body),
                                         $msg->serialize_properties(),
-                                        $msg->body);
+                                        $msg->body, $pkt);
 
         if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag] = $msg;
