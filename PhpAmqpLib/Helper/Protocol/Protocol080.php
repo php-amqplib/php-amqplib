@@ -276,7 +276,7 @@ class Protocol080
 		$args->write_short($ticket);
 		$args->write_shortstr($queue);
 		$args->write_shortstr($consumer_tag);
-		$args->write_bits(array($no_local, $no_ack, $exclusive, $nowait);
+		$args->write_bits(array($no_local, $no_ack, $exclusive, $nowait));
 		return array(60, 20, $args);
 	}
 
