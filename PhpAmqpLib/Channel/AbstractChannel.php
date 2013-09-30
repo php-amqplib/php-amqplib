@@ -119,9 +119,9 @@ class AbstractChannel
     /**
      * This is here for performance reasons to batch calls to fwrite from basic.publish
      */
-    protected function prepare_method_frame($method_sig, $args="")
+    protected function prepare_method_frame($method_sig, $args="", $pkt = null)
     {
-        return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args);
+        return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args, $pkt);
     }
 
     public function wait_content()
