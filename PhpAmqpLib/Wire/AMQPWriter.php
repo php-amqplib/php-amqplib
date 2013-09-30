@@ -244,6 +244,9 @@ class AMQPWriter
             } elseif (is_array($v)) {
                 $data->write('A');
                 $data->write_array($v);
+            } elseif (is_bool($v)) {
+                $data->write('t');
+                $data->write_octet($v ? 1 : 0);
             }
         }
 
@@ -296,7 +299,7 @@ class AMQPWriter
                 $table_data->write_array($v);
             } elseif ($ftype=='t') {
                 $table_data->write('t');
-                $table_data->write_bits(array($v));
+                $table_data->write_octet($v ? 1 : 0);
             } else {
                 throw new \InvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
             }
