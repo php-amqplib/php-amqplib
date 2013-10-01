@@ -282,6 +282,7 @@ class AbstractConnection extends AbstractChannel
             $channel = $reader->read_short();
             $size = $reader->read_long();
             
+            // payload + ch
             $reader2 = new AMQPReader($this->input->read($size + AMQPReader::OCTET));
             
             $payload = $reader2->read($size);

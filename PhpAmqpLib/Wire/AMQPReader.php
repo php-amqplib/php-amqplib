@@ -27,6 +27,7 @@ class AMQPReader
     const TIMESTAMP = 8;
 
     protected $str;
+    protected $str_length;
     protected $offset;
     protected $bitcount;
     protected $is64bits;
@@ -46,6 +47,7 @@ class AMQPReader
         }
 
         $this->str = $str;
+        $this->str_length = strlen($this->str);
         $this->io = $io;
         $this->offset = 0;
         $this->bitcount = $this->bits = 0;
@@ -116,13 +118,14 @@ class AMQPReader
             $res = $this->io->read($n);
             $this->offset += $n;
         } else {
-            if (strlen($this->str) < $n) {
+            if ($this->str_length < $n) {
                 throw new AMQPRuntimeException("Error reading data. Requested $n bytes while string buffer has only " .
-                    strlen($this->str));
+                    $this->str_length);
             }
 
             $res = substr($this->str,0,$n);
             $this->str = substr($this->str,$n);
+            $this->str_length -= $n;
             $this->offset += $n;
         }
 
