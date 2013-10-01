@@ -42,10 +42,6 @@ class AMQPReader
      */
     public function __construct($str, AbstractIO $io = null, $timeout = 0)
     {
-        if (!function_exists("bcmul")) {
-            throw new AMQPRuntimeException("'bc math' module required");
-        }
-
         $this->str = $str;
         $this->str_length = strlen($this->str);
         $this->io = $io;
