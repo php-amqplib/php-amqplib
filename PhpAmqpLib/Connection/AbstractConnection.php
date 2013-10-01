@@ -143,7 +143,7 @@ class AbstractConnection extends AbstractChannel
         $this->getIO()->close();
     }
 
-    protected function write($data)
+    public function write($data)
     {
         if ($this->debug) {
             MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
@@ -184,7 +184,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * returns a new AMQPWriter or mutates the provided $pkt
      */
-    protected function prepare_content($channel, $class_id, $weight, $body_size,
+    public function prepare_content($channel, $class_id, $weight, $body_size,
                         $packed_properties, $body, $pkt = null)
     {
         if (empty($pkt)) {

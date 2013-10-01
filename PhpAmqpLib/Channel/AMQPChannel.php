@@ -5,8 +5,10 @@ namespace PhpAmqpLib\Channel;
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPWriter;
 
 class AMQPChannel extends AbstractChannel
 {
@@ -42,6 +44,15 @@ class AMQPChannel extends AbstractChannel
      * 	param AMQPMessage $msg
      */
     protected $basic_return_callback = null;
+
+
+    /**
+     * 
+     * @var array
+     * used to keep track of the messages that are going
+     * to be batch published.
+     */
+    protected $batch_messages = array();
 
     public function __construct($connection,
                                 $channel_id=null,
@@ -757,6 +768,52 @@ class AMQPChannel extends AbstractChannel
         if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag] = $msg;
             $this->next_delivery_tag                           = bcadd($this->next_delivery_tag, '1');
+        }
+    }
+
+    public function batch_basic_publish($msg, $exchange="", $routing_key="",
+                                  $mandatory=false, $immediate=false,
+                                  $ticket=null)
+    {
+        $this->batch_messages[] = func_get_args();
+    }
+
+    public function publish_batch()
+    {
+        if (!empty($this->batch_messages)) {
+
+            $pkt = new AMQPWriter();
+
+            foreach ($this->batch_messages as $m) {
+                $msg = $m[0];
+                $exchange = isset($m[1]) ? $m[1] : "";
+                $routing_key = isset($m[2]) ? $m[2] : "";
+                $mandatory = isset($m[2]) ? $m[2] : false;
+                $immediate = isset($m[2]) ? $m[2] : false;
+                $ticket = isset($m[2]) ? $m[2] : null;
+
+                $ticket = $this->getTicket($ticket);
+                list($class_id, $method_id, $args) =
+                    $this->protocolWriter->basicPublish($ticket, $exchange, $routing_key, $mandatory, $immediate);
+
+                $this->prepare_method_frame(array($class_id, $method_id), $args, $pkt);
+
+                $this->connection->prepare_content($this->channel_id, 60, 0,
+                                                strlen($msg->body),
+                                                $msg->serialize_properties(),
+                                                $msg->body, $pkt);
+
+                if ($this->next_delivery_tag > 0) {
+                    $this->published_messages[$this->next_delivery_tag] = $msg;
+                    $this->next_delivery_tag                           = bcadd($this->next_delivery_tag, '1');
+                }
+            }
+            //call write here
+            $this->connection->write($pkt->getvalue());
+            $this->batch_messages = array();
+
+        } else {
+            throw new AMQPRuntimeException('calling send_batch before publishing messages via batch_basic_publish');
         }
     }
 
