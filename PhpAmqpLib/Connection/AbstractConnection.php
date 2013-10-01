@@ -279,8 +279,7 @@ class AbstractConnection extends AbstractChannel
 
         try {
             // frame_type + channel_id + size
-            $acc = AMQPReader::OCTET + AMQPReader::SHORT + AMQPReader::LONG;
-            $this->wait_frame_reader->reuse($this->input->read($acc));
+            $this->wait_frame_reader->reuse($this->input->read(AMQPReader::OCTET + AMQPReader::SHORT + AMQPReader::LONG));
             
             $frame_type = $this->wait_frame_reader->read_octet();
             $channel = $this->wait_frame_reader->read_short();
