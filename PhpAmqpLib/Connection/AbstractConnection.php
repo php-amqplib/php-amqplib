@@ -43,6 +43,8 @@ class AbstractConnection extends AbstractChannel
      * @var null|\PhpAmqpLib\Wire\IO\AbstractIO
      */
     protected $io = null;
+    
+    protected $wait_frame_reader;
 
     public function __construct($user, $password,
                                 $vhost="/",$insist=false,
@@ -53,6 +55,8 @@ class AbstractConnection extends AbstractChannel
     {
     	// save the params for the use of __clone
         $this->construct_params = func_get_args();
+        
+        $this->wait_frame_reader = new AMQPReader(null);
 
         if ($user && $password) {
             $login_response = new AMQPWriter();
@@ -276,17 +280,17 @@ class AbstractConnection extends AbstractChannel
         try {
             // frame_type + channel_id + size
             $acc = AMQPReader::OCTET + AMQPReader::SHORT + AMQPReader::LONG;
-            $reader = new AMQPReader($this->input->read($acc));
+            $this->wait_frame_reader->reuse($this->input->read($acc));
             
-            $frame_type = $reader->read_octet();
-            $channel = $reader->read_short();
-            $size = $reader->read_long();
+            $frame_type = $this->wait_frame_reader->read_octet();
+            $channel = $this->wait_frame_reader->read_short();
+            $size = $this->wait_frame_reader->read_long();
             
             // payload + ch
-            $reader2 = new AMQPReader($this->input->read($size + AMQPReader::OCTET));
+            $this->wait_frame_reader->reuse($this->input->read($size + AMQPReader::OCTET));
             
-            $payload = $reader2->read($size);
-            $ch = $reader2->read_octet();
+            $payload = $this->wait_frame_reader->read($size);
+            $ch = $this->wait_frame_reader->read_octet();
         } catch(AMQPTimeoutException $e) {
             $this->input->setTimeout($currentTimeout);
 
