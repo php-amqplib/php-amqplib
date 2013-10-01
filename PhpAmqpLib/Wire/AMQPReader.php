@@ -51,6 +51,20 @@ class AMQPReader
 
         $this->is64bits = ((int) 4294967296) != 0 ? true : false;
     }
+    
+    /**
+     * Used to not need to create a new AMQPReader instance every time.
+     * when we can just pass a string and reset the object state.
+     * NOTE: since we are working with strings we don't need to pass an AbstractIO
+     *       or a timeout.
+     */
+    public function reuse($str)
+    {
+        $this->str = $str;
+        $this->str_length = strlen($this->str);
+        $this->offset = 0;
+        $this->bitcount = $this->bits = 0;
+    }
 
     /**
      * close the stream
