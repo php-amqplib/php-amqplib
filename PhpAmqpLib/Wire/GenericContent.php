@@ -79,11 +79,12 @@ abstract class GenericContent
      * property-list from a content-frame-header, parse and insert
      * into a dictionary stored in this object as an attribute named
      * 'properties'.
+     *
+     * @param AMQPReader $r
+     * NOTE: do not mutate $r
      */
-    public function load_properties($raw_bytes)
+    public function load_properties($r)
     {
-        $r = new AMQPReader($raw_bytes);
-
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();
         while (true) {
