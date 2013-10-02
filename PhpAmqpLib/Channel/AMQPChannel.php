@@ -47,7 +47,7 @@ class AMQPChannel extends AbstractChannel
 
 
     /**
-     * 
+     *
      * @var array
      * used to keep track of the messages that are going
      * to be batch published.
@@ -788,9 +788,9 @@ class AMQPChannel extends AbstractChannel
                 $msg = $m[0];
                 $exchange = isset($m[1]) ? $m[1] : "";
                 $routing_key = isset($m[2]) ? $m[2] : "";
-                $mandatory = isset($m[2]) ? $m[2] : false;
-                $immediate = isset($m[2]) ? $m[2] : false;
-                $ticket = isset($m[2]) ? $m[2] : null;
+                $mandatory = isset($m[3]) ? $m[3] : false;
+                $immediate = isset($m[4]) ? $m[4] : false;
+                $ticket = isset($m[5]) ? $m[5] : null;
 
                 $ticket = $this->getTicket($ticket);
                 list($class_id, $method_id, $args) =
