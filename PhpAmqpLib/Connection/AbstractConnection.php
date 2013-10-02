@@ -237,7 +237,7 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * returns the AMQPWriter
+     * returns a new AMQPWriter or mutates the provided $pkt
      */    
     protected function prepare_channel_method_frame($channel, $method_sig, $args="", $pkt = null)
     {
