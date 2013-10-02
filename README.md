@@ -14,7 +14,7 @@ Since version 2.0 this library uses `AMQP 0.9.1` by default. You shouldn't need 
 
 ## Supported RabbitMQ Extensions ##
 
-Since now the library uses `AMQP 0.9.1` we added support for the following RabbitMQ extensions:
+Since the library uses `AMQP 0.9.1` we added support for the following RabbitMQ extensions:
 
 * Exchange to Exchange Bindings
 * Basic Nack
