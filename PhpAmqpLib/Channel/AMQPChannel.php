@@ -812,8 +812,6 @@ class AMQPChannel extends AbstractChannel
             $this->connection->write($pkt->getvalue());
             $this->batch_messages = array();
 
-        } else {
-            throw new AMQPRuntimeException('calling send_batch before publishing messages via batch_basic_publish');
         }
     }
 
