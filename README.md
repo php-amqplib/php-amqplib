@@ -85,6 +85,8 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 $ php amqp_consumer_non_blocking.php
 ```
 
+## Tutorials ##
+
 To not repeat ourselves, if you want to learn more about this library, 
 please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
