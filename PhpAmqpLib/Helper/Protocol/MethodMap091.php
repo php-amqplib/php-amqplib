@@ -47,7 +47,7 @@ class MethodMap091
   '60,11' => 'basic_qos_ok',
   '60,20' => 'basic_consume',
   '60,21' => 'basic_consume_ok',
-  '60,30' => 'basic_cancel_by_server',
+  '60,30' => 'basic_cancel_from_server',
   '60,31' => 'basic_cancel_ok',
   '60,40' => 'basic_publish',
   '60,50' => 'basic_return',

@@ -236,7 +236,7 @@ function method_map($json_spec) {
     $ret  = array();
     
     $special_map = array(
-        '60,30' => 'basic_cancel_by_server',
+        '60,30' => 'basic_cancel_from_server',
         '60,80' => 'basic_ack_from_server',
         '60,120' => 'basic_nack_from_server'
     );

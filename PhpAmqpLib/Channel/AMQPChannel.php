@@ -617,7 +617,7 @@ class AMQPChannel extends AbstractChannel
             ));
     }
 
-    protected function basic_cancel_by_server(AMQPReader $args)
+    protected function basic_cancel_from_server(AMQPReader $args)
     {
         $consumerTag = $args->read_shortstr();
 
