@@ -93,6 +93,44 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demos fanout exchanges with named queues.
 - `basic_get.php`: demos obtaining messages from the queues by using the _basic get_ AMQP call.
 
+## Batch Publishing ##
+
+Let's say you have a process that generates a bunch of messages that are going to be published to the same `exchange` using the same `routing_key` and options like `mandatory`. 
+Then you could make use of the `batch_basic_publish` library feature. You can batch messages like this:
+
+```php
+$msg = new AMQPMessage($msg_body);
+$ch->batch_basic_publish($msg, $exchange);
+
+$msg2 = new AMQPMessage($msg_body);
+$ch->batch_basic_publish($msg2, $exchange);
+```
+
+and then send the batch like this:
+
+```php
+$ch->publish_batch();
+```
+Let's say our program needs to read from a file and then publish one message per line. Depending on the message size, you will have to decide when it's better to send the batch.
+You could send it every 50 messages, or every hundred. That's up to you.
+
+## Fast Message Publishing ##
+
+Another way to speed up your message publishing is by reusing the `AMQPMessage` message instances. You can create your new message like this:
+
+```
+$properties = array('content_type' => 'text/plain', 'delivery_mode' => 2);
+$msg = new AMQPMessage($body, $properties);
+$ch->basic_publish($msg, $exchange);
+```
+
+Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `2`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
+
+```php
+$msg->setBody($body2);
+$ch->basic_publish($msg, $exchange);
+```
+
 ## Debugging ##
 
 If you want to know what's going on at a protocol level then add the following constant to your code:
