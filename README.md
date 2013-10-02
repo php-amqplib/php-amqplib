@@ -12,12 +12,14 @@ The library was used for the PHP examples of [RabbitMQ in Action](http://manning
 
 Since version 2.0 this library uses `AMQP 0.9.1` by default. You shouldn't need to change your code, but test before upgrading.
 
-## New since version 2.0 ##
+## Supported RabbitMQ Extensions ##
 
 Since now the library uses `AMQP 0.9.1` we added support for the following RabbitMQ extensions:
 
 * Exchange to Exchange Bindings
 * Basic Nack
+* Publisher Confirms
+* Consumer Cancel Notify
 
 Extensions that modify existing methods like `alternate exchanges` are also supported.
 
