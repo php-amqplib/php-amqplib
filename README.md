@@ -111,6 +111,9 @@ and then send the batch like this:
 ```php
 $ch->publish_batch();
 ```
+
+### When do we publish the message batch? ###
+
 Let's say our program needs to read from a file and then publish one message per line. Depending on the message size, you will have to decide when it's better to send the batch.
 You could send it every 50 messages, or every hundred. That's up to you.
 
