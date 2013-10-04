@@ -30,7 +30,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 ```javascript
 {
   "require": {
-      "videlalvaro/php-amqplib": "v2.2.1"
+      "videlalvaro/php-amqplib": "v2.2.2"
   }
 }
 ```
@@ -87,7 +87,7 @@ $ php amqp_consumer_non_blocking.php
 
 ## Tutorials ##
 
-To not repeat ourselves, if you want to learn more about this library, 
+To not repeat ourselves, if you want to learn more about this library,
 please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
 ## More Examples ##
@@ -99,7 +99,7 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 
 ## Batch Publishing ##
 
-Let's say you have a process that generates a bunch of messages that are going to be published to the same `exchange` using the same `routing_key` and options like `mandatory`. 
+Let's say you have a process that generates a bunch of messages that are going to be published to the same `exchange` using the same `routing_key` and options like `mandatory`.
 Then you could make use of the `batch_basic_publish` library feature. You can batch messages like this:
 
 ```php
