@@ -766,7 +766,7 @@ class AMQPChannel extends AbstractChannel
         return $msg;
     }
 
-    private function pre_publish ($exchange, $routing_key, $mandatory, $immediate, $ticket)
+    private function pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket)
     {
         $cache_key = "$exchange|$routing_key|$mandatory|$immediate|$ticket";
         if (! isset($this->publish_cache[$cache_key])) {
