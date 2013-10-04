@@ -54,6 +54,22 @@ class AMQPChannel extends AbstractChannel
      */
     protected $batch_messages = array();
 
+    /**
+     * Circular buffer to speed up both basic_publish() and publish_batch().
+     * Max size limited by $publish_cache_max_size.
+     * @var array
+     * @see basic_publish()
+     * @see publish_batch()
+     */
+    private $publish_cache;
+
+    /**
+     * Maximal size of $publish_cache.
+     * @var int
+     */
+    private $publish_cache_max_size;
+
+
     public function __construct($connection,
                                 $channel_id=null,
                                 $auto_decode=true)
@@ -63,6 +79,9 @@ class AMQPChannel extends AbstractChannel
         }
 
         parent::__construct($connection, $channel_id);
+
+        $this->publish_cache = array();
+        $this->publish_cache_max_size = 100;
 
         if ($this->debug) {
           MiscHelper::debug_msg("using channel_id: " . $channel_id);
@@ -747,6 +766,24 @@ class AMQPChannel extends AbstractChannel
         return $msg;
     }
 
+    private function pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket)
+    {
+        $cache_key = "$exchange|$routing_key|$mandatory|$immediate|$ticket";
+        if (! isset($this->publish_cache[$cache_key])) {
+            $ticket = $this->getTicket($ticket);
+            list($class_id, $method_id, $args) =
+                $this->protocolWriter->basicPublish($ticket, $exchange, $routing_key, $mandatory, $immediate);
+            $pkt = $this->prepare_method_frame(array($class_id, $method_id), $args);
+            $this->publish_cache[$cache_key] = $pkt->getvalue();
+            if (count($this->publish_cache) > $this->publish_cache_max_size) {
+                reset($this->publish_cache);
+                $old_key = key($this->publish_cache);
+                unset($this->publish_cache[$old_key]);
+            }
+        }
+        return $this->publish_cache[$cache_key];
+    }
+
     /**
      * publish a message
      */
@@ -754,11 +791,8 @@ class AMQPChannel extends AbstractChannel
                                   $mandatory=false, $immediate=false,
                                   $ticket=null)
     {
-        $ticket = $this->getTicket($ticket);
-        list($class_id, $method_id, $args) =
-            $this->protocolWriter->basicPublish($ticket, $exchange, $routing_key, $mandatory, $immediate);
-
-        $pkt = $this->prepare_method_frame(array($class_id, $method_id), $args);
+        $pkt = new AMQPWriter();
+        $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 
         $this->connection->send_content($this->channel_id, 60, 0,
                                         strlen($msg->body),
@@ -791,12 +825,7 @@ class AMQPChannel extends AbstractChannel
                 $mandatory = isset($m[3]) ? $m[3] : false;
                 $immediate = isset($m[4]) ? $m[4] : false;
                 $ticket = isset($m[5]) ? $m[5] : null;
-
-                $ticket = $this->getTicket($ticket);
-                list($class_id, $method_id, $args) =
-                    $this->protocolWriter->basicPublish($ticket, $exchange, $routing_key, $mandatory, $immediate);
-
-                $this->prepare_method_frame(array($class_id, $method_id), $args, $pkt);
+                $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 
                 $this->connection->prepare_content($this->channel_id, 60, 0,
                                                 strlen($msg->body),
