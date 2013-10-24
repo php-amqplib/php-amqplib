@@ -34,4 +34,9 @@ class AMQPMessage extends GenericContent
 
         parent::__construct($properties, static::$PROPERTIES);
     }
+    
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
 }

@@ -13,6 +13,7 @@ abstract class GenericContent
 {
     public $delivery_info = array();
     private $properties = array();
+    private $serialized_properties = null;
 
     protected static $PROPERTIES = array(
         "dummy" => "shortstr"
@@ -78,11 +79,12 @@ abstract class GenericContent
      * property-list from a content-frame-header, parse and insert
      * into a dictionary stored in this object as an attribute named
      * 'properties'.
+     *
+     * @param AMQPReader $r
+     * NOTE: do not mutate $r
      */
-    public function load_properties($raw_bytes)
+    public function load_properties($r)
     {
-        $r = new AMQPReader($raw_bytes);
-
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();
         while (true) {
@@ -118,42 +120,48 @@ abstract class GenericContent
      */
     public function serialize_properties()
     {
-        $shift = 15;
-        $flag_bits = 0;
-        $flags = array();
-        $raw_bytes = new AMQPWriter();
+        if (!empty($this->serialized_properties)) {
+            return $this->serialized_properties;
+        } else {
+            $shift = 15;
+            $flag_bits = 0;
+            $flags = array();
+            $raw_bytes = new AMQPWriter();
 
-        foreach ($this->prop_types as $key => $proptype) {
-            if (isset($this->properties[$key])) {
-                $val = $this->properties[$key];
-            } else {
-                $val = null;
-            }
-
-            if ($val != null) {
-                if ($shift == 0) {
-                    $flags[] = $flag_bits;
-                    $flag_bits = 0;
-                    $shift = 15;
+            foreach ($this->prop_types as $key => $proptype) {
+                if (isset($this->properties[$key])) {
+                    $val = $this->properties[$key];
+                } else {
+                    $val = null;
                 }
 
-                $flag_bits |= (1 << $shift);
-                if ($proptype != "bit") {
-                    $raw_bytes->{'write_'.$proptype}($val);
+                if ($val != null) {
+                    if ($shift == 0) {
+                        $flags[] = $flag_bits;
+                        $flag_bits = 0;
+                        $shift = 15;
+                    }
+
+                    $flag_bits |= (1 << $shift);
+                    if ($proptype != "bit") {
+                        $raw_bytes->{'write_'.$proptype}($val);
+                    }
+
                 }
-
+                $shift -= 1;
             }
-            $shift -= 1;
+
+            $flags[] = $flag_bits;
+            $result = new AMQPWriter();
+            foreach ($flags as $flag_bits) {
+                $result->write_short($flag_bits);
+            }
+
+            $result->write($raw_bytes->getvalue());
+            
+            $this->serialized_properties = $result->getvalue();
+
+            return $this->serialized_properties;
         }
-
-        $flags[] = $flag_bits;
-        $result = new AMQPWriter();
-        foreach ($flags as $flag_bits) {
-            $result->write_short($flag_bits);
-        }
-
-        $result->write($raw_bytes->getvalue());
-
-        return $result->getvalue();
     }
 }

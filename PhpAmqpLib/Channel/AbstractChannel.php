@@ -37,6 +37,10 @@ class AbstractChannel
 
     protected $channel_id;
     
+    protected $msg_property_reader = null;
+    protected $wait_content_reader = null;
+    protected $dispatch_reader = null;
+    
     /**
      * @param \PhpAmqpLib\Connection\AbstractConnection $connection
      * @param                                       $channel_id
@@ -50,6 +54,10 @@ class AbstractChannel
         $this->method_queue = array(); // Higher level queue for methods
         $this->auto_decode = false;
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
+
+        $this->msg_property_reader = new AMQPReader(null);
+        $this->wait_content_reader = new AMQPReader(null);
+        $this->dispatch_reader     = new AMQPReader(null);
 
         $this->protocolVersion = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : '0.9.1';
         switch ($this->protocolVersion) {
@@ -90,12 +98,14 @@ class AbstractChannel
         if (!method_exists($this, $amqp_method)) {
             throw new AMQPRuntimeException("Method: $amqp_method not implemented by class: " . get_class($this));
         }
+        
+        $this->dispatch_reader->reuse($args);
 
         if ($content == null) {
-            return call_user_func(array($this, $amqp_method), $args);
+            return call_user_func(array($this, $amqp_method), $this->dispatch_reader);
         }
 
-        return call_user_func(array($this, $amqp_method), $args, $content);
+        return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $content);
     }
 
     public function next_frame($timeout = 0)
@@ -115,6 +125,14 @@ class AbstractChannel
     {
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
+    
+    /**
+     * This is here for performance reasons to batch calls to fwrite from basic.publish
+     */
+    protected function prepare_method_frame($method_sig, $args="", $pkt = null)
+    {
+        return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args, $pkt);
+    }
 
     public function wait_content()
     {
@@ -126,13 +144,17 @@ class AbstractChannel
             throw new AMQPRuntimeException("Expecting Content header");
         }
 
-        $payload_reader = new AMQPReader(substr($payload,0,12));
-        $class_id = $payload_reader->read_short();
-        $weight = $payload_reader->read_short();
+        $this->wait_content_reader->reuse(substr($payload,0,12));
 
-        $body_size = $payload_reader->read_longlong();
+        // $payload_reader = new AMQPReader(substr($payload,0,12));
+        $class_id = $this->wait_content_reader->read_short();
+        $weight = $this->wait_content_reader->read_short();
+
+        $body_size = $this->wait_content_reader->read_longlong();
+        
         $msg = new AMQPMessage();
-        $msg->load_properties(substr($payload,12));
+        $this->msg_property_reader->reuse(substr($payload,12)); //hack to avoid creating new instances of AMQPReader;
+        $msg->load_properties($this->msg_property_reader);
 
         $body_parts = array();
         $body_received = 0;
@@ -219,7 +241,8 @@ class AbstractChannel
 
             $method_sig_array = unpack("n2", substr($payload,0,4));
             $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
-            $args = new AMQPReader(substr($payload,4));
+            
+            $args = substr($payload,4);
 
             if ($this->debug) {
               MiscHelper::debug_msg("> $method_sig: " . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);

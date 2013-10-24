@@ -12,12 +12,14 @@ The library was used for the PHP examples of [RabbitMQ in Action](http://manning
 
 Since version 2.0 this library uses `AMQP 0.9.1` by default. You shouldn't need to change your code, but test before upgrading.
 
-## New since version 2.0 ##
+## Supported RabbitMQ Extensions ##
 
-Since now the library uses `AMQP 0.9.1` we added support for the following RabbitMQ extensions:
+Since the library uses `AMQP 0.9.1` we added support for the following RabbitMQ extensions:
 
 * Exchange to Exchange Bindings
 * Basic Nack
+* Publisher Confirms
+* Consumer Cancel Notify
 
 Extensions that modify existing methods like `alternate exchanges` are also supported.
 
@@ -28,7 +30,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 ```javascript
 {
   "require": {
-      "videlalvaro/php-amqplib": "v2.1.0"
+      "videlalvaro/php-amqplib": "v2.2.2"
   }
 }
 ```
@@ -83,7 +85,9 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 $ php amqp_consumer_non_blocking.php
 ```
 
-To not repeat ourselves, if you want to learn more about this library, 
+## Tutorials ##
+
+To not repeat ourselves, if you want to learn more about this library,
 please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
 ## More Examples ##
@@ -92,6 +96,47 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 - `amqp_consumer_exclusive.php` and `amqp_publisher_exclusive.php`: demos fanout exchanges using exclusive queues.
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demos fanout exchanges with named queues.
 - `basic_get.php`: demos obtaining messages from the queues by using the _basic get_ AMQP call.
+
+## Batch Publishing ##
+
+Let's say you have a process that generates a bunch of messages that are going to be published to the same `exchange` using the same `routing_key` and options like `mandatory`.
+Then you could make use of the `batch_basic_publish` library feature. You can batch messages like this:
+
+```php
+$msg = new AMQPMessage($msg_body);
+$ch->batch_basic_publish($msg, $exchange);
+
+$msg2 = new AMQPMessage($msg_body);
+$ch->batch_basic_publish($msg2, $exchange);
+```
+
+and then send the batch like this:
+
+```php
+$ch->publish_batch();
+```
+
+### When do we publish the message batch? ###
+
+Let's say our program needs to read from a file and then publish one message per line. Depending on the message size, you will have to decide when it's better to send the batch.
+You could send it every 50 messages, or every hundred. That's up to you.
+
+## Optimized Message Publishing ##
+
+Another way to speed up your message publishing is by reusing the `AMQPMessage` message instances. You can create your new message like this:
+
+```
+$properties = array('content_type' => 'text/plain', 'delivery_mode' => 2);
+$msg = new AMQPMessage($body, $properties);
+$ch->basic_publish($msg, $exchange);
+```
+
+Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `2`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
+
+```php
+$msg->setBody($body2);
+$ch->basic_publish($msg, $exchange);
+```
 
 ## Debugging ##
 
