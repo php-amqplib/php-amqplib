@@ -158,10 +158,17 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * Reconnect using the original connection settings, this will not recreate any channels that had were established previously
+     * Reconnect using the original connection settings, this will not recreate any channels that were established previously
      */
     public function reconnect()
     {
+		// Try to close out each channel
+		foreach ($this->channels as $channel) {
+			try {
+				$channel->close();
+			} catch (\Exception $e) {/* Ignore closing errors */}
+		}
+
         try {
             // Try to close the AMQP connection
             $this->close();
