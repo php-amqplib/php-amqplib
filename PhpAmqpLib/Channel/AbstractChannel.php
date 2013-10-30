@@ -226,7 +226,13 @@ class AbstractChannel
 
         // No deferred methods?  wait for new ones
         while (true) {
-            $frm = $this->next_frame($timeout);
+            try {
+                $frm = $this->next_frame($timeout);
+            } catch (AMQPRuntimeException $e) {
+                // nothing to do, empty response body
+                break;
+            }
+            
             $frame_type = $frm[0];
             $payload = $frm[1];
 
