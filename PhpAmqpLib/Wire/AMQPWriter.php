@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Wire;
 
+use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 
 class AMQPWriter
@@ -129,7 +130,7 @@ class AMQPWriter
     public function write_octet($n)
     {
         if ($n < 0 || $n > 255) {
-            throw new \InvalidArgumentException('Octet out of range 0..255');
+            throw new AMQPInvalidArgumentException('Octet out of range 0..255');
         }
 
         $this->out .= chr($n);
@@ -143,7 +144,7 @@ class AMQPWriter
     public function write_short($n)
     {
         if ($n < 0 ||  $n > 65535) {
-            throw new \InvalidArgumentException('Octet out of range 0..65535');
+            throw new AMQPInvalidArgumentException('Octet out of range 0..65535');
         }
 
         $this->out .= pack('n', $n);
@@ -197,7 +198,7 @@ class AMQPWriter
     {
         $len = strlen($s);
         if ($len > 255) {
-            throw new \InvalidArgumentException('String too long');
+            throw new AMQPInvalidArgumentException('String too long');
         }
 
         $this->write_octet($len);
@@ -301,7 +302,7 @@ class AMQPWriter
                 $table_data->write('t');
                 $table_data->write_octet($v ? 1 : 0);
             } else {
-                throw new \InvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
+                throw new AMQPInvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
             }
         }
 
