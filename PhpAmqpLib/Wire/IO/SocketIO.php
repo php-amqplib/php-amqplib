@@ -2,6 +2,8 @@
 
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Exception\AMQPIOException;
+
 class SocketIO extends AbstractIO
 {
     private $sock = null;
@@ -16,7 +18,7 @@ class SocketIO extends AbstractIO
         if (!socket_connect($this->sock, $host, $port)) {
             $errno = socket_last_error($this->sock);
             $errstr = socket_strerror($errno);
-            throw new \Exception ("Error Connecting to server($errno): $errstr ");
+            throw new AMQPIOException("Error Connecting to server($errno): $errstr ", $errno);
         }
 
         socket_set_block($this->sock);
@@ -36,7 +38,7 @@ class SocketIO extends AbstractIO
         }
 
         if (strlen($res)!=$n) {
-            throw new \Exception("Error reading data. Received " .
+            throw new AMQPIOException("Error reading data. Received " .
                 strlen($res) . " instead of expected $n bytes");
         }
 
@@ -50,7 +52,7 @@ class SocketIO extends AbstractIO
         while (true) {
             $sent = socket_write($this->sock, $data, $len);
             if ($sent === false) {
-                throw new \Exception ("Error sending data");
+                throw new AMQPIOException("Error sending data");
             }
             // Check if the entire message has been sented
             if ($sent < $len) {

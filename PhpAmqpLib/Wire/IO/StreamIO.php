@@ -28,7 +28,7 @@ class StreamIO extends AbstractIO
         }
 
         if(!stream_set_timeout($this->sock, $read_write_timeout)) {
-            throw new \Exception ("Timeout could not be set");
+            throw new AMQPIOException("Timeout could not be set");
         }
 
         stream_set_blocking($this->sock, 1);
