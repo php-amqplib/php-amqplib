@@ -61,7 +61,6 @@ class SocketIO extends AbstractIO
         if (strlen($res)!=$n) {
             throw new AMQPIOException("Error reading data. Received " .
                 strlen($res) . " instead of expected $n bytes");
-
         }
 
         return $res;
