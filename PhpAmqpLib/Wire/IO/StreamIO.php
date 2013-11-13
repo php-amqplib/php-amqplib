@@ -43,7 +43,7 @@ class StreamIO extends AbstractIO
         }
 
         if(!stream_set_timeout($this->sock, $this->read_write_timeout)) {
-            throw new \Exception ("Timeout could not be set");
+            throw new AMQPIOException("Timeout could not be set");
         }
 
         stream_set_blocking($this->sock, 1);
@@ -64,7 +64,11 @@ class StreamIO extends AbstractIO
         $read = 0;
 
         while ($read < $n && !feof($this->sock) &&
-            ($buf = fread($this->sock, $n - $read))) {
+            (false !== ($buf = fread($this->sock, $n - $read)))) {
+                
+            if ($buf === '') {
+                continue;
+            }
 
             $read += strlen($buf);
             $res .= $buf;
