@@ -154,7 +154,7 @@
                          "arguments": [{"type": "shortstr", "name": "reason", "default-value": ""}],
                          "name": "blocked"},
                         {"id": 61,
-                         "arguments": [{"type": "shortstr", "name": "reason", "default-value": ""}],
+                         "arguments": [],
                          "name": "unblocked"}],
             "name": "connection",
             "properties": []
