@@ -84,6 +84,21 @@ class Protocol091
 		return $ret;
 	}
 
+	public function connectionBlocked($reason = '') {
+		$args = new AMQPWriter();
+		$args->write_shortstr($reason);
+		return array(10, 60, $args);
+	}
+
+	public static function connectionUnblocked($args) {
+		$ret = array();
+<<<<<<< HEAD
+		$ret[] = $args->read_shortstr();
+=======
+>>>>>>> blockedconn
+		return $ret;
+	}
+
 	public function channelOpen($out_of_band = '') {
 		$args = new AMQPWriter();
 		$args->write_shortstr($out_of_band);

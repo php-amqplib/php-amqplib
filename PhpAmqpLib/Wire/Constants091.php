@@ -41,6 +41,8 @@ class Constants091
   '10,41' => 'Connection.open_ok',
   '10,50' => 'Connection.close',
   '10,51' => 'Connection.close_ok',
+  '10,60' => 'Connection.blocked',
+  '10,61' => 'Connection.unblocked',
   '20,10' => 'Channel.open',
   '20,11' => 'Channel.open_ok',
   '20,20' => 'Channel.flow',

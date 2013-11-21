@@ -17,6 +17,8 @@ class MethodMap091
   '10,41' => 'connection_open_ok',
   '10,50' => 'connection_close',
   '10,51' => 'connection_close_ok',
+  '10,60' => 'connection_blocked',
+  '10,61' => 'connection_unblocked',
   '20,10' => 'channel_open',
   '20,11' => 'channel_open_ok',
   '20,20' => 'channel_flow',
