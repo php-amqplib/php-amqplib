@@ -92,7 +92,10 @@ class Protocol091
 
 	public static function connectionUnblocked($args) {
 		$ret = array();
+<<<<<<< HEAD
 		$ret[] = $args->read_shortstr();
+=======
+>>>>>>> blockedconn
 		return $ret;
 	}
 
