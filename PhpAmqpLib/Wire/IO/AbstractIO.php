@@ -11,4 +11,8 @@ abstract class AbstractIO
     abstract public function close();
 
     abstract public function select($sec, $usec);
+
+    abstract public function connect();
+
+    abstract public function reconnect();
 }

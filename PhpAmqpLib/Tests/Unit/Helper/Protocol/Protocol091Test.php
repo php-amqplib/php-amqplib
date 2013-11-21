@@ -195,4 +195,14 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         list($class_id, $method_id, $args) = $this->protocol091->basicReject(1, false);
         $this->assertEquals($expected, $args->getvalue());
     }
+
+	public function testConnectionBlocked()
+	{
+		$expected = 'Low on memory';
+		list($class_id, $method_id, $args) = $this->protocol091->connectionBlocked($expected);
+
+		$this->assertEquals($class_id, 10);
+		$this->assertEquals($method_id, 60);
+		$this->assertEquals($expected, trim($args->getValue()));
+	}
 }

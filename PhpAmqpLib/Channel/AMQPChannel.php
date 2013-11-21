@@ -607,13 +607,6 @@ class AMQPChannel extends AbstractChannel
         return $keys;
     }
 
-    protected function dispatch_to_handler($handler, array $arguments)
-    {
-        if (is_callable($handler)) {
-            call_user_func_array($handler, $arguments);
-        }
-    }
-
     /**
      * reject one or several received messages.
      */
@@ -1059,7 +1052,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param callable $callback
      */
-    public function set_nack_handler(Callable $callback)
+    public function set_nack_handler($callback)
     {
         $this->nack_handler = $callback;
     }
@@ -1069,7 +1062,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param callable $callback
      */
-    public function set_ack_handler(Callable $callback)
+    public function set_ack_handler($callback)
     {
         $this->ack_handler = $callback;
     }
