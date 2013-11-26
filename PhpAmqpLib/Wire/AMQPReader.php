@@ -377,6 +377,9 @@ class AMQPReader
             case 'A': // Array
                 $val = $this->read_array();
                 break;
+            case 'b': // Array
+                $val = $this->read_bit();
+                break;
             default:
                 // UNKNOWN TYPE
                 throw new AMQPRuntimeException("Usupported table field type {$fieldType}");
