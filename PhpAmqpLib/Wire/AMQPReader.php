@@ -184,7 +184,7 @@ class AMQPReader
     /**
      * Reads 32 bit integer in big-endian byte order.
      *
-     * On 64 bit systems it will return always usngined int
+     * On 64 bit systems it will return always unsigned int
      * value in 0..2^32 range.
      *
      * On 32 bit systems it will return signed int value in
