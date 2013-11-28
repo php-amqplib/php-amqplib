@@ -377,7 +377,7 @@ class AMQPReader
             case 'A': // Array
                 $val = $this->read_array();
                 break;
-            case 'b': // Array
+            case 'b': // bit
                 $val = $this->read_bit();
                 break;
             default:
