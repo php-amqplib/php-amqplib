@@ -41,10 +41,6 @@ class StreamIO extends AbstractIO
 
         while ($read < $n && !feof($this->sock) &&
             (false !== ($buf = fread($this->sock, $n - $read)))) {
-
-            if($this->timed_out()) {
-                throw new AMQPTimeoutException("Error reading data. Socket connection timed out");
-            }
             
             if ($buf === '') {
                 continue;
