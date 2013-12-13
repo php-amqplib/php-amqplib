@@ -41,6 +41,10 @@ class AbstractConnection extends AbstractChannel
             )
         )
     );
+    
+    protected $channel_max = 65535;
+    
+    protected $frame_max = 131072;
 
     /**
      * contructor parameters for clone
@@ -89,9 +93,6 @@ class AbstractConnection extends AbstractChannel
             $this->channels = array();
             // The connection object itself is treated as channel 0
             parent::__construct($this, 0);
-
-            $this->channel_max = 65535;
-            $this->frame_max = 131072;
 
             $this->io = $io;
             $this->input = new AMQPReader(null, $this->io);
