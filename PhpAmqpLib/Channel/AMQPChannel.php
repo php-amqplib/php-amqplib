@@ -657,14 +657,17 @@ class AMQPChannel extends AbstractChannel
      */
     public function basic_consume($queue="", $consumer_tag="", $no_local=false,
                                   $no_ack=false, $exclusive=false, $nowait=false,
-                                  $callback=null, $ticket=null)
+                                  $callback=null, $ticket=null, $arguments = array())
     {
         $ticket = $this->getTicket($ticket);
         list($class_id, $method_id, $args) =
-            $this->protocolWriter->basicConsume(
-                $ticket, $queue, $consumer_tag, $no_local,
-                $no_ack, $exclusive, $nowait
-            );
+            $this->protocolVersion == '0.9.1'
+                ? $this->protocolWriter->basicConsume(
+                    $ticket, $queue, $consumer_tag, $no_local,
+                    $no_ack, $exclusive, $nowait, $arguments)
+                : $this->protocolWriter->basicConsume(
+                    $ticket, $queue, $consumer_tag, $no_local,
+                    $no_ack, $exclusive, $nowait);
 
         $this->send_method_frame(array($class_id, $method_id), $args);
 
