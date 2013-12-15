@@ -34,7 +34,7 @@ abstract class GenericContent
     }
 
     /**
-     * Check wheter a property exists in the 'properties' dictionary
+     * Check whether a property exists in the 'properties' dictionary
      * or if present - in the 'delivery_info' dictionary.
      */
     public function has($name)

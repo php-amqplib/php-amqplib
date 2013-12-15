@@ -36,9 +36,9 @@ class AMQPReader
     protected $io = null;
 
     /**
-     * @param string $str
-     * @param null   $sock
-     * @param int    $timeout
+     * @param string     $str
+     * @param AbstractIO $io
+     * @param int        $timeout
      */
     public function __construct($str, AbstractIO $io = null, $timeout = 0)
     {
