@@ -47,12 +47,12 @@ class AbstractConnection extends AbstractChannel
     protected $frame_max = 131072;
 
     /**
-     * contructor parameters for clone
+     * constructor parameters for clone
      * @var array
      */
     protected $construct_params;
     /**
-     * close the connection in destructur
+     * close the connection in destructor
      * @var bool
      */
     protected $close_on_destruct = true ;

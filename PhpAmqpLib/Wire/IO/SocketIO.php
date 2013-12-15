@@ -54,12 +54,12 @@ class SocketIO extends AbstractIO
             if ($sent === false) {
                 throw new AMQPIOException("Error sending data");
             }
-            // Check if the entire message has been sented
+            // Check if the entire message has been sent
             if ($sent < $len) {
                 // If not sent the entire message.
-                // Get the part of the message that has not yet been sented as message
+                // Get the part of the message that has not yet been sent as message
                 $data = substr($data, $sent);
-                // Get the length of the not sented part
+                // Get the length of the not sent part
                 $len -= $sent;
             } else {
                 break;

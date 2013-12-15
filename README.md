@@ -179,7 +179,7 @@ $ make test
 
 ## Using AMQP 0.8 ##
 
-If you still want to use the old version of the protcol then you can do it by settings the following constant in your configuration code:
+If you still want to use the old version of the protocol then you can do it by settings the following constant in your configuration code:
 
 ```php
 define('AMQP_PROTOCOL', '0.8');
