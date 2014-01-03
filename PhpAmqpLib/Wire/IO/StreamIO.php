@@ -27,7 +27,7 @@ class StreamIO extends AbstractIO
             throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
         }
 
-        if(!stream_set_timeout($this->sock, $read_write_timeout)) {
+        if(!stream_set_timeout($this->sock, floor($read_write_timeout), ($read_write_timeout - floor($read_write_timeout)) * 1000000)) {
             throw new AMQPIOException("Timeout could not be set");
         }
 
