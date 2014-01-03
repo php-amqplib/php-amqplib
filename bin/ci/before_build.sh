@@ -1,7 +1,7 @@
 #!/bin/sh
 
 curl --silent https://getcomposer.org/installer | php
-php composer.phar install --dev --prefer-source
+php composer.phar install
 
 # phpamqplib:phpamqplib_password has full access to phpamqplib_testbed
 
