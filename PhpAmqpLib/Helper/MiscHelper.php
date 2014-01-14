@@ -26,6 +26,19 @@ class MiscHelper
     }
 
     /**
+     * Gets a number (either int or float) and returns an array containing its integer part as first element and its
+     * decimal part mutliplied by 10^6. Useful for some PHP stream functions that need seconds and microseconds as
+     * different arguments
+     *
+     * @param $number
+     * @return array
+     */
+    public static function splitSecondsMicroseconds($number)
+    {
+        return array(floor($number), ($number - floor($number)) * 1000000);
+    }
+
+    /**
      * View any string as a hexdump.
      *
      * This is most commonly used to view binary data from streams
