@@ -3,6 +3,7 @@
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPTimeoutException;
+use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPDecimal;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
@@ -102,7 +103,8 @@ class AMQPReader
         }
 
         // wait ..
-        $result = $this->io->select($this->timeout, 0);
+        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
+        $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
             throw new AMQPRuntimeException(sprintf("An error occurs", $this->timeout));
