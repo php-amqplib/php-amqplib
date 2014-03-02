@@ -1,5 +1,3 @@
-before_script: ./bin/ci/before_build.sh
-
 language: php
 
 php:
