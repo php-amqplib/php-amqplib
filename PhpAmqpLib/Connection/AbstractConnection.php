@@ -37,7 +37,8 @@ class AbstractConnection extends AbstractChannel
                 'publisher_confirms' => array('t', true),
                 'consumer_cancel_notify' => array('t', true),
                 'exchange_exchange_bindings' => array('t', true),
-                'basic.nack' => array('t', true)
+                'basic.nack' => array('t', true),
+				'connection.blocked' => array('t', true)
             )
         )
     );
@@ -45,6 +46,20 @@ class AbstractConnection extends AbstractChannel
     protected $channel_max = 65535;
     
     protected $frame_max = 131072;
+
+	/**
+	 * Handles connection blocking from the server
+	 *
+	 * @var Callable
+	 */
+	private $connection_block_handler = null;
+
+	/**
+	 * Handles connection unblocking from the server
+	 *
+	 * @var Callable
+	 */
+	private $connection_unblock_handler = null;
 
     /**
      * constructor parameters for clone
@@ -597,4 +612,45 @@ class AbstractConnection extends AbstractChannel
         return $this->io;
     }
 
+	/**
+	 * Handles connection blocked notifications
+	 *
+	 * @param AMQPReader $args
+	 */
+	protected function connection_blocked(\PhpAmqpLib\Wire\AMQPReader $args)
+	{
+		// Call the block handler and pass in the reason
+		$this->dispatch_to_handler($this->connection_block_handler, array($args->read_shortstr()));
+	}
+
+	/**
+	 * Handles connection unblocked notifications
+	 *
+	 * @param AMQPReader $args
+	 */
+	protected function connection_unblocked(\PhpAmqpLib\Wire\AMQPReader $args)
+	{
+		// No args to an unblock event
+		$this->dispatch_to_handler($this->connection_unblock_handler, array());
+	}
+
+	/**
+	 * Sets a handler which is called whenever a connection.block is sent from the server
+	 *
+	 * @param callable $callback
+	 */
+	public function set_connection_block_handler($callback)
+	{
+		$this->connection_block_handler = $callback;
+	}
+
+	/**
+	 * Sets a handler which is called whenever a connection.block is sent from the server
+	 *
+	 * @param callable $callback
+	 */
+	public function set_connection_unblock_handler($callback)
+	{
+		$this->connection_unblock_handler = $callback;
+	}
 }

@@ -272,4 +272,11 @@ class AbstractChannel
             };
         }
     }
+
+	protected function dispatch_to_handler($handler, array $arguments)
+	{
+		if (is_callable($handler)) {
+			call_user_func_array($handler, $arguments);
+		}
+	}
 }

@@ -607,13 +607,6 @@ class AMQPChannel extends AbstractChannel
         return $keys;
     }
 
-    protected function dispatch_to_handler($handler, array $arguments)
-    {
-        if (is_callable($handler)) {
-            call_user_func_array($handler, $arguments);
-        }
-    }
-
     /**
      * reject one or several received messages.
      */
