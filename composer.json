@@ -16,6 +16,9 @@
     "require-dev": {
         "phpunit/phpunit": "3.7.*"
     },
+    "suggest": {
+        "ext-sockets": "Use AMQPSocketConnection"
+    },
     "autoload": {
         "psr-0": {"PhpAmqpLib": ""}
     },
