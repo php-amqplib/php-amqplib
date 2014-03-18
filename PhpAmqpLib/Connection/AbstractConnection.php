@@ -95,7 +95,7 @@ class AbstractConnection extends AbstractChannel
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
 
-	$this->wait_frame_reader = new AMQPReader(null);
+        $this->wait_frame_reader = new AMQPReader(null);
         $this->vhost = $vhost;
         $this->insist = $insist;
         $this->login_method = $login_method;
@@ -164,9 +164,9 @@ class AbstractConnection extends AbstractChannel
     {
 	// Try to close out each channel
 	foreach ($this->channels as $channel) {
-		try {
-			$channel->close();
-		} catch (\Exception $e) {/* Ignore closing errors */}
+	    try {
+		$channel->close();
+	    } catch (\Exception $e) {/* Ignore closing errors */}
 	}
 
         try {
@@ -361,8 +361,8 @@ class AbstractConnection extends AbstractChannel
 
         if ($this->debug) {
             $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-            $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+                MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
+                           $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
         }
 
         return $pkt;
@@ -561,7 +561,7 @@ class AbstractConnection extends AbstractChannel
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
         if ($this->debug) {
-            MiscHelper::debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]" );
+          MiscHelper::debug_msg("Redirected to [". $host . "], known_hosts [" . $this->known_hosts . "]" );
         }
 
         return $host;
