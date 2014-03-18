@@ -95,13 +95,13 @@ class AbstractConnection extends AbstractChannel
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
 
+	$this->wait_frame_reader = new AMQPReader(null);
         $this->vhost = $vhost;
         $this->insist = $insist;
         $this->login_method = $login_method;
         $this->login_response = $login_response;
         $this->locale = $locale;
         $this->io = $io;
-		$this->wait_frame_reader = new AMQPReader(null);
 
         if ($user && $password) {
             $this->login_response = new AMQPWriter();
@@ -162,12 +162,12 @@ class AbstractConnection extends AbstractChannel
      */
     public function reconnect()
     {
-		// Try to close out each channel
-		foreach ($this->channels as $channel) {
-			try {
-				$channel->close();
-			} catch (\Exception $e) {/* Ignore closing errors */}
-		}
+	// Try to close out each channel
+	foreach ($this->channels as $channel) {
+		try {
+			$channel->close();
+		} catch (\Exception $e) {/* Ignore closing errors */}
+	}
 
         try {
             // Try to close the AMQP connection
@@ -194,21 +194,21 @@ class AbstractConnection extends AbstractChannel
         }
     }
 
-	/**
-	 * Attempt to close the connection safely
-	 */
-	protected function safeClose()
-	{
-		if (isset($this->input) && $this->input) {
-			// close() always tries to connect to the server to shutdown
-			// the connection. If the server has gone away, it will
-			// throw an error in the connection class, so catch it
-			// and shutdown quietly
-			try {
-				$this->close();
-			} catch (\Exception $e) { }
-		}
+    /**
+     * Attempt to close the connection safely
+     */
+    protected function safeClose()
+    {
+	if (isset($this->input) && $this->input) {
+	    // close() always tries to connect to the server to shutdown
+       	    // the connection. If the server has gone away, it will
+   	    // throw an error in the connection class, so catch it
+	    // and shutdown quietly
+	    try {
+	    	$this->close();
+	    } catch (\Exception $e) { }
 	}
+    }
 
     public function select($sec, $usec = 0)
     {
@@ -419,7 +419,7 @@ class AbstractConnection extends AbstractChannel
             // Not the channel we were looking for.  Queue this frame
             //for later, when the other channel is looking for frames.
             array_push($this->channels[$frame_channel]->frame_queue,
-                array($frame_type, $payload));
+                       array($frame_type, $payload));
 
             // If we just queued up a method for channel 0 (the Connection
             // itself) it's probably a close method in reaction to some
@@ -461,8 +461,8 @@ class AbstractConnection extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         return $this->wait(array(
-            $this->waitHelper->get_wait('connection.close_ok')
-        ));
+                $this->waitHelper->get_wait('connection.close_ok')
+            ));
     }
 
     public static function dump_table($table)
@@ -546,7 +546,7 @@ class AbstractConnection extends AbstractChannel
     {
         $this->known_hosts = $args->read_shortstr();
         if ($this->debug) {
-            MiscHelper::debug_msg("Open OK! known_hosts: " . $this->known_hosts);
+          MiscHelper::debug_msg("Open OK! known_hosts: " . $this->known_hosts);
         }
 
         return null;
@@ -597,12 +597,12 @@ class AbstractConnection extends AbstractChannel
         $this->locales = explode(" ", $args->read_longstr());
 
         if ($this->debug) {
-            MiscHelper::debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
-                $this->version_major,
-                $this->version_minor,
-                self::dump_table($this->server_properties),
-                implode(', ', $this->mechanisms),
-                implode(', ', $this->locales)));
+          MiscHelper::debug_msg(sprintf("Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
+                            $this->version_major,
+                            $this->version_minor,
+                            self::dump_table($this->server_properties),
+                            implode(', ', $this->mechanisms),
+                            implode(', ', $this->locales)));
         }
 
     }
