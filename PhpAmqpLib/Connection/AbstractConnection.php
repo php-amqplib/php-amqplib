@@ -171,7 +171,7 @@ class AbstractConnection extends AbstractChannel
 
         try {
             // Try to close the AMQP connection
-            $this->close();
+            $this->safeClose();
         } catch (\Exception $e) {/* Ignore closing errors */}
 
         // Reconnect the socket/stream then AMQP
@@ -190,17 +190,25 @@ class AbstractConnection extends AbstractChannel
     public function __destruct()
     {
         if ($this->close_on_destruct) {
-            if (isset($this->input) && $this->input) {
-                // close() always tries to connect to the server to shutdown
-                // the connection. If the server has gone away, it will
-                // throw an error in the connection class, so catch it
-                // and shutdown quietly
-                try {
-                    $this->close();
-                } catch (\Exception $e) { }
-            }
+            $this->safeClose();
         }
     }
+
+	/**
+	 * Attempt to close the connection safely
+	 */
+	protected function safeClose()
+	{
+		if (isset($this->input) && $this->input) {
+			// close() always tries to connect to the server to shutdown
+			// the connection. If the server has gone away, it will
+			// throw an error in the connection class, so catch it
+			// and shutdown quietly
+			try {
+				$this->close();
+			} catch (\Exception $e) { }
+		}
+	}
 
     public function select($sec, $usec = 0)
     {
