@@ -78,7 +78,7 @@ class StreamIO extends AbstractIO
 
         if (strlen($res)!=$n) {
             throw new AMQPRuntimeException("Error reading data. Received " .
-            strlen($res) . " instead of expected $n bytes");
+                strlen($res) . " instead of expected $n bytes");
         }
 
         return $res;
