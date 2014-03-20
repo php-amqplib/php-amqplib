@@ -126,14 +126,14 @@ class AbstractConnection extends AbstractChannel
      */
     protected function connect()
     {
-        $this->io->connect();
+        $this->getIO()->connect();
 
         while (true) {
             $this->channels = array();
             // The connection object itself is treated as channel 0
             parent::__construct($this, 0);
 
-            $this->input = new AMQPReader(null, $this->io);
+            $this->input = new AMQPReader(null, $this->getIO());
 
             $this->write($this->amqp_protocol_header);
             $this->wait(array($this->waitHelper->get_wait('connection.start')));
@@ -175,7 +175,7 @@ class AbstractConnection extends AbstractChannel
         } catch (\Exception $e) {/* Ignore closing errors */}
 
         // Reconnect the socket/stream then AMQP
-        $this->io->reconnect();
+        $this->getIO()->reconnect();
         $this->connect();
     }
 
@@ -212,7 +212,7 @@ class AbstractConnection extends AbstractChannel
 
     public function select($sec, $usec = 0)
     {
-        return $this->io->select($sec, $usec);
+        return $this->getIO()->select($sec, $usec);
     }
 
     /**
@@ -231,7 +231,7 @@ class AbstractConnection extends AbstractChannel
             MiscHelper::debug_msg("closing socket");
         }
 
-        $this->io->close();
+        $this->getIO()->close();
     }
 
     public function write($data)
@@ -240,7 +240,7 @@ class AbstractConnection extends AbstractChannel
             MiscHelper::debug_msg("< [hex]:\n" . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
         }
 
-        $this->io->write($data);
+        $this->getIO()->write($data);
     }
 
     protected function do_close()
