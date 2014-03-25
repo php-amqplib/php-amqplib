@@ -214,15 +214,18 @@ class AbstractConnection extends AbstractChannel
      */
     protected function safeClose()
     {
-	if (isset($this->input) && $this->input) {
-	    // close() always tries to connect to the server to shutdown
-       	    // the connection. If the server has gone away, it will
-   	    // throw an error in the connection class, so catch it
-	    // and shutdown quietly
-	    try {
-	    	$this->close();
-	    } catch (\Exception $e) { }
-	}
+        // Set the connection status in case the server has gone away
+        $this->setIsConnected(false);
+
+        if (isset($this->input) && $this->input) {
+            // close() always tries to connect to the server to shutdown
+            // the connection. If the server has gone away, it will
+            // throw an error in the connection class, so catch it
+            // and shutdown quietly
+            try {
+                $this->close();
+            } catch (\Exception $e) { }
+        }
     }
 
     public function select($sec, $usec = 0)
@@ -474,6 +477,8 @@ class AbstractConnection extends AbstractChannel
             $method_sig[1]
         );
         $this->send_method_frame(array($class_id, $method_id), $args);
+
+        $this->setIsConnected(false);
 
         return $this->wait(array(
                 $this->waitHelper->get_wait('connection.close_ok')
