@@ -42,9 +42,9 @@ class AbstractConnection extends AbstractChannel
             )
         )
     );
-    
+
     protected $channel_max = 65535;
-    
+
     protected $frame_max = 131072;
 
 	/**
@@ -79,6 +79,12 @@ class AbstractConnection extends AbstractChannel
     protected static $connect_on_construct = true;
 
     /**
+     * Maintain connection status
+     * @var bool
+     */
+    protected $is_connected = false;
+
+	/**
      * @var null|\PhpAmqpLib\Wire\IO\AbstractIO
      */
     protected $io = null;
@@ -126,34 +132,49 @@ class AbstractConnection extends AbstractChannel
      */
     protected function connect()
     {
-        $this->getIO()->connect();
+        try {
+            // Loop until we connect
+            while (!$this->isConnected()) {
+                // Assume we will connect, until we dont
+                $this->setIsConnected(true);
 
-        while (true) {
-            $this->channels = array();
-            // The connection object itself is treated as channel 0
-            parent::__construct($this, 0);
+                // Connect the socket
+                $this->getIO()->connect();
 
-            $this->input = new AMQPReader(null, $this->getIO());
+                $this->channels = array();
+                // The connection object itself is treated as channel 0
+                parent::__construct($this, 0);
 
-            $this->write($this->amqp_protocol_header);
-            $this->wait(array($this->waitHelper->get_wait('connection.start')));
-            $this->x_start_ok(self::$LIBRARY_PROPERTIES, $this->login_method, $this->login_response, $this->locale);
+                $this->input = new AMQPReader(null, $this->getIO());
 
-            $this->wait_tune_ok = true;
-            while ($this->wait_tune_ok) {
-                $this->wait(array(
-                    $this->waitHelper->get_wait('connection.secure'),
-                    $this->waitHelper->get_wait('connection.tune')
-                ));
+                $this->write($this->amqp_protocol_header);
+                $this->wait(array($this->waitHelper->get_wait('connection.start')));
+                $this->x_start_ok(self::$LIBRARY_PROPERTIES, $this->login_method, $this->login_response, $this->locale);
+
+                $this->wait_tune_ok = true;
+                while ($this->wait_tune_ok) {
+                    $this->wait(array(
+                        $this->waitHelper->get_wait('connection.secure'),
+                        $this->waitHelper->get_wait('connection.tune')
+                    ));
+                }
+
+                $host = $this->x_open($this->vhost,"", $this->insist);
+                if (!$host) {
+                    return; // we weren't redirected
+                }
+
+                $this->setIsConnected(false);
+
+                // we were redirected, close the socket, loop and try again
+                $this->close_socket();
             }
+        } catch (\Exception $e) {
+            // Something went wrong, set the connection status
+            $this->setIsConnected(false);
 
-            $host = $this->x_open($this->vhost,"", $this->insist);
-            if (!$host) {
-                return; // we weren't redirected
-            }
-
-            // we were redirected, close the socket, loop and try again
-            $this->close_socket();
+            // Rethrow exception
+            throw $e;
         }
     }
 
@@ -707,4 +728,22 @@ class AbstractConnection extends AbstractChannel
 	{
 		$this->connection_unblock_handler = $callback;
 	}
+
+    /**
+     * Get the connection status
+     * @return bool
+     */
+    public function isConnected()
+    {
+        return $this->is_connected;
+    }
+
+    /**
+     * Set the connection status
+     * @param $is_connected
+     */
+    protected function setIsConnected($is_connected)
+    {
+        $this->is_connected = $is_connected;
+    }
 }
