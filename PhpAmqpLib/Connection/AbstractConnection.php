@@ -73,12 +73,6 @@ class AbstractConnection extends AbstractChannel
     protected $close_on_destruct = true;
 
     /**
-     * Connect to AMQP server on construct?
-     * @var bool
-     */
-    protected static $connect_on_construct = true;
-
-    /**
      * Maintain connection status
      * @var bool
      */
@@ -122,7 +116,7 @@ class AbstractConnection extends AbstractChannel
         $this->prepare_content_cache_max_size = 100;
 
         // Lazy Connection waits on connecting
-        if (static::$connect_on_construct) {
+        if ($this->connectOnConstruct()) {
             $this->connect();
         }
     }
@@ -745,5 +739,14 @@ class AbstractConnection extends AbstractChannel
     protected function setIsConnected($is_connected)
     {
         $this->is_connected = $is_connected;
+    }
+
+    /**
+     * Should the connection be attempted during construction?
+     * @return bool
+     */
+    public function connectOnConstruct()
+    {
+        return true;
     }
 }

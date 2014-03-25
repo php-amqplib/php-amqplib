@@ -5,12 +5,6 @@ namespace PhpAmqpLib\Connection;
 class AMQPLazyConnection extends AMQPConnection
 {
     /**
-     * Connect to AMQP server on construct?
-     * @var bool
-     */
-    protected static $connect_on_construct = false;
-
-    /**
      * get socket from current connection
      *
      * @deprecated
@@ -40,5 +34,14 @@ class AMQPLazyConnection extends AMQPConnection
         $this->connect();
 
         return $this->io;
+    }
+
+    /**
+     * Should the connection be attempted during construction?
+     * @return bool
+     */
+    public function connectOnConstruct()
+    {
+        return false;
     }
 }
