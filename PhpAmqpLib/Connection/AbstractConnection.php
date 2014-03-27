@@ -178,7 +178,11 @@ class AbstractConnection extends AbstractChannel
     public function reconnect()
     {
 	// Try to close out each channel
-	foreach ($this->channels as $channel) {
+	foreach ($this->channels as $key => $channel) {
+		// channels[0] is this connection object, so don't close it yet
+		if($key === 0) {
+			continue;
+		}
 	    try {
 		$channel->close();
 	    } catch (\Exception $e) {/* Ignore closing errors */}
