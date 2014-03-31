@@ -62,8 +62,7 @@ class SocketIO extends AbstractIO
 
             $sent = socket_write($this->sock, $data, $len);
             if ($sent === false) {
-                $errorNo = socket_last_error($this->sock);
-                throw new AMQPIOException ("Error sending data. Last SocketError: ".socket_strerror($errorNo));
+                throw new AMQPIOException ("Error sending data. Last SocketError: ".socket_strerror(socket_last_error()));
             }
             // Check if the entire message has been sent
             if ($sent < $len) {
