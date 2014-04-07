@@ -42,9 +42,9 @@ class AbstractConnection extends AbstractChannel
             )
         )
     );
-    
+
     protected $channel_max = 65535;
-    
+
     protected $frame_max = 131072;
 
 	/**
@@ -70,9 +70,15 @@ class AbstractConnection extends AbstractChannel
      * close the connection in destructor
      * @var bool
      */
-    protected $close_on_destruct = true ;
+    protected $close_on_destruct = true;
 
     /**
+     * Maintain connection status
+     * @var bool
+     */
+    protected $is_connected = false;
+
+	/**
      * @var null|\PhpAmqpLib\Wire\IO\AbstractIO
      */
     protected $io = null;
@@ -90,49 +96,109 @@ class AbstractConnection extends AbstractChannel
         $this->construct_params = func_get_args();
 
         $this->wait_frame_reader = new AMQPReader(null);
+        $this->vhost = $vhost;
+        $this->insist = $insist;
+        $this->login_method = $login_method;
+        $this->login_response = $login_response;
+        $this->locale = $locale;
+        $this->io = $io;
 
         if ($user && $password) {
-            $login_response = new AMQPWriter();
-            $login_response->write_table(array("LOGIN" => array('S',$user),
+            $this->login_response = new AMQPWriter();
+            $this->login_response->write_table(array("LOGIN" => array('S',$user),
                 "PASSWORD" => array('S',$password)));
-            $login_response = substr($login_response->getvalue(),4); //Skip the length
+            $this->login_response = substr($this->login_response->getvalue(),4); //Skip the length
         } else {
-            $login_response = null;
+            $this->login_response = null;
         }
 
         $this->prepare_content_cache = array();
         $this->prepare_content_cache_max_size = 100;
 
-        $d = self::$LIBRARY_PROPERTIES;
-        while (true) {
-            $this->channels = array();
-            // The connection object itself is treated as channel 0
-            parent::__construct($this, 0);
-
-            $this->io = $io;
-            $this->input = new AMQPReader(null, $this->io);
-
-            $this->write($this->amqp_protocol_header);
-            $this->wait(array($this->waitHelper->get_wait('connection.start')));
-            $this->x_start_ok($d, $login_method, $login_response, $locale);
-
-            $this->wait_tune_ok = true;
-            while ($this->wait_tune_ok) {
-                $this->wait(array(
-                    $this->waitHelper->get_wait('connection.secure'),
-                    $this->waitHelper->get_wait('connection.tune')
-                ));
-            }
-
-            $host = $this->x_open($vhost,"", $insist);
-            if (!$host) {
-                return; // we weren't redirected
-            }
-
-            // we were redirected, close the socket, loop and try again
-            $this->close_socket();
+        // Lazy Connection waits on connecting
+        if ($this->connectOnConstruct()) {
+            $this->connect();
         }
     }
+
+    /**
+     * Make the connection to the AMQP server
+     */
+    protected function connect()
+    {
+        try {
+            // Loop until we connect
+            while (!$this->isConnected()) {
+                // Assume we will connect, until we dont
+                $this->setIsConnected(true);
+
+                // Connect the socket
+                $this->getIO()->connect();
+
+                $this->channels = array();
+                // The connection object itself is treated as channel 0
+                parent::__construct($this, 0);
+
+                $this->input = new AMQPReader(null, $this->getIO());
+
+                $this->write($this->amqp_protocol_header);
+                $this->wait(array($this->waitHelper->get_wait('connection.start')));
+                $this->x_start_ok(self::$LIBRARY_PROPERTIES, $this->login_method, $this->login_response, $this->locale);
+
+                $this->wait_tune_ok = true;
+                while ($this->wait_tune_ok) {
+                    $this->wait(array(
+                        $this->waitHelper->get_wait('connection.secure'),
+                        $this->waitHelper->get_wait('connection.tune')
+                    ));
+                }
+
+                $host = $this->x_open($this->vhost,"", $this->insist);
+                if (!$host) {
+                    return; // we weren't redirected
+                }
+
+                $this->setIsConnected(false);
+
+                // we were redirected, close the socket, loop and try again
+                $this->close_socket();
+            }
+        } catch (\Exception $e) {
+            // Something went wrong, set the connection status
+            $this->setIsConnected(false);
+
+            // Rethrow exception
+            throw $e;
+        }
+    }
+
+    /**
+     * Reconnect using the original connection settings, this will not recreate any channels that were established previously
+     */
+    public function reconnect()
+    {
+	// Try to close out each channel
+	foreach ($this->channels as $key => $channel) {
+		// channels[0] is this connection object, so don't close it yet
+		if($key === 0) {
+			continue;
+		}
+	    try {
+		$channel->close();
+	    } catch (\Exception $e) {/* Ignore closing errors */}
+	}
+
+        try {
+            // Try to close the AMQP connection
+            $this->safeClose();
+        } catch (\Exception $e) {/* Ignore closing errors */}
+
+        // Reconnect the socket/stream then AMQP
+        $this->getIO()->reconnect();
+        $this->setIsConnected(false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
+        $this->connect();
+    }
+
     /**
      * cloning will use the old properties to make a new connection to the same server
      */
@@ -144,15 +210,26 @@ class AbstractConnection extends AbstractChannel
     public function __destruct()
     {
         if ($this->close_on_destruct) {
-            if (isset($this->input) && $this->input) {
-                // close() always tries to connect to the server to shutdown
-                // the connection. If the server has gone away, it will
-                // throw an error in the connection class, so catch it
-                // and shutdown quietly
-                try {
-                    $this->close();
-                } catch (\Exception $e) { }
-            }
+            $this->safeClose();
+        }
+    }
+
+    /**
+     * Attempt to close the connection safely
+     */
+    protected function safeClose()
+    {
+        // Set the connection status in case the server has gone away
+        $this->setIsConnected(false);
+
+        if (isset($this->input) && $this->input) {
+            // close() always tries to connect to the server to shutdown
+            // the connection. If the server has gone away, it will
+            // throw an error in the connection class, so catch it
+            // and shutdown quietly
+            try {
+                $this->close();
+            } catch (\Exception $e) { }
         }
     }
 
@@ -406,6 +483,8 @@ class AbstractConnection extends AbstractChannel
         );
         $this->send_method_frame(array($class_id, $method_id), $args);
 
+        $this->setIsConnected(false);
+
         return $this->wait(array(
                 $this->waitHelper->get_wait('connection.close_ok')
             ));
@@ -653,4 +732,31 @@ class AbstractConnection extends AbstractChannel
 	{
 		$this->connection_unblock_handler = $callback;
 	}
+
+    /**
+     * Get the connection status
+     * @return bool
+     */
+    public function isConnected()
+    {
+        return $this->is_connected;
+    }
+
+    /**
+     * Set the connection status
+     * @param $is_connected
+     */
+    protected function setIsConnected($is_connected)
+    {
+        $this->is_connected = $is_connected;
+    }
+
+    /**
+     * Should the connection be attempted during construction?
+     * @return bool
+     */
+    public function connectOnConstruct()
+    {
+        return true;
+    }
 }

@@ -12,28 +12,52 @@ class StreamIO extends AbstractIO
 
     public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null)
     {
-        $errstr = $errno = null;
         $this->sock = null;
+        $this->host = $host;
+        $this->port = $port;
+        $this->connection_timeout = $connection_timeout;
+        $this->read_write_timeout = $read_write_timeout;
+        $this->context = $context;
+    }
+
+    /**
+     * Setup the stream connection
+     *
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \Exception
+     */
+    public function connect()
+    {
+        $errstr = $errno = null;
 
         //TODO clean up
-        if ($context) {
-            $remote = sprintf('ssl://%s:%s', $host, $port);
-            $this->sock = @stream_socket_client($remote, $errno, $errstr, $connection_timeout, STREAM_CLIENT_CONNECT, $context);
+        if ($this->context) {
+            $remote = sprintf('ssl://%s:%s', $this->host, $this->port);
+            $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT, $this->context);
         } else {
-            $remote = sprintf('tcp://%s:%s', $host, $port);
-            $this->sock = @stream_socket_client($remote, $errno, $errstr, $connection_timeout, STREAM_CLIENT_CONNECT);
+            $remote = sprintf('tcp://%s:%s', $this->host, $this->port);
+            $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT);
         }
 
         if (!$this->sock) {
             throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
         }
 
-        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($read_write_timeout);
+        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
         if(!stream_set_timeout($this->sock, $sec, $usec)) {
             throw new AMQPIOException("Timeout could not be set");
         }
 
         stream_set_blocking($this->sock, 1);
+    }
+
+    /**
+     * Reconnect the socket
+     */
+    public function reconnect()
+    {
+        $this->close();
+        $this->connect();
     }
 
     public function read($n)
