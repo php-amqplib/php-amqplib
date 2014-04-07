@@ -195,6 +195,7 @@ class AbstractConnection extends AbstractChannel
 
         // Reconnect the socket/stream then AMQP
         $this->getIO()->reconnect();
+        $this->setIsConnected(false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
         $this->connect();
     }
 
