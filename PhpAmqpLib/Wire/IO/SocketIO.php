@@ -3,6 +3,7 @@
 namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPIOException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 class SocketIO extends AbstractIO
 {
@@ -52,7 +53,11 @@ class SocketIO extends AbstractIO
         $read = 0;
 
         $buf = socket_read($this->sock, $n);
-        while ($read < $n && $buf !== '') {
+        while ($read < $n && $buf !== '' && $buf !== false) {
+            // Null sockets are invalid, throw exception
+            if (is_null($this->sock)) {
+                throw new AMQPRuntimeException("Socket was null! Last SocketError was: ".socket_strerror(socket_last_error()));
+            }
             $read += strlen($buf);
             $res .= $buf;
             $buf = socket_read($this->sock, $n - $read);
@@ -71,9 +76,14 @@ class SocketIO extends AbstractIO
         $len = strlen($data);
 
         while (true) {
+            // Null sockets are invalid, throw exception
+            if (is_null($this->sock)) {
+                throw new AMQPRuntimeException("Socket was null! Last SocketError was: ".socket_strerror(socket_last_error()));
+            }
+
             $sent = socket_write($this->sock, $data, $len);
             if ($sent === false) {
-                throw new AMQPIOException("Error sending data");
+                throw new AMQPIOException ("Error sending data. Last SocketError: ".socket_strerror(socket_last_error()));
             }
             // Check if the entire message has been sent
             if ($sent < $len) {
