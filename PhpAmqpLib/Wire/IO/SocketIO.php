@@ -81,7 +81,7 @@ class SocketIO extends AbstractIO
                 throw new AMQPRuntimeException("Socket was null! Last SocketError was: ".socket_strerror(socket_last_error()));
             }
 
-            $sent = @socket_write($this->sock, $data, $len);
+            $sent = socket_write($this->sock, $data, $len);
             if ($sent === false) {
                 throw new AMQPIOException ("Error sending data. Last SocketError: ".socket_strerror(socket_last_error()));
             }
