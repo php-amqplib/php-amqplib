@@ -58,14 +58,14 @@ class SocketIO extends AbstractIO
             if (is_null($this->sock)) {
                 throw new AMQPRuntimeException("Socket was null! Last SocketError was: ".socket_strerror(socket_last_error()));
             }
-            $read += strlen($buf);
+            $read += mb_strlen($buf, 'ASCII');
             $res .= $buf;
             $buf = socket_read($this->sock, $n - $read);
         }
 
-        if (strlen($res)!=$n) {
+        if (mb_strlen($res, 'ASCII')!=$n) {
             throw new AMQPIOException("Error reading data. Received " .
-                strlen($res) . " instead of expected $n bytes");
+                mb_strlen($res, 'ASCII') . " instead of expected $n bytes");
         }
 
         return $res;
@@ -73,7 +73,7 @@ class SocketIO extends AbstractIO
 
     public function write($data)
     {
-        $len = strlen($data);
+        $len = mb_strlen($data, 'ASCII');
 
         while (true) {
             // Null sockets are invalid, throw exception
@@ -81,7 +81,7 @@ class SocketIO extends AbstractIO
                 throw new AMQPRuntimeException("Socket was null! Last SocketError was: ".socket_strerror(socket_last_error()));
             }
 
-            $sent = socket_write($this->sock, $data, $len);
+            $sent = @socket_write($this->sock, $data, $len);
             if ($sent === false) {
                 throw new AMQPIOException ("Error sending data. Last SocketError: ".socket_strerror(socket_last_error()));
             }
@@ -89,7 +89,7 @@ class SocketIO extends AbstractIO
             if ($sent < $len) {
                 // If not sent the entire message.
                 // Get the part of the message that has not yet been sent as message
-                $data = substr($data, $sent);
+                $data = mb_substr($data,$sent,mb_strlen($data,'ASCII')-$sent,'ASCII');
                 // Get the length of the not sent part
                 $len -= $sent;
             } else {

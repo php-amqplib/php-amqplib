@@ -25,7 +25,7 @@ function generate_random_content($bytes)
         $max = $bytes;
         while ($len < $max-1) {
             $buffer .= fgets($handle, $max-$len);
-            $len = strlen($buffer);
+            $len = mb_strlen($buffer, 'ASCII');
         }
         fclose($handle);
     }

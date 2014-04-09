@@ -29,7 +29,7 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 
         $out = $this->_writer->getvalue();
 
-        $this->assertEquals(51, strlen($out));
+        $this->assertEquals(51, mb_strlen($out,'ASCII'));
 
         $expected = "\x00\x00\x00\x2fS\x00\x00\x00\x10rabbit@localhostS\x00\x00\x00\x0Ehare@localhostI\x00\x00\x00\x2at\x01";
 

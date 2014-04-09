@@ -107,7 +107,8 @@ class AbstractConnection extends AbstractChannel
             $this->login_response = new AMQPWriter();
             $this->login_response->write_table(array("LOGIN" => array('S',$user),
                 "PASSWORD" => array('S',$password)));
-            $this->login_response = substr($this->login_response->getvalue(),4); //Skip the length
+            $responseValue = $this->login_response->getvalue();
+            $this->login_response = mb_substr($responseValue,4,mb_strlen($responseValue,'ASCII')-4,'ASCII');  //Skip the length
         } else {
             $this->login_response = null;
         }
@@ -311,7 +312,7 @@ class AbstractConnection extends AbstractChannel
             $w = new AMQPWriter();
             $w->write_octet(2);
             $w->write_short($channel);
-            $w->write_long(strlen($packed_properties)+12);
+            $w->write_long(mb_strlen($packed_properties, 'ASCII')+12);
             $w->write_short($class_id);
             $w->write_short($weight);
             $this->prepare_content_cache[$key_cache] = $w->getvalue();
@@ -329,18 +330,19 @@ class AbstractConnection extends AbstractChannel
         $pkt->write_octet(0xCE);
 
         while ($body) {
-            $payload = substr($body,0, $this->frame_max-8);
-            $body = substr($body,$this->frame_max-8);
+            $bodyStart = ($this->frame_max-8);
+            $payload = mb_substr($body,0, $bodyStart, 'ASCII');
+            $body = mb_substr($body,$bodyStart,mb_strlen($body,'ASCII')-$bodyStart,'ASCII');
 
             $pkt->write_octet(3);
             $pkt->write_short($channel);
-            $pkt->write_long(strlen($payload));
+            $pkt->write_long(mb_strlen($payload, 'ASCII'));
 
             $pkt->write($payload);
 
             $pkt->write_octet(0xCE);
         }
-
+        
         return $pkt;
     }
 
@@ -373,7 +375,7 @@ class AbstractConnection extends AbstractChannel
 
         $pkt->write_octet(1);
         $pkt->write_short($channel);
-        $pkt->write_long(strlen($args)+4);  // 4 = length of class_id and method_id
+        $pkt->write_long(mb_strlen($args, 'ASCII')+4);  // 4 = length of class_id and method_id
         // in payload
 
         $pkt->write_short($method_sig[0]); // class_id

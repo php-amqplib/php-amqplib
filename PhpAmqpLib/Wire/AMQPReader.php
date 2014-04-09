@@ -44,7 +44,7 @@ class AMQPReader
     public function __construct($str, AbstractIO $io = null, $timeout = 0)
     {
         $this->str = $str;
-        $this->str_length = strlen($this->str);
+        $this->str_length = mb_strlen($this->str, 'ASCII');
         $this->io = $io;
         $this->offset = 0;
         $this->bitcount = $this->bits = 0;
@@ -62,7 +62,7 @@ class AMQPReader
     public function reuse($str)
     {
         $this->str = $str;
-        $this->str_length = strlen($this->str);
+        $this->str_length = mb_strlen($this->str, 'ASCII');
         $this->offset = 0;
         $this->bitcount = $this->bits = 0;
     }
@@ -135,8 +135,8 @@ class AMQPReader
                     $this->str_length);
             }
 
-            $res = substr($this->str,0,$n);
-            $this->str = substr($this->str,$n);
+            $res = mb_substr($this->str,0,$n,'ASCII');
+            $this->str = mb_substr($this->str,$n,mb_strlen($this->str,'ASCII')-$n,'ASCII');
             $this->str_length -= $n;
             $this->offset += $n;
         }

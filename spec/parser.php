@@ -153,7 +153,7 @@ file_put_contents(__DIR__ . '/../PhpAmqpLib/Helper/Protocol/Protocol' . protocol
 function frame_types($json_spec) {
     $ret = array();
     foreach ($json_spec['constants'] as $c) {
-        if (substr($c['name'], 0, 5) == "FRAME") {
+        if (mb_substr($c['name'], 0, 5, 'ASCII') == "FRAME") {
             $ret[$c['value']] =  $c['name'];
         }
     }
