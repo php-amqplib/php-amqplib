@@ -144,7 +144,7 @@ class AbstractChannel
             throw new AMQPRuntimeException("Expecting Content header");
         }
 
-        $this->wait_content_reader->reuse(substr($payload,0,12));
+        $this->wait_content_reader->reuse(mb_substr($payload,0,12,'ASCII'));
 
         // $payload_reader = new AMQPReader(substr($payload,0,12));
         $class_id = $this->wait_content_reader->read_short();
@@ -153,7 +153,7 @@ class AbstractChannel
         $body_size = $this->wait_content_reader->read_longlong();
         
         $msg = new AMQPMessage();
-        $this->msg_property_reader->reuse(substr($payload,12)); //hack to avoid creating new instances of AMQPReader;
+        $this->msg_property_reader->reuse(mb_substr($payload,12,mb_strlen($payload,'ASCII')-12,'ASCII')); //hack to avoid creating new instances of AMQPReader;
         $msg->load_properties($this->msg_property_reader);
 
         $body_parts = array();
@@ -170,7 +170,7 @@ class AbstractChannel
             }
 
             $body_parts[] = $payload;
-            $body_received = bcadd($body_received, strlen($payload));
+            $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'));
         }
 
         $msg->body = implode("",$body_parts);
@@ -235,14 +235,14 @@ class AbstractChannel
                         .$PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type].")");
             }
 
-            if (strlen($payload) < 4) {
+            if (mb_strlen($payload, 'ASCII') < 4) {
                 throw new AMQPOutOfBoundsException("Method frame too short");
             }
 
-            $method_sig_array = unpack("n2", substr($payload,0,4));
+            $method_sig_array = unpack("n2", mb_substr($payload,0,4, 'ASCII'));
             $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
             
-            $args = substr($payload,4);
+            $args = mb_substr($payload,4,mb_strlen($payload,'ASCII')-4,'ASCII');
 
             if ($this->debug) {
               MiscHelper::debug_msg("> $method_sig: " . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);

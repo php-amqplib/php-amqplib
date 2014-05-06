@@ -72,13 +72,13 @@ class StreamIO extends AbstractIO
                 continue;
             }
 
-            $read += strlen($buf);
+            $read += mb_strlen($buf, 'ASCII');
             $res .= $buf;
         }
 
-        if (strlen($res)!=$n) {
+        if (mb_strlen($res, 'ASCII')!=$n) {
             throw new AMQPRuntimeException("Error reading data. Received " .
-                strlen($res) . " instead of expected $n bytes");
+                mb_strlen($res, 'ASCII') . " instead of expected $n bytes");
         }
 
         return $res;
@@ -86,9 +86,12 @@ class StreamIO extends AbstractIO
 
     public function write($data)
     {
-        $len = strlen($data);
+        $len = mb_strlen($data, 'ASCII');
         while (true) {
-            if (false === ($written = fwrite($this->sock, $data))) {
+            if (is_null($this->sock)) {
+                throw new AMQPRuntimeException("Broken pipe or closed connection");
+            }
+            if (false === ($written = @fwrite($this->sock, $data))) {
                 throw new AMQPRuntimeException("Error sending data");
             }
             if ($written === 0) {
@@ -101,7 +104,7 @@ class StreamIO extends AbstractIO
 
             $len = $len - $written;
             if ($len > 0) {
-                $data = substr($data,0-$len);
+                $data = mb_substr($data,0-$len,0-$len,'ASCII');
             } else {
                 break;
             }
