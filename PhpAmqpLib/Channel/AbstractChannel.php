@@ -20,7 +20,12 @@ class AbstractChannel
 {
     public static $PROTOCOL_CONSTANTS_CLASS;
 
-    protected $debug;
+    /**
+     *
+     * @var boolean
+     */
+    protected $debug = false;
+
     /**
      *
      * @var AbstractConnection
@@ -80,6 +85,28 @@ class AbstractChannel
         default:
             throw new AMQPRuntimeException('Protocol: ' . $this->protocolVersion . ' not implemented.');
         }
+    }
+
+    /**
+     * Disables output of channel debug data
+     *
+     * @return \PhpAmqpLib\Channel\AbstractChannel
+     */
+    public function disableDebug()
+    {
+        $this->debug = false;
+        return $this;
+    }
+
+    /**
+     * Enables output of channel debug data
+     *
+     * @return \PhpAmqpLib\Channel\AbstractChannel
+     */
+    public function enableDebug()
+    {
+        $this->debug = true;
+        return $this;
     }
 
     public function getChannelId()
