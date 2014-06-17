@@ -4,7 +4,6 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
-use PhpAmqpLib\Wire\AMQPDecimal;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Wire\IO\AbstractIO;
@@ -52,7 +51,7 @@ class AMQPReader
 
         $this->is64bits = ((int) 4294967296) != 0 ? true : false;
     }
-    
+
     /**
      * Used to not need to create a new AMQPReader instance every time.
      * when we can just pass a string and reset the object state.
@@ -221,7 +220,7 @@ class AMQPReader
     }
 
     /**
-     * @return long
+     * @return integer
      */
     private function read_signed_long()
     {

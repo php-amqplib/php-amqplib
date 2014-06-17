@@ -11,9 +11,11 @@ use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
+use PhpAmqpLib\Wire\IO\SocketIO;
 
 class AbstractConnection extends AbstractChannel
 {
+
     /**
      * Circular buffer to speed up prepare_content().
      * Max size limited by $prepare_content_cache_max_size.
@@ -42,6 +44,49 @@ class AbstractConnection extends AbstractChannel
             )
         )
     );
+
+    public $version_major;
+
+    public $version_minor;
+
+    public $server_properties;
+
+    public $heartbeat;
+
+    /**
+     * @var array
+     */
+    public $mechanisms;
+
+    /**
+     * @var array
+     */
+    public $locales;
+
+    /**
+     * @var bool
+     */
+    public $wait_tune_ok;
+
+    /**
+     * @var string
+     */
+    public $known_hosts;
+
+    /**
+     * @var AMQPReader
+     */
+    public $input;
+
+    /**
+     * @var AMQPChannel[]
+     */
+    public $channels = array();
+
+    /**
+     * @var SocketIO
+     */
+    protected $sock = null;
 
     protected $channel_max = 65535;
 
@@ -342,7 +387,7 @@ class AbstractConnection extends AbstractChannel
 
             $pkt->write_octet(0xCE);
         }
-        
+
         return $pkt;
     }
 
@@ -680,6 +725,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * get socket from current connection
+     *
+     * @return SocketIO
      */
     public function getSocket()
     {
