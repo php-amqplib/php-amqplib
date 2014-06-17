@@ -87,4 +87,5 @@ class MethodMap091
     {
         return array_key_exists($method_sig, $this->method_map);
     }
+
 }

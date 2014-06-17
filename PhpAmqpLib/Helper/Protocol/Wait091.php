@@ -80,4 +80,5 @@ class Wait091
     {
         return $this->wait[$method];
     }
+
 }
