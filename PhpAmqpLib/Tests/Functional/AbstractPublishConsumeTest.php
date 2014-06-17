@@ -102,8 +102,13 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $this->ch->exchange_delete($this->exchange_name);
-        $this->ch->close();
-        $this->conn->close();
+        if ($this->ch) {
+            $this->ch->exchange_delete($this->exchange_name);
+            $this->ch->close();
+        }
+
+        if ($this->conn) {
+            $this->conn->close();
+        }
     }
 }

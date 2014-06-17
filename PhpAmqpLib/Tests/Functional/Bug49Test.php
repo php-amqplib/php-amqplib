@@ -54,7 +54,12 @@ class Bug49Test extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $this->ch2->close();
-        $this->conn->close();
+        if ($this->ch2) {
+            $this->ch2->close();
+        }
+
+        if ($this->conn) {
+            $this->conn->close();
+        }
     }
 }

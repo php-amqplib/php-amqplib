@@ -189,9 +189,14 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $this->ch->exchange_delete($this->exchange);
-        $this->ch->queue_delete($this->queue);
-        $this->ch->close();
-        $this->conn->close();
+        if ($this->ch) {
+            $this->ch->exchange_delete($this->exchange);
+            $this->ch->queue_delete($this->queue);
+            $this->ch->close();
+        }
+
+        if ($this->conn) {
+            $this->conn->close();
+        }
     }
 }
