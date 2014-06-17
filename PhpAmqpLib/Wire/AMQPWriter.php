@@ -7,6 +7,7 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 
 class AMQPWriter
 {
+
     public function __construct()
     {
         $this->out = "";
@@ -14,10 +15,14 @@ class AMQPWriter
         $this->bitcount = 0;
     }
 
+
+
     private static function chrbytesplit($x, $bytes)
     {
-        return array_map('chr', AMQPWriter::bytesplit($x,$bytes));
+        return array_map('chr', AMQPWriter::bytesplit($x, $bytes));
     }
+
+
 
     /**
      * Splits number (could be either int or string) into array of byte
@@ -26,7 +31,7 @@ class AMQPWriter
     private static function bytesplit($x, $bytes)
     {
         if (is_int($x)) {
-            if ($x<0) {
+            if ($x < 0) {
                 $x = sprintf("%u", $x);
             }
         }
@@ -34,20 +39,22 @@ class AMQPWriter
         $res = array();
 
         while ($bytes > 0) {
-            $b = bcmod($x,'256');
+            $b = bcmod($x, '256');
             $res[] = (int) $b;
-            $x = bcdiv($x,'256', 0);
+            $x = bcdiv($x, '256', 0);
             $bytes--;
         }
 
         $res = array_reverse($res);
 
-        if ($x!=0) {
+        if ($x != 0) {
             throw new AMQPOutOfBoundsException("Value too big!");
         }
 
         return $res;
     }
+
+
 
     private function flushbits()
     {
@@ -58,16 +65,22 @@ class AMQPWriter
         }
     }
 
+
+
     /**
      * Get what's been encoded so far.
      */
     public function getvalue()
     {
         /* temporarily needed for compatibility with write_bit unit tests */
-        if ($this->bitcount) $this->flushbits();
+        if ($this->bitcount) {
+            $this->flushbits();
+        }
 
         return $this->out;
     }
+
+
 
     /**
      * Write a plain PHP string, with no special encoding.
@@ -78,6 +91,8 @@ class AMQPWriter
 
         return $this;
     }
+
+
 
     /**
      * Write a boolean value.
@@ -107,6 +122,8 @@ class AMQPWriter
         return $this;
     }
 
+
+
     /**
      * Write multiple bits as an octet.
      */
@@ -124,6 +141,8 @@ class AMQPWriter
         return $this;
     }
 
+
+
     /**
      * Write an integer as an unsigned 8-bit value.
      */
@@ -138,12 +157,14 @@ class AMQPWriter
         return $this;
     }
 
+
+
     /**
      * Write an integer as an unsigned 16-bit value.
      */
     public function write_short($n)
     {
-        if ($n < 0 ||  $n > 65535) {
+        if ($n < 0 || $n > 65535) {
             throw new AMQPInvalidArgumentException('Octet out of range 0..65535');
         }
 
@@ -151,6 +172,8 @@ class AMQPWriter
 
         return $this;
     }
+
+
 
     /**
      * Write an integer as an unsigned 32-bit value.
@@ -162,6 +185,8 @@ class AMQPWriter
         return $this;
     }
 
+
+
     private function write_signed_long($n)
     {
         // although format spec for 'N' mentions unsigned
@@ -170,6 +195,8 @@ class AMQPWriter
 
         return $this;
     }
+
+
 
     /**
      * Write an integer as an unsigned 64-bit value.
@@ -190,6 +217,8 @@ class AMQPWriter
         return $this;
     }
 
+
+
     /**
      * Write a string up to 255 bytes long after encoding.
      * Assume UTF-8 encoding.
@@ -208,6 +237,7 @@ class AMQPWriter
     }
 
 
+
     /*
      * Write a string up to 2**32 bytes long.  Assume UTF-8 encoding.
      */
@@ -218,6 +248,8 @@ class AMQPWriter
 
         return $this;
     }
+
+
 
     /**
      * Supports the writing of Array types, so that you can implement
@@ -258,47 +290,51 @@ class AMQPWriter
         return $this;
     }
 
+
+
     /**
      * Write unix time_t value as 64 bit timestamp.
      */
-   public function write_timestamp($v)
-   {
-       $this->write_longlong($v);
+    public function write_timestamp($v)
+    {
+        $this->write_longlong($v);
 
-       return $this;
-   }
+        return $this;
+    }
 
-   /**
-    * Write PHP array, as table. Input array format: keys are strings,
-    * values are (type,value) tuples.
-    */
+
+
+    /**
+     * Write PHP array, as table. Input array format: keys are strings,
+     * values are (type,value) tuples.
+     */
     public function write_table($d)
     {
         $table_data = new AMQPWriter();
-        foreach ($d as $k=>$va) {
-            list($ftype,$v) = $va;
+        foreach ($d as $k => $va) {
+            list($ftype, $v) = $va;
             $table_data->write_shortstr($k);
-            if ($ftype=='S') {
+            if ($ftype == 'S') {
                 $table_data->write('S');
                 $table_data->write_longstr($v);
-            } elseif ($ftype=='I') {
+            } elseif ($ftype == 'I') {
                 $table_data->write('I');
                 $table_data->write_signed_long($v);
-            } elseif ($ftype=='D') {
+            } elseif ($ftype == 'D') {
                 // 'D' type values are passed AMQPDecimal instances.
                 $table_data->write('D');
                 $table_data->write_octet($v->e);
                 $table_data->write_signed_long($v->n);
-            } elseif ($ftype=='T') {
+            } elseif ($ftype == 'T') {
                 $table_data->write('T');
                 $table_data->write_timestamp($v);
-            } elseif ($ftype=='F') {
+            } elseif ($ftype == 'F') {
                 $table_data->write('F');
                 $table_data->write_table($v);
-            } elseif ($ftype=='A') {
+            } elseif ($ftype == 'A') {
                 $table_data->write('A');
                 $table_data->write_array($v);
-            } elseif ($ftype=='t') {
+            } elseif ($ftype == 't') {
                 $table_data->write('t');
                 $table_data->write_octet($v ? 1 : 0);
             } else {

@@ -11,9 +11,20 @@ use PhpAmqpLib\Helper\MiscHelper;
  */
 class AMQPException extends \Exception
 {
+
+    public $amqp_reply_code;
+
+    public $amqp_reply_text;
+
+    public $amqp_method_sig;
+
+    public $args;
+
+
+
     public function __construct($reply_code, $reply_text, $method_sig)
     {
-        parent::__construct($reply_text,$reply_code);
+        parent::__construct($reply_text, $reply_code);
 
         $this->amqp_reply_code = $reply_code; // redundant, but kept for BC
         $this->amqp_reply_text = $reply_text; // redundant, but kept for BC
@@ -22,14 +33,10 @@ class AMQPException extends \Exception
         $ms = MiscHelper::methodSig($method_sig);
         $PROTOCOL_CONSTANTS_CLASS = AbstractChannel::$PROTOCOL_CONSTANTS_CLASS;
         $mn = isset($PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms])
-                ? $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms]
-                : $mn = "";
+            ? $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms]
+            : $mn = "";
 
-        $this->args = array(
-            $reply_code,
-            $reply_text,
-            $method_sig,
-            $mn
-        );
+        $this->args = array($reply_code, $reply_text, $method_sig, $mn);
     }
+
 }

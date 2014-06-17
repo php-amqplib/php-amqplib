@@ -7,16 +7,20 @@ use PhpAmqpLib\Wire\IO\StreamIO;
 class AMQPStreamConnection extends AbstractConnection
 {
 
-    public function __construct($host, $port,
-                                $user, $password,
-                                $vhost="/",$insist=false,
-                                $login_method="AMQPLAIN",
-                                $login_response=null,
-                                $locale="en_US",
-                                $connection_timeout = 3,
-                                $read_write_timeout = 3,
-                                $context = null)
-    {
+    public function __construct(
+        $host,
+        $port,
+        $user,
+        $password,
+        $vhost = "/",
+        $insist = false,
+        $login_method = "AMQPLAIN",
+        $login_response = null,
+        $locale = "en_US",
+        $connection_timeout = 3,
+        $read_write_timeout = 3,
+        $context = null
+    ) {
         $io = new StreamIO($host, $port, $connection_timeout, $read_write_timeout, $context);
         $this->sock = $io->get_socket();
 

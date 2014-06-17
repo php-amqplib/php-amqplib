@@ -9,7 +9,10 @@ use PhpAmqpLib\Helper\MiscHelper;
 
 class StreamIO extends AbstractIO
 {
+
     private $sock = null;
+
+
 
     public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null)
     {
@@ -21,6 +24,8 @@ class StreamIO extends AbstractIO
         $this->context = $context;
     }
 
+
+
     /**
      * Setup the stream connection
      *
@@ -31,7 +36,6 @@ class StreamIO extends AbstractIO
     {
         $errstr = $errno = null;
 
-        //TODO clean up
         if ($this->context) {
             $remote = sprintf('ssl://%s:%s', $this->host, $this->port);
             $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT, $this->context);
@@ -44,13 +48,15 @@ class StreamIO extends AbstractIO
             throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
         }
 
-        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
-        if(!stream_set_timeout($this->sock, $sec, $usec)) {
+        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
+        if (!stream_set_timeout($this->sock, $sec, $uSec)) {
             throw new AMQPIOException("Timeout could not be set");
         }
 
         stream_set_blocking($this->sock, 1);
     }
+
+
 
     /**
      * Reconnect the socket
@@ -61,14 +67,14 @@ class StreamIO extends AbstractIO
         $this->connect();
     }
 
+
+
     public function read($n)
     {
         $res = '';
         $read = 0;
 
-        while ($read < $n && !feof($this->sock) &&
-            (false !== ($buf = fread($this->sock, $n - $read)))) {
-
+        while ($read < $n && !feof($this->sock) && (false !== ($buf = fread($this->sock, $n - $read)))) {
             if ($buf === '') {
                 continue;
             }
@@ -77,13 +83,15 @@ class StreamIO extends AbstractIO
             $res .= $buf;
         }
 
-        if (mb_strlen($res, 'ASCII')!=$n) {
+        if (mb_strlen($res, 'ASCII') != $n) {
             throw new AMQPRuntimeException("Error reading data. Received " .
                 mb_strlen($res, 'ASCII') . " instead of expected $n bytes");
         }
 
         return $res;
     }
+
+
 
     public function write($data)
     {
@@ -92,25 +100,30 @@ class StreamIO extends AbstractIO
             if (is_null($this->sock)) {
                 throw new AMQPRuntimeException("Broken pipe or closed connection");
             }
+
             if (false === ($written = @fwrite($this->sock, $data))) {
                 throw new AMQPRuntimeException("Error sending data");
             }
+
             if ($written === 0) {
                 throw new AMQPRuntimeException("Broken pipe or closed connection");
             }
 
-            if($this->timed_out()) {
+            if ($this->timed_out()) {
                 throw new AMQPTimeoutException("Error sending data. Socket connection timed out");
             }
 
             $len = $len - $written;
             if ($len > 0) {
-                $data = mb_substr($data,0-$len,0-$len,'ASCII');
+                $data = mb_substr($data, 0 - $len, 0 - $len, 'ASCII');
+
             } else {
                 break;
             }
         }
     }
+
+
 
     public function close()
     {
@@ -120,23 +133,30 @@ class StreamIO extends AbstractIO
         $this->sock = null;
     }
 
+
+
     public function get_socket()
     {
         return $this->sock;
     }
 
+
+
     public function select($sec, $usec)
     {
-        $read   = array($this->sock);
-        $write  = null;
+        $read = array($this->sock);
+        $write = null;
         $except = null;
         return stream_select($read, $write, $except, $sec, $usec);
     }
 
+
+
     protected function timed_out()
     {
-      // get status of socket to determine whether or not it has timed out
-      $info = stream_get_meta_data($this->sock);
-      return $info['timed_out'];
+        // get status of socket to determine whether or not it has timed out
+        $info = stream_get_meta_data($this->sock);
+        return $info['timed_out'];
     }
+
 }

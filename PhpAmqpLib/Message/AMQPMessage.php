@@ -9,6 +9,7 @@ use PhpAmqpLib\Wire\GenericContent;
  */
 class AMQPMessage extends GenericContent
 {
+
     public $body;
 
     protected static $PROPERTIES = array(
@@ -28,15 +29,20 @@ class AMQPMessage extends GenericContent
         "cluster_id" => "shortstr"
     );
 
+
+
     public function __construct($body = '', $properties = null)
     {
         $this->body = $body;
 
         parent::__construct($properties, static::$PROPERTIES);
     }
-    
+
+
+
     public function setBody($body)
     {
         $this->body = $body;
     }
+
 }
