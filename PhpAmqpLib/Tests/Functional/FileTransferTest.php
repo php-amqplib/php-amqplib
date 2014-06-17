@@ -2,12 +2,15 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class FileTransferTest extends \PHPUnit_Framework_TestCase
 {
+
     protected $exchange_name = 'test_exchange';
+
     protected $queue_name = null;
 
     public function setUp()
@@ -16,13 +19,15 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
         $this->ch = $this->conn->channel();
 
         $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
-        list($this->queue_name,,) = $this->ch->queue_declare();
+        list($this->queue_name, ,) = $this->ch->queue_declare();
         $this->ch->queue_bind($this->queue_name, $this->exchange_name, $this->queue_name);
     }
 
+
+
     public function testSendFile()
     {
-        $this->msg_body = file_get_contents(__DIR__.'/fixtures/data_1mb.bin');
+        $this->msg_body = file_get_contents(__DIR__ . '/fixtures/data_1mb.bin');
 
         $msg = new AMQPMessage($this->msg_body, array('delivery_mode' => 1));
 
@@ -43,6 +48,8 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+
+
     public function process_msg($msg)
     {
         $delivery_info = $msg->delivery_info;
@@ -52,6 +59,8 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->msg_body, $msg->body);
     }
+
+
 
     public function tearDown()
     {

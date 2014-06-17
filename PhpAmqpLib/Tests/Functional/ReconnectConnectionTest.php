@@ -2,13 +2,14 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use PhpAmqpLib\Message\AMQPMessage;
-
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * Hold onto the connection
      * @var \PhpAmqpLib\Connection\AbstractConnection
@@ -17,7 +18,7 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Hold onto the channel
-     * @var \PhpAmqpLib\Channel\AbstractChannel
+     * @var \PhpAmqpLib\Channel\AbstractChannel|AMQPChannel
      */
     protected $ch = null;
 
@@ -39,6 +40,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $msgBody = 'foo bar baz äëïöü';
 
+
+
     /**
      * Get a new lazy connection
      * @return AMQPLazyConnection
@@ -47,6 +50,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
     {
         return new AMQPLazyConnection(HOST, PORT, USER, PASS, VHOST);
     }
+
+
 
     /**
      * Get a new socket connection
@@ -57,6 +62,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         return new AMQPSocketConnection(HOST, PORT, USER, PASS, VHOST);
     }
 
+
+
     /**
      * Test the reconnect logic on the lazy connection, which is also stream connection
      */
@@ -65,6 +72,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         $this->conn = $this->getLazyConnection();
         $this->performTest();
     }
+
+
 
     /**
      * Test the reconnect logic on the lazy connection, which is also stream connection after its been closed
@@ -87,6 +96,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->msgBody, $this->publishGet()->body);
     }
 
+
+
     /**
      * Test the reconnect logic on the socket connection
      */
@@ -95,6 +106,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         $this->conn = $this->getSocketConnection();
         $this->performTest();
     }
+
+
 
     /**
      * Test the reconnect logic on the socket connection after its been closed
@@ -111,6 +124,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         // Ensure normal publish then get works
         $this->assertEquals($this->msgBody, $this->publishGet()->body);
     }
+
+
 
     /**
      * Perform the test after the connection has already been setup
@@ -134,6 +149,7 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
     }
 
 
+
     /**
      * Publish a message, then get it immediately
      * @return \PhpAmqpLib\Message\AMQPMessage
@@ -152,6 +168,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         return $this->ch->basic_get($this->queue);
     }
 
+
+
     /**
      * Setup the exchanges, and queues and channel
      */
@@ -163,6 +181,8 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
         $this->ch->queue_declare($this->queue);
         $this->ch->queue_bind($this->queue, $this->exchange, $this->queue);
     }
+
+
 
     /**
      * Shut it down, delete exchanges, queues, close connections and channels

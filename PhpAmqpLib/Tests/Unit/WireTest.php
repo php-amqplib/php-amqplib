@@ -7,16 +7,21 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 class WireTest extends \PHPUnit_Framework_TestCase
 {
+
     public function testBitWriteRead()
     {
         $this->bitWriteRead(true);
         $this->bitWriteRead(false);
     }
 
+
+
     protected function bitWriteRead($v)
     {
         $this->writeAndRead($v, 'write_bit', 'read_bit');
     }
+
+
 
     public function testOctetWriteRead()
     {
@@ -28,10 +33,14 @@ class WireTest extends \PHPUnit_Framework_TestCase
         $this->octetWriteRead(256);
     }
 
+
+
     protected function octetWriteRead($v)
     {
         $this->writeAndRead($v, 'write_octet', 'read_octet');
     }
+
+
 
     public function testShortWriteRead()
     {
@@ -44,10 +53,14 @@ class WireTest extends \PHPUnit_Framework_TestCase
         $this->shortWriteRead(65536);
     }
 
+
+
     protected function shortWriteRead($v)
     {
         $this->writeAndRead($v, 'write_short', 'read_short');
     }
+
+
 
     public function testLongWriteRead()
     {
@@ -57,10 +70,14 @@ class WireTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+
+
     protected function longWriteRead($v)
     {
         $this->writeAndRead($v, 'write_long', 'read_long');
     }
+
+
 
     public function testShortstrWriteRead()
     {
@@ -73,10 +90,14 @@ class WireTest extends \PHPUnit_Framework_TestCase
         abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz');
     }
 
+
+
     protected function shortstrWriteRead($v)
     {
         $this->writeAndRead($v, 'write_shortstr', 'read_shortstr');
     }
+
+
 
     public function testLongstrWriteRead()
     {
@@ -87,10 +108,14 @@ class WireTest extends \PHPUnit_Framework_TestCase
         abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz');
     }
 
+
+
     protected function longstrWriteRead($v)
     {
         $this->writeAndRead($v, 'write_longstr', 'read_longstr');
     }
+
+
 
     public function testLongLongWriteRead()
     {
@@ -106,10 +131,14 @@ class WireTest extends \PHPUnit_Framework_TestCase
         $this->longlongWriteRead(4294967296);
     }
 
+
+
     protected function longlongWriteRead($v)
     {
         $this->writeAndRead($v, 'write_longlong', 'read_longlong');
     }
+
+
 
     protected function writeAndRead($v, $write_method, $read_method)
     {

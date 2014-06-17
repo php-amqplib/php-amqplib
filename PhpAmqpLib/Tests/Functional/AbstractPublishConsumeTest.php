@@ -2,12 +2,16 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AMQPSocketConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 {
+
     protected $exchange_name = 'test_exchange';
+
     protected $queue_name = null;
 
     public function setUp()
@@ -16,11 +20,15 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
         $this->ch = $this->conn->channel();
 
         $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
-        list($this->queue_name,,) = $this->ch->queue_declare();
+        list($this->queue_name, ,) = $this->ch->queue_declare();
         $this->ch->queue_bind($this->queue_name, $this->exchange_name, $this->queue_name);
     }
 
+
+
     abstract protected function createConnection();
+
+
 
     public function testPublishConsume()
     {
@@ -50,6 +58,8 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+
+
     public function process_msg($msg)
     {
         $delivery_info = $msg->delivery_info;
@@ -73,6 +83,8 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('OutOfBoundsException');
         $msg->get('no_property');
     }
+
+
 
     public function tearDown()
     {
