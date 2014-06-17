@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
@@ -67,7 +68,7 @@ class StreamIO extends AbstractIO
 
         while ($read < $n && !feof($this->sock) &&
             (false !== ($buf = fread($this->sock, $n - $read)))) {
-            
+
             if ($buf === '') {
                 continue;
             }

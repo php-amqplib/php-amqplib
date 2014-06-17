@@ -2,9 +2,6 @@
 
 namespace PhpAmqpLib\Wire;
 
-use PhpAmqpLib\Wire\AMQPReader;
-use PhpAmqpLib\Wire\AMQPWriter;
-
 /**
  * Abstract base class for AMQP content.  Subclasses should override
  * the PROPERTIES attribute.
@@ -25,7 +22,6 @@ abstract class GenericContent
             $this->prop_types = $prop_types;
         else
             $this->prop_types = self::$PROPERTIES;
-        $d = array();
         if ($props)
             $d = array_intersect_key($props, $this->prop_types);
         else
@@ -158,7 +154,7 @@ abstract class GenericContent
             }
 
             $result->write($raw_bytes->getvalue());
-            
+
             $this->serialized_properties = $result->getvalue();
 
             return $this->serialized_properties;

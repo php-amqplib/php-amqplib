@@ -36,11 +36,11 @@ class AbstractChannel
     protected $methodMap;
 
     protected $channel_id;
-    
+
     protected $msg_property_reader = null;
     protected $wait_content_reader = null;
     protected $dispatch_reader = null;
-    
+
     /**
      * @param \PhpAmqpLib\Connection\AbstractConnection $connection
      * @param                                       $channel_id
@@ -98,7 +98,7 @@ class AbstractChannel
         if (!method_exists($this, $amqp_method)) {
             throw new AMQPRuntimeException("Method: $amqp_method not implemented by class: " . get_class($this));
         }
-        
+
         $this->dispatch_reader->reuse($args);
 
         if ($content == null) {
@@ -125,7 +125,7 @@ class AbstractChannel
     {
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
-    
+
     /**
      * This is here for performance reasons to batch calls to fwrite from basic.publish
      */
@@ -151,7 +151,7 @@ class AbstractChannel
         $weight = $this->wait_content_reader->read_short();
 
         $body_size = $this->wait_content_reader->read_longlong();
-        
+
         $msg = new AMQPMessage();
         $this->msg_property_reader->reuse(mb_substr($payload,12,mb_strlen($payload,'ASCII')-12,'ASCII')); //hack to avoid creating new instances of AMQPReader;
         $msg->load_properties($this->msg_property_reader);
@@ -192,6 +192,8 @@ class AbstractChannel
      * Wait for some expected AMQP methods and dispatch to them.
      * Unexpected methods are queued up for later calls to this PHP
      * method.
+     *
+     * @return mixed
      */
     public function wait($allowed_methods=null, $non_blocking = false, $timeout = 0)
     {
@@ -241,7 +243,7 @@ class AbstractChannel
 
             $method_sig_array = unpack("n2", mb_substr($payload,0,4, 'ASCII'));
             $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
-            
+
             $args = mb_substr($payload,4,mb_strlen($payload,'ASCII')-4,'ASCII');
 
             if ($this->debug) {

@@ -2,11 +2,10 @@
 
 namespace PhpAmqpLib\Channel;
 
-use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
-use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 
@@ -29,7 +28,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * If the channel is in confirm_publish mode this array will store all published messages
      * until they get ack'ed or nack'ed
-     * @var \PhpAmqpLib\Message\AMQPMessage[]
+     * @var AMQPMessage[]
      */
     private $published_messages = array();
 
@@ -1027,7 +1026,7 @@ class AMQPChannel extends AbstractChannel
      * Helper method to get a particular method from $this->publishedMessages, removes it from the array and returns it.
      *
      * @param $index
-     * @return \PhpAmqpLib\Message\AMQPMessage
+     * @return AMQPMessage
      */
     protected function get_and_unset_message($index)
     {
