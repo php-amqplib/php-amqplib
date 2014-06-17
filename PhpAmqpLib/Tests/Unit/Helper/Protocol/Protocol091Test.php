@@ -6,6 +6,14 @@ use PhpAmqpLib\Helper\Protocol\Protocol091;
 
 class Protocol091Test extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var Protocol091
+     */
+    protected $protocol091;
+
+
+
     public function setUp()
     {
         $this->protocol091 = new Protocol091();

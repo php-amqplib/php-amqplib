@@ -17,6 +17,23 @@ class Bug40Test extends \PHPUnit_Framework_TestCase
 
     protected $q1msgs = 0;
 
+    /**
+     * @var AMQPConnection
+     */
+    protected $conn;
+
+    /**
+     * @var AMQPChannel
+     */
+    protected $ch;
+
+    /**
+     * @var AMQPChannel
+     */
+    protected $ch2;
+
+
+
     public function setUp()
     {
         $this->conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);

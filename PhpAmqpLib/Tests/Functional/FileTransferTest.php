@@ -13,6 +13,20 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
 
     protected $queue_name = null;
 
+    /**
+     * @var AMQPConnection
+     */
+    protected $conn;
+
+    /**
+     * @var AMQPChannel
+     */
+    protected $ch;
+
+    protected $msg_body;
+
+
+
     public function setUp()
     {
         $this->conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);

@@ -14,6 +14,20 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 
     protected $queue_name = null;
 
+    protected $msg_body;
+
+    /**
+     * @var AMQPStreamConnection|AMQPSocketConnection
+     */
+    protected $conn;
+
+    /**
+     * @var AMQPChannel
+     */
+    protected $ch;
+
+
+
     public function setUp()
     {
         $this->conn = $this->createConnection();
