@@ -8,7 +8,7 @@ use PhpAmqpLib\Connection\AMQPConnection;
 
 $exchange = 'fanout_example_exchange';
 $queue = 'fanout_group_1';
-$consumer_tag = 'consumer'. getmypid ();
+$consumer_tag = 'consumer' . getmypid();
 
 $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
@@ -34,19 +34,20 @@ $ch->exchange_declare($exchange, 'fanout', false, false, true);
 
 $ch->queue_bind($queue, $exchange);
 
+/**
+ * @param \PhpAmqpLib\Message\AMQPMessage $msg
+ */
 function process_message($msg)
 {
     echo "\n--------\n";
     echo $msg->body;
     echo "\n--------\n";
 
-   $msg->delivery_info['channel']->
-        basic_ack($msg->delivery_info['delivery_tag']);
+    $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
 
     // Send a message with the string "quit" to cancel the consumer.
     if ($msg->body === 'quit') {
-        $msg->delivery_info['channel']->
-            basic_cancel($msg->delivery_info['consumer_tag']);
+        $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
     }
 }
 
@@ -63,11 +64,16 @@ function process_message($msg)
 
 $ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
 
+/**
+ * @param \PhpAmqpLib\Channel\AMQPChannel $ch
+ * @param \PhpAmqpLib\Connection\AbstractConnection $conn
+ */
 function shutdown($ch, $conn)
 {
     $ch->close();
     $conn->close();
 }
+
 register_shutdown_function('shutdown', $ch, $conn);
 
 // Loop as long as the channel has callbacks registered
