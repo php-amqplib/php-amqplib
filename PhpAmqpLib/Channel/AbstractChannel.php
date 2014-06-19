@@ -18,6 +18,7 @@ use PhpAmqpLib\Helper\Protocol\MethodMap091;
 
 class AbstractChannel
 {
+    /** @var \PhpAmqpLib\Wire\Constants091|\PhpAmqpLib\Wire\Constants080 $PROTOCOL_CONSTANTS_CLASS */
     public static $PROTOCOL_CONSTANTS_CLASS;
 
     protected $debug;
@@ -43,7 +44,7 @@ class AbstractChannel
 
     /**
      * @param \PhpAmqpLib\Connection\AbstractConnection $connection
-     * @param                                       $channel_id
+     * @param int                                       $channel_id
      */
     public function __construct(AbstractConnection $connection, $channel_id)
     {
@@ -165,6 +166,7 @@ class AbstractChannel
 
             if ($frame_type != 3) {
                 $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+                /** @var string $FRAME_TYPES */
                 throw new AMQPRuntimeException("Expecting Content body, received frame type $frame_type ("
                         .$PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type].")");
             }
@@ -216,7 +218,8 @@ class AbstractChannel
                 unset($this->method_queue[$qk]);
 
                 if ($this->debug) {
-                  MiscHelper::debug_msg("Executing queued method: $method_sig: " .
+                    /** @var string $GLOBAL_METHOD_NAMES */
+                    MiscHelper::debug_msg("Executing queued method: $method_sig: " .
                             $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
                 }
 
@@ -233,6 +236,7 @@ class AbstractChannel
             $payload = $frm[1];
 
             if ($frame_type != 1) {
+            	/** @var string $FRAME_TYPES */
                 throw new AMQPRuntimeException("Expecting AMQP method, received frame type: $frame_type ("
                         .$PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type].")");
             }
@@ -247,7 +251,8 @@ class AbstractChannel
             $args = mb_substr($payload,4,mb_strlen($payload,'ASCII')-4,'ASCII');
 
             if ($this->debug) {
-              MiscHelper::debug_msg("> $method_sig: " . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            	/** @var string $GLOBAL_METHOD_NAMES */
+                MiscHelper::debug_msg("> $method_sig: " . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
 
             if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
@@ -265,13 +270,14 @@ class AbstractChannel
 
             // Wasn't what we were looking for? save it for later
             if ($this->debug) {
-              MiscHelper::debug_msg("Queueing for later: $method_sig: " . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            	/** @var string $GLOBAL_METHOD_NAMES */
+                MiscHelper::debug_msg("Queueing for later: $method_sig: " . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
             }
             $this->method_queue[] = array($method_sig, $args, $content);
 
             if ($non_blocking) {
                 break;
-            };
+            }
         }
     }
 
