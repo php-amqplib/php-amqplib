@@ -6,6 +6,7 @@ use PhpAmqpLib\Helper\MiscHelper;
 
 class MiscHelperTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @dataProvider getInputOutputForSplitSecondsMicroseconds
      * @param mixed $input
@@ -15,6 +16,8 @@ class MiscHelperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($expected, MiscHelper::splitSecondsMicroseconds($input));
     }
+
+
 
     public function getInputOutputForSplitSecondsMicroseconds()
     {

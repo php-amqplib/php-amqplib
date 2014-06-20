@@ -6,10 +6,10 @@
  * The integer arguments tells the script how many messages to publish.
  */
 
-include(__DIR__ . '/config.php');
-
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+
+include(__DIR__ . '/config.php');
 
 $exchange = 'bench_exchange';
 $queue = 'bench_queue';

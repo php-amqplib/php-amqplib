@@ -2,15 +2,37 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class Bug40Test extends \PHPUnit_Framework_TestCase
 {
+
     protected $exchange_name = 'test_exchange';
+
     protected $queue_name1 = null;
+
     protected $queue_name2 = null;
+
     protected $q1msgs = 0;
+
+    /**
+     * @var AMQPConnection
+     */
+    protected $conn;
+
+    /**
+     * @var AMQPChannel
+     */
+    protected $ch;
+
+    /**
+     * @var AMQPChannel
+     */
+    protected $ch2;
+
+
 
     public function setUp()
     {
@@ -19,11 +41,13 @@ class Bug40Test extends \PHPUnit_Framework_TestCase
         $this->ch2 = $this->conn->channel();
 
         $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
-        list($this->queue_name1,,) = $this->ch->queue_declare();
-        list($this->queue_name2,,) = $this->ch->queue_declare();
+        list($this->queue_name1, ,) = $this->ch->queue_declare();
+        list($this->queue_name2, ,) = $this->ch->queue_declare();
         $this->ch->queue_bind($this->queue_name1, $this->exchange_name, $this->queue_name1);
         $this->ch->queue_bind($this->queue_name2, $this->exchange_name, $this->queue_name2);
     }
+
+
 
     public function testFrameOrder()
     {
@@ -46,6 +70,8 @@ class Bug40Test extends \PHPUnit_Framework_TestCase
             $this->ch->wait();
         }
     }
+
+
 
     public function process_msg1($msg)
     {
@@ -74,16 +100,25 @@ class Bug40Test extends \PHPUnit_Framework_TestCase
 
     }
 
+
+
     public function process_msg2($msg)
     {
         $delivery_info = $msg->delivery_info;
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
     }
 
+
+
     public function tearDown()
     {
-        $this->ch->exchange_delete($this->exchange_name);
-        $this->ch->close();
-        $this->conn->close();
+        if ($this->ch) {
+            $this->ch->exchange_delete($this->exchange_name);
+            $this->ch->close();
+        }
+
+        if ($this->conn) {
+            $this->conn->close();
+        }
     }
 }

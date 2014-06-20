@@ -40,7 +40,7 @@ $ch->confirm_select();
 
 $ch->exchange_declare($exchange, 'fanout', false, false, true);
 
-$i   = 1;
+$i = 1;
 $msg = new AMQPMessage($i, array('content_type' => 'text/plain'));
 $ch->basic_publish($msg, $exchange);
 

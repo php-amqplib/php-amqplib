@@ -6,17 +6,27 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var AMQPWriter
+     */
     protected $_writer;
+
+
 
     public function setUp()
     {
         $this->_writer = new AMQPWriter();
     }
 
+
+
     public function tearDown()
     {
         $this->_writer = null;
     }
+
+
 
     public function testWriteArray()
     {
@@ -29,21 +39,23 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 
         $out = $this->_writer->getvalue();
 
-        $this->assertEquals(51, mb_strlen($out,'ASCII'));
+        $this->assertEquals(51, mb_strlen($out, 'ASCII'));
 
         $expected = "\x00\x00\x00\x2fS\x00\x00\x00\x10rabbit@localhostS\x00\x00\x00\x0Ehare@localhostI\x00\x00\x00\x2at\x01";
 
         $this->assertEquals($expected, $out);
     }
 
+
+
     public function testWriteTable()
     {
         $this->_writer->write_table(array(
-                'x-foo' => array('S', 'bar'),
-                'x-bar' => array('A', array('baz', 'qux')),
-                'x-baz' => array('I', 42),
-                'x-true' => array('t', true),
-                'x-false' => array('t', false)
+            'x-foo' => array('S', 'bar'),
+            'x-bar' => array('A', array('baz', 'qux')),
+            'x-baz' => array('I', 42),
+            'x-true' => array('t', true),
+            'x-false' => array('t', false)
         ));
 
         $out = $this->_writer->getvalue();
@@ -54,12 +66,14 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $out);
     }
 
+
+
     public function testWriteTableThrowsExceptionOnInvalidType()
     {
         $this->setExpectedException('PhpAmqpLib\Exception\AMQPInvalidArgumentException', "Invalid type '_'");
 
         $this->_writer->write_table(array(
-                'x-foo' => array('_', 'bar'),
+            'x-foo' => array('_', 'bar'),
         ));
     }
 }

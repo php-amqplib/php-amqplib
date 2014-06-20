@@ -7,4 +7,5 @@ namespace PhpAmqpLib\Exception;
  */
 class AMQPConnectionException extends AMQPException
 {
+
 }

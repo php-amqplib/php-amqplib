@@ -4,6 +4,7 @@ namespace PhpAmqpLib\Connection;
 
 class AMQPLazyConnection extends AMQPConnection
 {
+
     /**
      * get socket from current connection
      *
@@ -16,6 +17,8 @@ class AMQPLazyConnection extends AMQPConnection
         return $this->sock;
     }
 
+
+
     /**
      * @inheritdoc
      */
@@ -25,6 +28,8 @@ class AMQPLazyConnection extends AMQPConnection
 
         return parent::channel($channel_id);
     }
+
+
 
     /**
      * @return null|\PhpAmqpLib\Wire\IO\AbstractIO
@@ -36,6 +41,8 @@ class AMQPLazyConnection extends AMQPConnection
         return $this->io;
     }
 
+
+
     /**
      * Should the connection be attempted during construction?
      * @return bool
@@ -44,4 +51,5 @@ class AMQPLazyConnection extends AMQPConnection
     {
         return false;
     }
+
 }

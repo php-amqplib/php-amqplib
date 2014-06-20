@@ -20,7 +20,7 @@ $ch = $conn->channel();
 $ch->exchange_declare($exchange, 'fanout', false, false, true);
 
 $msg_body = implode(' ', array_slice($argv, 1));
-$msg = new AMQPMessage($msg_body,array('content_type' => 'text/plain'));
+$msg = new AMQPMessage($msg_body, array('content_type' => 'text/plain'));
 $ch->basic_publish($msg, $exchange);
 
 $ch->close();
