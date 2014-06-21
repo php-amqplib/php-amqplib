@@ -106,8 +106,7 @@ class AMQPChannel extends AbstractChannel
 
     public function __destruct()
     {
-        //TODO:???if($this->connection)
-        //    $this->close("destroying channel");
+        $this->close();
     }
 
 
