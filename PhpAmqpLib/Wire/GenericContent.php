@@ -64,6 +64,8 @@ abstract class GenericContent
     /**
      * Look for additional properties in the 'properties' dictionary,
      * and if present - the 'delivery_info' dictionary.
+     *
+     * @return mixed|AMQPChannel
      */
     public function get($name)
     {

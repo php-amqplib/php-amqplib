@@ -606,8 +606,8 @@ class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
     {
-        if (!$this->protocolWriter) {
-            return;
+        if (!$this->protocolWriter || !$this->isConnected()) {
+            return NULL;
         }
 
         list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(

@@ -106,8 +106,7 @@ class AMQPChannel extends AbstractChannel
 
     public function __destruct()
     {
-        //TODO:???if($this->connection)
-        //    $this->close("destroying channel");
+        $this->close();
     }
 
 
@@ -117,9 +116,11 @@ class AMQPChannel extends AbstractChannel
      */
     protected function do_close()
     {
-        $this->is_open = false;
-        unset($this->connection->channels[$this->channel_id]);
+        if ($this->channel_id !== NULL) {
+            unset($this->connection->channels[$this->channel_id]);
+        }
         $this->channel_id = $this->connection = null;
+        $this->is_open = false;
     }
 
 
@@ -151,6 +152,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
     {
+        if ($this->is_open !== true || !$this->connection || !$this->connection->isConnected()) {
+            $this->do_close();
+            return; // already closed
+        }
+
         list($class_id, $method_id, $args) = $this->protocolWriter->channelClose(
             $reply_code,
             $reply_text,
