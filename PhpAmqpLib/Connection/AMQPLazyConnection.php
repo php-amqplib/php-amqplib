@@ -36,7 +36,9 @@ class AMQPLazyConnection extends AMQPConnection
      */
     protected function getIO()
     {
-        $this->connect();
+        if (!$this->io) {
+            $this->connect();
+        }
 
         return $this->io;
     }
