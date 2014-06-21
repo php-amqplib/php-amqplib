@@ -23,7 +23,6 @@ class AbstractChannel
     protected $debug;
 
     /**
-     *
      * @var AbstractConnection
      */
     protected $connection;
