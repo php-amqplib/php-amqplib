@@ -152,7 +152,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
     {
-        if ($this->is_open !== true || !$this->connection || !$this->connection->isConnected()) {
+        if ((isset($this->is_open) && $this->is_open !== true) || !$this->connection || !$this->connection->isConnected()) {
             $this->do_close();
             return; // already closed
         }
