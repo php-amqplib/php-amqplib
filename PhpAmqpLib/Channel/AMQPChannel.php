@@ -75,6 +75,11 @@ class AMQPChannel extends AbstractChannel
      */
     private $publish_cache_max_size;
 
+    /**
+     * Whether or not the channel has been "opened" or not
+     * @var bool
+     */
+    protected $is_open = false;
 
 
     public function __construct($connection, $channel_id = null, $auto_decode = true)
@@ -152,7 +157,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
     {
-        if ((isset($this->is_open) && $this->is_open !== true) || !$this->connection || !$this->connection->isConnected()) {
+        if ($this->is_open !== true || !$this->connection || !$this->connection->isConnected()) {
             $this->do_close();
             return; // already closed
         }
