@@ -27,21 +27,45 @@ class AMQPReader
     const LONGLONG = 8;
     const TIMESTAMP = 8;
 
+    /**
+     * @var string
+     */
     protected $str;
 
+    /**
+     * @var int
+     */
     protected $str_length;
 
+    /**
+     * @var int
+     */
     protected $offset;
 
+    /**
+     * @var int
+     */
     protected $bitcount;
 
+    /**
+     * @var bool
+     */
     protected $is64bits;
 
+    /**
+     * @var int
+     */
     protected $timeout;
 
+    /**
+     * @var int
+     */
     protected $bits;
 
-    protected $io = null;
+    /**
+     * @var IO\AbstractIO
+     */
+    protected $io;
 
 
 

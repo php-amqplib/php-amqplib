@@ -8,6 +8,23 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 class AMQPWriter
 {
 
+    /**
+     * @var string
+     */
+    protected $out;
+
+    /**
+     * @var array
+     */
+    protected $bits;
+
+    /**
+     * @var int
+     */
+    protected $bitcount;
+
+
+
     public function __construct()
     {
         $this->out = "";

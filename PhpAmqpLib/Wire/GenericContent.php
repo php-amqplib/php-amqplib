@@ -19,6 +19,11 @@ abstract class GenericContent
     /**
      * @var array
      */
+    protected $prop_types;
+
+    /**
+     * @var array
+     */
     private $properties = array();
 
     /**

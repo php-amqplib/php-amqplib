@@ -20,6 +20,29 @@ class AbstractChannel
 
     public static $PROTOCOL_CONSTANTS_CLASS;
 
+    /**
+     * @var array
+     */
+    protected $frame_queue;
+
+    /**
+     * @var array
+     */
+    protected $method_queue;
+
+    /**
+     * @var bool
+     */
+    protected $auto_decode;
+
+    /**
+     * @var string
+     */
+    protected $amqp_protocol_header;
+
+    /**
+     * @var bool
+     */
     protected $debug;
 
     /**

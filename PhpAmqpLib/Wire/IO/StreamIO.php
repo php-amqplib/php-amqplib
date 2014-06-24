@@ -10,13 +10,40 @@ use PhpAmqpLib\Helper\MiscHelper;
 class StreamIO extends AbstractIO
 {
 
-    private $sock = null;
+    /**
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * @var int
+     */
+    protected $port;
+
+    /**
+     * @var int
+     */
+    protected $connection_timeout;
+
+    /**
+     * @var int
+     */
+    protected $read_write_timeout;
+
+    /**
+     * @var resource
+     */
+    protected $context;
+
+    /**
+     * @var resource
+     */
+    private $sock;
 
 
 
     public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null)
     {
-        $this->sock = null;
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;

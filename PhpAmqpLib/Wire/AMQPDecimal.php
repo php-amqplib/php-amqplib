@@ -18,6 +18,18 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 class AMQPDecimal
 {
 
+    /**
+     * @var int
+     */
+    protected $n;
+
+    /**
+     * @var int
+     */
+    protected $e;
+
+
+
     public function __construct($n, $e)
     {
         if ($e < 0) {

@@ -31,43 +31,80 @@ class AbstractConnection extends AbstractChannel
         )
     );
 
-    public $version_major;
-
-    public $version_minor;
-
-    public $server_properties;
-
-    public $heartbeat;
-
-    /**
-     * @var array
-     */
-    public $mechanisms;
-
-    /**
-     * @var array
-     */
-    public $locales;
-
-    /**
-     * @var bool
-     */
-    public $wait_tune_ok;
-
-    /**
-     * @var string
-     */
-    public $known_hosts;
-
-    /**
-     * @var AMQPReader
-     */
-    public $input;
-
     /**
      * @var AMQPChannel[]
      */
     public $channels = array();
+
+    /**
+     * @var int
+     */
+    protected $version_major;
+
+    /**
+     * @var int
+     */
+    protected $version_minor;
+
+    /**
+     * @var array
+     */
+    protected $server_properties;
+
+    /**
+     * @var string
+     */
+    protected $heartbeat;
+
+    /**
+     * @var array
+     */
+    protected $mechanisms;
+
+    /**
+     * @var array
+     */
+    protected $locales;
+
+    /**
+     * @var bool
+     */
+    protected $wait_tune_ok;
+
+    /**
+     * @var string
+     */
+    protected $known_hosts;
+
+    /**
+     * @var AMQPReader
+     */
+    protected $input;
+
+    /**
+     * @var string
+     */
+    protected $vhost;
+
+    /**
+     * @var bool
+     */
+    protected $insist;
+
+    /**
+     * @var string
+     */
+    protected $login_method;
+
+    /**
+     * @var AMQPWriter
+     */
+    protected $login_response;
+
+    /**
+     * @var string
+     */
+    protected $locale;
 
     /**
      * @var SocketIO
