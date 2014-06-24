@@ -6,6 +6,7 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Helper\Object;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
 
@@ -14,7 +15,7 @@ use PhpAmqpLib\Wire\IO\AbstractIO;
  *
  * TODO : split this class: AMQPStreamReader and a AMQPBufferReader
  */
-class AMQPReader
+class AMQPReader extends Object
 {
 
     const BIT = 1;

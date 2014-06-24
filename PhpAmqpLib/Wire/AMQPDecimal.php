@@ -3,6 +3,7 @@
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use PhpAmqpLib\Helper\Object;
 
 /**
  * AMQP protocol decimal value.
@@ -15,7 +16,7 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
  * business values such as currency rates and amounts. The
  * 'decimals' octet is not signed.
  */
-class AMQPDecimal
+class AMQPDecimal extends Object
 {
 
     public function __construct($n, $e)
