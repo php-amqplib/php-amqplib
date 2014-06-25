@@ -4,8 +4,9 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use PhpAmqpLib\Helper\Object;
 
-class AMQPWriter
+class AMQPWriter extends Object
 {
 
     public function __construct()

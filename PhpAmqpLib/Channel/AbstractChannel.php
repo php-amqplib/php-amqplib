@@ -6,6 +6,7 @@ use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Helper\Object;
 use PhpAmqpLib\Helper\Protocol\MethodMap080;
 use PhpAmqpLib\Helper\Protocol\MethodMap091;
 use PhpAmqpLib\Helper\Protocol\Protocol080;
@@ -15,7 +16,7 @@ use PhpAmqpLib\Helper\Protocol\Wait091;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
 
-class AbstractChannel
+class AbstractChannel extends Object
 {
 
     public static $PROTOCOL_CONSTANTS_CLASS;

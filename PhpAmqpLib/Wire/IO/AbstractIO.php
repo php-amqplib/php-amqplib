@@ -2,7 +2,9 @@
 
 namespace PhpAmqpLib\Wire\IO;
 
-abstract class AbstractIO
+use PhpAmqpLib\Helper\Object;
+
+abstract class AbstractIO extends Object
 {
 
     abstract public function read($n);

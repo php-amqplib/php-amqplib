@@ -3,12 +3,13 @@
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Helper\Object;
 
 /**
  * Abstract base class for AMQP content.  Subclasses should override
  * the PROPERTIES attribute.
  */
-abstract class GenericContent
+abstract class GenericContent extends Object
 {
 
     /**
