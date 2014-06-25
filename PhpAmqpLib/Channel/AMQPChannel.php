@@ -75,6 +75,11 @@ class AMQPChannel extends AbstractChannel
      */
     private $publish_cache_max_size;
 
+    /**
+     * Whether or not the channel has been "opened" or not
+     * @var bool
+     */
+    protected $is_open = false;
 
 
     public function __construct($connection, $channel_id = null, $auto_decode = true)
