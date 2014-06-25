@@ -22,5 +22,10 @@
     "autoload": {
         "psr-0": {"PhpAmqpLib": ""}
     },
-    "license": "LGPL-2.1"
+    "license": "LGPL-2.1",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev"
+        }
+    }
 }
