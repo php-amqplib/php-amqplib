@@ -79,12 +79,12 @@ class AMQPChannel extends AbstractChannel
     private $next_delivery_tag = 0;
 
     /**
-     * @var Callable
+     * @var callable
      */
     private $ack_handler = null;
 
     /**
-     * @var Callable
+     * @var callable
      */
     private $nack_handler = null;
 

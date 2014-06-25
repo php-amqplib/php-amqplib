@@ -152,14 +152,14 @@ class AbstractConnection extends AbstractChannel
     /**
      * Handles connection blocking from the server
      *
-     * @var Callable
+     * @var callable
      */
     private $connection_block_handler = null;
 
     /**
      * Handles connection unblocking from the server
      *
-     * @var Callable
+     * @var callable
      */
     private $connection_unblock_handler = null;
 
