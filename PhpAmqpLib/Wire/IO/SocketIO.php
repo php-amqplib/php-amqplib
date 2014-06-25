@@ -9,9 +9,24 @@ class SocketIO extends AbstractIO
 {
 
     /**
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * @var int
+     */
+    protected $port;
+
+    /**
+     * @var int
+     */
+    protected $timeout;
+
+    /**
      * @var resource
      */
-    private $sock = null;
+    private $sock;
 
 
 

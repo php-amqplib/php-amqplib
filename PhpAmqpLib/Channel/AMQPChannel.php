@@ -19,26 +19,31 @@ class AMQPChannel extends AbstractChannel
     public $callbacks = array();
 
     /**
+     * Whether or not the channel has been "opened" or not
+     *
+     * @var bool
+     */
+    protected $is_open = false;
+
+    /**
      * @var int
      */
-    private $next_delivery_tag = 0;
+    protected $default_ticket;
 
     /**
-     * @var Callable
+     * @var bool
      */
-    private $ack_handler = null;
+    protected $active;
 
     /**
-     * @var Callable
+     * @var array
      */
-    private $nack_handler = null;
+    protected $alerts;
 
     /**
-     * If the channel is in confirm_publish mode this array will store all published messages
-     * until they get ack'ed or nack'ed
-     * @var AMQPMessage[]
+     * @var bool
      */
-    private $published_messages = array();
+    protected $auto_decode;
 
     /**
      * These parameters will be passed to function in case of basic_return:
@@ -61,6 +66,29 @@ class AMQPChannel extends AbstractChannel
     protected $batch_messages = array();
 
     /**
+     * If the channel is in confirm_publish mode this array will store all published messages
+     * until they get ack'ed or nack'ed
+     *
+     * @var AMQPMessage[]
+     */
+    private $published_messages = array();
+
+    /**
+     * @var int
+     */
+    private $next_delivery_tag = 0;
+
+    /**
+     * @var callable
+     */
+    private $ack_handler = null;
+
+    /**
+     * @var callable
+     */
+    private $nack_handler = null;
+
+    /**
      * Circular buffer to speed up both basic_publish() and publish_batch().
      * Max size limited by $publish_cache_max_size.
      * @var array
@@ -74,12 +102,6 @@ class AMQPChannel extends AbstractChannel
      * @var int
      */
     private $publish_cache_max_size;
-
-    /**
-     * Whether or not the channel has been "opened" or not
-     * @var bool
-     */
-    protected $is_open = false;
 
 
     public function __construct($connection, $channel_id = null, $auto_decode = true)
