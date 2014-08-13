@@ -1,10 +1,10 @@
-<phpunit bootstrap="PhpAmqpLib/Tests/bootstrap.php" colors="true">
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
         <testsuites>
             <testsuite name="Unit Tests">
-                <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">PhpAmqpLib/Tests/Unit</directory>
+                <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">tests/Unit</directory>
             </testsuite>
             <testsuite name="Functional Tests">
-                <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">PhpAmqpLib/Tests/Functional</directory>
+                <directory suffix="Test.php" phpVersion="5.3.0" phpVersionOperator=">=">tests/Functional</directory>
             </testsuite>
         </testsuites>
 </phpunit>
