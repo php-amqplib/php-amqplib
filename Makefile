@@ -1,5 +1,5 @@
 test:
-	phpunit
+	vendor/bin/phpunit
 .PHONY: benchmark
 benchmark:
 	@echo "Publishing 4000 msgs with 1KB of content:"
