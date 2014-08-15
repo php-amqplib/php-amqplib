@@ -36,19 +36,25 @@ class StreamIO extends AbstractIO
     protected $context;
 
     /**
+     * @var bool
+     */
+    protected $keepalive;
+
+    /**
      * @var resource
      */
     private $sock;
 
 
 
-    public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null)
+    public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null, $keepalive = false)
     {
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;
         $this->read_write_timeout = $read_write_timeout;
         $this->context = $context;
+        $this->keepalive = $keepalive;
     }
 
 
@@ -81,9 +87,11 @@ class StreamIO extends AbstractIO
         }
 
         stream_set_blocking($this->sock, 1);
+
+        if ($this->keepalive) {
+            $this->enable_keepalive();
+        }
     }
-
-
 
     /**
      * Reconnect the socket
@@ -184,6 +192,20 @@ class StreamIO extends AbstractIO
         // get status of socket to determine whether or not it has timed out
         $info = stream_get_meta_data($this->sock);
         return $info['timed_out'];
+    }
+
+    protected function enable_keepalive()
+    {
+        if (!function_exists('socket_import_stream')) {
+            throw new AMQPIOException("Can not enable keepalive: function socket_import_stream does not exist");
+        }
+
+        if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
+            throw new AMQPIOException("Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined");
+        }
+
+        $socket = socket_import_stream($this->sock);
+        socket_set_option($socket, SOL_SOCKET, SO_KEEPALIVE, 1);
     }
 
 }

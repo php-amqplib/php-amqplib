@@ -30,11 +30,12 @@ class SocketIO extends AbstractIO
 
 
 
-    public function __construct($host, $port, $timeout)
+    public function __construct($host, $port, $timeout, $keepalive = false)
     {
         $this->host = $host;
         $this->port = $port;
         $this->timeout = $timeout;
+        $this->keepalive = $keepalive;
     }
 
 
@@ -59,6 +60,10 @@ class SocketIO extends AbstractIO
 
         socket_set_block($this->sock);
         socket_set_option($this->sock, SOL_TCP, TCP_NODELAY, 1);
+
+        if ($this->keepalive) {
+            $this->enable_keepalive();
+        }
     }
 
 
@@ -150,6 +155,15 @@ class SocketIO extends AbstractIO
         $write = null;
         $except = null;
         return socket_select($read, $write, $except, $sec, $usec);
+    }
+
+    protected function enable_keepalive()
+    {
+        if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
+            throw new AMQPIOException("Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined");
+        }
+
+        socket_set_option($this->sock, SOL_SOCKET, SO_KEEPALIVE, 1);
     }
 
 }

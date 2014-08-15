@@ -17,9 +17,10 @@ class AMQPSocketConnection extends AbstractConnection
         $login_method = "AMQPLAIN",
         $login_response = null,
         $locale = "en_US",
-        $timeout = 3
+        $timeout = 3,
+        $keepalive = false
     ) {
-        $io = new SocketIO($host, $port, $timeout);
+        $io = new SocketIO($host, $port, $timeout, $keepalive);
 
         parent::__construct($user, $password, $vhost, $insist, $login_method, $login_response, $locale, $io);
     }
