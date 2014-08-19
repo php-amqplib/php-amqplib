@@ -108,9 +108,14 @@ class StreamIO extends AbstractIO
     {
         $res = '';
         $read = 0;
+        $canDispatchPcntlSignal = extension_loaded('pcntl') && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
 
         while ($read < $n && !feof($this->sock) && (false !== ($buf = fread($this->sock, $n - $read)))) {
             if ($buf === '') {
+                if ($canDispatchPcntlSignal) {
+                    pcntl_signal_dispatch();
+                }
                 continue;
             }
 
