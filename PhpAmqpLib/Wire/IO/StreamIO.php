@@ -45,6 +45,10 @@ class StreamIO extends AbstractIO
      */
     private $sock;
 
+    /**
+     * @var bool
+     */
+    private $canDispatchPcntlSignal;
 
 
     public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null, $keepalive = false)
@@ -55,6 +59,8 @@ class StreamIO extends AbstractIO
         $this->read_write_timeout = $read_write_timeout;
         $this->context = $context;
         $this->keepalive = $keepalive;
+        $this->canDispatchPcntlSignal = extension_loaded('pcntl') && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
 
 
@@ -111,6 +117,9 @@ class StreamIO extends AbstractIO
 
         while ($read < $n && !feof($this->sock) && (false !== ($buf = fread($this->sock, $n - $read)))) {
             if ($buf === '') {
+                if ($this->canDispatchPcntlSignal) {
+                    pcntl_signal_dispatch();
+                }
                 continue;
             }
 
