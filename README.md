@@ -138,6 +138,45 @@ $msg->setBody($body2);
 $ch->basic_publish($msg, $exchange);
 ```
 
+##UNIX Signals##
+
+If you have installed [PCNTL extension](http://www.php.net/manual/en/book.pcntl.php) dispatching of signal will be handled when consumer is not processing message.
+
+```php
+$pcntlHandler = function ($signal) {
+    switch ($signal) {
+        case \SIGTERM:
+        case \SIGUSR1:
+        case \SIGINT:
+            // some stuff before stop consumer e.g. delete lock etc
+            exit(0);
+            break;
+        case \SIGHUP:
+            // some stuff to restart consumer
+            break;
+        default:
+            // do nothing
+    }
+};
+
+declare(ticks = 1) {
+    pcntl_signal(\SIGTERM, $pcntlHandler);
+    pcntl_signal(\SIGINT,  $pcntlHandler);
+    pcntl_signal(\SIGUSR1, $pcntlHandler);
+    pcntl_signal(\SIGHUP,  $pcntlHandler);
+}
+```
+
+To disable this feature just define constant `AMQP_WITHOUT_SIGNALS` as `true`
+
+```php
+<?php
+define('AMQP_WITHOUT_SIGNALS', true);
+
+... more code
+
+```
+
 ## Debugging ##
 
 If you want to know what's going on at a protocol level then add the following constant to your code:
