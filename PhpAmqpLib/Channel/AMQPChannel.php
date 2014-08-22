@@ -179,7 +179,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
     {
-        if ($this->is_open !== true || !$this->connection || !$this->connection->isConnected()) {
+        if ($this->is_open !== true || null === $this->connection || false === $this->connection->isConnected()) {
             $this->do_close();
             return; // already closed
         }
@@ -824,7 +824,7 @@ class AMQPChannel extends AbstractChannel
         $delivery_tag = $args->read_longlong();
         $multiple = (bool) $args->read_bit();
 
-        if (!isset($this->published_messages[$delivery_tag])) {
+        if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
                     'Server ack\'ed unknown delivery_tag %s',
                     $delivery_tag
@@ -848,7 +848,7 @@ class AMQPChannel extends AbstractChannel
         $delivery_tag = $args->read_longlong();
         $multiple = (bool) $args->read_bit();
 
-        if (!isset($this->published_messages[$delivery_tag])) {
+        if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
                     'Server nack\'ed unknown delivery_tag %s',
                     $delivery_tag
@@ -997,7 +997,7 @@ class AMQPChannel extends AbstractChannel
 
         $this->send_method_frame(array($class_id, $method_id), $args);
 
-        if (!$nowait) {
+        if (false === $nowait) {
             $consumer_tag = $this->wait(array(
                 $this->waitHelper->get_wait('basic.consume_ok')
             ));
@@ -1124,7 +1124,7 @@ class AMQPChannel extends AbstractChannel
     private function pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket)
     {
         $cache_key = "$exchange|$routing_key|$mandatory|$immediate|$ticket";
-        if (!isset($this->publish_cache[$cache_key])) {
+        if (false === isset($this->publish_cache[$cache_key])) {
             $ticket = $this->getTicket($ticket);
             list($class_id, $method_id, $args) = $this->protocolWriter->basicPublish(
                 $ticket,
@@ -1337,7 +1337,7 @@ class AMQPChannel extends AbstractChannel
         $exchange = $args->read_shortstr();
         $routing_key = $args->read_shortstr();
 
-        if (!is_null($this->basic_return_callback)) {
+        if (null !== ($this->basic_return_callback)) {
             call_user_func_array($this->basic_return_callback, array(
                 $reply_code,
                 $reply_text,
@@ -1519,7 +1519,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_return_listener($callback)
     {
-        if (!is_callable($callback)) {
+        if (false === is_callable($callback)) {
             throw new \InvalidArgumentException("$callback should be callable.");
         }
         $this->basic_return_callback = $callback;
@@ -1534,7 +1534,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_nack_handler($callback)
     {
-        if (!is_callable($callback)) {
+        if (false === is_callable($callback)) {
             throw new \InvalidArgumentException("$callback should be callable.");
         }
         $this->nack_handler = $callback;
@@ -1549,7 +1549,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_ack_handler($callback)
     {
-        if (!is_callable($callback)) {
+        if (false === is_callable($callback)) {
             throw new \InvalidArgumentException("$callback should be callable.");
         }
         $this->ack_handler = $callback;
