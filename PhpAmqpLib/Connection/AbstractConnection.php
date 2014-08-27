@@ -283,18 +283,6 @@ class AbstractConnection extends AbstractChannel
      */
     public function reconnect()
     {
-        // Try to close out each channel
-        foreach ($this->channels as $key => $channel) {
-            // channels[0] is this connection object, so don't close it yet
-            if ($key === 0) {
-                continue;
-            }
-            try {
-                $channel->close();
-            } catch (\Exception $e) { /* Ignore closing errors */
-            }
-        }
-
         try {
             // Try to close the AMQP connection
             $this->safeClose();
@@ -303,7 +291,7 @@ class AbstractConnection extends AbstractChannel
 
         // Reconnect the socket/stream then AMQP
         $this->getIO()->reconnect();
-        $this->setIsConnected(false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
+        $this->setIsConnected(false, false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
         $this->connect();
     }
 
@@ -647,6 +635,8 @@ class AbstractConnection extends AbstractChannel
             return NULL;
         }
 
+        $this->closeChannels();
+
         list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
             $reply_code,
             $reply_text,
@@ -655,7 +645,7 @@ class AbstractConnection extends AbstractChannel
         );
         $this->send_method_frame(array($class_id, $method_id), $args);
 
-        $this->setIsConnected(false);
+        $this->setIsConnected(false, false);
 
         return $this->wait(array(
             $this->waitHelper->get_wait('connection.close_ok')
@@ -982,13 +972,30 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Set the connection status
-     * @param $is_connected
+     * @param bool $is_connected
+     * @param bool $closeChannels
      */
-    protected function setIsConnected($is_connected)
+    protected function setIsConnected($is_connected, $closeChannels = true)
     {
         $this->is_connected = $is_connected;
+        if (!($is_connected) && $closeChannels) {
+            $this->closeChannels();
+        }
     }
 
+    protected function closeChannels()
+    {
+        foreach ($this->channels as $key => $channel) {
+            // channels[0] is this connection object, so don't close it yet
+            if ($key === 0) {
+                continue;
+            }
+            try {
+                $channel->close();
+            } catch (\Exception $e) { /* Ignore closing errors */
+            }
+        }
+    }
 
 
     /**

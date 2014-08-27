@@ -126,7 +126,12 @@ class AMQPChannel extends AbstractChannel
         $this->callbacks = array();
         $this->auto_decode = $auto_decode;
 
-        $this->x_open();
+        try {
+            $this->x_open();
+        } catch (\Exception $e) {
+            $this->close();
+            throw $e;
+        }
     }
 
 
@@ -179,7 +184,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
     {
-        if ($this->is_open !== true || null === $this->connection || false === $this->connection->isConnected()) {
+        if ($this->is_open !== true || null === $this->connection) {
             $this->do_close();
             return; // already closed
         }
