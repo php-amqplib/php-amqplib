@@ -264,6 +264,7 @@ class AbstractConnection extends AbstractChannel
                 }
 
                 $this->setIsConnected(false);
+                $this->closeChannels();
 
                 // we were redirected, close the socket, loop and try again
                 $this->close_socket();
@@ -272,6 +273,7 @@ class AbstractConnection extends AbstractChannel
         } catch (\Exception $e) {
             // Something went wrong, set the connection status
             $this->setIsConnected(false);
+            $this->closeChannels();
             throw $e; // Rethrow exception
         }
     }
@@ -291,7 +293,7 @@ class AbstractConnection extends AbstractChannel
 
         // Reconnect the socket/stream then AMQP
         $this->getIO()->reconnect();
-        $this->setIsConnected(false, false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
+        $this->setIsConnected(false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
         $this->connect();
     }
 
@@ -323,6 +325,7 @@ class AbstractConnection extends AbstractChannel
     {
         // Set the connection status in case the server has gone away
         $this->setIsConnected(false);
+        $this->closeChannels();
 
         if (isset($this->input) && $this->input) {
             // close() always tries to connect to the server to shutdown
@@ -645,7 +648,7 @@ class AbstractConnection extends AbstractChannel
         );
         $this->send_method_frame(array($class_id, $method_id), $args);
 
-        $this->setIsConnected(false, false);
+        $this->setIsConnected(false);
 
         return $this->wait(array(
             $this->waitHelper->get_wait('connection.close_ok')
@@ -969,18 +972,13 @@ class AbstractConnection extends AbstractChannel
     }
 
 
-
     /**
      * Set the connection status
      * @param bool $is_connected
-     * @param bool $closeChannels
      */
-    protected function setIsConnected($is_connected, $closeChannels = true)
+    protected function setIsConnected($is_connected)
     {
         $this->is_connected = $is_connected;
-        if (!($is_connected) && $closeChannels) {
-            $this->closeChannels();
-        }
     }
 
     protected function closeChannels()
