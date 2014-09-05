@@ -6,6 +6,7 @@ use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Wire\AMQPWriter;
 
 class StreamIO extends AbstractIO
 {
@@ -41,6 +42,21 @@ class StreamIO extends AbstractIO
     protected $keepalive;
 
     /**
+     * @var int
+     */
+    protected $heartbeat;
+
+    /**
+     * @var float
+     */
+    protected $last_read;
+
+    /**
+     * @var float
+     */
+    protected $last_write;
+
+    /**
      * @var resource
      */
     private $sock;
@@ -51,7 +67,7 @@ class StreamIO extends AbstractIO
     private $canDispatchPcntlSignal;
 
 
-    public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null, $keepalive = false)
+    public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null, $keepalive = false, $heartbeat = 0)
     {
         $this->host = $host;
         $this->port = $port;
@@ -59,6 +75,7 @@ class StreamIO extends AbstractIO
         $this->read_write_timeout = $read_write_timeout;
         $this->context = $context;
         $this->keepalive = $keepalive;
+        $this->heartbeat = $heartbeat;
         $this->canDispatchPcntlSignal = extension_loaded('pcntl') && function_exists('pcntl_signal_dispatch')
             && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
@@ -116,6 +133,8 @@ class StreamIO extends AbstractIO
         $read = 0;
 
         while ($read < $n && !feof($this->sock) && (false !== ($buf = fread($this->sock, $n - $read)))) {
+            $this->check_heartbeat();
+
             if ($buf === '') {
                 if ($this->canDispatchPcntlSignal) {
                     pcntl_signal_dispatch();
@@ -125,6 +144,8 @@ class StreamIO extends AbstractIO
 
             $read += mb_strlen($buf, 'ASCII');
             $res .= $buf;
+
+            $this->last_read = microtime(true);
         }
 
         if (mb_strlen($res, 'ASCII') != $n) {
@@ -162,9 +183,45 @@ class StreamIO extends AbstractIO
                 $data = mb_substr($data, 0 - $len, 0 - $len, 'ASCII');
 
             } else {
+                $this->last_write = microtime(true);
                 break;
             }
         }
+    }
+
+        
+
+    public function check_heartbeat()
+    {
+        // ignore unless heartbeat interval is set
+        if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
+            $t = microtime(true);
+            $t_read  = round($t - $this->last_read);
+            $t_write = round($t - $this->last_write);
+            
+            // server has gone away
+            if (($this->heartbeat * 2) < $t_read) {
+                $this->reconnect();
+            }
+
+            // time for client to send a heartbeat
+            if (($this->heartbeat / 2) < $t_write) {
+                $this->write_heartbeat();
+            }
+        }
+    }
+
+
+
+    public function write_heartbeat()
+    {
+        $pkt = new AMQPWriter();
+        $pkt->write_octet(8);
+        $pkt->write_short(0);
+        $pkt->write_long(0);
+        $pkt->write_octet(0xCE);
+        $val = $pkt->getvalue();
+        $this->write($pkt->getvalue());
     }
 
 
