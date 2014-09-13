@@ -169,25 +169,24 @@ abstract class GenericContent
         $raw_bytes = new AMQPWriter();
 
         foreach ($this->prop_types as $key => $prototype) {
-            if (isset($this->properties[$key])) {
-                $val = $this->properties[$key];
-            } else {
-                $val = null;
+            $val = isset($this->properties[$key]) ? $this->properties[$key] : null;
+
+            if ($val === null) {
+                $shift -= 1;
+                continue;
             }
 
-            if ($val != null) {
-                if ($shift == 0) {
-                    $flags[] = $flag_bits;
-                    $flag_bits = 0;
-                    $shift = 15;
-                }
-
-                $flag_bits |= (1 << $shift);
-                if ($prototype != "bit") {
-                    $raw_bytes->{'write_' . $prototype}($val);
-                }
-
+            if ($shift === 0) {
+                $flags[] = $flag_bits;
+                $flag_bits = 0;
+                $shift = 15;
             }
+
+            $flag_bits |= (1 << $shift);
+            if ($prototype != 'bit') {
+                $raw_bytes->{'write_' . $prototype}($val);
+            }
+
             $shift -= 1;
         }
 
