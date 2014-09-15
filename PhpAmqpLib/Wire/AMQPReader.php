@@ -450,6 +450,9 @@ class AMQPReader
             case 'b': // bit
                 $val = $this->read_bit();
                 break;
+            case 'V': // void
+                $val = null;
+                break;                
             default:
                 // UNKNOWN TYPE
                 throw new AMQPRuntimeException("Usupported table field type {$fieldType}");
