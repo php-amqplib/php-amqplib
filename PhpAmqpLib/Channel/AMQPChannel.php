@@ -136,13 +136,6 @@ class AMQPChannel extends AbstractChannel
 
 
 
-    public function __destruct()
-    {
-        $this->close();
-    }
-
-
-
     /**
      * Tear down this object, after we've agreed to close with the server.
      */
@@ -188,7 +181,6 @@ class AMQPChannel extends AbstractChannel
             $this->do_close();
             return; // already closed
         }
-
         list($class_id, $method_id, $args) = $this->protocolWriter->channelClose(
             $reply_code,
             $reply_text,
