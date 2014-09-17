@@ -25,6 +25,7 @@ class AbstractConnection extends AbstractChannel
         "capabilities" => array(
             'F',
             array(
+                'authentication_failure_close' => array('t', true),
                 'publisher_confirms' => array('t', true),
                 'consumer_cancel_notify' => array('t', true),
                 'exchange_exchange_bindings' => array('t', true),
