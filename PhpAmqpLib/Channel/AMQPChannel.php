@@ -148,7 +148,7 @@ class AMQPChannel extends AbstractChannel
      */
     protected function do_close()
     {
-        if ($this->channel_id !== NULL) {
+        if ($this->channel_id !== null) {
             unset($this->connection->channels[$this->channel_id]);
         }
         $this->channel_id = $this->connection = null;
@@ -455,7 +455,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -509,7 +509,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -599,7 +599,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -701,7 +701,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -746,7 +746,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -784,7 +784,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -997,7 +997,7 @@ class AMQPChannel extends AbstractChannel
             $no_ack,
             $exclusive,
             $nowait,
-            $this->protocolVersion == '0.9.1' ? $arguments : NULL
+            $this->protocolVersion == '0.9.1' ? $arguments : null
         );
 
         $this->send_method_frame(array($class_id, $method_id), $args);
