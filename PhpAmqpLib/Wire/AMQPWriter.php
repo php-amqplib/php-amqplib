@@ -29,7 +29,7 @@ class AMQPWriter
      */
     private static function chrbytesplit($x, $bytes)
     {
-        return array_map('chr', AMQPWriter::bytesplit($x, $bytes));
+        return array_map('chr', self::bytesplit($x, $bytes));
     }
 
     /**
@@ -109,20 +109,9 @@ class AMQPWriter
      */
     public function write_bit($b)
     {
-        if ($b) {
-            $b = 1;
-        } else {
-            $b = 0;
-        }
-
+        $b = $b ? 1 : 0;
         $shift = $this->bitcount % 8;
-
-        if ($shift == 0) {
-            $last = 0;
-        } else {
-            $last = array_pop($this->bits);
-        }
-
+        $last = $shift === 0 ? 0 : array_pop($this->bits);
         $last |= ($b << $shift);
         array_push($this->bits, $last);
         $this->bitcount += 1;
@@ -278,7 +267,7 @@ class AMQPWriter
      */
     public function write_array($a)
     {
-        $data = new AMQPWriter();
+        $data = new self();
 
         foreach ($a as $v) {
             if (is_string($v)) {
@@ -289,8 +278,8 @@ class AMQPWriter
                 $data->write_signed_long($v);
             } elseif ($v instanceof AMQPDecimal) {
                 $data->write('D');
-                $data->write_octet($v->e);
-                $data->write_signed_long($v->n);
+                $data->write_octet($v->getE());
+                $data->write_signed_long($v->getN());
             } elseif (is_array($v)) {
                 $data->write('A');
                 $data->write_array($v);

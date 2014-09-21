@@ -5,7 +5,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
  * Abstract base class for AMQP content.  Subclasses should override
- * the PROPERTIES attribute.
+ * the propertyDefinitions attribute.
  */
 abstract class GenericContent
 {
@@ -21,22 +21,18 @@ abstract class GenericContent
     /** @var string Compiled properties */
     private $serialized_properties;
 
-    /**
-     * @var array
-     */
-    protected static $PROPERTIES = array(
-        "dummy" => "shortstr"
+    /** @var array Default property definitions */
+    protected static $propertyDefinitions = array(
+        'dummy' => 'shortstr'
     );
 
-
-
-    public function __construct($props, $prop_types = null)
+    /**
+     * @param array $props Message property content
+     * @param array $prop_types Message property definitions
+     */
+    public function __construct(array $props, array $prop_types = array())
     {
-        if ($prop_types) {
-            $this->prop_types = $prop_types;
-        } else {
-            $this->prop_types = self::$PROPERTIES;
-        }
+        $this->prop_types = $prop_types ?: self::$propertyDefinitions;
 
         if ($props) {
             $this->properties = array_intersect_key($props, $this->prop_types);
@@ -124,7 +120,7 @@ abstract class GenericContent
         while (true) {
             $flag_bits = $reader->read_short();
             $flags[] = $flag_bits;
-            if (($flag_bits & 1) == 0) {
+            if (($flag_bits & 1) === 0) {
                 break;
             }
         }
@@ -132,7 +128,7 @@ abstract class GenericContent
         $shift = 0;
         $d = array();
         foreach ($this->prop_types as $key => $proptype) {
-            if ($shift == 0) {
+            if ($shift === 0) {
                 if (!$flags) {
                     break;
                 }

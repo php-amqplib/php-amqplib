@@ -99,7 +99,11 @@ class AbstractChannel
                 $this->methodMap = new MethodMap080();
                 break;
             default:
-                throw new AMQPRuntimeException('Protocol: ' . $this->protocolVersion . ' not implemented.');
+                throw new AMQPRuntimeException(sprintf(
+                    'Protocol: %s not implemented.',
+                    $this->protocolVersion
+                ));
+                break;
         }
     }
 
@@ -221,9 +225,14 @@ class AbstractChannel
             $payload = $frm[1];
 
             if ($frame_type != 3) {
-                $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-                throw new AMQPRuntimeException("Expecting Content body, received frame type $frame_type ("
-                    . $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type] . ")");
+                /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
+                $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
+                throw new AMQPRuntimeException(sprintf(
+                    'Expecting Content body, received frame type "%s" (%s)',
+                    $frame_type,
+                    // @todo fix this crappy call! Generate a ProtocolInterface::getFrameTypes() getter...
+                    $protocolClass::$FRAME_TYPES[$frame_type]
+                ));
             }
 
             $body_parts[] = $payload;
@@ -259,12 +268,13 @@ class AbstractChannel
      */
     public function wait($allowed_methods = null, $non_blocking = false, $timeout = 0)
     {
-        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+        $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
 
-        if ($allowed_methods && $this->debug) {
-            MiscHelper::debug_msg("waiting for " . implode(", ", $allowed_methods));
-        } elseif ($this->debug) {
-            MiscHelper::debug_msg("waiting for any method");
+        if ($this->debug) {
+            MiscHelper::debug_msg(sprintf(
+                'waiting for %s',
+                $allowed_methods ? implode(', ', $allowed_methods) : 'any method'
+            ));
         }
 
         //Process deferred methods
@@ -278,8 +288,11 @@ class AbstractChannel
                 unset($this->method_queue[$qk]);
 
                 if ($this->debug) {
-                    MiscHelper::debug_msg("Executing queued method: $method_sig: " .
-                        $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+                    MiscHelper::debug_msg(sprintf(
+                        'Executing queued method: %s: %s',
+                        $method_sig,
+                        $protocolClass::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+                    ));
                 }
 
                 return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
@@ -293,8 +306,11 @@ class AbstractChannel
             $payload = $frm[1];
 
             if ($frame_type != 1) {
-                throw new AMQPRuntimeException("Expecting AMQP method, received frame type: $frame_type ("
-                    . $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type] . ")");
+                throw new AMQPRuntimeException(sprintf(
+                    'Expecting AMQP method, received frame type: %s (%s)',
+                    $frame_type,
+                    $protocolClass::$FRAME_TYPES[$frame_type]
+                ));
             }
 
             if (mb_strlen($payload, 'ASCII') < 4) {
@@ -306,27 +322,32 @@ class AbstractChannel
             $args = mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
 
             if ($this->debug) {
-                MiscHelper::debug_msg("> $method_sig: "
-                    . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+                MiscHelper::debug_msg(sprintf(
+                    '> %s: %s',
+                    $method_sig,
+                    $protocolClass::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+                ));
             }
 
-            if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
+            $content = null;
+            if (in_array($method_sig, $protocolClass::$CONTENT_METHODS)) {
                 $content = $this->wait_content();
-            } else {
-                $content = null;
             }
 
-            if ($allowed_methods == null ||
-                in_array($method_sig, $allowed_methods) ||
-                in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS)
+            if ($allowed_methods == null
+                || in_array($method_sig, $allowed_methods)
+                || in_array($method_sig, $protocolClass::$CLOSE_METHODS)
             ) {
                 return $this->dispatch($method_sig, $args, $content);
             }
 
             // Wasn't what we were looking for? save it for later
             if ($this->debug) {
-                MiscHelper::debug_msg("Queueing for later: $method_sig: "
-                    . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+                MiscHelper::debug_msg(sprintf(
+                    'Queueing for later: %s: %s',
+                    $method_sig,
+                    $protocolClass::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+                ));
             }
             $this->method_queue[] = array($method_sig, $args, $content);
 

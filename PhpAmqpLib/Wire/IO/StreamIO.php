@@ -48,11 +48,18 @@ class StreamIO extends AbstractIO
         $this->read_write_timeout = $read_write_timeout;
         $this->context = $context;
         $this->keepalive = $keepalive;
-        $this->canDispatchPcntlSignal = extension_loaded('pcntl') && function_exists('pcntl_signal_dispatch')
-            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
+        $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
     }
 
-
+    /**
+     * @return bool
+     */
+    private function isPcntlSignalEnabled()
+    {
+        return extension_loaded('pcntl')
+            && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') && !AMQP_WITHOUT_SIGNALS);
+    }
 
     /**
      * Sets up the stream connection

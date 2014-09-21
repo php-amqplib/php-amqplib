@@ -60,8 +60,7 @@ class AMQPReader
         $this->io = $io;
         $this->offset = 0;
         $this->bitcount = $this->bits = 0;
-        $this->timeout = $timeout;
-
+        $this->setTimeout($timeout);
         $this->is64bits = ((int) 4294967296) != 0 ? true : false;
     }
 
@@ -113,12 +112,12 @@ class AMQPReader
      */
     protected function wait()
     {
-        if ($this->timeout == 0) {
+        if ($this->getTimeout() == 0) {
             return;
         }
 
         // wait ..
-        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
+        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->getTimeout());
         $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
@@ -145,22 +144,25 @@ class AMQPReader
             $this->wait();
             $res = $this->io->read($n);
             $this->offset += $n;
-        } else {
-            if ($this->str_length < $n) {
-                throw new AMQPRuntimeException("Error reading data. Requested $n bytes while string buffer has only " .
-                    $this->str_length);
-            }
 
-            $res = mb_substr($this->str, 0, $n, 'ASCII');
-            $this->str = mb_substr($this->str, $n, mb_strlen($this->str, 'ASCII') - $n, 'ASCII');
-            $this->str_length -= $n;
-            $this->offset += $n;
+            return $res;
         }
+
+        if ($this->str_length < $n) {
+            throw new AMQPRuntimeException(sprintf(
+                'Error while reading data. Requested %s bytes while string buffer has only %s',
+                $n,
+                $this->str_length
+            ));
+        }
+
+        $res = mb_substr($this->str, 0, $n, 'ASCII');
+        $this->str = mb_substr($this->str, $n, mb_strlen($this->str, 'ASCII') - $n, 'ASCII');
+        $this->str_length -= $n;
+        $this->offset += $n;
 
         return $res;
     }
-
-
 
     /**
      * @return bool
@@ -218,12 +220,10 @@ class AMQPReader
         if ($this->is64bits) {
             $sres = sprintf('%u', $res);
             return (int) $sres;
-        } else {
-            return $res;
         }
+
+        return $res;
     }
-
-
 
     /**
      * PHP does not have unsigned 32 bit int,
@@ -369,7 +369,6 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
 
-        $val = NULL;
         switch ($fieldType) {
             case 'S': // Long string
                 $val = $this->read_longstr();
@@ -412,7 +411,7 @@ class AMQPReader
                 break;
         }
 
-        return $val;
+        return isset($val) ? $val : null;
     }
 
     /**

@@ -756,10 +756,9 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                    'Server ack\'ed unknown delivery_tag %s',
-                    $delivery_tag
-                )
-            );
+                'Server ack\'ed unknown delivery_tag "%s"',
+                $delivery_tag
+            ));
         }
 
         $this->internal_ack_handler($delivery_tag, $multiple, $this->ack_handler);
@@ -778,10 +777,9 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                    'Server nack\'ed unknown delivery_tag %s',
-                    $delivery_tag
-                )
-            );
+                'Server nack\'ed unknown delivery_tag "%s"',
+                $delivery_tag
+            ));
         }
 
         $this->internal_ack_handler($delivery_tag, $multiple, $this->nack_handler);
@@ -965,13 +963,7 @@ class AMQPChannel extends AbstractChannel
         );
 
         if (isset($this->callbacks[$consumer_tag])) {
-            $func = $this->callbacks[$consumer_tag];
-        } else {
-            $func = null;
-        }
-
-        if ($func != null) {
-            call_user_func($func, $msg);
+            call_user_func($this->callbacks[$consumer_tag], $msg);
         }
     }
 
@@ -1247,9 +1239,11 @@ class AMQPChannel extends AbstractChannel
                 $routing_key,
                 $msg,
             ));
+            return;
+        }
 
-        } elseif ($this->debug) {
-            MiscHelper::debug_msg("Skipping unhandled basic_return message");
+        if ($this->debug) {
+            MiscHelper::debug_msg('Skipping unhandled basic_return message');
         }
     }
 
@@ -1399,8 +1393,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_return_listener($callback)
     {
-        if (false === is_callable($callback)) {
-            throw new \InvalidArgumentException("$callback should be callable.");
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Provided callback is not a callable but a %s',
+                gettype($callback)
+            ));
         }
 
         $this->basic_return_callback = $callback;
@@ -1414,8 +1411,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_nack_handler($callback)
     {
-        if (false === is_callable($callback)) {
-            throw new \InvalidArgumentException("$callback should be callable.");
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Provided callback is not a callable but a %s',
+                gettype($callback)
+            ));
         }
 
         $this->nack_handler = $callback;
@@ -1429,8 +1429,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_ack_handler($callback)
     {
-        if (false === is_callable($callback)) {
-            throw new \InvalidArgumentException("$callback should be callable.");
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Provided callback is not a callable but a %s',
+                gettype($callback)
+            ));
         }
 
         $this->ack_handler = $callback;

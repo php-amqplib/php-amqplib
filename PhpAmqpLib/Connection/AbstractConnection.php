@@ -315,8 +315,11 @@ class AbstractConnection extends AbstractChannel
     public function write($data)
     {
         if ($this->debug) {
-            MiscHelper::debug_msg("< [hex]:\n"
-                . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
+            MiscHelper::debug_msg(sprintf(
+                '< [hex]:%s%s',
+                PHP_EOL,
+                MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true)
+            ));
         }
 
         $this->getIO()->write($data);
@@ -376,12 +379,17 @@ class AbstractConnection extends AbstractChannel
      */
     public function prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, AMQPWriter $pkt = null)
     {
-        if (empty($pkt)) {
-            $pkt = new AMQPWriter();
-        }
+        $pkt = $pkt ?: new AMQPWriter();
 
         // Content already prepared ?
-        $key_cache = "$channel|$packed_properties|$class_id|$weight";
+        $key_cache = sprintf(
+            '%s|%s|%s|%s',
+            $channel,
+            $packed_properties,
+            $class_id,
+            $weight
+        );
+
         if (!isset($this->prepare_content_cache[$key_cache])) {
             $w = new AMQPWriter();
             $w->write_octet(2);
@@ -433,9 +441,12 @@ class AbstractConnection extends AbstractChannel
         $this->write($pkt->getvalue());
 
         if ($this->debug) {
-            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            $protocol = self::$PROTOCOL_CONSTANTS_CLASS;
+            MiscHelper::debug_msg(sprintf(
+                '< %s: %s',
+                MiscHelper::methodSig($method_sig),
+                $protocol::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+            ));
         }
     }
 
@@ -454,9 +465,7 @@ class AbstractConnection extends AbstractChannel
             $args = $args->getvalue();
         }
 
-        if (empty($pkt)) {
-            $pkt = new AMQPWriter();
-        }
+        $pkt = $pkt ?: new AMQPWriter();
 
         $pkt->write_octet(1);
         $pkt->write_short($channel);
@@ -470,9 +479,12 @@ class AbstractConnection extends AbstractChannel
         $pkt->write_octet(0xCE);
 
         if ($this->debug) {
-            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            $protocol = self::$PROTOCOL_CONSTANTS_CLASS;
+            MiscHelper::debug_msg(sprintf(
+                '< %s: %s',
+                MiscHelper::methodSig($method_sig),
+                $protocol::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+            ));
         }
 
         return $pkt;
@@ -567,17 +579,14 @@ class AbstractConnection extends AbstractChannel
     {
         if (isset($this->channels[$channel_id])) {
             return $this->channels[$channel_id];
-
-        } else {
-            $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
-            $ch = new AMQPChannel($this->connection, $channel_id);
-            $this->channels[$channel_id] = $ch;
-
-            return $ch;
         }
+
+        $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
+        $ch = new AMQPChannel($this->connection, $channel_id);
+        $this->channels[$channel_id] = $ch;
+
+        return $ch;
     }
-
-
 
     /**
      * Requestes a connection close
@@ -902,7 +911,7 @@ class AbstractConnection extends AbstractChannel
      */
     protected function setIsConnected($is_connected)
     {
-        $this->is_connected = $is_connected;
+        $this->is_connected = (bool) $is_connected;
     }
 
     protected function closeChannels()

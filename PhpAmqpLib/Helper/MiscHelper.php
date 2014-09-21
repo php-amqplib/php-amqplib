@@ -3,10 +3,12 @@ namespace PhpAmqpLib\Helper;
 
 class MiscHelper
 {
-
-    public static function debug_msg($s)
+    /**
+     * @param string $string
+     */
+    public static function debug_msg($string)
     {
-        echo $s, "\n";
+        echo $string . PHP_EOL;
     }
 
     /**
@@ -17,13 +19,10 @@ class MiscHelper
     {
         if (is_string($a)) {
             return $a;
-
-        } else {
-            return sprintf("%d,%d", $a[0], $a[1]);
         }
+
+        return sprintf('%d,%d', $a[0], $a[1]);
     }
-
-
 
     /**
      * @param $bytes
@@ -110,21 +109,20 @@ class MiscHelper
 
                 // Add newline
                 if ($i !== $len - 1) {
-                    $dump .= "\n";
+                    $dump .= PHP_EOL;
                 }
             }
         }
 
         // Finish dump
         $dump .= $htmloutput === true ? '</pre>' : '';
-        $dump .= "\n";
+        $dump .= PHP_EOL;
 
         // Output method
-        if ($return === false) {
-            echo $dump;
-        } else {
+        if ($return) {
             return $dump;
         }
-    }
 
+        echo $dump;
+    }
 }

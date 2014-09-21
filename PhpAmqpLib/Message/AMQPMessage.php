@@ -51,6 +51,7 @@ class AMQPMessage extends GenericContent
     public function setBody($body)
     {
         $this->body = $body;
-    }
 
+        return $this;
+    }
 }
