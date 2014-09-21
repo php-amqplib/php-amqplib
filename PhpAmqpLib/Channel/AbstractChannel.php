@@ -332,7 +332,7 @@ class AbstractChannel
 
             if ($non_blocking) {
                 break;
-            };
+            }
         }
     }
 
