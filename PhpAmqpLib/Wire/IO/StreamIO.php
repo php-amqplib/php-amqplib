@@ -73,12 +73,16 @@ class StreamIO extends AbstractIO
         }
 
         if (!$this->sock) {
-            throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
+            throw new AMQPRuntimeException(sprintf(
+                'Error Connecting to server (%s): %s',
+                $errno,
+                $errstr
+            ), $errno);
         }
 
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
         if (!stream_set_timeout($this->sock, $sec, $uSec)) {
-            throw new AMQPIOException("Timeout could not be set");
+            throw new AMQPIOException('Timeout could not be set');
         }
 
         stream_set_blocking($this->sock, 1);
@@ -120,8 +124,11 @@ class StreamIO extends AbstractIO
         }
 
         if (mb_strlen($res, 'ASCII') != $n) {
-            throw new AMQPRuntimeException("Error reading data. Received " .
-                mb_strlen($res, 'ASCII') . " instead of expected $n bytes");
+            throw new AMQPIOException(sprintf(
+                'Error reading data. Received %s instead of expected %s bytes',
+                mb_strlen($res, 'ASCII'),
+                $n
+            ));
         }
 
         return $res;
@@ -138,19 +145,19 @@ class StreamIO extends AbstractIO
         $len = mb_strlen($data, 'ASCII');
         while (true) {
             if (is_null($this->sock)) {
-                throw new AMQPRuntimeException("Broken pipe or closed connection");
+                throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
             if (false === ($written = @fwrite($this->sock, $data))) {
-                throw new AMQPRuntimeException("Error sending data");
+                throw new AMQPRuntimeException('Error sending data');
             }
 
             if ($written === 0) {
-                throw new AMQPRuntimeException("Broken pipe or closed connection");
+                throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
             if ($this->timed_out()) {
-                throw new AMQPTimeoutException("Error sending data. Socket connection timed out");
+                throw new AMQPTimeoutException('Error sending data. Socket connection timed out');
             }
 
             $len = $len - $written;
@@ -208,11 +215,11 @@ class StreamIO extends AbstractIO
     protected function enable_keepalive()
     {
         if (!function_exists('socket_import_stream')) {
-            throw new AMQPIOException("Can not enable keepalive: function socket_import_stream does not exist");
+            throw new AMQPIOException('Can not enable keepalive: function socket_import_stream does not exist');
         }
 
         if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
-            throw new AMQPIOException("Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined");
+            throw new AMQPIOException('Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined');
         }
 
         $socket = socket_import_stream($this->sock);

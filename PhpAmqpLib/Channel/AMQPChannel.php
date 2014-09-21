@@ -95,7 +95,7 @@ class AMQPChannel extends AbstractChannel
         $this->publish_cache_max_size = 100;
 
         if ($this->debug) {
-            MiscHelper::debug_msg("using channel_id: " . $channel_id);
+            MiscHelper::debug_msg('using channel_id: ' . $channel_id);
         }
 
         $this->default_ticket = 0;
@@ -159,7 +159,7 @@ class AMQPChannel extends AbstractChannel
      * @param array $method_sig
      * @return mixed
      */
-    public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
+    public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
         if ($this->is_open !== true || null === $this->connection) {
             $this->do_close();
@@ -253,7 +253,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $out_of_band
      * @return mixed
      */
-    protected function x_open($out_of_band = "")
+    protected function x_open($out_of_band = '')
     {
         if ($this->is_open) {
             return NULL;
@@ -277,7 +277,7 @@ class AMQPChannel extends AbstractChannel
         $this->is_open = true;
 
         if ($this->debug) {
-            MiscHelper::debug_msg("Channel open");
+            MiscHelper::debug_msg('Channel open');
         }
     }
 
@@ -442,7 +442,7 @@ class AMQPChannel extends AbstractChannel
     public function exchange_bind(
         $destination,
         $source,
-        $routing_key = "",
+        $routing_key = '',
         $nowait = false,
         $arguments = null,
         $ticket = null
@@ -487,7 +487,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      * @return mixed
      */
-    public function exchange_unbind($destination, $source, $routing_key = "", $arguments = null, $ticket = null)
+    public function exchange_unbind($destination, $source, $routing_key = '', $arguments = null, $ticket = null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -525,7 +525,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      * @return mixed|null
      */
-    public function queue_bind($queue, $exchange, $routing_key = "", $nowait = false, $arguments = null, $ticket = null)
+    public function queue_bind($queue, $exchange, $routing_key = '', $nowait = false, $arguments = null, $ticket = null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -567,7 +567,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      * @return mixed
      */
-    public function queue_unbind($queue, $exchange, $routing_key = "", $arguments = null, $ticket = null)
+    public function queue_unbind($queue, $exchange, $routing_key = '', $arguments = null, $ticket = null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -608,7 +608,7 @@ class AMQPChannel extends AbstractChannel
      * @return mixed|null
      */
     public function queue_declare(
-        $queue = "",
+        $queue = '',
         $passive = false,
         $durable = false,
         $exclusive = false,
@@ -667,7 +667,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      * @return mixed|null
      */
-    public function queue_delete($queue = "", $if_unused = false, $if_empty = false, $nowait = false, $ticket = null)
+    public function queue_delete($queue = '', $if_unused = false, $if_empty = false, $nowait = false, $ticket = null)
     {
         $ticket = $this->getTicket($ticket);
 
@@ -709,7 +709,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      * @return mixed|null
      */
-    public function queue_purge($queue = "", $nowait = false, $ticket = null)
+    public function queue_purge($queue = '', $nowait = false, $ticket = null)
     {
         $ticket = $this->getTicket($ticket);
         list($class_id, $method_id, $args) = $this->protocolWriter->queuePurge($ticket, $queue, $nowait);
@@ -903,8 +903,8 @@ class AMQPChannel extends AbstractChannel
      * @return mixed|string
      */
     public function basic_consume(
-        $queue = "",
-        $consumer_tag = "",
+        $queue = '',
+        $consumer_tag = '',
         $no_local = false,
         $no_ack = false,
         $exclusive = false,
@@ -964,12 +964,12 @@ class AMQPChannel extends AbstractChannel
         $routing_key = $args->read_shortstr();
 
         $msg->delivery_info = array(
-            "channel" => $this,
-            "consumer_tag" => $consumer_tag,
-            "delivery_tag" => $delivery_tag,
-            "redelivered" => $redelivered,
-            "exchange" => $exchange,
-            "routing_key" => $routing_key
+            'channel' => $this,
+            'consumer_tag' => $consumer_tag,
+            'delivery_tag' => $delivery_tag,
+            'redelivered' => $redelivered,
+            'exchange' => $exchange,
+            'routing_key' => $routing_key
         );
 
         if (isset($this->callbacks[$consumer_tag])) {
@@ -991,7 +991,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      * @return mixed
      */
-    public function basic_get($queue = "", $no_ack = false, $ticket = null)
+    public function basic_get($queue = '', $no_ack = false, $ticket = null)
     {
         $ticket = $this->getTicket($ticket);
         list($class_id, $method_id, $args) = $this->protocolWriter->basicGet($ticket, $queue, $no_ack);
@@ -1030,11 +1030,11 @@ class AMQPChannel extends AbstractChannel
         $message_count = $args->read_long();
 
         $msg->delivery_info = array(
-            "delivery_tag" => $delivery_tag,
-            "redelivered" => $redelivered,
-            "exchange" => $exchange,
-            "routing_key" => $routing_key,
-            "message_count" => $message_count
+            'delivery_tag' => $delivery_tag,
+            'redelivered' => $redelivered,
+            'exchange' => $exchange,
+            'routing_key' => $routing_key,
+            'message_count' => $message_count
         );
 
         return $msg;
@@ -1084,9 +1084,9 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      */
     public function basic_publish(
-        $msg,
-        $exchange = "",
-        $routing_key = "",
+        AMQPMessage $msg,
+        $exchange = '',
+        $routing_key = '',
         $mandatory = false,
         $immediate = false,
         $ticket = null
@@ -1119,9 +1119,9 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      */
     public function batch_basic_publish(
-        $msg,
-        $exchange = "",
-        $routing_key = "",
+        AMQPMessage $msg,
+        $exchange = '',
+        $routing_key = '',
         $mandatory = false,
         $immediate = false,
         $ticket = null
@@ -1143,8 +1143,8 @@ class AMQPChannel extends AbstractChannel
         foreach ($this->batch_messages as $m) {
             $msg = $m[0];
 
-            $exchange = isset($m[1]) ? $m[1] : "";
-            $routing_key = isset($m[2]) ? $m[2] : "";
+            $exchange = isset($m[1]) ? $m[1] : '';
+            $routing_key = isset($m[2]) ? $m[2] : '';
             $mandatory = isset($m[3]) ? $m[3] : false;
             $immediate = isset($m[4]) ? $m[4] : false;
             $ticket = isset($m[5]) ? $m[5] : null;

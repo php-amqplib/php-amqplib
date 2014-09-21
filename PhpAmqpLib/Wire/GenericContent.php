@@ -73,7 +73,10 @@ abstract class GenericContent
             return $this->delivery_info[$name];
         }
 
-        throw new \OutOfBoundsException("No '$name' property");
+        throw new \OutOfBoundsException(sprintf(
+            'No "%s" property',
+            $name
+        ));
     }
 
     /**
@@ -96,7 +99,10 @@ abstract class GenericContent
     public function set($name, $value)
     {
         if (!array_key_exists($name, $this->prop_types)) {
-            throw new \OutOfBoundsException("No '$name' property");
+            throw new \OutOfBoundsException(sprintf(
+                'No "%s" property',
+                $name
+            ));
         }
 
         $this->properties[$name] = $value;

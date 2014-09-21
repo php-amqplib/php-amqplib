@@ -122,11 +122,14 @@ class AMQPReader
         $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
-            throw new AMQPRuntimeException(sprintf("An error occurs", $this->timeout));
+            throw new AMQPRuntimeException('A network error occured while awaiting for incoming data');
         }
 
         if ($result === 0) {
-            throw new AMQPTimeoutException(sprintf("A timeout occurs while waiting for incoming data", $this->timeout));
+            throw new AMQPTimeoutException(sprintf(
+                'The connection timed out after %s sec while awaiting incoming data',
+                $this->getTimeout()
+            ));
         }
     }
 
@@ -213,8 +216,7 @@ class AMQPReader
     {
         list(, $res) = unpack('N', $this->rawread(4));
         if ($this->is64bits) {
-            $sres = sprintf("%u", $res);
-
+            $sres = sprintf('%u', $res);
             return (int) $sres;
         } else {
             return $res;
@@ -232,7 +234,7 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
         list(, $res) = unpack('N', $this->rawread(4));
-        $sres = sprintf("%u", $res);
+        $sres = sprintf('%u', $res);
 
         return $sres;
     }
@@ -264,10 +266,10 @@ class AMQPReader
         $lo = unpack('N', $this->rawread(4));
 
         // workaround signed/unsigned braindamage in php
-        $hi = sprintf("%u", $hi[1]);
-        $lo = sprintf("%u", $lo[1]);
+        $hi = sprintf('%u', $hi[1]);
+        $lo = sprintf('%u', $lo[1]);
 
-        return bcadd(bcmul($hi, "4294967296"), $lo);
+        return bcadd(bcmul($hi, '4294967296'), $lo);
     }
 
     /**
@@ -293,7 +295,7 @@ class AMQPReader
         $slen = $this->read_php_int();
 
         if ($slen < 0) {
-            throw new AMQPOutOfBoundsException("Strings longer than supported on this platform");
+            throw new AMQPOutOfBoundsException('Strings longer than supported on this platform');
         }
 
         return $this->rawread($slen);
@@ -318,7 +320,7 @@ class AMQPReader
         $tlen = $this->read_php_int();
 
         if ($tlen < 0) {
-            throw new AMQPOutOfBoundsException("Table is longer than supported");
+            throw new AMQPOutOfBoundsException('Table is longer than supported');
         }
 
         $table_data = new AMQPReader($this->rawread($tlen), null);
@@ -403,7 +405,10 @@ class AMQPReader
                 break;                
             default:
                 // UNKNOWN TYPE
-                throw new AMQPRuntimeException("Usupported table field type {$fieldType}");
+                throw new AMQPRuntimeException(sprint(
+                    'Usupported table field type "%s"',
+                    $fieldType
+                ));
                 break;
         }
 

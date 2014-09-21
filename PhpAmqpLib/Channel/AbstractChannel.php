@@ -121,13 +121,20 @@ class AbstractChannel
     public function dispatch($method_sig, $args, $content)
     {
         if (!$this->methodMap->valid_method($method_sig)) {
-            throw new AMQPRuntimeException("Unknown AMQP method $method_sig");
+            throw new AMQPRuntimeException(sprintf(
+                'Unknown AMQP method "%s"',
+                $method_sig
+            ));
         }
 
         $amqp_method = $this->methodMap->get_method($method_sig);
 
         if (!method_exists($this, $amqp_method)) {
-            throw new AMQPRuntimeException("Method: $amqp_method not implemented by class: " . get_class($this));
+            throw new AMQPRuntimeException(sprintf(
+                'Method: "%s" not implemented by class: %s',
+                $amqp_method,
+                get_class($this)
+            ));
         }
 
         $this->dispatch_reader->reuse($args);
@@ -146,7 +153,7 @@ class AbstractChannel
     public function next_frame($timeout = 0)
     {
         if ($this->debug) {
-            MiscHelper::debug_msg("waiting for a new frame");
+            MiscHelper::debug_msg('waiting for a new frame');
         }
 
         if (!empty($this->frame_queue)) {
@@ -156,9 +163,11 @@ class AbstractChannel
         return $this->connection->wait_channel($this->channel_id, $timeout);
     }
 
-
-
-    protected function send_method_frame($method_sig, $args = "")
+    /**
+     * @param $method_sig
+     * @param string $args
+     */
+    protected function send_method_frame($method_sig, $args = '')
     {
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
@@ -171,7 +180,7 @@ class AbstractChannel
      * @param null $pkt
      * @return null|\PhpAmqpLib\Wire\AMQPWriter
      */
-    protected function prepare_method_frame($method_sig, $args = "", $pkt = null)
+    protected function prepare_method_frame($method_sig, $args = '', $pkt = null)
     {
         return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args, $pkt);
     }
@@ -187,7 +196,7 @@ class AbstractChannel
         $payload = $frm[1];
 
         if ($frame_type != 2) {
-            throw new AMQPRuntimeException("Expecting Content header");
+            throw new AMQPRuntimeException('Expecting Content header');
         }
 
         $this->wait_content_reader->reuse(mb_substr($payload, 0, 12, 'ASCII'));
@@ -221,14 +230,14 @@ class AbstractChannel
             $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'));
         }
 
-        $msg->body = implode("", $body_parts);
+        $msg->body = implode('', $body_parts);
 
         if ($this->auto_decode && isset($msg->content_encoding)) {
             try {
                 $msg->body = $msg->body->decode($msg->content_encoding);
             } catch (\Exception $e) {
                 if ($this->debug) {
-                    MiscHelper::debug_msg("Ignoring body decoding exception: " . $e->getMessage());
+                    MiscHelper::debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
                 }
             }
         }
@@ -261,7 +270,7 @@ class AbstractChannel
         //Process deferred methods
         foreach ($this->method_queue as $qk => $queued_method) {
             if ($this->debug) {
-                MiscHelper::debug_msg("checking queue method " . $qk);
+                MiscHelper::debug_msg('checking queue method ' . $qk);
             }
 
             $method_sig = $queued_method[0];
@@ -289,12 +298,11 @@ class AbstractChannel
             }
 
             if (mb_strlen($payload, 'ASCII') < 4) {
-                throw new AMQPOutOfBoundsException("Method frame too short");
+                throw new AMQPOutOfBoundsException('Method frame too short');
             }
 
-            $method_sig_array = unpack("n2", mb_substr($payload, 0, 4, 'ASCII'));
-            $method_sig = "" . $method_sig_array[1] . "," . $method_sig_array[2];
-
+            $method_sig_array = unpack('n2', mb_substr($payload, 0, 4, 'ASCII'));
+            $method_sig = '' . $method_sig_array[1] . ',' . $method_sig_array[2];
             $args = mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
 
             if ($this->debug) {

@@ -14,33 +14,30 @@ class AMQPMessage extends GenericContent
     /** @var string */
     public $content_encoding;
 
-    /**
-     * @var array
-     */
-    protected static $PROPERTIES = array(
-        "content_type" => "shortstr",
-        "content_encoding" => "shortstr",
-        "application_headers" => "table",
-        "delivery_mode" => "octet",
-        "priority" => "octet",
-        "correlation_id" => "shortstr",
-        "reply_to" => "shortstr",
-        "expiration" => "shortstr",
-        "message_id" => "shortstr",
-        "timestamp" => "timestamp",
-        "type" => "shortstr",
-        "user_id" => "shortstr",
-        "app_id" => "shortstr",
-        "cluster_id" => "shortstr"
+    /** @var array */
+    protected static $propertyDefinitions = array(
+        'content_type' => 'shortstr',
+        'content_encoding' => 'shortstr',
+        'application_headers' => 'table',
+        'delivery_mode' => 'octet',
+        'priority' => 'octet',
+        'correlation_id' => 'shortstr',
+        'reply_to' => 'shortstr',
+        'expiration' => 'shortstr',
+        'message_id' => 'shortstr',
+        'timestamp' => 'timestamp',
+        'type' => 'shortstr',
+        'user_id' => 'shortstr',
+        'app_id' => 'shortstr',
+        'cluster_id' => 'shortstr'
     );
 
 
 
     public function __construct($body = '', $properties = null)
     {
-        $this->body = $body;
-
-        parent::__construct($properties, static::$PROPERTIES);
+        $this->setBody($body);
+        parent::__construct($properties, static::$propertyDefinitions);
     }
 
     /**
