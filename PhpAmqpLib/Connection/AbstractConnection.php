@@ -356,7 +356,7 @@ class AbstractConnection extends AbstractChannel
      * @param string $body
      * @param AMQPWriter $pkt
      */
-    public function send_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt = null)
+    public function send_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, AMQPWriter $pkt = null)
     {
         $this->prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt);
         $this->write($pkt->getvalue());
@@ -374,7 +374,7 @@ class AbstractConnection extends AbstractChannel
      * @param AMQPWriter $pkt
      * @return AMQPWriter
      */
-    public function prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt = null)
+    public function prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, AMQPWriter $pkt = null)
     {
         if (empty($pkt)) {
             $pkt = new AMQPWriter();
@@ -448,7 +448,7 @@ class AbstractConnection extends AbstractChannel
      * @param AMQPWriter $pkt
      * @return null|AMQPWriter
      */
-    protected function prepare_channel_method_frame($channel, $method_sig, $args = "", $pkt = null)
+    protected function prepare_channel_method_frame($channel, $method_sig, $args = '', AMQPWriter $pkt = null)
     {
         if ($args instanceof AMQPWriter) {
             $args = $args->getvalue();
@@ -638,13 +638,11 @@ class AbstractConnection extends AbstractChannel
 
     }
 
-
-
     /**
      * @param AMQPReader $args
      * @throws \PhpAmqpLib\Exception\AMQPProtocolConnectionException
      */
-    protected function connection_close($args)
+    protected function connection_close(AMQPReader $args)
     {
         $reply_code = $args->read_short();
         $reply_text = $args->read_shortstr();
@@ -668,7 +666,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Confirm a connection close
      */
-    protected function connection_close_ok($args)
+    protected function connection_close_ok()
     {
         $this->do_close();
     }
@@ -703,14 +701,12 @@ class AbstractConnection extends AbstractChannel
      *
      * @param AMQPReader $args
      */
-    protected function connection_open_ok($args)
+    protected function connection_open_ok(AMQPReader $args)
     {
         $this->known_hosts = $args->read_shortstr();
         if ($this->debug) {
             MiscHelper::debug_msg('Open OK! known_hosts: ' . $this->known_hosts);
         }
-
-        return null;
     }
 
     /**
@@ -719,7 +715,7 @@ class AbstractConnection extends AbstractChannel
      * @param AMQPReader $args
      * @return string
      */
-    protected function connection_redirect($args)
+    protected function connection_redirect(AMQPReader $args)
     {
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
@@ -739,9 +735,9 @@ class AbstractConnection extends AbstractChannel
      *
      * @param AMQPReader $args
      */
-    protected function connection_secure($args)
+    protected function connection_secure(AMQPReader $args)
     {
-        $challenge = $args->read_longstr();
+        $args->read_longstr();
     }
 
     /**
@@ -759,7 +755,7 @@ class AbstractConnection extends AbstractChannel
      *
      * @param AMQPReader $args
      */
-    protected function connection_start($args)
+    protected function connection_start(AMQPReader $args)
     {
         $this->version_major = $args->read_octet();
         $this->version_minor = $args->read_octet();
@@ -800,7 +796,7 @@ class AbstractConnection extends AbstractChannel
      *
      * @param AMQPReader $args
      */
-    protected function connection_tune($args)
+    protected function connection_tune(AMQPReader $args)
     {
         $v = $args->read_short();
         if ($v) {
@@ -863,7 +859,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Handles connection unblocked notifications
      */
-    protected function connection_unblocked(AMQPReader $args)
+    protected function connection_unblocked()
     {
         // No args to an unblock event
         $this->dispatch_to_handler($this->connection_unblock_handler, array());

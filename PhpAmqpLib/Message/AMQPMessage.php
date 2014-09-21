@@ -32,9 +32,11 @@ class AMQPMessage extends GenericContent
         'cluster_id' => 'shortstr'
     );
 
-
-
-    public function __construct($body = '', $properties = null)
+    /**
+     * @param string $body
+     * @param array|null $properties
+     */
+    public function __construct($body = null, $properties = array())
     {
         $this->setBody($body);
         parent::__construct($properties, static::$propertyDefinitions);

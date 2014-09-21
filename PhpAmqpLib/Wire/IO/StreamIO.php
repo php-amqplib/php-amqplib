@@ -66,10 +66,23 @@ class StreamIO extends AbstractIO
 
         if ($this->context) {
             $remote = sprintf('ssl://%s:%s', $this->host, $this->port);
-            $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT, $this->context);
+            $this->sock = @stream_socket_client(
+                $remote,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                STREAM_CLIENT_CONNECT,
+                $this->context
+            );
         } else {
             $remote = sprintf('tcp://%s:%s', $this->host, $this->port);
-            $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT);
+            $this->sock = @stream_socket_client(
+                $remote,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                STREAM_CLIENT_CONNECT
+            );
         }
 
         if (!$this->sock) {
