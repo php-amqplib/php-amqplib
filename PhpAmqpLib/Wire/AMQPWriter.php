@@ -17,7 +17,7 @@ class AMQPWriter
 
     public function __construct()
     {
-        $this->out = "";
+        $this->out = '';
         $this->bits = array();
         $this->bitcount = 0;
     }
@@ -45,7 +45,7 @@ class AMQPWriter
     {
         if (is_int($x)) {
             if ($x < 0) {
-                $x = sprintf("%u", $x);
+                $x = sprintf('%u', $x);
             }
         }
 
@@ -61,7 +61,7 @@ class AMQPWriter
         $res = array_reverse($res);
 
         if ($x != 0) {
-            throw new AMQPOutOfBoundsException("Value too big!");
+            throw new AMQPOutOfBoundsException('Value too big!');
         }
 
         return $res;
@@ -70,7 +70,7 @@ class AMQPWriter
     private function flushbits()
     {
         if (!empty($this->bits)) {
-            $this->out .= implode("", array_map('chr', $this->bits));
+            $this->out .= implode('', array_map('chr', $this->bits));
             $this->bits = array();
             $this->bitcount = 0;
         }
@@ -228,7 +228,7 @@ class AMQPWriter
             $n2 = ($n & 0x00000000ffffffff);
             $this->out .= pack('NN', $n1, $n2);
         } else {
-            $this->out .= implode("", AMQPWriter::chrbytesplit($n, 8));
+            $this->out .= implode('', self::chrbytesplit($n, 8));
         }
 
         return $this;
@@ -358,7 +358,10 @@ class AMQPWriter
                 $table_data->write('t');
                 $table_data->write_octet($v ? 1 : 0);
             } else {
-                throw new AMQPInvalidArgumentException(sprintf("Invalid type '%s'", $ftype));
+                throw new AMQPInvalidArgumentException(sprintf(
+                    'Invalid type "%s"',
+                    $ftype
+                ));
             }
         }
 

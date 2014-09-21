@@ -23,11 +23,11 @@ class AMQPSocketConnection extends AbstractConnection
         $port,
         $user,
         $password,
-        $vhost = "/",
+        $vhost = '/',
         $insist = false,
-        $login_method = "AMQPLAIN",
+        $login_method = 'AMQPLAIN',
         $login_response = null,
-        $locale = "en_US",
+        $locale = 'en_US',
         $timeout = 3,
         $keepalive = false
     ) {

@@ -70,7 +70,7 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 
     public function testWriteTableThrowsExceptionOnInvalidType()
     {
-        $this->setExpectedException('PhpAmqpLib\Exception\AMQPInvalidArgumentException', "Invalid type '_'");
+        $this->setExpectedException('PhpAmqpLib\Exception\AMQPInvalidArgumentException', 'Invalid type "_"');
 
         $this->_writer->write_table(array(
             'x-foo' => array('_', 'bar'),

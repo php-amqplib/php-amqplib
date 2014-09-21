@@ -50,7 +50,11 @@ class SocketIO extends AbstractIO
         if (!socket_connect($this->sock, $this->host, $this->port)) {
             $errno = socket_last_error($this->sock);
             $errstr = socket_strerror($errno);
-            throw new AMQPIOException("Error Connecting to server($errno): $errstr ", $errno);
+            throw new AMQPIOException(sprintf(
+                'Error Connecting to server (%s): %s',
+                $errno,
+                $errstr
+            ), $errno);
         }
 
         socket_set_block($this->sock);
@@ -93,8 +97,10 @@ class SocketIO extends AbstractIO
         while ($read < $n && $buf !== '' && $buf !== false) {
             // Null sockets are invalid, throw exception
             if (is_null($this->sock)) {
-                throw new AMQPRuntimeException("Socket was null! Last SocketError was: "
-                    . socket_strerror(socket_last_error()));
+                throw new AMQPRuntimeException(sprintf(
+                    'Socket was null! Last SocketError was: %s',
+                    socket_strerror(socket_last_error())
+                ));
             }
 
             $read += mb_strlen($buf, 'ASCII');
@@ -103,8 +109,11 @@ class SocketIO extends AbstractIO
         }
 
         if (mb_strlen($res, 'ASCII') != $n) {
-            throw new AMQPIOException("Error reading data. Received " .
-                mb_strlen($res, 'ASCII') . " instead of expected $n bytes");
+            throw new AMQPIOException(sprintf(
+                'Error reading data. Received %s instead of expected %s bytes',
+                mb_strlen($res, 'ASCII'),
+                $n
+            ));
         }
 
         return $res;
@@ -123,14 +132,18 @@ class SocketIO extends AbstractIO
         while (true) {
             // Null sockets are invalid, throw exception
             if (is_null($this->sock)) {
-                throw new AMQPRuntimeException("Socket was null! Last SocketError was: "
-                    . socket_strerror(socket_last_error()));
+                throw new AMQPRuntimeException(sprintf(
+                    'Socket was null! Last SocketError was: %s',
+                    socket_strerror(socket_last_error())
+                ));
             }
 
             $sent = socket_write($this->sock, $data, $len);
             if ($sent === false) {
-                throw new AMQPIOException ("Error sending data. Last SocketError: "
-                    . socket_strerror(socket_last_error()));
+                throw new AMQPIOException(sprintf(
+                    'Error sending data. Last SocketError: %s',
+                    socket_strerror(socket_last_error())
+                ));
             }
 
             // Check if the entire message has been sent
@@ -173,7 +186,7 @@ class SocketIO extends AbstractIO
     protected function enable_keepalive()
     {
         if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
-            throw new AMQPIOException("Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined");
+            throw new AMQPIOException('Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined');
         }
 
         socket_set_option($this->sock, SOL_SOCKET, SO_KEEPALIVE, 1);

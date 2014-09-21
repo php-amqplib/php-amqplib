@@ -17,7 +17,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $port,
         $user,
         $password,
-        $vhost = "/",
+        $vhost = '/',
         $ssl_options = array(),
         $options = array()
     ) {
@@ -29,9 +29,9 @@ class AMQPSSLConnection extends AMQPStreamConnection
             $password,
             $vhost,
             isset($options['insist']) ? $options['insist'] : false,
-            isset($options['login_method']) ? $options['login_method'] : "AMQPLAIN",
+            isset($options['login_method']) ? $options['login_method'] : 'AMQPLAIN',
             isset($options['login_response']) ? $options['login_response'] : null,
-            isset($options['locale']) ? $options['locale'] : "en_US",
+            isset($options['locale']) ? $options['locale'] : 'en_US',
             isset($options['connection_timeout']) ? $options['connection_timeout'] : 3,
             isset($options['read_write_timeout']) ? $options['read_write_timeout'] : 3,
             $ssl_context,

@@ -5,7 +5,7 @@ class MiscHelper
 {
     public static function debug_msg($s)
     {
-        echo $s, "\n";
+        echo $s . PHP_EOL;
     }
 
     /**
@@ -17,7 +17,7 @@ class MiscHelper
         if (is_string($a)) {
             return $a;
         } else {
-            return sprintf("%d,%d", $a[0], $a[1]);
+            return sprintf('%d,%d', $a[0], $a[1]);
         }
     }
 
@@ -77,7 +77,7 @@ class MiscHelper
         // Iterate string
         for ($i = $j = 0; $i < $len; $i++) {
             // Convert to hexidecimal
-            $hexi .= sprintf("%02$x ", ord($data[$i]));
+            $hexi .= sprintf('%02$x ', ord($data[$i]));
 
             // Replace non-viewable bytes with '.'
             if (ord($data[$i]) >= 32) {
@@ -97,7 +97,7 @@ class MiscHelper
             // Add row
             if (++$j === 16 || $i === $len - 1) {
                 // Join the hexi / ascii output
-                $dump .= sprintf("%04$x  %-49s  %s", $offset, $hexi, $ascii);
+                $dump .= sprintf('%04$x  %-49s  %s', $offset, $hexi, $ascii);
 
                 // Reset vars
                 $hexi = $ascii = '';
@@ -106,14 +106,14 @@ class MiscHelper
 
                 // Add newline
                 if ($i !== $len - 1) {
-                    $dump .= "\n";
+                    $dump .= PHP_EOL;
                 }
             }
         }
 
         // Finish dump
         $dump .= $htmloutput === true ? '</pre>' : '';
-        $dump .= "\n";
+        $dump .= PHP_EOL;
 
         // Output method
         if ($return === false) {

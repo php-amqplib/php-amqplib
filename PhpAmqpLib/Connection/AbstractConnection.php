@@ -16,12 +16,12 @@ class AbstractConnection extends AbstractChannel
 {
     /** @var array */
     public static $LIBRARY_PROPERTIES = array(
-        "product" => array('S', "AMQPLib"),
-        "platform" => array('S', "PHP"),
-        "version" => array('S', "2.4"),
-        "information" => array('S', ""),
-        "copyright" => array('S', ""),
-        "capabilities" => array(
+        'product' => array('S', 'AMQPLib'),
+        'platform' => array('S', 'PHP'),
+        'version' => array('S', '2.4'),
+        'information' => array('S', ''),
+        'copyright' => array('S', ''),
+        'capabilities' => array(
             'F',
             array(
                 'authentication_failure_close' => array('t', true),
@@ -136,11 +136,11 @@ class AbstractConnection extends AbstractChannel
     public function __construct(
         $user,
         $password,
-        $vhost = "/",
+        $vhost = '/',
         $insist = false,
-        $login_method = "AMQPLAIN",
+        $login_method = 'AMQPLAIN',
         $login_response = null,
-        $locale = "en_US",
+        $locale = 'en_US',
         AbstractIO $io,
         $heartbeat = 0
     ) {
@@ -159,8 +159,8 @@ class AbstractConnection extends AbstractChannel
         if ($user && $password) {
             $this->login_response = new AMQPWriter();
             $this->login_response->write_table(array(
-                "LOGIN" => array('S', $user),
-                "PASSWORD" => array('S', $password)
+                'LOGIN' => array('S', $user),
+                'PASSWORD' => array('S', $password)
             ));
 
             // Skip the length
@@ -212,7 +212,7 @@ class AbstractConnection extends AbstractChannel
                     ));
                 }
 
-                $host = $this->x_open($this->vhost, "", $this->insist);
+                $host = $this->x_open($this->vhost, '', $this->insist);
                 if (!$host) {
                     return; // we weren't redirected
                 }
@@ -299,7 +299,7 @@ class AbstractConnection extends AbstractChannel
     protected function close_input()
     {
         if ($this->debug) {
-            MiscHelper::debug_msg("closing input");
+            MiscHelper::debug_msg('closing input');
         }
 
         if (!is_null($this->input)) {
@@ -311,7 +311,7 @@ class AbstractConnection extends AbstractChannel
     protected function close_socket()
     {
         if ($this->debug) {
-            MiscHelper::debug_msg("closing socket");
+            MiscHelper::debug_msg('closing socket');
         }
 
         if (!is_null($this->getIO())) {
@@ -325,8 +325,11 @@ class AbstractConnection extends AbstractChannel
     public function write($data)
     {
         if ($this->debug) {
-            MiscHelper::debug_msg("< [hex]:\n"
-                . MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true));
+            MiscHelper::debug_msg(sprintf(
+                '< [hex]: %s%s',
+                PHP_EOL,
+                MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true)
+            ));
         }
 
         $this->getIO()->write($data);
@@ -351,7 +354,7 @@ class AbstractConnection extends AbstractChannel
             }
         }
 
-        throw new AMQPRuntimeException("No free channel ids");
+        throw new AMQPRuntimeException('No free channel ids');
     }
 
     /**
@@ -388,7 +391,13 @@ class AbstractConnection extends AbstractChannel
         }
 
         // Content already prepared ?
-        $key_cache = "$channel|$packed_properties|$class_id|$weight";
+        $key_cache = sprintf(
+            '%s|%s|%s|%s',
+            $channel,
+            $packed_properties,
+            $class_id,
+            $weight
+        );
         if (!isset($this->prepare_content_cache[$key_cache])) {
             $w = new AMQPWriter();
             $w->write_octet(2);
@@ -410,7 +419,7 @@ class AbstractConnection extends AbstractChannel
 
         $pkt->write_octet(0xCE);
 
-        while ($body !== "") {
+        while ($body !== '') {
             $bodyStart = ($this->frame_max - 8);
             $payload = mb_substr($body, 0, $bodyStart, 'ASCII');
             $body = mb_substr($body, $bodyStart, mb_strlen($body, 'ASCII') - $bodyStart, 'ASCII');
@@ -433,7 +442,7 @@ class AbstractConnection extends AbstractChannel
      * @param string $args
      * @param null $pkt
      */
-    protected function send_channel_method_frame($channel, $method_sig, $args = "", $pkt = null)
+    protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
         $pkt = $this->prepare_channel_method_frame($channel, $method_sig, $args, $pkt);
 
@@ -441,8 +450,11 @@ class AbstractConnection extends AbstractChannel
 
         if ($this->debug) {
             $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            MiscHelper::debug_msg(sprintf(
+                '< %s: %s',
+                MiscHelper::methodSig($method_sig),
+                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+            ));
         }
     }
 
@@ -455,7 +467,7 @@ class AbstractConnection extends AbstractChannel
      * @param AMQPWriter $pkt
      * @return null|AMQPWriter
      */
-    protected function prepare_channel_method_frame($channel, $method_sig, $args = "", $pkt = null)
+    protected function prepare_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
         if ($args instanceof AMQPWriter) {
             $args = $args->getvalue();
@@ -478,8 +490,11 @@ class AbstractConnection extends AbstractChannel
 
         if ($this->debug) {
             $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg("< " . MiscHelper::methodSig($method_sig) . ": " .
-                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
+            MiscHelper::debug_msg(sprintf(
+                '< %s: %s',
+                MiscHelper::methodSig($method_sig),
+                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+            ));
         }
 
         return $pkt;
@@ -523,7 +538,10 @@ class AbstractConnection extends AbstractChannel
         $this->input->setTimeout($currentTimeout);
 
         if ($ch != 0xCE) {
-            throw new AMQPRuntimeException(sprintf("Framing error, unexpected byte: %x", $ch));
+            throw new AMQPRuntimeException(sprintf(
+                'Framing error, unexpected byte: %x',
+                $ch
+            ));
         }
 
         return array($frame_type, $channel, $payload);
@@ -593,7 +611,7 @@ class AbstractConnection extends AbstractChannel
      * @param array $method_sig
      * @return mixed|null
      */
-    public function close($reply_code = 0, $reply_text = "", $method_sig = array(0, 0))
+    public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
         if (!$this->protocolWriter || !$this->isConnected()) {
             return null;
@@ -684,7 +702,7 @@ class AbstractConnection extends AbstractChannel
      * @param bool $insist
      * @return mixed
      */
-    protected function x_open($virtual_host, $capabilities = "", $insist = false)
+    protected function x_open($virtual_host, $capabilities = '', $insist = false)
     {
         $args = new AMQPWriter();
         $args->write_shortstr($virtual_host);
@@ -712,7 +730,7 @@ class AbstractConnection extends AbstractChannel
     {
         $this->known_hosts = $args->read_shortstr();
         if ($this->debug) {
-            MiscHelper::debug_msg("Open OK! known_hosts: " . $this->known_hosts);
+            MiscHelper::debug_msg('Open OK! known_hosts: ' . $this->known_hosts);
         }
     }
 
@@ -727,7 +745,11 @@ class AbstractConnection extends AbstractChannel
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
         if ($this->debug) {
-            MiscHelper::debug_msg("Redirected to [" . $host . "], known_hosts [" . $this->known_hosts . "]");
+            MiscHelper::debug_msg(sprintf(
+                'Redirected to [%s], known_hosts [%s]',
+                $host,
+                $this->known_hosts
+            ));
         }
 
         return $host;
@@ -763,12 +785,12 @@ class AbstractConnection extends AbstractChannel
         $this->version_major = $args->read_octet();
         $this->version_minor = $args->read_octet();
         $this->server_properties = $args->read_table();
-        $this->mechanisms = explode(" ", $args->read_longstr());
-        $this->locales = explode(" ", $args->read_longstr());
+        $this->mechanisms = explode(' ', $args->read_longstr());
+        $this->locales = explode(' ', $args->read_longstr());
 
         if ($this->debug) {
             MiscHelper::debug_msg(sprintf(
-                "Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s",
+                'Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s',
                 $this->version_major,
                 $this->version_minor,
                 self::dump_table($this->server_properties),
