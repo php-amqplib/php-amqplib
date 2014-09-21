@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Helper;
 
 class MiscHelper
@@ -10,8 +9,10 @@ class MiscHelper
         echo $s, "\n";
     }
 
-
-
+    /**
+     * @param $a
+     * @return string
+     */
     public static function methodSig($a)
     {
         if (is_string($a)) {
@@ -24,14 +25,15 @@ class MiscHelper
 
 
 
+    /**
+     * @param $bytes
+     */
     public static function saveBytes($bytes)
     {
         $fh = fopen('/tmp/bytes', 'wb');
         fwrite($fh, $bytes);
         fclose($fh);
     }
-
-
 
     /**
      * Gets a number (either int or float) and returns an array containing its integer part as first element and its
@@ -45,8 +47,6 @@ class MiscHelper
     {
         return array(floor($number), ($number - floor($number)) * 1000000);
     }
-
-
 
     /**
      * View any string as a hexdump.

@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Message;
 
 use PhpAmqpLib\Wire\GenericContent;
@@ -9,15 +8,10 @@ use PhpAmqpLib\Wire\GenericContent;
  */
 class AMQPMessage extends GenericContent
 {
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $body;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $content_encoding;
 
     /**
@@ -49,8 +43,12 @@ class AMQPMessage extends GenericContent
         parent::__construct($properties, static::$PROPERTIES);
     }
 
-
-
+    /**
+     * Sets the message payload
+     *
+     * @param mixed $body
+     * @return $this
+     */
     public function setBody($body)
     {
         $this->body = $body;

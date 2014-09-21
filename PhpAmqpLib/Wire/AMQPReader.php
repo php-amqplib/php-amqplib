@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
@@ -8,7 +7,6 @@ use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
-
 /**
  * This class can read from a string or from a stream
  *
@@ -16,7 +14,6 @@ use PhpAmqpLib\Wire\IO\AbstractIO;
  */
 class AMQPReader
 {
-
     const BIT = 1;
     const OCTET = 1;
     const SHORTSTR = 1;
@@ -27,47 +24,29 @@ class AMQPReader
     const LONGLONG = 8;
     const TIMESTAMP = 8;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $str;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $str_length;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $offset;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $bitcount;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $is64bits;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $timeout;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $bits;
 
-    /**
-     * @var IO\AbstractIO
-     */
+    /** @var \PhpAmqpLib\Wire\IO\AbstractIO */
     protected $io;
-
-
 
     /**
      * @param string $str
@@ -86,13 +65,15 @@ class AMQPReader
         $this->is64bits = ((int) 4294967296) != 0 ? true : false;
     }
 
-
-
     /**
+     * Resets the object from the injected param
+     *
      * Used to not need to create a new AMQPReader instance every time.
      * when we can just pass a string and reset the object state.
      * NOTE: since we are working with strings we don't need to pass an AbstractIO
      *       or a timeout.
+     *
+     * @param string $str
      */
     public function reuse($str)
     {
@@ -102,10 +83,8 @@ class AMQPReader
         $this->bitcount = $this->bits = 0;
     }
 
-
-
     /**
-     * close the stream
+     * Closes the stream
      */
     public function close()
     {
@@ -114,11 +93,8 @@ class AMQPReader
         }
     }
 
-
-
     /**
-     * @param int $n
-     *
+     * @param $n
      * @return string
      */
     public function read($n)
@@ -128,10 +104,8 @@ class AMQPReader
         return $this->rawread($n);
     }
 
-
-
     /**
-     * Wait until some data is retrieved from the socket.
+     * Waits until some data is retrieved from the socket.
      *
      * AMQPTimeoutException can be raised if the timeout is set
      *
@@ -156,16 +130,12 @@ class AMQPReader
         }
     }
 
-
-
     /**
      * @param $n
-     *
      * @return string
      * @throws \RuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-
     protected function rawread($n)
     {
         if ($this->io) {
@@ -206,8 +176,6 @@ class AMQPReader
         return $result;
     }
 
-
-
     /**
      * @return mixed
      */
@@ -219,8 +187,6 @@ class AMQPReader
         return $res;
     }
 
-
-
     /**
      * @return mixed
      */
@@ -231,8 +197,6 @@ class AMQPReader
 
         return $res;
     }
-
-
 
     /**
      * Reads 32 bit integer in big-endian byte order.
@@ -273,8 +237,6 @@ class AMQPReader
         return $sres;
     }
 
-
-
     /**
      * @return integer
      */
@@ -287,8 +249,6 @@ class AMQPReader
 
         return $res;
     }
-
-
 
     /**
      * Even on 64 bit systems PHP integers are singed.
@@ -310,8 +270,6 @@ class AMQPReader
         return bcadd(bcmul($hi, "4294967296"), $lo);
     }
 
-
-
     /**
      * Read a utf-8 encoded string that's stored in up to
      * 255 bytes.  Return it decoded as a PHP unicode object.
@@ -323,8 +281,6 @@ class AMQPReader
 
         return $this->rawread($slen);
     }
-
-
 
     /**
      * Read a string that's up to 2**32 bytes, the encoding
@@ -343,8 +299,6 @@ class AMQPReader
         return $this->rawread($slen);
     }
 
-
-
     /**
      * Read and AMQP timestamp, which is a 64-bit integer representing
      * seconds since the Unix epoch in 1-second resolution.
@@ -353,8 +307,6 @@ class AMQPReader
     {
         return $this->read_longlong();
     }
-
-
 
     /**
      * Read an AMQP table, and return as a PHP array. keys are strings,
@@ -381,8 +333,6 @@ class AMQPReader
         return $result;
     }
 
-
-
     /**
      * Reads the array in the next value.
      *
@@ -406,14 +356,12 @@ class AMQPReader
         return $result;
     }
 
-
-
     /**
      * Reads the next value as the provided field type.
      *
      * @param string $fieldType the char field type
-     *
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_value($fieldType)
     {
@@ -462,8 +410,6 @@ class AMQPReader
         return $val;
     }
 
-
-
     /**
      * @return int
      */
@@ -472,10 +418,8 @@ class AMQPReader
         return $this->offset;
     }
 
-
-
     /**
-     * Set the timeout (second)
+     * Sets the timeout (second)
      *
      * @param $timeout
      */
@@ -483,8 +427,6 @@ class AMQPReader
     {
         $this->timeout = $timeout;
     }
-
-
 
     /**
      * @return int

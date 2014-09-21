@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
@@ -7,23 +6,14 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 
 class AMQPWriter
 {
-
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $out;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $bits;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $bitcount;
-
-
 
     public function __construct()
     {
@@ -32,18 +22,24 @@ class AMQPWriter
         $this->bitcount = 0;
     }
 
-
-
+    /**
+     * @param $x
+     * @param $bytes
+     * @return array
+     */
     private static function chrbytesplit($x, $bytes)
     {
         return array_map('chr', AMQPWriter::bytesplit($x, $bytes));
     }
 
-
-
     /**
      * Splits number (could be either int or string) into array of byte
      * values (represented as integers) in big-endian byte order.
+     *
+     * @param $x
+     * @param $bytes
+     * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     private static function bytesplit($x, $bytes)
     {
@@ -71,8 +67,6 @@ class AMQPWriter
         return $res;
     }
 
-
-
     private function flushbits()
     {
         if (!empty($this->bits)) {
@@ -81,8 +75,6 @@ class AMQPWriter
             $this->bitcount = 0;
         }
     }
-
-
 
     /**
      * Get what's been encoded so far.
@@ -97,8 +89,6 @@ class AMQPWriter
         return $this->out;
     }
 
-
-
     /**
      * Write a plain PHP string, with no special encoding.
      */
@@ -109,11 +99,13 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
      * Write a boolean value.
      * (deprecated, use write_bits instead)
+     *
+     * @deprecated
+     * @param $b
+     * @return $this
      */
     public function write_bit($b)
     {
@@ -133,16 +125,16 @@ class AMQPWriter
 
         $last |= ($b << $shift);
         array_push($this->bits, $last);
-
         $this->bitcount += 1;
 
         return $this;
     }
 
-
-
     /**
-     * Write multiple bits as an octet.
+     * Write multiple bits as an octet
+     *
+     * @param $bits
+     * @return $this
      */
     public function write_bits($bits)
     {
@@ -158,10 +150,12 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
-     * Write an integer as an unsigned 8-bit value.
+     * Write an integer as an unsigned 8-bit value
+     *
+     * @param $n
+     * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_octet($n)
     {
@@ -174,10 +168,12 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
-     * Write an integer as an unsigned 16-bit value.
+     * Write an integer as an unsigned 16-bit value
+     *
+     * @param $n
+     * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_short($n)
     {
@@ -190,10 +186,11 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
-     * Write an integer as an unsigned 32-bit value.
+     * Write an integer as an unsigned 32-bit value
+     *
+     * @param $n
+     * @return $this
      */
     public function write_long($n)
     {
@@ -202,8 +199,10 @@ class AMQPWriter
         return $this;
     }
 
-
-
+    /**
+     * @param $n
+     * @return $this
+     */
     private function write_signed_long($n)
     {
         // although format spec for 'N' mentions unsigned
@@ -213,10 +212,11 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
-     * Write an integer as an unsigned 64-bit value.
+     * Write an integer as an unsigned 64-bit value
+     *
+     * @param $n
+     * @return $this
      */
     public function write_longlong($n)
     {
@@ -228,17 +228,19 @@ class AMQPWriter
             $n2 = ($n & 0x00000000ffffffff);
             $this->out .= pack('NN', $n1, $n2);
         } else {
-            $this->out .= implode("", AMQPWriter::chrbytesplit($n, 8));
+            $this->out .= implode('', self::chrbytesplit($n, 8));
         }
 
         return $this;
     }
 
-
-
     /**
      * Write a string up to 255 bytes long after encoding.
-     * Assume UTF-8 encoding.
+     * Assume UTF-8 encoding
+     *
+     * @param $s
+     * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_shortstr($s)
     {
@@ -253,10 +255,11 @@ class AMQPWriter
         return $this;
     }
 
-
-
-    /*
-     * Write a string up to 2**32 bytes long.  Assume UTF-8 encoding.
+    /**
+     * Write a string up to 2**32 bytes long.  Assume UTF-8 encoding
+     *
+     * @param $s
+     * @return $this
      */
     public function write_longstr($s)
     {
@@ -266,14 +269,11 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
      * Supports the writing of Array types, so that you can implement
      * array methods, like Rabbitmq's HA parameters
      *
      * @param array $a
-     *
      * @return self
      */
     public function write_array($a)
@@ -307,10 +307,11 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
-     * Write unix time_t value as 64 bit timestamp.
+     * Write unix time_t value as 64 bit timestamp
+     *
+     * @param $v
+     * @return $this
      */
     public function write_timestamp($v)
     {
@@ -319,11 +320,13 @@ class AMQPWriter
         return $this;
     }
 
-
-
     /**
      * Write PHP array, as table. Input array format: keys are strings,
      * values are (type,value) tuples.
+     *
+     * @param $d
+     * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_table($d)
     {
