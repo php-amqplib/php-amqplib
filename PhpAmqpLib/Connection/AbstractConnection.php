@@ -380,9 +380,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt = null)
     {
-        if (empty($pkt)) {
-            $pkt = new AMQPWriter();
-        }
+        $pkt = $pkt ?: new AMQPWriter();
 
         // Content already prepared ?
         $key_cache = sprintf(
@@ -392,6 +390,7 @@ class AbstractConnection extends AbstractChannel
             $class_id,
             $weight
         );
+
         if (!isset($this->prepare_content_cache[$key_cache])) {
             $w = new AMQPWriter();
             $w->write_octet(2);
@@ -444,9 +443,7 @@ class AbstractConnection extends AbstractChannel
     protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
         $pkt = $this->prepare_channel_method_frame($channel, $method_sig, $args, $pkt);
-
         $this->write($pkt->getvalue());
-
         $this->debug->debug_method_signature1($method_sig);
     }
 
@@ -465,9 +462,7 @@ class AbstractConnection extends AbstractChannel
             $args = $args->getvalue();
         }
 
-        if (empty($pkt)) {
-            $pkt = new AMQPWriter();
-        }
+        $pkt = $pkt ?: new AMQPWriter();
 
         $pkt->write_octet(1);
         $pkt->write_short($channel);
@@ -598,14 +593,15 @@ class AbstractConnection extends AbstractChannel
     public function channel($channel_id = null)
     {
         if (isset($this->channels[$channel_id])) {
-            return $this->channels[$channel_id];
-        } else {
-            $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
-            $ch = new AMQPChannel($this->connection, $channel_id);
-            $this->channels[$channel_id] = $ch;
 
-            return $ch;
+            return $this->channels[$channel_id];
         }
+
+        $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
+        $ch = new AMQPChannel($this->connection, $channel_id);
+        $this->channels[$channel_id] = $ch;
+
+        return $ch;
     }
 
     /**
@@ -902,7 +898,7 @@ class AbstractConnection extends AbstractChannel
      */
     protected function setIsConnected($is_connected)
     {
-        $this->is_connected = $is_connected;
+        $this->is_connected = (bool) $is_connected;
     }
 
     /**

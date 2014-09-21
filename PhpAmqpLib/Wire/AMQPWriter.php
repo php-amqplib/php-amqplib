@@ -43,6 +43,7 @@ class AMQPWriter extends AbstractClient
 
         $ox = $x; //purely for dbg purposes (overflow exception)
         $isNeg = false;
+
         if (is_int($x)) {
             if ($x < 0) {
                 $isNeg = true;
@@ -56,6 +57,7 @@ class AMQPWriter extends AbstractClient
         } else {
             throw new AMQPInvalidArgumentException('Only integer and numeric string values are supported');
         }
+
         if ($isNeg) {
             $x = bcadd($x, -1, 0);
         } //in negative domain starting point is -1, not 0
@@ -66,6 +68,7 @@ class AMQPWriter extends AbstractClient
             $x = bcdiv($x, 65536, 0);
             $res[] = pack('n', $isNeg ? ~$chnk : $chnk);
         }
+
         if ($x || ($isNeg && ($chnk & 0x8000))) {
             throw new AMQPOutOfBoundsException(sprintf('Overflow detected while attempting to pack %s into %s bytes', $ox, $bytes));
         }
@@ -115,15 +118,9 @@ class AMQPWriter extends AbstractClient
      */
     public function write_bit($b)
     {
-        $b = (int) (bool) $b;
+        $b = $b ? 1 : 0;
         $shift = $this->bitcount % 8;
-
-        if ($shift == 0) {
-            $last = 0;
-        } else {
-            $last = array_pop($this->bits);
-        }
-
+        $last = $shift === 0 ? 0 : array_pop($this->bits);
         $last |= ($b << $shift);
         array_push($this->bits, $last);
         $this->bitcount += 1;
@@ -461,8 +458,8 @@ class AMQPWriter extends AbstractClient
                 $this->write_longlong($val);
                 break;
             case AMQPAbstractCollection::T_DECIMAL:
-                $this->write_octet($val->e);
-                $this->write_signed_long($val->n);
+                $this->write_octet($val->getE());
+                $this->write_signed_long($val->getN());
                 break;
             case AMQPAbstractCollection::T_TIMESTAMP:
                 $this->write_timestamp($val);

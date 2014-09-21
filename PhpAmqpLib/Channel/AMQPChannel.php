@@ -749,7 +749,7 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                'Server ack\'ed unknown delivery_tag %s',
+                'Server ack\'ed unknown delivery_tag "%s"',
                 $delivery_tag
             ));
         }
@@ -770,7 +770,7 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                'Server nack\'ed unknown delivery_tag %s',
+                'Server nack\'ed unknown delivery_tag "%s"',
                 $delivery_tag
             ));
         }
@@ -966,13 +966,7 @@ class AMQPChannel extends AbstractChannel
         );
 
         if (isset($this->callbacks[$consumer_tag])) {
-            $func = $this->callbacks[$consumer_tag];
-        } else {
-            $func = null;
-        }
-
-        if ($func != null) {
-            call_user_func($func, $msg);
+            call_user_func($this->callbacks[$consumer_tag], $msg);
         }
     }
 
@@ -1245,6 +1239,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $args
      * @param AMQPMessage $msg
+     * @return null
      */
     protected function basic_return($args, $msg)
     {
@@ -1252,19 +1247,20 @@ class AMQPChannel extends AbstractChannel
         $reply_text = $args->read_shortstr();
         $exchange = $args->read_shortstr();
         $routing_key = $args->read_shortstr();
+        $callback = $this->basic_return_callback;
 
-        if (null !== ($this->basic_return_callback)) {
-            call_user_func_array($this->basic_return_callback, array(
-                $reply_code,
-                $reply_text,
-                $exchange,
-                $routing_key,
-                $msg,
-            ));
-
-        } else {
+        if (!is_callable($callback)) {
             $this->debug->debug_msg('Skipping unhandled basic_return message');
+            return null;
         }
+
+        call_user_func_array($callback, array(
+            $reply_code,
+            $reply_text,
+            $exchange,
+            $routing_key,
+            $msg,
+        ));
     }
 
     /**
@@ -1441,7 +1437,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_return_listener($callback)
     {
-        if (false === is_callable($callback)) {
+        if (!is_callable($callback)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given callback "%s" should be callable. %s type was given.',
                 $callback,
@@ -1460,7 +1456,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_nack_handler($callback)
     {
-        if (false === is_callable($callback)) {
+        if (!is_callable($callback)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given callback "%s" should be callable. %s type was given.',
                 $callback,
@@ -1479,7 +1475,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_ack_handler($callback)
     {
-        if (false === is_callable($callback)) {
+        if (!is_callable($callback)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given callback "%s" should be callable. %s type was given.',
                 $callback,

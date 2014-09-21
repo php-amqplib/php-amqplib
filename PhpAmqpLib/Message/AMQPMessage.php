@@ -39,9 +39,9 @@ class AMQPMessage extends GenericContent
 
     /**
      * @param string $body
-     * @param null $properties
+     * @param array $properties
      */
-    public function __construct($body = '', $properties = null)
+    public function __construct($body = '', $properties = array())
     {
         $this->setBody($body);
         parent::__construct($properties, static::$propertyDefinitions);
@@ -56,5 +56,7 @@ class AMQPMessage extends GenericContent
     public function setBody($body)
     {
         $this->body = $body;
+
+        return $this;
     }
 }

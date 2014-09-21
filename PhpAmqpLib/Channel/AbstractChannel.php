@@ -109,8 +109,11 @@ abstract class AbstractChannel
                 $this->methodMap = new MethodMap080();
                 break;
             default:
-                //this is logic exception (requires code changes to fix), so OutOfRange, not OutOfBounds or Runtime
-                throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $this->protocolVersion));
+                throw new AMQPRuntimeException(sprintf(
+                    'Protocol: %s not implemented.',
+                    $this->protocolVersion
+                ));
+                break;
         }
     }
 
@@ -275,10 +278,12 @@ abstract class AbstractChannel
         return $msg;
     }
 
-    protected function build_msg_body($body_size) {
+    protected function build_msg_body($body_size)
+    {
         $body_parts = array();
         $body_received = 0;
         $is_truncated = false;
+
         while (bccomp($body_size, $body_received, 0) == 1) {
             list($frame_type, $payload) = $this->next_frame();
 
@@ -286,7 +291,7 @@ abstract class AbstractChannel
 
             $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
 
-            if ( ! is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
+            if (!is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
                 $is_truncated = true;
                 continue;
             }
@@ -346,13 +351,16 @@ abstract class AbstractChannel
         }
     }
 
-    protected function process_deferred_methods($allowed_methods) {
+    protected function process_deferred_methods($allowed_methods)
+    {
         $dispatch = false;
         $queued_method = array();
+
         foreach ($this->method_queue as $qk => $qm) {
             $this->debug->debug_msg('checking queue method ' . $qk);
 
             $method_sig = $qm[0];
+
             if ($allowed_methods == null || in_array($method_sig, $allowed_methods)) {
                 unset($this->method_queue[$qk]);
                 $dispatch = true;
@@ -360,40 +368,46 @@ abstract class AbstractChannel
                 break;
             }
         }
+
         return array('dispatch' => $dispatch, 'queued_method' => $queued_method);
     }
 
-    protected function dispatch_deferred_method($queued_method) {
+    protected function dispatch_deferred_method($queued_method)
+    {
         $this->debug->debug_method_signature('Executing queued method: %s', $queued_method[0]);
+
         return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
     }
-
 
     /**
      * @param $frame_type
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    protected function validate_method_frame($frame_type) {
+    protected function validate_method_frame($frame_type)
+    {
         $this->validate_frame($frame_type, 1, 'AMQP method');
     }
 
-    protected function validate_header_frame($frame_type) {
+    protected function validate_header_frame($frame_type)
+    {
         $this->validate_frame($frame_type, 2, 'AMQP Content header');
     }
 
-    protected function validate_body_frame($frame_type) {
+    protected function validate_body_frame($frame_type)
+    {
         $this->validate_frame($frame_type, 3, 'AMQP Content body');
     }
 
-    protected function validate_frame($frame_type, $expected_type, $expected_msg) {
+    protected function validate_frame($frame_type, $expected_type, $expected_msg)
+    {
         if ($frame_type != $expected_type) {
             $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
             throw new AMQPRuntimeException(sprintf(
-                    'Expecting %s, received frame type %s (%s)',
-                    $expected_msg,
-                    $frame_type,
-                    $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-                ));
+                'Expecting %s, received frame type %s (%s)',
+                $expected_msg,
+                $frame_type,
+                $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
+            ));
         }
     }
 
@@ -401,34 +415,43 @@ abstract class AbstractChannel
      * @param $payload
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
-    protected function validate_frame_payload($payload) {
+    protected function validate_frame_payload($payload)
+    {
         if (mb_strlen($payload, 'ASCII') < 4) {
             throw new AMQPOutOfBoundsException('Method frame too short');
         }
     }
 
-    protected function build_method_signature($payload) {
+    protected function build_method_signature($payload)
+    {
         $method_sig_array = unpack('n2', mb_substr($payload, 0, 4, 'ASCII'));
-        return '' . $method_sig_array[1] . ',' . $method_sig_array[2];
+
+        return sprintf('%s,%s', $method_sig_array[1], $method_sig_array[2]);
     }
 
-    protected function extract_args($payload) {
+    protected function extract_args($payload)
+    {
         return mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
     }
 
-    protected function should_dispatch_method($allowed_methods, $method_sig) {
+    protected function should_dispatch_method($allowed_methods, $method_sig)
+    {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-        return $allowed_methods == null ||
-                in_array($method_sig, $allowed_methods) ||
-                in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS);
+
+        return $allowed_methods == null
+            || in_array($method_sig, $allowed_methods)
+            || in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS);
     }
 
-    protected function maybe_wait_for_content($method_sig) {
+    protected function maybe_wait_for_content($method_sig)
+    {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
         $content = null;
+
         if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
             $content = $this->wait_content();
         }
+
         return $content;
     }
 
