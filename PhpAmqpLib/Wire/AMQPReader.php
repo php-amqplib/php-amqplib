@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
@@ -8,7 +7,6 @@ use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
-
 /**
  * This class can read from a string or from a stream
  *
@@ -16,7 +14,6 @@ use PhpAmqpLib\Wire\IO\AbstractIO;
  */
 class AMQPReader
 {
-
     const BIT = 1;
     const OCTET = 1;
     const SHORTSTR = 1;
@@ -27,47 +24,29 @@ class AMQPReader
     const LONGLONG = 8;
     const TIMESTAMP = 8;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $str;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $str_length;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $offset;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $bitcount;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $is64bits;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $timeout;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $bits;
 
-    /**
-     * @var IO\AbstractIO
-     */
+    /** @var \PhpAmqpLib\Wire\IO\AbstractIO */
     protected $io;
-
-
 
     /**
      * @param string $str
@@ -81,18 +60,19 @@ class AMQPReader
         $this->io = $io;
         $this->offset = 0;
         $this->bitcount = $this->bits = 0;
-        $this->timeout = $timeout;
-
+        $this->setTimeout($timeout);
         $this->is64bits = ((int) 4294967296) != 0 ? true : false;
     }
 
-
-
     /**
+     * Resets the object from the injected param
+     *
      * Used to not need to create a new AMQPReader instance every time.
      * when we can just pass a string and reset the object state.
      * NOTE: since we are working with strings we don't need to pass an AbstractIO
      *       or a timeout.
+     *
+     * @param string $str
      */
     public function reuse($str)
     {
@@ -102,10 +82,8 @@ class AMQPReader
         $this->bitcount = $this->bits = 0;
     }
 
-
-
     /**
-     * close the stream
+     * Closes the stream
      */
     public function close()
     {
@@ -114,11 +92,8 @@ class AMQPReader
         }
     }
 
-
-
     /**
-     * @param int $n
-     *
+     * @param $n
      * @return string
      */
     public function read($n)
@@ -128,10 +103,8 @@ class AMQPReader
         return $this->rawread($n);
     }
 
-
-
     /**
-     * Wait until some data is retrieved from the socket.
+     * Waits until some data is retrieved from the socket.
      *
      * AMQPTimeoutException can be raised if the timeout is set
      *
@@ -139,55 +112,57 @@ class AMQPReader
      */
     protected function wait()
     {
-        if ($this->timeout == 0) {
+        if ($this->getTimeout() == 0) {
             return;
         }
 
         // wait ..
-        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
+        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->getTimeout());
         $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
-            throw new AMQPRuntimeException(sprintf("An error occurs", $this->timeout));
+            throw new AMQPRuntimeException('A network error occured while awaiting for incoming data');
         }
 
         if ($result === 0) {
-            throw new AMQPTimeoutException(sprintf("A timeout occurs while waiting for incoming data", $this->timeout));
+            throw new AMQPTimeoutException(sprintf(
+                'The connection timed out after %s sec while awaiting incoming data',
+                $this->getTimeout()
+            ));
         }
     }
 
-
-
     /**
      * @param $n
-     *
      * @return string
      * @throws \RuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-
     protected function rawread($n)
     {
         if ($this->io) {
             $this->wait();
             $res = $this->io->read($n);
             $this->offset += $n;
-        } else {
-            if ($this->str_length < $n) {
-                throw new AMQPRuntimeException("Error reading data. Requested $n bytes while string buffer has only " .
-                    $this->str_length);
-            }
 
-            $res = mb_substr($this->str, 0, $n, 'ASCII');
-            $this->str = mb_substr($this->str, $n, mb_strlen($this->str, 'ASCII') - $n, 'ASCII');
-            $this->str_length -= $n;
-            $this->offset += $n;
+            return $res;
         }
+
+        if ($this->str_length < $n) {
+            throw new AMQPRuntimeException(sprintf(
+                'Error while reading data. Requested %s bytes while string buffer has only %s',
+                $n,
+                $this->str_length
+            ));
+        }
+
+        $res = mb_substr($this->str, 0, $n, 'ASCII');
+        $this->str = mb_substr($this->str, $n, mb_strlen($this->str, 'ASCII') - $n, 'ASCII');
+        $this->str_length -= $n;
+        $this->offset += $n;
 
         return $res;
     }
-
-
 
     /**
      * @return bool
@@ -206,8 +181,6 @@ class AMQPReader
         return $result;
     }
 
-
-
     /**
      * @return mixed
      */
@@ -219,8 +192,6 @@ class AMQPReader
         return $res;
     }
 
-
-
     /**
      * @return mixed
      */
@@ -231,8 +202,6 @@ class AMQPReader
 
         return $res;
     }
-
-
 
     /**
      * Reads 32 bit integer in big-endian byte order.
@@ -249,15 +218,12 @@ class AMQPReader
     {
         list(, $res) = unpack('N', $this->rawread(4));
         if ($this->is64bits) {
-            $sres = sprintf("%u", $res);
-
+            $sres = sprintf('%u', $res);
             return (int) $sres;
-        } else {
-            return $res;
         }
+
+        return $res;
     }
-
-
 
     /**
      * PHP does not have unsigned 32 bit int,
@@ -268,12 +234,10 @@ class AMQPReader
     {
         $this->bitcount = $this->bits = 0;
         list(, $res) = unpack('N', $this->rawread(4));
-        $sres = sprintf("%u", $res);
+        $sres = sprintf('%u', $res);
 
         return $sres;
     }
-
-
 
     /**
      * @return integer
@@ -287,8 +251,6 @@ class AMQPReader
 
         return $res;
     }
-
-
 
     /**
      * Even on 64 bit systems PHP integers are singed.
@@ -304,13 +266,11 @@ class AMQPReader
         $lo = unpack('N', $this->rawread(4));
 
         // workaround signed/unsigned braindamage in php
-        $hi = sprintf("%u", $hi[1]);
-        $lo = sprintf("%u", $lo[1]);
+        $hi = sprintf('%u', $hi[1]);
+        $lo = sprintf('%u', $lo[1]);
 
-        return bcadd(bcmul($hi, "4294967296"), $lo);
+        return bcadd(bcmul($hi, '4294967296'), $lo);
     }
-
-
 
     /**
      * Read a utf-8 encoded string that's stored in up to
@@ -324,8 +284,6 @@ class AMQPReader
         return $this->rawread($slen);
     }
 
-
-
     /**
      * Read a string that's up to 2**32 bytes, the encoding
      * isn't specified in the AMQP spec, so just return it as
@@ -337,13 +295,11 @@ class AMQPReader
         $slen = $this->read_php_int();
 
         if ($slen < 0) {
-            throw new AMQPOutOfBoundsException("Strings longer than supported on this platform");
+            throw new AMQPOutOfBoundsException('Strings longer than supported on this platform');
         }
 
         return $this->rawread($slen);
     }
-
-
 
     /**
      * Read and AMQP timestamp, which is a 64-bit integer representing
@@ -353,8 +309,6 @@ class AMQPReader
     {
         return $this->read_longlong();
     }
-
-
 
     /**
      * Read an AMQP table, and return as a PHP array. keys are strings,
@@ -366,7 +320,7 @@ class AMQPReader
         $tlen = $this->read_php_int();
 
         if ($tlen < 0) {
-            throw new AMQPOutOfBoundsException("Table is longer than supported");
+            throw new AMQPOutOfBoundsException('Table is longer than supported');
         }
 
         $table_data = new AMQPReader($this->rawread($tlen), null);
@@ -380,8 +334,6 @@ class AMQPReader
 
         return $result;
     }
-
-
 
     /**
      * Reads the array in the next value.
@@ -406,20 +358,17 @@ class AMQPReader
         return $result;
     }
 
-
-
     /**
      * Reads the next value as the provided field type.
      *
      * @param string $fieldType the char field type
-     *
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_value($fieldType)
     {
         $this->bitcount = $this->bits = 0;
 
-        $val = NULL;
         switch ($fieldType) {
             case 'S': // Long string
                 $val = $this->read_longstr();
@@ -455,14 +404,15 @@ class AMQPReader
                 break;                
             default:
                 // UNKNOWN TYPE
-                throw new AMQPRuntimeException("Usupported table field type {$fieldType}");
+                throw new AMQPRuntimeException(sprint(
+                    'Usupported table field type "%s"',
+                    $fieldType
+                ));
                 break;
         }
 
-        return $val;
+        return isset($val) ? $val : null;
     }
-
-
 
     /**
      * @return int
@@ -472,10 +422,8 @@ class AMQPReader
         return $this->offset;
     }
 
-
-
     /**
-     * Set the timeout (second)
+     * Sets the timeout (second)
      *
      * @param $timeout
      */
@@ -483,8 +431,6 @@ class AMQPReader
     {
         $this->timeout = $timeout;
     }
-
-
 
     /**
      * @return int

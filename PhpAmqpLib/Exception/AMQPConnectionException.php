@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Exception;
 
 /**
@@ -7,5 +6,4 @@ namespace PhpAmqpLib\Exception;
  */
 class AMQPConnectionException extends AMQPException
 {
-
 }

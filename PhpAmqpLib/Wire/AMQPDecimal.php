@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
@@ -17,33 +16,48 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
  */
 class AMQPDecimal
 {
-
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $n;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $e;
 
-
-
+    /**
+     * @param $n
+     * @param $e
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     */
     public function __construct($n, $e)
     {
         if ($e < 0) {
-            throw new AMQPOutOfBoundsException("Decimal exponent value must be unsigned!");
+            throw new AMQPOutOfBoundsException('Decimal exponent value must be unsigned!');
         }
 
         $this->n = $n;
         $this->e = $e;
     }
 
-
-
+    /**
+     * @return string
+     */
     public function asBCvalue()
     {
         return bcdiv($this->n, bcpow(10, $this->e));
+    }
+
+    /**
+     * @return int
+     */
+    public function getE()
+    {
+        return $this->e;
+    }
+
+    /**
+     * @return int
+     */
+    public function getN()
+    {
+        return $this->n;
     }
 }

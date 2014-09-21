@@ -1,37 +1,38 @@
 <?php
-
 namespace PhpAmqpLib\Helper;
 
 class MiscHelper
 {
-
-    public static function debug_msg($s)
+    /**
+     * @param string $string
+     */
+    public static function debug_msg($string)
     {
-        echo $s, "\n";
+        echo $string . PHP_EOL;
     }
 
-
-
+    /**
+     * @param $a
+     * @return string
+     */
     public static function methodSig($a)
     {
         if (is_string($a)) {
             return $a;
-
-        } else {
-            return sprintf("%d,%d", $a[0], $a[1]);
         }
+
+        return sprintf('%d,%d', $a[0], $a[1]);
     }
 
-
-
+    /**
+     * @param $bytes
+     */
     public static function saveBytes($bytes)
     {
         $fh = fopen('/tmp/bytes', 'wb');
         fwrite($fh, $bytes);
         fclose($fh);
     }
-
-
 
     /**
      * Gets a number (either int or float) and returns an array containing its integer part as first element and its
@@ -45,8 +46,6 @@ class MiscHelper
     {
         return array(floor($number), ($number - floor($number)) * 1000000);
     }
-
-
 
     /**
      * View any string as a hexdump.
@@ -81,7 +80,7 @@ class MiscHelper
         // Iterate string
         for ($i = $j = 0; $i < $len; $i++) {
             // Convert to hexidecimal
-            $hexi .= sprintf("%02$x ", ord($data[$i]));
+            $hexi .= sprintf('%02$x ', ord($data[$i]));
 
             // Replace non-viewable bytes with '.'
             if (ord($data[$i]) >= 32) {
@@ -101,7 +100,7 @@ class MiscHelper
             // Add row
             if (++$j === 16 || $i === $len - 1) {
                 // Join the hexi / ascii output
-                $dump .= sprintf("%04$x  %-49s  %s", $offset, $hexi, $ascii);
+                $dump .= sprintf('%04$x  %-49s  %s', $offset, $hexi, $ascii);
 
                 // Reset vars
                 $hexi = $ascii = '';
@@ -110,21 +109,20 @@ class MiscHelper
 
                 // Add newline
                 if ($i !== $len - 1) {
-                    $dump .= "\n";
+                    $dump .= PHP_EOL;
                 }
             }
         }
 
         // Finish dump
         $dump .= $htmloutput === true ? '</pre>' : '';
-        $dump .= "\n";
+        $dump .= PHP_EOL;
 
         // Output method
-        if ($return === false) {
-            echo $dump;
-        } else {
+        if ($return) {
             return $dump;
         }
-    }
 
+        echo $dump;
+    }
 }

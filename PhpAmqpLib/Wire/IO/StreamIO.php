@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPIOException;
@@ -9,48 +8,38 @@ use PhpAmqpLib\Helper\MiscHelper;
 
 class StreamIO extends AbstractIO
 {
-
-    /**
-     * @var string
-     */
+    /** @var  string */
     protected $host;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $port;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $connection_timeout;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $read_write_timeout;
 
-    /**
-     * @var resource
-     */
+    /** @var resource */
     protected $context;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $keepalive;
 
-    /**
-     * @var resource
-     */
+    /** @var resource */
     private $sock;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $canDispatchPcntlSignal;
 
-
+    /**
+     * @param string $host
+     * @param int $port
+     * @param int $connection_timeout
+     * @param int $read_write_timeout
+     * @param null $context
+     * @param bool $keepalive
+     */
     public function __construct($host, $port, $connection_timeout, $read_write_timeout, $context = null, $keepalive = false)
     {
         $this->host = $host;
@@ -59,14 +48,21 @@ class StreamIO extends AbstractIO
         $this->read_write_timeout = $read_write_timeout;
         $this->context = $context;
         $this->keepalive = $keepalive;
-        $this->canDispatchPcntlSignal = extension_loaded('pcntl') && function_exists('pcntl_signal_dispatch')
-            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
+        $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
     }
 
-
+    /**
+     * @return bool
+     */
+    private function isPcntlSignalEnabled()
+    {
+        return extension_loaded('pcntl')
+            && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') && !AMQP_WITHOUT_SIGNALS);
+    }
 
     /**
-     * Setup the stream connection
+     * Sets up the stream connection
      *
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \Exception
@@ -77,19 +73,36 @@ class StreamIO extends AbstractIO
 
         if ($this->context) {
             $remote = sprintf('ssl://%s:%s', $this->host, $this->port);
-            $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT, $this->context);
+            $this->sock = @stream_socket_client(
+                $remote,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                STREAM_CLIENT_CONNECT,
+                $this->context
+            );
         } else {
             $remote = sprintf('tcp://%s:%s', $this->host, $this->port);
-            $this->sock = @stream_socket_client($remote, $errno, $errstr, $this->connection_timeout, STREAM_CLIENT_CONNECT);
+            $this->sock = @stream_socket_client(
+                $remote,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                STREAM_CLIENT_CONNECT
+            );
         }
 
         if (!$this->sock) {
-            throw new AMQPRuntimeException("Error Connecting to server($errno): $errstr ");
+            throw new AMQPRuntimeException(sprintf(
+                'Error Connecting to server (%s): %s',
+                $errno,
+                $errstr
+            ), $errno);
         }
 
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
         if (!stream_set_timeout($this->sock, $sec, $uSec)) {
-            throw new AMQPIOException("Timeout could not be set");
+            throw new AMQPIOException('Timeout could not be set');
         }
 
         stream_set_blocking($this->sock, 1);
@@ -100,7 +113,7 @@ class StreamIO extends AbstractIO
     }
 
     /**
-     * Reconnect the socket
+     * Reconnects the socket
      */
     public function reconnect()
     {
@@ -108,8 +121,11 @@ class StreamIO extends AbstractIO
         $this->connect();
     }
 
-
-
+    /**
+     * @param $n
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @return mixed|string
+     */
     public function read($n)
     {
         $res = '';
@@ -128,33 +144,40 @@ class StreamIO extends AbstractIO
         }
 
         if (mb_strlen($res, 'ASCII') != $n) {
-            throw new AMQPRuntimeException("Error reading data. Received " .
-                mb_strlen($res, 'ASCII') . " instead of expected $n bytes");
+            throw new AMQPIOException(sprintf(
+                'Error reading data. Received %s instead of expected %s bytes',
+                mb_strlen($res, 'ASCII'),
+                $n
+            ));
         }
 
         return $res;
     }
 
-
-
+    /**
+     * @param $data
+     * @return mixed|void
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     */
     public function write($data)
     {
         $len = mb_strlen($data, 'ASCII');
         while (true) {
             if (is_null($this->sock)) {
-                throw new AMQPRuntimeException("Broken pipe or closed connection");
+                throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
             if (false === ($written = @fwrite($this->sock, $data))) {
-                throw new AMQPRuntimeException("Error sending data");
+                throw new AMQPRuntimeException('Error sending data');
             }
 
             if ($written === 0) {
-                throw new AMQPRuntimeException("Broken pipe or closed connection");
+                throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
             if ($this->timed_out()) {
-                throw new AMQPTimeoutException("Error sending data. Socket connection timed out");
+                throw new AMQPTimeoutException('Error sending data. Socket connection timed out');
             }
 
             $len = $len - $written;
@@ -167,8 +190,6 @@ class StreamIO extends AbstractIO
         }
     }
 
-
-
     public function close()
     {
         if (is_resource($this->sock)) {
@@ -177,15 +198,19 @@ class StreamIO extends AbstractIO
         $this->sock = null;
     }
 
-
-
+    /**
+     * @return resource
+     */
     public function get_socket()
     {
         return $this->sock;
     }
 
-
-
+    /**
+     * @param $sec
+     * @param $usec
+     * @return int|mixed
+     */
     public function select($sec, $usec)
     {
         $read = array($this->sock);
@@ -194,8 +219,9 @@ class StreamIO extends AbstractIO
         return stream_select($read, $write, $except, $sec, $usec);
     }
 
-
-
+    /**
+     * @return mixed
+     */
     protected function timed_out()
     {
         // get status of socket to determine whether or not it has timed out
@@ -203,18 +229,20 @@ class StreamIO extends AbstractIO
         return $info['timed_out'];
     }
 
+    /**
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     */
     protected function enable_keepalive()
     {
         if (!function_exists('socket_import_stream')) {
-            throw new AMQPIOException("Can not enable keepalive: function socket_import_stream does not exist");
+            throw new AMQPIOException('Can not enable keepalive: function socket_import_stream does not exist');
         }
 
         if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
-            throw new AMQPIOException("Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined");
+            throw new AMQPIOException('Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined');
         }
 
         $socket = socket_import_stream($this->sock);
         socket_set_option($socket, SOL_SOCKET, SO_KEEPALIVE, 1);
     }
-
 }
