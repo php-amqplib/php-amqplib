@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
@@ -17,19 +16,17 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
  */
 class AMQPDecimal
 {
-
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $n;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $e;
 
-
-
+    /**
+     * @param $n
+     * @param $e
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     */
     public function __construct($n, $e)
     {
         if ($e < 0) {
@@ -40,8 +37,9 @@ class AMQPDecimal
         $this->e = $e;
     }
 
-
-
+    /**
+     * @return string
+     */
     public function asBCvalue()
     {
         return bcdiv($this->n, bcpow(10, $this->e));

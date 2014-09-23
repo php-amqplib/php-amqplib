@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPIOException;
@@ -7,29 +6,27 @@ use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 class SocketIO extends AbstractIO
 {
-
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $host;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $port;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $timeout;
 
-    /**
-     * @var resource
-     */
+    /** @var resource */
     private $sock;
 
+    /** @var bool */
+    private $keepalive;
 
-
+    /**
+     * @param string $host
+     * @param int $port
+     * @param int $timeout
+     * @param bool $keepalive
+     */
     public function __construct($host, $port, $timeout, $keepalive = false)
     {
         $this->host = $host;
@@ -38,10 +35,8 @@ class SocketIO extends AbstractIO
         $this->keepalive = $keepalive;
     }
 
-
-
     /**
-     * Setup the socket connection
+     * Sets up the socket connection
      *
      * @throws \Exception
      */
@@ -66,17 +61,16 @@ class SocketIO extends AbstractIO
         }
     }
 
-
-
+    /**
+     * @return resource
+     */
     public function getSocket()
     {
         return $this->sock;
     }
 
-
-
     /**
-     * Reconnect the socket
+     * Reconnects the socket
      */
     public function reconnect()
     {
@@ -84,8 +78,12 @@ class SocketIO extends AbstractIO
         $this->connect();
     }
 
-
-
+    /**
+     * @param $n
+     * @return mixed|string
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     public function read($n)
     {
         $res = '';
@@ -112,8 +110,12 @@ class SocketIO extends AbstractIO
         return $res;
     }
 
-
-
+    /**
+     * @param $data
+     * @return mixed|void
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     public function write($data)
     {
         $len = mb_strlen($data, 'ASCII');
@@ -144,8 +146,6 @@ class SocketIO extends AbstractIO
         }
     }
 
-
-
     public function close()
     {
         if (is_resource($this->sock)) {
@@ -154,8 +154,11 @@ class SocketIO extends AbstractIO
         $this->sock = null;
     }
 
-
-
+    /**
+     * @param $sec
+     * @param $usec
+     * @return int|mixed
+     */
     public function select($sec, $usec)
     {
         $read = array($this->sock);
@@ -164,6 +167,9 @@ class SocketIO extends AbstractIO
         return socket_select($read, $write, $except, $sec, $usec);
     }
 
+    /**
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     */
     protected function enable_keepalive()
     {
         if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
@@ -172,5 +178,4 @@ class SocketIO extends AbstractIO
 
         socket_set_option($this->sock, SOL_SOCKET, SO_KEEPALIVE, 1);
     }
-
 }

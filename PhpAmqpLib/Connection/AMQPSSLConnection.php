@@ -1,10 +1,17 @@
 <?php
-
 namespace PhpAmqpLib\Connection;
 
 class AMQPSSLConnection extends AMQPStreamConnection
 {
-
+    /**
+     * @param AbstractConnection $host
+     * @param int $port
+     * @param string $user
+     * @param bool $password
+     * @param string $vhost
+     * @param array $ssl_options
+     * @param array $options
+     */
     public function __construct(
         $host,
         $port,
@@ -15,7 +22,6 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $options = array()
     ) {
         $ssl_context = empty($ssl_options) ? null : $this->create_ssl_context($ssl_options);
-
         parent::__construct(
             $host,
             $port,
@@ -34,8 +40,10 @@ class AMQPSSLConnection extends AMQPStreamConnection
         );
     }
 
-
-
+    /**
+     * @param $options
+     * @return resource
+     */
     private function create_ssl_context($options)
     {
         $ssl_context = stream_context_create();
@@ -45,5 +53,4 @@ class AMQPSSLConnection extends AMQPStreamConnection
 
         return $ssl_context;
     }
-
 }
