@@ -17,11 +17,15 @@ class AbstractConnection extends AbstractChannel
 {
 
     public static $LIBRARY_PROPERTIES = array(
-        "library" => array('S', "PHP AMQP Lib"),
-        "library_version" => array('S', "2.0"),
+        "product" => array('S', "AMQPLib"),
+        "platform" => array('S', "PHP"),
+        "version" => array('S', "2.4"),
+        "information" => array('S', ""),
+        "copyright" => array('S', ""),
         "capabilities" => array(
             'F',
             array(
+                'authentication_failure_close' => array('t', true),
                 'publisher_confirms' => array('t', true),
                 'consumer_cancel_notify' => array('t', true),
                 'exchange_exchange_bindings' => array('t', true),
