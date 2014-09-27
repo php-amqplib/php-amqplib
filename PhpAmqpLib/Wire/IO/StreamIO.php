@@ -189,16 +189,16 @@ class StreamIO extends AbstractIO
         }
     }
 
-        
 
-    public function check_heartbeat()
+
+    protected function check_heartbeat()
     {
         // ignore unless heartbeat interval is set
         if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
             $t = microtime(true);
             $t_read  = round($t - $this->last_read);
             $t_write = round($t - $this->last_write);
-            
+
             // server has gone away
             if (($this->heartbeat * 2) < $t_read) {
                 $this->reconnect();
@@ -213,7 +213,7 @@ class StreamIO extends AbstractIO
 
 
 
-    public function write_heartbeat()
+    protected function write_heartbeat()
     {
         $pkt = new AMQPWriter();
         $pkt->write_octet(8);
