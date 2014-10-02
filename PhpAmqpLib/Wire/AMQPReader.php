@@ -152,7 +152,7 @@ class AMQPReader
         }
 
         if ($result === 0) {
-            throw new AMQPTimeoutException(sprintf("A timeout occurs while waiting for incoming data", $this->timeout));
+            throw new AMQPTimeoutException(sprintf("A timeout of %ds occurs while waiting for incoming data", $this->timeout));
         }
     }
 
