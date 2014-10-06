@@ -146,7 +146,7 @@ class AbstractChannel
      * @param string $method_sig
      * @param string $args
      * @param $content
-     * @return null|string
+     * @return mixed
      */
     public function dispatch($method_sig, $args, $content)
     {
