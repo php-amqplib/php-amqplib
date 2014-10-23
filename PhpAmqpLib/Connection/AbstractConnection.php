@@ -708,7 +708,9 @@ class AbstractConnection extends AbstractChannel
      */
     protected function x_close_ok()
     {
-        $this->send_method_frame(array(10, 51));
+        $this->send_method_frame(
+            explode(',', $this->waitHelper->get_wait('connection.close_ok'))
+        );
         $this->do_close();
     }
 
