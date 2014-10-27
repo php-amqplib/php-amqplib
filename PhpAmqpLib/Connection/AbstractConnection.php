@@ -106,11 +106,6 @@ class AbstractConnection extends AbstractChannel
     protected $locale;
 
     /**
-     * @var SocketIO
-     */
-    protected $sock = null;
-
-    /**
      * @var int
      */
     protected $channel_max = 65535;
@@ -919,7 +914,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function getSocket()
     {
-        return $this->sock;
+        return $this->io->getSocket();
     }
 
 

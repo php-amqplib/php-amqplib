@@ -140,6 +140,10 @@ class AbstractChannel
         return $this->channel_id;
     }
 
+    public function getConnection()
+    {
+        return $this->connection;
+    }
 
 
     /**

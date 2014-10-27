@@ -243,6 +243,13 @@ class StreamIO extends AbstractIO
 
 
 
+    public function getSocket()
+    {
+        return $this->get_socket();
+    }
+
+
+
     public function select($sec, $usec)
     {
         $read = array($this->sock);

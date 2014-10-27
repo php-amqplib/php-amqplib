@@ -27,4 +27,7 @@ abstract class AbstractIO
 
     abstract public function reconnect();
 
+
+
+    abstract public function getSocket();
 }

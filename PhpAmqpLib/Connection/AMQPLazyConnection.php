@@ -14,7 +14,7 @@ class AMQPLazyConnection extends AMQPConnection
     {
         $this->connect();
 
-        return $this->sock;
+        return parent::getSocket();
     }
 
 
