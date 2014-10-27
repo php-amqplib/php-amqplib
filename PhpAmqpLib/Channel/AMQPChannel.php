@@ -1451,6 +1451,28 @@ class AMQPChannel extends AbstractChannel
         }
     }
 
+    /**
+     * Waits for pending acks, nacks and returns from the server. If there are no pending acks, the method returns immediately.
+     *
+     * @param int $timeout If set to value > 0 the method will wait at most $timeout seconds for pending acks.
+     */
+    public function wait_for_pending_acks_returns($timeout = 0)
+    {
+        $functions = array(
+            $this->waitHelper->get_wait('basic.ack'),
+            $this->waitHelper->get_wait('basic.nack'),
+            $this->waitHelper->get_wait('basic.return'),
+        );
+
+        while (count($this->published_messages) !== 0) {
+            if ($timeout > 0) {
+                $this->wait($functions, true, $timeout);
+            } else {
+                $this->wait($functions);
+            }
+        }
+    }
+
 
 
     /**
