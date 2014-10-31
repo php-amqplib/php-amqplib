@@ -24,7 +24,6 @@ class AMQPStreamConnection extends AbstractConnection
         $heartbeat = 0
     ) {
         $io = new StreamIO($host, $port, $connection_timeout, $read_write_timeout, $context, $keepalive, $heartbeat);
-        $this->sock = $io->get_socket();
 
         parent::__construct($user, $password, $vhost, $insist, $login_method, $login_response, $locale, $io, $heartbeat);
 

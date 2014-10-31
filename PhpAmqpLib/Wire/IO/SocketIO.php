@@ -68,6 +68,13 @@ class SocketIO extends AbstractIO
 
 
 
+    public function getSocket()
+    {
+        return $this->sock;
+    }
+
+
+
     /**
      * Reconnect the socket
      */
