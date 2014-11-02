@@ -39,6 +39,7 @@ class AMQPLazyConnection extends AMQPConnection
 
     /**
      * Should the connection be attempted during construction?
+     *
      * @return bool
      */
     public function connectOnConstruct()

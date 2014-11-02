@@ -3,6 +3,7 @@ namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\MethodMap080;
@@ -16,6 +17,9 @@ use PhpAmqpLib\Wire\AMQPReader;
 
 class AbstractChannel
 {
+    const PROTO_080 = '0.8';
+    const PROTO_091 = '0.9.1';
+
     public static $PROTOCOL_CONSTANTS_CLASS;
 
     /** @var array */
@@ -79,9 +83,9 @@ class AbstractChannel
         $this->wait_content_reader = new AMQPReader(null);
         $this->dispatch_reader = new AMQPReader(null);
 
-        $this->protocolVersion = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : '0.9.1';
+        $this->protocolVersion = self::getProtocolVersion();
         switch ($this->protocolVersion) {
-            case '0.9.1':
+            case self::PROTO_091:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
@@ -89,7 +93,7 @@ class AbstractChannel
                 $this->waitHelper = new Wait091();
                 $this->methodMap = new MethodMap091();
                 break;
-            case '0.8':
+            case self::PROTO_080:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants080';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
@@ -98,8 +102,24 @@ class AbstractChannel
                 $this->methodMap = new MethodMap080();
                 break;
             default:
-                throw new AMQPRuntimeException('Protocol: ' . $this->protocolVersion . ' not implemented.');
+                //this is logic exception (requires code changes to fix), so OutOfRange, not OutOfBounds or Runtime
+                throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $this->protocolVersion));
         }
+    }
+
+    /**
+     * @return string
+     * @throws AMQPOutOfRangeException
+     */
+    public static function getProtocolVersion()
+    {
+        $proto = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : self::PROTO_091;
+        //adding check here to catch unknown protocol ASAP, as this method may be called from the outside
+        if (!in_array($proto, array(self::PROTO_080, self::PROTO_091), TRUE)) {
+            throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $proto));
+        }
+
+        return $proto;
     }
 
     /**

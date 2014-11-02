@@ -562,7 +562,7 @@ class AbstractConnection extends AbstractChannel
             if ($frame_channel === 0 && $frame_type === 8) {
                 // skip heartbeat frames
                 continue;
-                
+
             } else {
 
                 if ($frame_channel == $channel_id) {
@@ -834,10 +834,10 @@ class AbstractConnection extends AbstractChannel
         }
 
         // use server proposed value if not set
-        if ($this->heartbeat === NULL) {
+        if ($this->heartbeat === null) {
             $this->heartbeat = $args->read_short();
         }
-        
+
         $this->x_tune_ok($this->channel_max, $this->frame_max, $this->heartbeat);
     }
 

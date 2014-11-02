@@ -157,6 +157,7 @@ class AMQPChannel extends AbstractChannel
     {
         if ($this->is_open !== true || null === $this->connection) {
             $this->do_close();
+
             return; // already closed
         }
         list($class_id, $method_id, $args) = $this->protocolWriter->channelClose(
@@ -193,6 +194,8 @@ class AMQPChannel extends AbstractChannel
     /**
      * Confirm a channel close
      * Alias of AMQPChannel::do_close()
+     *
+     * @param AMQPReader $args
      */
     protected function channel_close_ok($args)
     {
@@ -249,7 +252,7 @@ class AMQPChannel extends AbstractChannel
     protected function x_open($out_of_band = '')
     {
         if ($this->is_open) {
-            return NULL;
+            return null;
         }
 
         list($class_id, $method_id, $args) = $this->protocolWriter->channelOpen($out_of_band);
@@ -310,8 +313,8 @@ class AMQPChannel extends AbstractChannel
     /**
      * Grants access to server resources
      *
-     * @param $args
-     * @return mixed
+     * @param AMQPReader $args
+     * @return string
      */
     protected function access_request_ok($args)
     {
@@ -363,7 +366,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         return $this->wait(array(
@@ -752,10 +755,9 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                    'Server ack\'ed unknown delivery_tag %s',
-                    $delivery_tag
-                )
-            );
+                'Server ack\'ed unknown delivery_tag %s',
+                $delivery_tag
+            ));
         }
 
         $this->internal_ack_handler($delivery_tag, $multiple, $this->ack_handler);
@@ -774,10 +776,9 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                    'Server nack\'ed unknown delivery_tag %s',
-                    $delivery_tag
-                )
-            );
+                'Server nack\'ed unknown delivery_tag %s',
+                $delivery_tag
+            ));
         }
 
         $this->internal_ack_handler($delivery_tag, $multiple, $this->nack_handler);
@@ -1281,6 +1282,7 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Rollbacks the current transaction
+     *
      * @return mixed
      */
     public function tx_rollback()
@@ -1312,7 +1314,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
 
         if ($nowait) {
-            return NULL;
+            return null;
         }
 
         $this->wait(array($this->waitHelper->get_wait('confirm.select_ok')));

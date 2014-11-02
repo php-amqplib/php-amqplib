@@ -177,6 +177,7 @@ class SocketIO extends AbstractIO
         $read = array($this->sock);
         $write = null;
         $except = null;
+
         return socket_select($read, $write, $except, $sec, $usec);
     }
 
