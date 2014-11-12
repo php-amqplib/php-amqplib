@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Exception;
 
 //TODO refactor usage of static methods
@@ -11,17 +10,23 @@ use PhpAmqpLib\Helper\MiscHelper;
  */
 class AMQPException extends \Exception
 {
-
+    /** @var string */
     public $amqp_reply_code;
 
+    /** @var int */
     public $amqp_reply_text;
 
+    /** @var \Exception */
     public $amqp_method_sig;
 
+    /** @var array */
     public $args;
 
-
-
+    /**
+     * @param string $reply_code
+     * @param int $reply_text
+     * @param \Exception $method_sig
+     */
     public function __construct($reply_code, $reply_text, $method_sig)
     {
         parent::__construct($reply_text, $reply_code);
@@ -38,5 +43,4 @@ class AMQPException extends \Exception
 
         $this->args = array($reply_code, $reply_text, $method_sig, $mn);
     }
-
 }

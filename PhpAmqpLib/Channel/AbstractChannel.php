@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Connection\AbstractConnection;
@@ -17,84 +16,54 @@ use PhpAmqpLib\Wire\AMQPReader;
 
 class AbstractChannel
 {
-
     public static $PROTOCOL_CONSTANTS_CLASS;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $frame_queue;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $method_queue;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $auto_decode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $amqp_protocol_header;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $debug;
 
-    /**
-     * @var AbstractConnection
-     */
+    /** @var \PhpAmqpLib\Connection\AbstractConnection */
     protected $connection;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $protocolVersion;
 
-    /**
-     * @var \PhpAmqpLib\Helper\Protocol\Protocol091|\PhpAmqpLib\Helper\Protocol\Protocol080
-     */
+    /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
     protected $protocolWriter;
 
-    /**
-     * @var \PhpAmqpLib\Helper\Protocol\Wait091|\PhpAmqpLib\Helper\Protocol\Wait080
-     */
+    /** @var \PhpAmqpLib\Helper\Protocol\Wait080|\PhpAmqpLib\Helper\Protocol\Wait091 */
     protected $waitHelper;
 
-    /**
-     * @var \PhpAmqpLib\Helper\Protocol\MethodMap091|\PhpAmqpLib\Helper\Protocol\MethodMap080
-     */
+    /** @var \PhpAmqpLib\Helper\Protocol\MethodMap080|\PhpAmqpLib\Helper\Protocol\MethodMap091 */
     protected $methodMap;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $channel_id;
 
-    /**
-     * @var \PhpAmqpLib\Wire\AMQPReader
-     */
-    protected $msg_property_reader = null;
+    /** @var \PhpAmqpLib\Wire\AMQPReader */
+    protected $msg_property_reader;
+
+    /** @var \PhpAmqpLib\Wire\AMQPReader */
+    protected $wait_content_reader;
+
+    /** @var \PhpAmqpLib\Wire\AMQPReader */
+    protected $dispatch_reader;
 
     /**
-     * @var \PhpAmqpLib\Wire\AMQPReader
-     */
-    protected $wait_content_reader = null;
-
-    /**
-     * @var \PhpAmqpLib\Wire\AMQPReader
-     */
-    protected $dispatch_reader = null;
-
-
-
-    /**
-     * @param \PhpAmqpLib\Connection\AbstractConnection $connection
-     * @param string $channel_id
+     * @param AbstractConnection $connection
+     * @param $channel_id
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function __construct(AbstractConnection $connection, $channel_id)
     {
@@ -133,24 +102,28 @@ class AbstractChannel
         }
     }
 
-
-
+    /**
+     * @return string
+     */
     public function getChannelId()
     {
         return $this->channel_id;
     }
 
+    /**
+     * @return AbstractConnection
+     */
     public function getConnection()
     {
         return $this->connection;
     }
-
 
     /**
      * @param string $method_sig
      * @param string $args
      * @param $content
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function dispatch($method_sig, $args, $content)
     {
@@ -173,8 +146,10 @@ class AbstractChannel
         return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $content);
     }
 
-
-
+    /**
+     * @param int $timeout
+     * @return array|mixed
+     */
     public function next_frame($timeout = 0)
     {
         if ($this->debug) {
@@ -188,25 +163,32 @@ class AbstractChannel
         return $this->connection->wait_channel($this->channel_id, $timeout);
     }
 
-
-
+    /**
+     * @param $method_sig
+     * @param string $args
+     */
     protected function send_method_frame($method_sig, $args = "")
     {
         $this->connection->send_channel_method_frame($this->channel_id, $method_sig, $args);
     }
 
-
-
     /**
      * This is here for performance reasons to batch calls to fwrite from basic.publish
+     *
+     * @param $method_sig
+     * @param string $args
+     * @param null $pkt
+     * @return null|\PhpAmqpLib\Wire\AMQPWriter
      */
     protected function prepare_method_frame($method_sig, $args = "", $pkt = null)
     {
         return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args, $pkt);
     }
 
-
-
+    /**
+     * @return AMQPMessage
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     public function wait_content()
     {
         $frm = $this->next_frame();
@@ -263,8 +245,6 @@ class AbstractChannel
         return $msg;
     }
 
-
-
     /**
      * Wait for some expected AMQP methods and dispatch to them.
      * Unexpected methods are queued up for later calls to this PHP
@@ -273,6 +253,8 @@ class AbstractChannel
      * @param array $allowed_methods
      * @param bool $non_blocking
      * @param int $timeout
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @return mixed
      */
     public function wait($allowed_methods = null, $non_blocking = false, $timeout = 0)
@@ -355,13 +337,14 @@ class AbstractChannel
         }
     }
 
-
-
+    /**
+     * @param $handler
+     * @param array $arguments
+     */
     protected function dispatch_to_handler($handler, array $arguments)
     {
         if (is_callable($handler)) {
             call_user_func_array($handler, $arguments);
         }
     }
-
 }

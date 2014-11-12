@@ -1,12 +1,25 @@
 <?php
-
 namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Wire\IO\StreamIO;
 
 class AMQPStreamConnection extends AbstractConnection
 {
-
+    /**
+     * @param AbstractConnection $host
+     * @param string $port
+     * @param string $user
+     * @param bool $password
+     * @param string $vhost
+     * @param bool $insist
+     * @param string $login_method
+     * @param null $login_response
+     * @param string $locale
+     * @param int $connection_timeout
+     * @param int $read_write_timeout
+     * @param null $context
+     * @param bool $keepalive
+     */
     public function __construct(
         $host,
         $port,
@@ -30,5 +43,4 @@ class AMQPStreamConnection extends AbstractConnection
         // save the params for the use of __clone, this will overwrite the parent
         $this->construct_params = func_get_args();
     }
-
 }

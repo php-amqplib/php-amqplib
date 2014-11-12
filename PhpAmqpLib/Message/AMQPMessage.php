@@ -1,5 +1,4 @@
 <?php
-
 namespace PhpAmqpLib\Message;
 
 use PhpAmqpLib\Wire\GenericContent;
@@ -9,20 +8,13 @@ use PhpAmqpLib\Wire\GenericContent;
  */
 class AMQPMessage extends GenericContent
 {
-
-    /**
-     * @var string
-     */
+    /** @var string */
     public $body;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $content_encoding;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected static $PROPERTIES = array(
         "content_type" => "shortstr",
         "content_encoding" => "shortstr",
@@ -40,8 +32,10 @@ class AMQPMessage extends GenericContent
         "cluster_id" => "shortstr"
     );
 
-
-
+    /**
+     * @param string $body
+     * @param null $properties
+     */
     public function __construct($body = '', $properties = null)
     {
         $this->body = $body;
@@ -49,11 +43,14 @@ class AMQPMessage extends GenericContent
         parent::__construct($properties, static::$PROPERTIES);
     }
 
-
-
+    /**
+     * Sets the message payload
+     *
+     * @param mixed $body
+     * @return $this
+     */
     public function setBody($body)
     {
         $this->body = $body;
     }
-
 }
