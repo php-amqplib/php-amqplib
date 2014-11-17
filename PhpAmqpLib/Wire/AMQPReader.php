@@ -438,7 +438,7 @@ class AMQPReader extends AbstractClient
      * @return mixed
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    private function read_value($fieldType, $collectionsAsObjects = false)
+    public function read_value($fieldType, $collectionsAsObjects = false)
     {
         $this->bitcount = $this->bits = 0;
 
