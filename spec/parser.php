@@ -110,7 +110,9 @@ class ArgumentWriter
 
         } else {
             $ret = $this->write_bits();
-            $ret .= '$args->write_' . $a_type . '($' . to_snake_case($arg['name']) . ");\n";
+
+            $a_name = '$' . to_snake_case($arg['name']);
+            $ret .= '$args->write_' . $a_type . '(' . ($a_type === 'table' ? 'empty(' . $a_name . ') ? array() : ' : '') . $a_name . ");\n";
         }
 
         return $ret;
