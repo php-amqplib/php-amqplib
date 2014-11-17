@@ -18,7 +18,7 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->setProtoVersion(AMQPArray::PROTO_091);
+        $this->setProtoVersion(AMQPArray::PROTOCOL_091);
         $this->_writer = new AMQPWriter();
     }
 
@@ -26,7 +26,7 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 
     public function tearDown()
     {
-        $this->setProtoVersion(AMQPArray::PROTO_RBT);
+        $this->setProtoVersion(AMQPArray::PROTOCOL_RBT);
         $this->_writer = null;
     }
 
@@ -34,7 +34,7 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_proto');
+        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }

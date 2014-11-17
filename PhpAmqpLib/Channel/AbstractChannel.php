@@ -17,8 +17,8 @@ use PhpAmqpLib\Wire\AMQPReader;
 
 class AbstractChannel
 {
-    const PROTO_080 = '0.8';
-    const PROTO_091 = '0.9.1';
+    const PROTOCOL_080 = '0.8';
+    const PROTOCOL_091 = '0.9.1';
 
     public static $PROTOCOL_CONSTANTS_CLASS;
 
@@ -85,7 +85,7 @@ class AbstractChannel
 
         $this->protocolVersion = self::getProtocolVersion();
         switch ($this->protocolVersion) {
-            case self::PROTO_091:
+            case self::PROTOCOL_091:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
@@ -93,7 +93,7 @@ class AbstractChannel
                 $this->waitHelper = new Wait091();
                 $this->methodMap = new MethodMap091();
                 break;
-            case self::PROTO_080:
+            case self::PROTOCOL_080:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants080';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
@@ -113,13 +113,13 @@ class AbstractChannel
      */
     public static function getProtocolVersion()
     {
-        $proto = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : self::PROTO_091;
+        $protocol = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : self::PROTOCOL_091;
         //adding check here to catch unknown protocol ASAP, as this method may be called from the outside
-        if (!in_array($proto, array(self::PROTO_080, self::PROTO_091), TRUE)) {
-            throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $proto));
+        if (!in_array($protocol, array(self::PROTOCOL_080, self::PROTOCOL_091), TRUE)) {
+            throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $protocol));
         }
 
-        return $proto;
+        return $protocol;
     }
 
     /**

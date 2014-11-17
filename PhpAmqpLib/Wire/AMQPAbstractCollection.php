@@ -12,9 +12,9 @@ abstract class AMQPAbstractCollection implements \Iterator
 {
 
     //protocol defines available field types and their corresponding symbols
-    const PROTO_080 = AbstractChannel::PROTO_080;
-    const PROTO_091 = AbstractChannel::PROTO_091;
-    const PROTO_RBT = 'rabbit'; //pseudo proto
+    const PROTOCOL_080 = AbstractChannel::PROTOCOL_080;
+    const PROTOCOL_091 = AbstractChannel::PROTOCOL_091;
+    const PROTOCOL_RBT = 'rabbit'; //pseudo proto
 
     //Abstract data types
     const T_INT_SHORTSHORT = 1;
@@ -41,7 +41,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     /**
      * @var string
      */
-    private static $_proto = null;
+    private static $_protocol = null;
 
     /*
      * Field types messy mess http://www.rabbitmq.com/amqp-0-9-1-errata.html#section_3
@@ -220,7 +220,7 @@ abstract class AMQPAbstractCollection implements \Iterator
         } elseif (is_array($val)) {
             //AMQP specs says "Field names MUST start with a letter, '$' or '#'"
             //so beware, some servers may raise an exception with 503 code in cases when indexed array is encoded as table
-            if (self::isProto(self::PROTO_080)) {
+            if (self::isProtocol(self::PROTOCOL_080)) {
                 //080 doesn't support arrays, forcing table
                 $val = array(self::T_TABLE, new AMQPTable($val));
             } elseif (empty($val) || (array_keys($val) === range(0, count($val) - 1))) {
@@ -285,7 +285,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     {
         if (($val >= -2147483648) && ($val <= 2147483647)) {
             $ev = array(self::T_INT_LONG, $val);
-        } elseif (self::isProto(self::PROTO_080)) {
+        } elseif (self::isProtocol(self::PROTOCOL_080)) {
             //080 doesn't support longlong
             $ev = $this->encodeString((string) $val);
         } else {
@@ -312,7 +312,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     {
         $val = (bool) $val;
 
-        return self::isProto(self::PROTO_080) ? array(self::T_INT_LONG, (int) $val) : array(self::T_BOOL, $val);
+        return self::isProtocol(self::PROTOCOL_080) ? array(self::T_INT_LONG, (int) $val) : array(self::T_BOOL, $val);
     }
 
     /**
@@ -320,30 +320,30 @@ abstract class AMQPAbstractCollection implements \Iterator
      */
     protected function encodeVoid()
     {
-        return self::isProto(self::PROTO_080) ? $this->encodeString('') : array(self::T_VOID, null);
+        return self::isProtocol(self::PROTOCOL_080) ? $this->encodeString('') : array(self::T_VOID, null);
     }
 
     /**
      * @return string
      */
-    final public static function getProto()
+    final public static function getProtocol()
     {
-        if (self::$_proto === null) {
-            self::$_proto = defined('AMQP_STRICT_FLD_TYPES') && AMQP_STRICT_FLD_TYPES ?
+        if (self::$_protocol === null) {
+            self::$_protocol = defined('AMQP_STRICT_FLD_TYPES') && AMQP_STRICT_FLD_TYPES ?
                 AbstractChannel::getProtocolVersion() :
-                self::PROTO_RBT;
+                self::PROTOCOL_RBT;
         }
 
-        return self::$_proto;
+        return self::$_protocol;
     }
 
     /**
      * @param string $proto
      * @return bool
      */
-    final public static function isProto($proto)
+    final public static function isProtocol($proto)
     {
-        return self::getProto() == $proto;
+        return self::getProtocol() == $proto;
     }
 
     /**
@@ -351,14 +351,14 @@ abstract class AMQPAbstractCollection implements \Iterator
      */
     final public static function getSupportedDataTypes()
     {
-        switch ($proto = self::getProto()) {
-            case self::PROTO_080:
+        switch ($proto = self::getProtocol()) {
+            case self::PROTOCOL_080:
                 $types = self::$_types_080;
                 break;
-            case self::PROTO_091:
+            case self::PROTOCOL_091:
                 $types = self::$_types_091;
                 break;
-            case self::PROTO_RBT:
+            case self::PROTOCOL_RBT:
                 $types = self::$_types_rabbit;
                 break;
             default:
@@ -378,7 +378,7 @@ abstract class AMQPAbstractCollection implements \Iterator
         try {
             $supported = self::getSupportedDataTypes();
             if (!isset($supported[$type])) {
-                throw new Exception\AMQPOutOfRangeException(sprintf('AMQP-%s doesn\'t support data of type [%s]', self::getProto(), $type));
+                throw new Exception\AMQPOutOfRangeException(sprintf('AMQP-%s doesn\'t support data of type [%s]', self::getProtocol(), $type));
             }
             return true;
 
@@ -399,7 +399,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     {
         $types = self::getSupportedDataTypes();
         if (!isset($types[$type])) {
-            throw new Exception\AMQPOutOfRangeException(sprintf('AMQP-%s doesn\'t support data of type [%s]', self::getProto(), $type));
+            throw new Exception\AMQPOutOfRangeException(sprintf('AMQP-%s doesn\'t support data of type [%s]', self::getProtocol(), $type));
         }
 
         return $types[$type];
@@ -413,7 +413,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     {
         $symbols = array_flip(self::getSupportedDataTypes());
         if (!isset($symbols[$symbol])) {
-            throw new Exception\AMQPOutOfRangeException(sprintf('AMQP-%s doesn\'t define data of type [%s]', self::getProto(), $symbol));
+            throw new Exception\AMQPOutOfRangeException(sprintf('AMQP-%s doesn\'t define data of type [%s]', self::getProtocol(), $symbol));
         }
 
         return $symbols[$symbol];

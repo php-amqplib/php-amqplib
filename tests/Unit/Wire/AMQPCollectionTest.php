@@ -9,7 +9,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testEncode080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_080);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
         $a = new Wire\AMQPArray(array(1, (int) -2147483648, (int) 2147483647, -2147483649, 2147483648, true, false, array('foo' => 'bar'), array('foo'), array()));
 
         $this->assertEquals(
@@ -38,7 +38,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testEncode091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_091);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
         $a = new Wire\AMQPArray(array(1, (int) -2147483648, (int) 2147483647, -2147483649, 2147483648, true, false, array('foo' => 'bar'), array('foo'), array()));
 
         $is64 = PHP_INT_SIZE == 8;
@@ -68,7 +68,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testEncodeRabbit()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_RBT);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
         $a = new Wire\AMQPArray(array(1, (int) -2147483648, (int) 2147483647, -2147483649, 2147483648, true, false, array('foo' => 'bar'), array('foo'), array()));
 
         $is64 = PHP_INT_SIZE == 8;
@@ -107,7 +107,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPushUnsupportedDataType080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_080);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
 
         $a = new Wire\AMQPArray();
         $this->setExpectedException('PhpAmqpLib\\Exception\\AMQPOutOfRangeException');
@@ -119,7 +119,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPushUnsupportedDataType091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_091);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
 
         $a = new Wire\AMQPArray();
         $this->setExpectedException('PhpAmqpLib\\Exception\\AMQPOutOfRangeException');
@@ -131,7 +131,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPushUnsupportedDataTypeRabbit()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_RBT);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
 
         $a = new Wire\AMQPArray();
         $this->setExpectedException('PhpAmqpLib\\Exception\\AMQPOutOfRangeException');
@@ -164,7 +164,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testConflictingFieldSymbols()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_091);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
 
         $a = new Wire\AMQPArray();
         $a->push(576, Wire\AMQPArray::T_INT_SHORT);
@@ -179,7 +179,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
         );
 
 
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_RBT);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
 
         $a = new Wire\AMQPArray();
         $a->push(576, Wire\AMQPArray::T_INT_SHORT);
@@ -261,7 +261,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayRoundTrip080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_080);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
 
         $a = new Wire\AMQPArray($this->getTestDataSrc());
         $this->assertEquals(array_values($this->getTestDataCmp080()), $a->getNativeData());
@@ -271,7 +271,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayRoundTrip091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_091);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
 
         $a = new Wire\AMQPArray($this->getTestDataSrc());
         $this->assertEquals(array_values($this->getTestDataCmp()), $a->getNativeData());
@@ -281,7 +281,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testArrayRoundTripRabbit()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_RBT);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
 
         $a = new Wire\AMQPArray($this->getTestDataSrc());
         $this->assertEquals(array_values($this->getTestDataCmp()), $a->getNativeData());
@@ -291,7 +291,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTableRoundTrip080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_080);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
 
         $a = new Wire\AMQPTable($this->getTestDataSrc());
         $this->assertEquals($this->getTestDataCmp080(), $a->getNativeData());
@@ -301,7 +301,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTableRoundTrip091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_091);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
 
         $a = new Wire\AMQPTable($this->getTestDataSrc());
         $this->assertEquals($this->getTestDataCmp(), $a->getNativeData());
@@ -311,7 +311,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testTableRoundTripRabbit()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_RBT);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
 
         $a = new Wire\AMQPTable($this->getTestDataSrc());
         $this->assertEquals($this->getTestDataCmp(), $a->getNativeData());
@@ -402,7 +402,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
             'e' => array(Wire\AMQPAbstractCollection::getDataTypeForSymbol('t'), false)
         );
 
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTO_091);
+        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
         $a = new Wire\AMQPTable($d);
 
         foreach ($a as $key => $val) {
@@ -417,7 +417,7 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_proto');
+        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }
