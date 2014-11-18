@@ -51,14 +51,14 @@ class Bug40Test extends \PHPUnit_Framework_TestCase
 
     public function testFrameOrder()
     {
-        $msg = new AMQPMessage("test message");
+        $msg = new AMQPMessage('test message');
         $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name1);
         $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name1);
         $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name2);
 
         $this->ch->basic_consume(
             $this->queue_name1,
-            "",
+            '',
             false,
             true,
             false,
@@ -81,7 +81,7 @@ class Bug40Test extends \PHPUnit_Framework_TestCase
         if ($this->q1msgs < 2) {
             $this->ch2->basic_consume(
                 $this->queue_name2,
-                "",
+                '',
                 false,
                 true,
                 false,

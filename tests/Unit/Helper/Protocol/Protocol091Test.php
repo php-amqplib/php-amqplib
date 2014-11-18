@@ -24,15 +24,15 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
     public function testChannelClose()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, "", 0, 0);
+        list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, '', 0, 0);
         $this->assertEquals($expected, $args->getvalue());
 
         $expected = "\x00\x00\x05error\x00\x00\x00\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, "error", 0, 0);
+        list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, 'error', 0, 0);
         $this->assertEquals($expected, $args->getvalue());
 
         $expected = "\x00\x00\x05error\x00\x14\x00\x28";
-        list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, "error", 20, 40);
+        list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, 'error', 20, 40);
         $this->assertEquals($expected, $args->getvalue());
     }
 
@@ -54,11 +54,11 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
     public function testXOpen()
     {
         $expected = "\x03foo";
-        list($class_id, $method_id, $args) = $this->protocol091->channelOpen("foo");
+        list($class_id, $method_id, $args) = $this->protocol091->channelOpen('foo');
         $this->assertEquals($expected, $args->getvalue());
 
         $expected = "\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->channelOpen("");
+        list($class_id, $method_id, $args) = $this->protocol091->channelOpen('');
         $this->assertEquals($expected, $args->getvalue());
     }
 
@@ -67,11 +67,11 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
     public function testAccessRequest()
     {
         $expected = "\x01/\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->accessRequest("/", false, false, false, false, false);
+        list($class_id, $method_id, $args) = $this->protocol091->accessRequest('/', false, false, false, false, false);
         $this->assertEquals($expected, $args->getvalue());
 
         $expected = "\x04/foo\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->accessRequest("/foo", false, false, false, false, false);
+        list($class_id, $method_id, $args) = $this->protocol091->accessRequest('/foo', false, false, false, false, false);
         $this->assertEquals($expected, $args->getvalue());
     }
 

@@ -39,7 +39,7 @@ class AMQPException extends \Exception
         $PROTOCOL_CONSTANTS_CLASS = AbstractChannel::$PROTOCOL_CONSTANTS_CLASS;
         $mn = isset($PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms])
             ? $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[$ms]
-            : $mn = "";
+            : $mn = '';
 
         $this->args = array($reply_code, $reply_text, $method_sig, $mn);
     }
