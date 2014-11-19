@@ -1082,7 +1082,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      */
     public function basic_publish(
-        AMQPMessage $msg,
+        $msg,
         $exchange = '',
         $routing_key = '',
         $mandatory = false,
@@ -1117,7 +1117,7 @@ class AMQPChannel extends AbstractChannel
      * @param null $ticket
      */
     public function batch_basic_publish(
-        AMQPMessage $msg,
+        $msg,
         $exchange = '',
         $routing_key = '',
         $mandatory = false,
