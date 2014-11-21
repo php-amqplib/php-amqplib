@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Wire;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 
-class AMQPWriter
+class AMQPWriter extends AbstractClient
 {
     /** @var string */
     protected $out;
@@ -17,54 +17,60 @@ class AMQPWriter
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->out = '';
         $this->bits = array();
         $this->bitcount = 0;
     }
 
     /**
-     * @param $x
-     * @param $bytes
-     * @return array
-     */
-    private static function chrbytesplit($x, $bytes)
-    {
-        return array_map('chr', AMQPWriter::bytesplit($x, $bytes));
-    }
-
-    /**
-     * Splits number (could be either int or string) into array of byte
-     * values (represented as integers) in big-endian byte order.
+     * Packs integer into raw byte string in big-endian order
+     * Supports positive and negative ints represented as PHP int or string (except scientific notation)
      *
-     * @param $x
-     * @param $bytes
-     * @return array
-     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * Floats has some precision issues and so intentionally not supported.
+     * Beware that floats out of PHP_INT_MAX range will be represented in scientific (exponential) notation when casted to string
+     *
+     * @param int|string $x Value to pack
+     * @param int $bytes Must be multiply of 2
+     * @return string
      */
-    private static function bytesplit($x, $bytes)
+    private static function packBigEndian($x, $bytes)
     {
+        if (($bytes <= 0) || ($bytes % 2)) {
+            throw new AMQPInvalidArgumentException(sprintf('Expected bytes count must be multiply of 2, %s given', $bytes));
+        }
+
+        $ox = $x; //purely for dbg purposes (overflow exception)
+        $isNeg = false;
         if (is_int($x)) {
             if ($x < 0) {
-                $x = sprintf('%u', $x);
+                $isNeg = true;
+                $x = abs($x);
             }
+        } elseif (is_string($x)) {
+            if (!is_numeric($x)) {
+                throw new AMQPInvalidArgumentException(sprintf('Unknown numeric string format: %s', $x));
+            }
+            $x = preg_replace('/^-/', '', $x, 1, $isNeg);
+        } else {
+            throw new AMQPInvalidArgumentException('Only integer and numeric string values are supported');
         }
+        if ($isNeg) {
+            $x = bcadd($x, -1);
+        } //in negative domain starting point is -1, not 0
 
         $res = array();
-
-        while ($bytes > 0) {
-            $b = bcmod($x, '256');
-            $res[] = (int) $b;
-            $x = bcdiv($x, '256', 0);
-            $bytes--;
+        for ($b = 0; $b < $bytes; $b += 2) {
+            $chnk = (int) bcmod($x, 65536);
+            $x = bcdiv($x, 65536, 0);
+            $res[] = pack('n', $isNeg ? ~$chnk : $chnk);
+        }
+        if ($x || ($isNeg && ($chnk & 0x8000))) {
+            throw new AMQPOutOfBoundsException(sprintf('Overflow detected while attempting to pack %s into %s bytes', $ox, $bytes));
         }
 
-        $res = array_reverse($res);
-
-        if ($x != 0) {
-            throw new AMQPOutOfBoundsException('Value too big!');
-        }
-
-        return $res;
+        return implode(array_reverse($res));
     }
 
     private function flushbits()
@@ -109,12 +115,7 @@ class AMQPWriter
      */
     public function write_bit($b)
     {
-        if ($b) {
-            $b = 1;
-        } else {
-            $b = 0;
-        }
-
+        $b = (int) (bool) $b;
         $shift = $this->bitcount % 8;
 
         if ($shift == 0) {
@@ -160,10 +161,21 @@ class AMQPWriter
     public function write_octet($n)
     {
         if ($n < 0 || $n > 255) {
-            throw new AMQPInvalidArgumentException('Octet out of range 0..255');
+            throw new AMQPInvalidArgumentException('Octet out of range: ' . $n);
         }
 
         $this->out .= chr($n);
+
+        return $this;
+    }
+
+    public function write_signed_octet($n)
+    {
+        if (($n < -128) || ($n > 127)) {
+            throw new AMQPInvalidArgumentException('Signed octet out of range: ' . $n);
+        }
+
+        $this->out .= pack('c', $n);
 
         return $this;
     }
@@ -178,10 +190,21 @@ class AMQPWriter
     public function write_short($n)
     {
         if ($n < 0 || $n > 65535) {
-            throw new AMQPInvalidArgumentException('Octet out of range 0..65535');
+            throw new AMQPInvalidArgumentException('Short out of range: ' . $n);
         }
 
         $this->out .= pack('n', $n);
+
+        return $this;
+    }
+
+    public function write_signed_short($n)
+    {
+        if (($n < -32768) || ($n > 32767)) {
+            throw new AMQPInvalidArgumentException('Signed short out of range: ' . $n);
+        }
+
+        $this->out .= $this->correctEndianness(pack('s', $n));
 
         return $this;
     }
@@ -194,6 +217,14 @@ class AMQPWriter
      */
     public function write_long($n)
     {
+        if (($n < 0) || ($n > 4294967295)) {
+            throw new AMQPInvalidArgumentException('Long out of range: ' . $n);
+        }
+
+        //Numeric strings >PHP_INT_MAX on 32bit are casted to PHP_INT_MAX, damn PHP
+        if (!$this->is64bits && is_string($n)) {
+            $n = (float) $n;
+        }
         $this->out .= pack('N', $n);
 
         return $this;
@@ -205,9 +236,12 @@ class AMQPWriter
      */
     private function write_signed_long($n)
     {
-        // although format spec for 'N' mentions unsigned
-        // it will deal with sinned integers as well. tested.
-        $this->out .= pack('N', $n);
+        if (($n < -2147483648) || ($n > 2147483647)) {
+            throw new AMQPInvalidArgumentException('Signed long out of range: ' . $n);
+        }
+
+        //on my 64bit debian this approach is slightly faster than splitIntoQuads()
+        $this->out .= $this->correctEndianness(pack('l', $n));
 
         return $this;
     }
@@ -220,18 +254,68 @@ class AMQPWriter
      */
     public function write_longlong($n)
     {
+        if ($n < 0) {
+            throw new AMQPInvalidArgumentException('Longlong out of range: ' . $n);
+        }
+
         // if PHP_INT_MAX is big enough for that
-        // (always on 64 bits, with smaller values in 32 bits)
-        if ($n <= PHP_INT_MAX) {
+        // direct $n<=PHP_INT_MAX check is unreliable on 64bit (values close to max) due to limited float precision
+        if (bcadd($n, -PHP_INT_MAX) <= 0) {
             // trick explained in http://www.php.net/manual/fr/function.pack.php#109328
-            $n1 = ($n & 0xffffffff00000000) >> 32;
-            $n2 = ($n & 0x00000000ffffffff);
-            $this->out .= pack('NN', $n1, $n2);
+            if ($this->is64bits) {
+                list($hi, $lo) = $this->splitIntoQuads($n);
+            } else {
+                $hi = 0;
+                $lo = $n;
+            } //on 32bits hi quad is 0 a priori
+            $this->out .= pack('NN', $hi, $lo);
         } else {
-            $this->out .= implode('', self::chrbytesplit($n, 8));
+            try {
+                $this->out .= self::packBigEndian($n, 8);
+            } catch (AMQPOutOfBoundsException $ex) {
+                throw new AMQPInvalidArgumentException('Longlong out of range: ' . $n, 0, $ex);
+            }
         }
 
         return $this;
+    }
+
+    public function write_signed_longlong($n)
+    {
+        if ((bcadd($n, PHP_INT_MAX) >= -1) && (bcadd($n, -PHP_INT_MAX) <= 0)) {
+            if ($this->is64bits) {
+                list($hi, $lo) = $this->splitIntoQuads($n);
+            } else {
+                $hi = $n < 0 ? -1 : 0;
+                $lo = $n;
+            } //0xffffffff for negatives
+            $this->out .= pack('NN', $hi, $lo);
+        } elseif ($this->is64bits) {
+            throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n);
+        } else {
+            if (bcadd($n, '-9223372036854775807') > 0) {
+                throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n);
+            }
+            try {
+                //will catch only negative overflow, as values >9223372036854775807 are valid for 8bytes range (unsigned)
+                $this->out .= self::packBigEndian($n, 8);
+            } catch (AMQPOutOfBoundsException $ex) {
+                throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n, 0, $ex);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param int $n
+     * @return array
+     */
+    private function splitIntoQuads($n)
+    {
+        $n = (int) $n;
+
+        return array($n >> 32, $n & 0x00000000ffffffff);
     }
 
     /**
@@ -273,31 +357,18 @@ class AMQPWriter
      * Supports the writing of Array types, so that you can implement
      * array methods, like Rabbitmq's HA parameters
      *
-     * @param array $a
+     * @param AMQPArray|array $a Instance of AMQPArray or PHP array WITHOUT format hints (unlike write_table())
      * @return self
      */
     public function write_array($a)
     {
+        if (!($a instanceof AMQPArray)) {
+            $a = new AMQPArray($a);
+        }
         $data = new AMQPWriter();
 
         foreach ($a as $v) {
-            if (is_string($v)) {
-                $data->write('S');
-                $data->write_longstr($v);
-            } elseif (is_int($v)) {
-                $data->write('I');
-                $data->write_signed_long($v);
-            } elseif ($v instanceof AMQPDecimal) {
-                $data->write('D');
-                $data->write_octet($v->e);
-                $data->write_signed_long($v->n);
-            } elseif (is_array($v)) {
-                $data->write('A');
-                $data->write_array($v);
-            } elseif (is_bool($v)) {
-                $data->write('t');
-                $data->write_octet($v ? 1 : 0);
-            }
+            $data->write_value($v[0], $v[1]);
         }
 
         $data = $data->getvalue();
@@ -324,45 +395,19 @@ class AMQPWriter
      * Write PHP array, as table. Input array format: keys are strings,
      * values are (type,value) tuples.
      *
-     * @param $d
-     * @return $this
+     * @param AMQPTable|array $d Instance of AMQPTable or PHP array WITH format hints (unlike write_array())
+     * @return self
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_table($d)
     {
+        $typeIsSym = !($d instanceof AMQPTable); //purely for back-compat purposes
+
         $table_data = new AMQPWriter();
         foreach ($d as $k => $va) {
             list($ftype, $v) = $va;
             $table_data->write_shortstr($k);
-            if ($ftype == 'S') {
-                $table_data->write('S');
-                $table_data->write_longstr($v);
-            } elseif ($ftype == 'I') {
-                $table_data->write('I');
-                $table_data->write_signed_long($v);
-            } elseif ($ftype == 'D') {
-                // 'D' type values are passed AMQPDecimal instances.
-                $table_data->write('D');
-                $table_data->write_octet($v->e);
-                $table_data->write_signed_long($v->n);
-            } elseif ($ftype == 'T') {
-                $table_data->write('T');
-                $table_data->write_timestamp($v);
-            } elseif ($ftype == 'F') {
-                $table_data->write('F');
-                $table_data->write_table($v);
-            } elseif ($ftype == 'A') {
-                $table_data->write('A');
-                $table_data->write_array($v);
-            } elseif ($ftype == 't') {
-                $table_data->write('t');
-                $table_data->write_octet($v ? 1 : 0);
-            } else {
-                throw new AMQPInvalidArgumentException(sprintf(
-                    'Invalid type "%s"',
-                    $ftype
-                ));
-            }
+            $table_data->write_value($typeIsSym ? AMQPAbstractCollection::getDataTypeForSymbol($ftype) : $ftype, $v);
         }
 
         $table_data = $table_data->getvalue();
@@ -370,5 +415,80 @@ class AMQPWriter
         $this->write($table_data);
 
         return $this;
+    }
+
+    /**
+     * for compat with method mapping used by AMQPMessage
+     */
+    public function write_table_object($d)
+    {
+        return $this->write_table($d);
+    }
+
+    /**
+     * @param int $type One of AMQPAbstractCollection::T_* constants
+     * @param mixed $val
+     */
+    private function write_value($type, $val)
+    {
+        //This will find appropriate symbol for given data type for currently selected protocol
+        //Also will raise an exception on unknown type
+        $this->write(AMQPAbstractCollection::getSymbolForDataType($type));
+
+        switch ($type) {
+            case AMQPAbstractCollection::T_INT_SHORTSHORT:
+                $this->write_signed_octet($val);
+                break;
+            case AMQPAbstractCollection::T_INT_SHORTSHORT_U:
+                $this->write_octet($val);
+                break;
+            case AMQPAbstractCollection::T_INT_SHORT:
+                $this->write_signed_short($val);
+                break;
+            case AMQPAbstractCollection::T_INT_SHORT_U:
+                $this->write_short($val);
+                break;
+            case AMQPAbstractCollection::T_INT_LONG:
+                $this->write_signed_long($val);
+                break;
+            case AMQPAbstractCollection::T_INT_LONG_U:
+                $this->write_long($val);
+                break;
+            case AMQPAbstractCollection::T_INT_LONGLONG:
+                $this->write_signed_longlong($val);
+                break;
+            case AMQPAbstractCollection::T_INT_LONGLONG_U:
+                $this->write_longlong($val);
+                break;
+            case AMQPAbstractCollection::T_DECIMAL:
+                $this->write_octet($val->e);
+                $this->write_signed_long($val->n);
+                break;
+            case AMQPAbstractCollection::T_TIMESTAMP:
+                $this->write_timestamp($val);
+                break;
+            case AMQPAbstractCollection::T_BOOL:
+                $this->write_octet($val ? 1 : 0);
+                break;
+            case AMQPAbstractCollection::T_STRING_SHORT:
+                $this->write_shortstr($val);
+                break;
+            case AMQPAbstractCollection::T_STRING_LONG:
+                $this->write_longstr($val);
+                break;
+            case AMQPAbstractCollection::T_ARRAY:
+                $this->write_array($val);
+                break;
+            case AMQPAbstractCollection::T_TABLE:
+                $this->write_table($val);
+                break;
+            case AMQPAbstractCollection::T_VOID:
+                break;
+            default:
+                throw new AMQPInvalidArgumentException(sprintf(
+                    'Unsupported type "%s"',
+                    $type
+                ));
+        }
     }
 }

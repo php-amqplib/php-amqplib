@@ -212,7 +212,7 @@ class StreamIO extends AbstractIO
         // ignore unless heartbeat interval is set
         if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
             $t = microtime(true);
-            $t_read  = round($t - $this->last_read);
+            $t_read = round($t - $this->last_read);
             $t_write = round($t - $this->last_write);
 
             // server has gone away
@@ -275,6 +275,7 @@ class StreamIO extends AbstractIO
         $read = array($this->sock);
         $write = null;
         $except = null;
+
         return stream_select($read, $write, $except, $sec, $usec);
     }
 
@@ -285,6 +286,7 @@ class StreamIO extends AbstractIO
     {
         // get status of socket to determine whether or not it has timed out
         $info = stream_get_meta_data($this->sock);
+
         return $info['timed_out'];
     }
 

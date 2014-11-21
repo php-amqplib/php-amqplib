@@ -18,7 +18,7 @@ class Protocol091
         $args = new AMQPWriter();
         $args->write_octet($version_major);
         $args->write_octet($version_minor);
-        $args->write_table($server_properties);
+        $args->write_table(empty($server_properties) ? array() : $server_properties);
         $args->write_longstr($mechanisms);
         $args->write_longstr($locales);
         return array(10, 10, $args);
@@ -287,7 +287,7 @@ class Protocol091
         $args->write_shortstr($exchange);
         $args->write_shortstr($type);
         $args->write_bits(array($passive, $durable, $auto_delete, $internal, $nowait));
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(40, 10, $args);
     }
 
@@ -342,7 +342,7 @@ class Protocol091
         $args->write_shortstr($source);
         $args->write_shortstr($routing_key);
         $args->write_bits(array($nowait));
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(40, 30, $args);
     }
 
@@ -371,7 +371,7 @@ class Protocol091
         $args->write_shortstr($source);
         $args->write_shortstr($routing_key);
         $args->write_bits(array($nowait));
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(40, 40, $args);
     }
 
@@ -398,7 +398,7 @@ class Protocol091
         $args->write_short($ticket);
         $args->write_shortstr($queue);
         $args->write_bits(array($passive, $durable, $exclusive, $auto_delete, $nowait));
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(50, 10, $args);
     }
 
@@ -430,7 +430,7 @@ class Protocol091
         $args->write_shortstr($exchange);
         $args->write_shortstr($routing_key);
         $args->write_bits(array($nowait));
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(50, 20, $args);
     }
 
@@ -512,7 +512,7 @@ class Protocol091
         $args->write_shortstr($queue);
         $args->write_shortstr($exchange);
         $args->write_shortstr($routing_key);
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(50, 50, $args);
     }
 
@@ -566,7 +566,7 @@ class Protocol091
         $args->write_shortstr($queue);
         $args->write_shortstr($consumer_tag);
         $args->write_bits(array($no_local, $no_ack, $exclusive, $nowait));
-        $args->write_table($arguments);
+        $args->write_table(empty($arguments) ? array() : $arguments);
         return array(60, 20, $args);
     }
 
