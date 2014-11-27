@@ -333,8 +333,6 @@ class AMQPChannel extends AbstractChannel
      * @param bool $auto_delete
      * @param bool $internal
      * @param bool $nowait
-     * @param null $arguments
-     * @param null $ticket
      * @return mixed|null
      */
     public function exchange_declare(
@@ -889,8 +887,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $no_ack
      * @param bool $exclusive
      * @param bool $nowait
-     * @param null $callback
-     * @param null $ticket
+     * @param callback|null $callback
+     * @param int|null $ticket
      * @param array $arguments
      * @return mixed|string
      */
@@ -1128,6 +1126,11 @@ class AMQPChannel extends AbstractChannel
         $this->batch_messages[] = func_get_args();
     }
 
+    /**
+     * Publish batch
+     *
+     * @return void
+     */
     public function publish_batch()
     {
         if (empty($this->batch_messages)) {
@@ -1323,6 +1326,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms a selection
+     *
+     * @return void
      */
     public function confirm_select_ok()
     {
