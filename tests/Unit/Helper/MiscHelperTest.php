@@ -36,9 +36,13 @@ class MiscHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testHexDump()
     {
-        $res = MiscHelper::hexdump('FM', 'hmtlOutput' == false, 'uppercase' == false, 'return' == true);
+        $htmlOutput = false;
+        $uppercase = false;
+        $return = true;
+        $res = MiscHelper::hexdump('FM', $htmlOutput, $uppercase, $return);
         $this->assertRegExp('/000\s+46 4d\s+FM/', $res);
-        $res = MiscHelper::hexdump('FM', 'hmtlOutput' == false, 'uppercase' == true, 'return' == true);
+        $uppercase = true;
+        $res = MiscHelper::hexdump('FM', $htmlOutput, $uppercase, $return);
         $this->assertRegExp('/000\s+46 4D\s+FM/', $res);
     }
 }
