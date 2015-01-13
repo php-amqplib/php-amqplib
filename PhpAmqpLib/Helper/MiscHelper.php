@@ -77,7 +77,7 @@ class MiscHelper
         // Iterate string
         for ($i = $j = 0; $i < $len; $i++) {
             // Convert to hexidecimal
-            $hexi .= sprintf('%02$x ', ord($data[$i]));
+            $hexi .= sprintf("%02$x ", ord($data[$i]));
 
             // Replace non-viewable bytes with '.'
             if (ord($data[$i]) >= 32) {
@@ -97,7 +97,7 @@ class MiscHelper
             // Add row
             if (++$j === 16 || $i === $len - 1) {
                 // Join the hexi / ascii output
-                $dump .= sprintf('%04$x  %-49s  %s', $offset, $hexi, $ascii);
+                $dump .= sprintf("%04$x  %-49s  %s", $offset, $hexi, $ascii);
 
                 // Reset vars
                 $hexi = $ascii = '';
