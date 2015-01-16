@@ -67,23 +67,23 @@ class MiscHelper
         // Init
         $hexi = '';
         $ascii = '';
-        $dump = ($htmloutput === true) ? '<pre>' : '';
+        $dump = $htmloutput ? '<pre>' : '';
         $offset = 0;
         $len = mb_strlen($data, 'ASCII');
 
         // Upper or lower case hexidecimal
-        $x = ($uppercase === false) ? 'x' : 'X';
+        $hexFormat = $uppercase ? 'X' : 'x';
 
         // Iterate string
         for ($i = $j = 0; $i < $len; $i++) {
             // Convert to hexidecimal
-            $hexi .= sprintf("%02$x ", ord($data[$i]));
+            // We must use concatenation here because the $hexFormat value
+            // is needed for sprintf() to parse the format
+            $hexi .= sprintf('%02' .  $hexFormat . ' ', ord($data[$i]));
 
             // Replace non-viewable bytes with '.'
             if (ord($data[$i]) >= 32) {
-                $ascii .= ($htmloutput === true) ?
-                    htmlentities($data[$i]) :
-                    $data[$i];
+                $ascii .= $htmloutput ? htmlentities($data[$i]) : $data[$i];
             } else {
                 $ascii .= '.';
             }
@@ -97,7 +97,9 @@ class MiscHelper
             // Add row
             if (++$j === 16 || $i === $len - 1) {
                 // Join the hexi / ascii output
-                $dump .= sprintf("%04$x  %-49s  %s", $offset, $hexi, $ascii);
+                // We must use concatenation here because the $hexFormat value
+                // is needed for sprintf() to parse the format
+                $dump .= sprintf('%04' . $hexFormat . '  %-49s  %s', $offset, $hexi, $ascii);
 
                 // Reset vars
                 $hexi = $ascii = '';
@@ -112,14 +114,13 @@ class MiscHelper
         }
 
         // Finish dump
-        $dump .= $htmloutput === true ? '</pre>' : '';
+        $dump .= $htmloutput ? '</pre>' : '';
         $dump .= PHP_EOL;
 
-        // Output method
-        if ($return === false) {
-            echo $dump;
-        } else {
+        if ($return) {
             return $dump;
         }
+
+        echo $dump;
     }
 }
