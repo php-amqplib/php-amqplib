@@ -8,9 +8,10 @@ This library is a _pure PHP_ implementation of the AMQP protocol. It's been test
 
 The library was used for the PHP examples of [RabbitMQ in Action](http://manning.com/videla/) and the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
-## BC BREAKING CHANGES ##
+## Supported RabbitMQ Versions ##
 
-Since version 2.0 this library uses `AMQP 0.9.1` by default. You shouldn't need to change your code, but test before upgrading.
+Starting with version 2.0 this library uses `AMQP 0.9.1` by default and thus requires [RabbitMQ 2.0 or later version](http://www.rabbitmq.com/download.html).
+You shouldn't need to change your code, but test before upgrading.
 
 ## Supported RabbitMQ Extensions ##
 
