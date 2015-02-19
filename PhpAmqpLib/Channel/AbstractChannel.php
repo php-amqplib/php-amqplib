@@ -139,6 +139,14 @@ class AbstractChannel
     }
 
     /**
+     * @return array
+     */
+    public function getMethodQueue()
+    {
+        return $this->method_queue;
+    }
+
+    /**
      * @param string $method_sig
      * @param string $args
      * @param $content
