@@ -424,7 +424,7 @@ class AbstractConnection extends AbstractChannel
         $position = 0;
         $bodyLength = mb_strlen($body,'ASCII');
         // add grongor's fix for UNEXPECTED_FRAME
-        while ($bodyLength && $position <= $bodyLength) {
+        while ($position < $bodyLength) {
             $payload = mb_substr($body, $position, $this->frame_max - 8, 'ASCII');
             $position += $this->frame_max - 8;
 
