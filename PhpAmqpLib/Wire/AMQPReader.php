@@ -354,7 +354,7 @@ class AMQPReader extends AbstractClient
 
     /**
      * Read and AMQP timestamp, which is a 64-bit integer representing
-     * seconds since the Unix epoch in 1-second resolution.
+     * milliseconds since the Unix epoch in 1-millisecond resolution.
      */
     public function read_timestamp()
     {
