@@ -242,7 +242,7 @@ class AbstractChannel
 
         $body_parts = array();
         $body_received = 0;
-        while (bccomp($body_size, $body_received) == 1) {
+        while (bccomp($body_size, $body_received, 0) == 1) {
             $frm = $this->next_frame();
             $frame_type = $frm[0];
             $payload = $frm[1];
@@ -257,7 +257,7 @@ class AbstractChannel
             }
 
             $body_parts[] = $payload;
-            $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'));
+            $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
         }
 
         $msg->body = implode('', $body_parts);
