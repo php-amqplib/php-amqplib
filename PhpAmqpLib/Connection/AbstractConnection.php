@@ -332,7 +332,12 @@ class AbstractConnection extends AbstractChannel
             ));
         }
 
-        $this->getIO()->write($data);
+        try {
+            $this->getIO()->write($data);
+        } catch (AMQPRuntimeException $e) {
+            $this->setIsConnected(false);
+            throw $e;
+        }
     }
 
     protected function do_close()
