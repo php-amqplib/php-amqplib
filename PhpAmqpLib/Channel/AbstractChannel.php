@@ -42,6 +42,11 @@ class AbstractChannel
 
     /** @var string */
     protected $protocolVersion;
+    
+    /**
+     * @var int
+     */
+    protected $body_size_max;
 
     /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
     protected $protocolWriter;
@@ -128,6 +133,18 @@ class AbstractChannel
     public function getChannelId()
     {
         return $this->channel_id;
+    }
+    
+    public function setBodySizeLimit($max_bytes)
+    {
+        $max_bytes = intval($max_bytes);
+        
+        if ( $max_bytes > 0 ) {
+            $this->body_size_max = $max_bytes;
+        }
+        else {
+            unset($this->body_size_max);
+        }
     }
 
     /**
@@ -247,7 +264,8 @@ class AbstractChannel
 
         $msg = new AMQPMessage();
         $msg->load_properties($this->msg_property_reader);
-
+        $msg->body_size = $body_size;
+        
         $body_parts = array();
         $body_received = 0;
         while (bccomp($body_size, $body_received, 0) == 1) {
@@ -264,8 +282,14 @@ class AbstractChannel
                 ));
             }
 
-            $body_parts[] = $payload;
             $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
+
+            if ( isset($this->body_size_max) && $body_received > $this->body_size_max ) {
+                $msg->is_truncated = true;
+                continue;
+            }
+
+            $body_parts[] = $payload;
         }
 
         $msg->body = implode('', $body_parts);

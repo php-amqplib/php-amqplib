@@ -10,6 +10,8 @@ class AMQPMessage extends GenericContent
 {
     /** @var string */
     public $body;
+    public $body_size;
+    public $is_truncated = false;
 
     /** @var string */
     public $content_encoding;
