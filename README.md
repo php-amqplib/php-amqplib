@@ -139,6 +139,17 @@ $msg->setBody($body2);
 $ch->basic_publish($msg, $exchange);
 ```
 
+## Truncating Large Messages ##
+
+AMQP imposes no limit on the size of messages; if a very large message is received by a consumer, PHP's memory limit may be reached
+within the library before the callback passed to `basic_consume` is called.
+
+To avoid this, you can call the method `setBodySizeLimit(int $bytes)` on your Channel object. Body sizes exceeding this will be truncated, 
+and delivered to your callback with a `$msg->is_truncated` flag set. The property `$msg->body_size` will reflect the true body size,
+which will be higher than `strlen($msg->body)` if the message has been truncated.
+
+By default, no truncation will occur. To disable truncation on a Channel that has had it enabled, pass `null` to `setBodySizeLimit`.
+
 ##UNIX Signals##
 
 If you have installed [PCNTL extension](http://www.php.net/manual/en/book.pcntl.php) dispatching of signal will be handled when consumer is not processing message.
