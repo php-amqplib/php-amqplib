@@ -46,7 +46,7 @@ class AbstractChannel
     /**
      * @var int
      */
-    protected $body_size_max;
+    protected $body_size_max = null;
 
     /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
     protected $protocolWriter;
@@ -141,9 +141,8 @@ class AbstractChannel
         
         if ( $max_bytes > 0 ) {
             $this->body_size_max = $max_bytes;
-        }
-        else {
-            unset($this->body_size_max);
+        } else {
+            $this->body_size_max = null;
         }
     }
 
@@ -284,7 +283,7 @@ class AbstractChannel
 
             $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
 
-            if ( isset($this->body_size_max) && $body_received > $this->body_size_max ) {
+            if ( ! is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
                 $msg->is_truncated = true;
                 continue;
             }
