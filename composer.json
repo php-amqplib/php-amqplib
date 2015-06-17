@@ -21,7 +21,15 @@
         "ext-sockets": "Use AMQPSocketConnection"
     },
     "autoload": {
-        "psr-0": {"PhpAmqpLib": ""}
+        "psr-4": {
+            "PhpAmqpLib\\": "PhpAmqpLib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpAmqpLib\\Tests\\Functional\\": "tests/Functional",
+            "PhpAmqpLib\\Tests\\Unit\\": "tests/Unit"
+        }
     },
     "license": "LGPL-2.1",
     "extra": {
