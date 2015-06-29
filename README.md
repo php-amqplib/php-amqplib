@@ -31,7 +31,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 ```javascript
 {
   "require": {
-      "videlalvaro/php-amqplib": "2.2.*"
+      "videlalvaro/php-amqplib": "2.5.*"
   }
 }
 ```
