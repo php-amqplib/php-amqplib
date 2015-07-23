@@ -428,7 +428,7 @@ class AbstractConnection extends AbstractChannel
         // memory efficiency: walk the string instead of biting it. good for very large packets (close in size to memory_limit setting)
         $position = 0;
         $bodyLength = mb_strlen($body,'ASCII');
-        while ($position <= $bodyLength) {
+        while ($position < $bodyLength) {
             $payload = mb_substr($body, $position, $this->frame_max - 8, 'ASCII');
             $position += $this->frame_max - 8;
 
