@@ -72,6 +72,26 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testPublishPacketSizeLongMessage()
+    {
+        // Connection frame_max;
+        $frame_max = 131072;
+
+        // Publish 3 messages with sizes: packet size - 1, equal packet size and packet size + 1
+        for ($length = $frame_max - 9; $length <= $frame_max - 7; $length++) {
+            $this->msg_body = str_repeat('1', $length);
+
+            $msg = new AMQPMessage($this->msg_body, array(
+                'content_type' => 'text/plain',
+                'delivery_mode' => 1,
+                'correlation_id' => 'my_correlation_id',
+                'reply_to' => 'my_reply_to'
+            ));
+
+            $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name);
+        }
+    }
+
 
 
     public function process_msg($msg)
