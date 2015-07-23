@@ -237,7 +237,6 @@ class StreamIO extends AbstractIO
         $pkt->write_short(0);
         $pkt->write_long(0);
         $pkt->write_octet(0xCE);
-        $val = $pkt->getvalue();
         $this->write($pkt->getvalue());
     }
 
