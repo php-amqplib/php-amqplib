@@ -14,7 +14,7 @@ class AMQPChannel extends AbstractChannel
     /** @var array */
     public $callbacks = array();
 
-    /** @var bool Whether or not the channel has been "opened" or not */
+    /** @var bool Whether or not the channel has been "opened" */
     protected $is_open = false;
 
     /** @var int */
