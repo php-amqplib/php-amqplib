@@ -15,7 +15,7 @@ use PhpAmqpLib\Helper\Protocol\Wait091;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
 
-class AbstractChannel
+abstract class AbstractChannel
 {
     const PROTOCOL_080 = '0.8';
     const PROTOCOL_091 = '0.9.1';
