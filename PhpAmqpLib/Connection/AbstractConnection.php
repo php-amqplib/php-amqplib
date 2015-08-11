@@ -519,6 +519,12 @@ class AbstractConnection extends AbstractChannel
      */
     protected function wait_frame($timeout = 0)
     {
+        if (is_null($this->input))
+        {
+            $this->setIsConnected(false);
+            throw new AMQPRuntimeException('Broken pipe or closed connection');
+        }
+
         $currentTimeout = $this->input->getTimeout();
         $this->input->setTimeout($timeout);
 
