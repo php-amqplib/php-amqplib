@@ -9,7 +9,7 @@ class AMQPSocketConnection extends AbstractConnection
      * @param AbstractConnection $host
      * @param int $port
      * @param string $user
-     * @param bool $password
+     * @param string $password
      * @param string $vhost
      * @param bool $insist
      * @param string $login_method
