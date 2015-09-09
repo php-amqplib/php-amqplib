@@ -8,6 +8,9 @@ use PhpAmqpLib\Wire\GenericContent;
  */
 class AMQPMessage extends GenericContent
 {
+    const DELIVERY_MODE_NON_PERSISTENT = 1;
+    const DELIVERY_MODE_PERSISTENT = 2;
+
     /** @var string */
     public $body;
     public $body_size;

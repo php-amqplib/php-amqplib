@@ -38,7 +38,7 @@ $ch->exchange_declare($exchange, 'direct', false, true, false);
 $ch->queue_bind($queue, $exchange);
 
 $msg_body = implode(' ', array_slice($argv, 1));
-$msg = new AMQPMessage($msg_body, array('content_type' => 'text/plain', 'delivery_mode' => 2));
+$msg = new AMQPMessage($msg_body, array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
 $ch->basic_publish($msg, $exchange);
 
 $ch->close();

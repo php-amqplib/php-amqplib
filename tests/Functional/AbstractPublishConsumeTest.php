@@ -50,7 +50,7 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 
         $msg = new AMQPMessage($this->msg_body, array(
             'content_type' => 'text/plain',
-            'delivery_mode' => 1,
+            'delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT,
             'correlation_id' => 'my_correlation_id',
             'reply_to' => 'my_reply_to'
         ));
@@ -83,7 +83,7 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 
             $msg = new AMQPMessage($this->msg_body, array(
                 'content_type' => 'text/plain',
-                'delivery_mode' => 1,
+                'delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT,
                 'correlation_id' => 'my_correlation_id',
                 'reply_to' => 'my_reply_to'
             ));
