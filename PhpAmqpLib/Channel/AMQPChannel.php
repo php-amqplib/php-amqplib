@@ -14,7 +14,7 @@ class AMQPChannel extends AbstractChannel
     /** @var array */
     public $callbacks = array();
 
-    /** @var bool Whether or not the channel has been "opened" or not */
+    /** @var bool Whether or not the channel has been "opened" */
     protected $is_open = false;
 
     /** @var int */
@@ -844,12 +844,18 @@ class AMQPChannel extends AbstractChannel
      *
      * @param string $consumer_tag
      * @param bool $nowait
+     * @param bool $noreturn
      * @return mixed
      */
-    public function basic_cancel($consumer_tag, $nowait = false)
+    public function basic_cancel($consumer_tag, $nowait = false, $noreturn = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicCancel($consumer_tag, $nowait);
         $this->send_method_frame(array($class_id, $method_id), $args);
+
+        if ($nowait || $noreturn) {
+            unset($this->callbacks[$consumer_tag]);
+            return $consumer_tag;
+        }
 
         return $this->wait(array(
             $this->waitHelper->get_wait('basic.cancel_ok')
@@ -876,6 +882,7 @@ class AMQPChannel extends AbstractChannel
     {
         $consumer_tag = $args->read_shortstr();
         unset($this->callbacks[$consumer_tag]);
+        return $consumer_tag;
     }
 
     /**

@@ -52,7 +52,7 @@ require_once __DIR__.'/vendor/autoload.php';
 Then you need to `use` the relevant classes, for example:
 
 ```php
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 ```
 

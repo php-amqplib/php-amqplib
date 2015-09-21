@@ -428,7 +428,7 @@ class AbstractConnection extends AbstractChannel
         // memory efficiency: walk the string instead of biting it. good for very large packets (close in size to memory_limit setting)
         $position = 0;
         $bodyLength = mb_strlen($body,'ASCII');
-        while ($position <= $bodyLength) {
+        while ($position < $bodyLength) {
             $payload = mb_substr($body, $position, $this->frame_max - 8, 'ASCII');
             $position += $this->frame_max - 8;
 
@@ -519,6 +519,12 @@ class AbstractConnection extends AbstractChannel
      */
     protected function wait_frame($timeout = 0)
     {
+        if (is_null($this->input))
+        {
+            $this->setIsConnected(false);
+            throw new AMQPRuntimeException('Broken pipe or closed connection');
+        }
+
         $currentTimeout = $this->input->getTimeout();
         $this->input->setTimeout($timeout);
 
@@ -564,11 +570,23 @@ class AbstractConnection extends AbstractChannel
      */
     protected function wait_channel($channel_id, $timeout = 0)
     {
+        // Keeping the original timeout unchanged.
+        $_timeout = $timeout;
         while (true) {
-            list($frame_type, $frame_channel, $payload) = $this->wait_frame($timeout);
+            $now = time();
+            list($frame_type, $frame_channel, $payload) = $this->wait_frame($_timeout);
 
             if ($frame_channel === 0 && $frame_type === 8) {
-                // skip heartbeat frames
+                // skip heartbeat frames and reduce the timeout by the time passed
+                if($_timeout > 0)
+                {
+                    $_timeout -= time() - $now;
+                    if($_timeout <= 0)
+                    {
+                        // If timeout has been reached, throw the exception without calling wait_frame
+                        throw new AMQPTimeoutException("Timeout waiting on channel");
+                    }
+                }
                 continue;
 
             } else {
