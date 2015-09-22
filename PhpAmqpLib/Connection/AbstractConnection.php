@@ -597,7 +597,11 @@ class AbstractConnection extends AbstractChannel
 
                 // Not the channel we were looking for.  Queue this frame
                 //for later, when the other channel is looking for frames.
-                array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
+                // Make sure the channel still exists, it could have been
+                // closed by a previous Exception.
+                if (isset($this->channels[$frame_channel])) {
+                    array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
+                }
 
                 // If we just queued up a method for channel 0 (the Connection
                 // itself) it's probably a close method in reaction to some
