@@ -7,7 +7,7 @@ When creating a new message set the `delivery_mode` to __2__:
     $msg = new AMQPMessage(
         $msg_body,
         array(
-            'delivery_mode' = 2
+            'delivery_mode' => 2
         )
     );
 
