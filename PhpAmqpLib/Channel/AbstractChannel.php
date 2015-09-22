@@ -42,7 +42,7 @@ abstract class AbstractChannel
 
     /** @var string */
     protected $protocolVersion;
-    
+
     /**
      * @var int
      */
@@ -134,11 +134,11 @@ abstract class AbstractChannel
     {
         return $this->channel_id;
     }
-    
+
     public function setBodySizeLimit($max_bytes)
     {
         $max_bytes = intval($max_bytes);
-        
+
         if ( $max_bytes > 0 ) {
             $this->body_size_max = $max_bytes;
         } else {
@@ -264,7 +264,7 @@ abstract class AbstractChannel
         $msg = new AMQPMessage();
         $msg->load_properties($this->msg_property_reader);
         $msg->body_size = $body_size;
-        
+
         $body_parts = array();
         $body_received = 0;
         while (bccomp($body_size, $body_received, 0) == 1) {
