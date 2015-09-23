@@ -298,9 +298,7 @@ class AbstractConnection extends AbstractChannel
 
     protected function close_input()
     {
-        if ($this->debug) {
-            MiscHelper::debug_msg('closing input');
-        }
+        $this->debug->debug_msg('closing input');
 
         if (!is_null($this->input)) {
             $this->input->close();
@@ -310,9 +308,7 @@ class AbstractConnection extends AbstractChannel
 
     protected function close_socket()
     {
-        if ($this->debug) {
-            MiscHelper::debug_msg('closing socket');
-        }
+        $this->debug->debug_msg('closing socket');
 
         if (!is_null($this->getIO())) {
             $this->getIO()->close();
@@ -324,13 +320,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function write($data)
     {
-        if ($this->debug) {
-            MiscHelper::debug_msg(sprintf(
-                '< [hex]: %s%s',
-                PHP_EOL,
-                MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true)
-            ));
-        }
+        $this->debug->debug_hexdump($data);
 
         try {
             $this->getIO()->write($data);
@@ -425,7 +415,9 @@ class AbstractConnection extends AbstractChannel
         $pkt->write_octet(0xCE);
 
 
-        // memory efficiency: walk the string instead of biting it. good for very large packets (close in size to memory_limit setting)
+        // memory efficiency: walk the string instead of biting
+        // it. good for very large packets (close in size to
+        // memory_limit setting)
         $position = 0;
         $bodyLength = mb_strlen($body,'ASCII');
         while ($position < $bodyLength) {
@@ -456,14 +448,7 @@ class AbstractConnection extends AbstractChannel
 
         $this->write($pkt->getvalue());
 
-        if ($this->debug) {
-            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg(sprintf(
-                '< %s: %s',
-                MiscHelper::methodSig($method_sig),
-                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-            ));
-        }
+        $this->debug->debug_method_signature1($method_sig);
     }
 
     /**
@@ -496,14 +481,7 @@ class AbstractConnection extends AbstractChannel
 
         $pkt->write_octet(0xCE);
 
-        if ($this->debug) {
-            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg(sprintf(
-                '< %s: %s',
-                MiscHelper::methodSig($method_sig),
-                $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-            ));
-        }
+        $this->debug->debug_method_signature1($method_sig);
 
         return $pkt;
     }
@@ -578,11 +556,9 @@ class AbstractConnection extends AbstractChannel
 
             if ($frame_channel === 0 && $frame_type === 8) {
                 // skip heartbeat frames and reduce the timeout by the time passed
-                if($_timeout > 0)
-                {
+                if($_timeout > 0) {
                     $_timeout -= time() - $now;
-                    if($_timeout <= 0)
-                    {
+                    if($_timeout <= 0) {
                         // If timeout has been reached, throw the exception without calling wait_frame
                         throw new AMQPTimeoutException("Timeout waiting on channel");
                     }
@@ -665,33 +641,6 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param $table
-     * @return string
-     */
-    public static function dump_table($table)
-    {
-        $tokens = array();
-        foreach ($table as $name => $value) {
-            switch ($value[0]) {
-                case 'D':
-                    $val = $value[1]->n . 'E' . $value[1]->e;
-                    break;
-                case 'F':
-                    $val = '(' . self::dump_table($value[1]) . ')';
-                    break;
-                case 'T':
-                    $val = date('Y-m-d H:i:s', $value[1]);
-                    break;
-                default:
-                    $val = $value[1];
-            }
-            $tokens[] = $name . '=' . $val;
-        }
-
-        return implode(', ', $tokens);
-    }
-
-    /**
      * @param AMQPReader $args
      * @throws \PhpAmqpLib\Exception\AMQPProtocolConnectionException
      */
@@ -759,9 +708,7 @@ class AbstractConnection extends AbstractChannel
     protected function connection_open_ok($args)
     {
         $this->known_hosts = $args->read_shortstr();
-        if ($this->debug) {
-            MiscHelper::debug_msg('Open OK! known_hosts: ' . $this->known_hosts);
-        }
+        $this->debug->debug_msg('Open OK! known_hosts: ' . $this->known_hosts);
     }
 
     /**
@@ -774,13 +721,11 @@ class AbstractConnection extends AbstractChannel
     {
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
-        if ($this->debug) {
-            MiscHelper::debug_msg(sprintf(
+        $this->debug->debug_msg(sprintf(
                 'Redirected to [%s], known_hosts [%s]',
                 $host,
                 $this->known_hosts
             ));
-        }
 
         return $host;
     }
@@ -818,16 +763,13 @@ class AbstractConnection extends AbstractChannel
         $this->mechanisms = explode(' ', $args->read_longstr());
         $this->locales = explode(' ', $args->read_longstr());
 
-        if ($this->debug) {
-            MiscHelper::debug_msg(sprintf(
-                'Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s',
-                $this->version_major,
-                $this->version_minor,
-                self::dump_table($this->server_properties),
-                implode(', ', $this->mechanisms),
-                implode(', ', $this->locales)
-            ));
-        }
+        $this->debug->debug_connection_start(
+            $this->version_major,
+            $this->version_minor,
+            $this->server_properties,
+            $this->mechanisms,
+            $this->locales
+        );
     }
 
     /**

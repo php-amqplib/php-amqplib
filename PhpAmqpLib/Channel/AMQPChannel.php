@@ -95,9 +95,7 @@ class AMQPChannel extends AbstractChannel
         $this->publish_cache = array();
         $this->publish_cache_max_size = 100;
 
-        if ($this->debug) {
-            MiscHelper::debug_msg('using channel_id: ' . $channel_id);
-        }
+        $this->debug->debug_msg('using channel_id: ' . $channel_id);
 
         $this->default_ticket = 0;
         $this->is_open = false;
@@ -270,9 +268,7 @@ class AMQPChannel extends AbstractChannel
     {
         $this->is_open = true;
 
-        if ($this->debug) {
-            MiscHelper::debug_msg('Channel open');
-        }
+        $this->debug->debug_msg('Channel open');
     }
 
     /**
@@ -1266,8 +1262,8 @@ class AMQPChannel extends AbstractChannel
                 $msg,
             ));
 
-        } elseif ($this->debug) {
-            MiscHelper::debug_msg('Skipping unhandled basic_return message');
+        } else {
+            $this->debug->debug_msg('Skipping unhandled basic_return message');
         }
     }
 
