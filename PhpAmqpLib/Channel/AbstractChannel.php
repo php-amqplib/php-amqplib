@@ -242,13 +242,9 @@ abstract class AbstractChannel
      */
     public function wait_content()
     {
-        $frm = $this->next_frame();
-        $frame_type = $frm[0];
-        $payload = $frm[1];
+        list($frame_type, $payload) = $this->next_frame();
 
-        if ($frame_type != 2) {
-            throw new AMQPRuntimeException('Expecting Content header');
-        }
+        $this->validate_header_frame($frame_type);
 
         $this->wait_content_reader->reuse(mb_substr($payload, 0, 12, 'ASCII'));
 
@@ -264,22 +260,26 @@ abstract class AbstractChannel
         $msg = new AMQPMessage();
         $msg->load_properties($this->msg_property_reader);
         $msg->body_size = $body_size;
+        $msg->body = $this->build_msg_body($body_size);
 
+        if ($this->auto_decode && isset($msg->content_encoding)) {
+            try {
+                $msg->body = $msg->body->decode($msg->content_encoding);
+            } catch (\Exception $e) {
+                $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
+            }
+        }
+
+        return $msg;
+    }
+
+    protected function build_msg_body($body_size) {
         $body_parts = array();
         $body_received = 0;
         while (bccomp($body_size, $body_received, 0) == 1) {
-            $frm = $this->next_frame();
-            $frame_type = $frm[0];
-            $payload = $frm[1];
+            list($frame_type, $payload) = $this->next_frame();
 
-            if ($frame_type != 3) {
-                $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-                throw new AMQPRuntimeException(sprintf(
-                    'Expecting Content body, received frame type %s (%s)',
-                    $frame_type,
-                    $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-                ));
-            }
+            $this->validate_body_frame($frame_type);
 
             $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
 
@@ -291,17 +291,7 @@ abstract class AbstractChannel
             $body_parts[] = $payload;
         }
 
-        $msg->body = implode('', $body_parts);
-
-        if ($this->auto_decode && isset($msg->content_encoding)) {
-            try {
-                $msg->body = $msg->body->decode($msg->content_encoding);
-            } catch (\Exception $e) {
-                $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
-            }
-        }
-
-        return $msg;
+        return implode('', $body_parts);
     }
 
     /**
@@ -375,18 +365,32 @@ abstract class AbstractChannel
         return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
     }
 
+
     /**
      * @param $frame_type
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     protected function validate_method_frame($frame_type) {
-        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-        if ($frame_type != 1) {
+        $this->validate_frame($frame_type, 1, 'AMQP method');
+    }
+
+    protected function validate_header_frame($frame_type) {
+        $this->validate_frame($frame_type, 2, 'AMQP Content header');
+    }
+
+    protected function validate_body_frame($frame_type) {
+        $this->validate_frame($frame_type, 3, 'AMQP Content body');
+    }
+
+    protected function validate_frame($frame_type, $expected_type, $expected_msg) {
+        if ($frame_type != $expected_type) {
+            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
             throw new AMQPRuntimeException(sprintf(
-                'Expecting AMQP method, received frame type: %s (%s)',
-                $frame_type,
-                $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-            ));
+                    'Expecting %s, received frame type %s (%s)',
+                    $expected_msg,
+                    $frame_type,
+                    $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
+                ));
         }
     }
 
