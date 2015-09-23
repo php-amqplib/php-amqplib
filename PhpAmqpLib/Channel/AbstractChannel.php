@@ -329,7 +329,7 @@ abstract class AbstractChannel
         while (true) {
             list($frame_type, $payload) = $this->next_frame($timeout);
 
-            $this->check_frame_type($frame_type);
+            $this->validate_method_frame($frame_type);
             $this->validate_frame_payload($payload);
 
             $method_sig = $this->build_method_signature($payload);
@@ -379,7 +379,7 @@ abstract class AbstractChannel
      * @param $frame_type
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    protected function check_frame_type($frame_type) {
+    protected function validate_method_frame($frame_type) {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
         if ($frame_type != 1) {
             throw new AMQPRuntimeException(sprintf(
