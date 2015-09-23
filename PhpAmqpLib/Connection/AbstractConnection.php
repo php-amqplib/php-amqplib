@@ -554,11 +554,9 @@ class AbstractConnection extends AbstractChannel
 
             if ($frame_channel === 0 && $frame_type === 8) {
                 // skip heartbeat frames and reduce the timeout by the time passed
-                if($_timeout > 0)
-                {
+                if($_timeout > 0) {
                     $_timeout -= time() - $now;
-                    if($_timeout <= 0)
-                    {
+                    if($_timeout <= 0) {
                         // If timeout has been reached, throw the exception without calling wait_frame
                         throw new AMQPTimeoutException("Timeout waiting on channel");
                     }
