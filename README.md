@@ -127,12 +127,12 @@ You could send it every 50 messages, or every hundred. That's up to you.
 Another way to speed up your message publishing is by reusing the `AMQPMessage` message instances. You can create your new message like this:
 
 ```
-$properties = array('content_type' => 'text/plain', 'delivery_mode' => 2);
+$properties = array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT);
 $msg = new AMQPMessage($body, $properties);
 $ch->basic_publish($msg, $exchange);
 ```
 
-Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `2`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
+Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `AMQPMessage::DELIVERY_MODE_PERSISTENT`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
 
 ```php
 $msg->setBody($body2);
