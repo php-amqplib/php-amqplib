@@ -415,7 +415,9 @@ class AbstractConnection extends AbstractChannel
         $pkt->write_octet(0xCE);
 
 
-        // memory efficiency: walk the string instead of biting it. good for very large packets (close in size to memory_limit setting)
+        // memory efficiency: walk the string instead of biting
+        // it. good for very large packets (close in size to
+        // memory_limit setting)
         $position = 0;
         $bodyLength = mb_strlen($body,'ASCII');
         while ($position < $bodyLength) {
