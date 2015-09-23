@@ -298,7 +298,7 @@ class AbstractConnection extends AbstractChannel
 
     protected function close_input()
     {
-        $this->debug_msg('closing input');
+        $this->debug->debug_msg('closing input');
 
         if (!is_null($this->input)) {
             $this->input->close();
@@ -308,7 +308,7 @@ class AbstractConnection extends AbstractChannel
 
     protected function close_socket()
     {
-        $this->debug_msg('closing socket');
+        $this->debug->debug_msg('closing socket');
 
         if (!is_null($this->getIO())) {
             $this->getIO()->close();
@@ -320,7 +320,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function write($data)
     {
-        $this->debug_hexdump($data);
+        $this->debug->debug_hexdump($data);
 
         try {
             $this->getIO()->write($data);
@@ -446,7 +446,7 @@ class AbstractConnection extends AbstractChannel
 
         $this->write($pkt->getvalue());
 
-        $this->debug_method_signature1($method_sig);
+        $this->debug->debug_method_signature1($method_sig);
     }
 
     /**
@@ -479,7 +479,7 @@ class AbstractConnection extends AbstractChannel
 
         $pkt->write_octet(0xCE);
 
-        $this->debug_method_signature1($method_sig);
+        $this->debug->debug_method_signature1($method_sig);
 
         return $pkt;
     }
@@ -708,7 +708,7 @@ class AbstractConnection extends AbstractChannel
     protected function connection_open_ok($args)
     {
         $this->known_hosts = $args->read_shortstr();
-        $this->debug_msg('Open OK! known_hosts: ' . $this->known_hosts);
+        $this->debug->debug_msg('Open OK! known_hosts: ' . $this->known_hosts);
     }
 
     /**
@@ -721,7 +721,7 @@ class AbstractConnection extends AbstractChannel
     {
         $host = $args->read_shortstr();
         $this->known_hosts = $args->read_shortstr();
-        $this->debug_msg(sprintf(
+        $this->debug->debug_msg(sprintf(
                 'Redirected to [%s], known_hosts [%s]',
                 $host,
                 $this->known_hosts
@@ -763,7 +763,13 @@ class AbstractConnection extends AbstractChannel
         $this->mechanisms = explode(' ', $args->read_longstr());
         $this->locales = explode(' ', $args->read_longstr());
 
-        $this->debug_connection_start();
+        $this->debug->debug_connection_start(
+            $this->version_major,
+            $this->version_minor,
+            $this->server_properties,
+            $this->mechanisms,
+            $this->locales
+        );
     }
 
     /**

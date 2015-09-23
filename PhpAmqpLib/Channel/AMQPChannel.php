@@ -95,7 +95,7 @@ class AMQPChannel extends AbstractChannel
         $this->publish_cache = array();
         $this->publish_cache_max_size = 100;
 
-        $this->debug_msg('using channel_id: ' . $channel_id);
+        $this->debug->debug_msg('using channel_id: ' . $channel_id);
 
         $this->default_ticket = 0;
         $this->is_open = false;
@@ -268,7 +268,7 @@ class AMQPChannel extends AbstractChannel
     {
         $this->is_open = true;
 
-        $this->debug_msg('Channel open');
+        $this->debug->debug_msg('Channel open');
     }
 
     /**
@@ -1263,7 +1263,7 @@ class AMQPChannel extends AbstractChannel
             ));
 
         } else {
-            $this->debug_msg('Skipping unhandled basic_return message');
+            $this->debug->debug_msg('Skipping unhandled basic_return message');
         }
     }
 

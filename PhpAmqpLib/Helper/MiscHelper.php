@@ -3,11 +3,6 @@ namespace PhpAmqpLib\Helper;
 
 class MiscHelper
 {
-    public static function debug_msg($s)
-    {
-        echo $s . PHP_EOL;
-    }
-
     /**
      * @param $a
      * @return string

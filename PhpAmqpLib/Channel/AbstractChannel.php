@@ -5,6 +5,7 @@ use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Helper\DebugHelper;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\MethodMap080;
 use PhpAmqpLib\Helper\Protocol\MethodMap091;
@@ -34,7 +35,7 @@ abstract class AbstractChannel
     /** @var string */
     protected $amqp_protocol_header;
 
-    /** @var bool */
+    /** @var \PhpAmqpLib\Helper\DebugHelper */
     protected $debug;
 
     /** @var \PhpAmqpLib\Connection\AbstractConnection */
@@ -82,7 +83,6 @@ abstract class AbstractChannel
         $this->frame_queue = array(); // Lower level queue for frames
         $this->method_queue = array(); // Higher level queue for methods
         $this->auto_decode = false;
-        $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
 
         $this->msg_property_reader = new AMQPReader(null);
         $this->wait_content_reader = new AMQPReader(null);
@@ -93,6 +93,7 @@ abstract class AbstractChannel
             case self::PROTOCOL_091:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
+                $this->debug = new DebugHelper($c);
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
                 $this->protocolWriter = new Protocol091();
                 $this->waitHelper = new Wait091();
@@ -101,6 +102,7 @@ abstract class AbstractChannel
             case self::PROTOCOL_080:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants080';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
+                $this->debug = new DebugHelper($c);
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
                 $this->protocolWriter = new Protocol080();
                 $this->waitHelper = new Wait080();
@@ -203,7 +205,7 @@ abstract class AbstractChannel
      */
     public function next_frame($timeout = 0)
     {
-        $this->debug_msg('waiting for a new frame');
+        $this->debug->debug_msg('waiting for a new frame');
 
         if (!empty($this->frame_queue)) {
             return array_shift($this->frame_queue);
@@ -295,7 +297,7 @@ abstract class AbstractChannel
             try {
                 $msg->body = $msg->body->decode($msg->content_encoding);
             } catch (\Exception $e) {
-                $this->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
+                $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
             }
         }
 
@@ -318,17 +320,17 @@ abstract class AbstractChannel
     {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
 
-        $this->debug_allowed_methods($allowed_methods);
+        $this->debug->debug_allowed_methods($allowed_methods);
 
         //Process deferred methods
         foreach ($this->method_queue as $qk => $queued_method) {
-            $this->debug_msg('checking queue method ' . $qk);
+            $this->debug->debug_msg('checking queue method ' . $qk);
 
             $method_sig = $queued_method[0];
             if ($allowed_methods == null || in_array($method_sig, $allowed_methods)) {
                 unset($this->method_queue[$qk]);
 
-                $this->debug_method_signature('Executing queued method: %s', $method_sig);
+                $this->debug->debug_method_signature('Executing queued method: %s', $method_sig);
 
                 return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
             }
@@ -356,7 +358,7 @@ abstract class AbstractChannel
             $method_sig = '' . $method_sig_array[1] . ',' . $method_sig_array[2];
             $args = mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
 
-            $this->debug_method_signature('> %s', $method_sig);
+            $this->debug->debug_method_signature('> %s', $method_sig);
 
             if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
                 $content = $this->wait_content();
@@ -372,65 +374,12 @@ abstract class AbstractChannel
             }
 
             // Wasn't what we were looking for? save it for later
-            $this->debug_method_signature('Queueing for later: %s', $method_sig);
+            $this->debug->debug_method_signature('Queueing for later: %s', $method_sig);
             $this->method_queue[] = array($method_sig, $args, $content);
 
             if ($non_blocking) {
                 break;
             }
-        }
-    }
-
-    protected function debug_msg($msg) {
-        if ($this->debug) {
-            MiscHelper::debug_msg($msg);
-        }
-    }
-
-    protected function debug_allowed_methods($allowed_methods) {
-        if ($allowed_methods) {
-            $msg = 'waiting for ' . implode(', ', $allowed_methods);
-        } else {
-            $msg = 'waiting for any method';
-        }
-        $this->debug_msg($msg);
-    }
-
-    protected function debug_method_signature1($method_sig) {
-        $this->debug_method_signature('< %s:', $method_sig);
-    }
-
-    protected function debug_method_signature($msg, $method_sig) {
-        if ($this->debug) {
-            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-            MiscHelper::debug_msg(sprintf(
-                    $msg . ': %s',
-                    MiscHelper::methodSig($method_sig),
-                    $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-                ));
-        }
-    }
-
-    protected function debug_hexdump($data) {
-        if ($this->debug) {
-            MiscHelper::debug_msg(sprintf(
-                    '< [hex]: %s%s',
-                    PHP_EOL,
-                    MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true)
-                ));
-        }
-    }
-
-    protected function debug_connection_start() {
-        if ($this->debug) {
-            MiscHelper::debug_msg(sprintf(
-                'Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s',
-                $this->version_major,
-                $this->version_minor,
-                MiscHelper::dump_table($this->server_properties),
-                implode(', ', $this->mechanisms),
-                implode(', ', $this->locales)
-            ));
         }
     }
 
