@@ -6,7 +6,7 @@ use PhpAmqpLib\Wire\IO\SocketIO;
 class AMQPSocketConnection extends AbstractConnection
 {
     /**
-     * @param AbstractConnection $host
+     * @param string $host
      * @param int $port
      * @param string $user
      * @param string $password

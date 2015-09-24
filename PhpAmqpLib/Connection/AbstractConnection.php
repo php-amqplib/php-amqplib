@@ -6,7 +6,6 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
-use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
@@ -122,7 +121,7 @@ class AbstractConnection extends AbstractChannel
     private $prepare_content_cache_max_size;
 
     /**
-     * @param AbstractConnection $user
+     * @param string $user
      * @param string $password
      * @param string $vhost
      * @param bool $insist
