@@ -8,18 +8,28 @@ php:
   - 7.0
   - hhvm
   - hhvm-nightly
-  
+
 matrix:
   fast_finish: true
   allow_failures:
     - php: 7.0
     - php: hhvm-nightly
+  include:
+    - php: 5.3
+      env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
 
 before_script:
-  - composer install --dev --prefer-source
-  - ./bin/ci/before_build.sh
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  - sudo rabbitmqctl add_vhost "phpamqplib_testbed"
+  - sudo rabbitmqctl add_user phpamqplib phpamqplib_password
+  - sudo rabbitmqctl set_permissions -p "phpamqplib_testbed" phpamqplib ".*" ".*" ".*"
 
-script: make test
+script:
+  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
+
+after_script:
+  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' && $TRAVIS_PHP_VERSION != '7.0' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover; fi
 
 services:
   rabbitmq
