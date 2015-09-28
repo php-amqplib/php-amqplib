@@ -78,7 +78,7 @@ class StreamIO extends AbstractIO
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
         $this->canSelectNull = true;
-        $this->canDispatchPcntlSignal = extension_loaded('pcntl') 
+        $this->canDispatchPcntlSignal = extension_loaded('pcntl')
             && function_exists('pcntl_signal_dispatch')
             && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
 
@@ -104,40 +104,46 @@ class StreamIO extends AbstractIO
         $errstr = $errno = null;
 
         $remote = sprintf(
-            '%s://%s:%s', 
+            '%s://%s:%s',
             $this->protocol,
             $this->host,
             $this->port
         );
 
         set_error_handler(array($this, 'error_handler'));
-        
-        $this->sock = stream_socket_client(
-            $remote,
-            $errno,
-            $errstr,
-            $this->connection_timeout,
-            STREAM_CLIENT_CONNECT,
-            $this->context
-        );
-        
+
+        try {
+            $this->sock = stream_socket_client(
+                $remote,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                STREAM_CLIENT_CONNECT,
+                $this->context
+            );
+        } catch (\Exception $e) {
+            restore_error_handler();
+
+            throw $e;
+        }
+
         restore_error_handler();
 
         if (false === $this->sock) {
             throw new AMQPRuntimeException(
                 sprintf(
-                    'Error Connecting to server(%s): %s ', 
+                    'Error Connecting to server(%s): %s ',
                     $errno,
                     $errstr
                 ),
                 $errno
             );
         }
-        
+
         if (false === stream_socket_get_name($this->sock, true)) {
             throw new AMQPRuntimeException(
                 sprintf(
-                    'Connection refused: %s ', 
+                    'Connection refused: %s ',
                     $remote
                 )
             );
@@ -219,7 +225,7 @@ class StreamIO extends AbstractIO
         if (mb_strlen($data, 'ASCII') !== $len) {
             throw new AMQPRuntimeException(
                 sprintf(
-                    'Error reading data. Received %s instead of expected %s bytes', 
+                    'Error reading data. Received %s instead of expected %s bytes',
                     mb_strlen($data, 'ASCII'),
                     $len
                 )
@@ -240,7 +246,7 @@ class StreamIO extends AbstractIO
     {
         $written = 0;
         $len = mb_strlen($data, 'ASCII');
-        
+
         while ($written < $len) {
 
             if (!is_resource($this->sock)) {
@@ -273,7 +279,7 @@ class StreamIO extends AbstractIO
 
     /**
      * Internal error handler to deal with stream and socket errors that need to be ignored
-     * 
+     *
      * @param  int $errno
      * @param  string $errstr
      * @param  string $errfile
