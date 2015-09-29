@@ -1,13 +1,13 @@
 <?php
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 include(__DIR__ . '/config.php');
 
 $exchange = 'someExchange';
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 $ch->set_ack_handler(

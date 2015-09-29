@@ -4,7 +4,7 @@
 // Set $queue name to test exclusiveness
 
 include(__DIR__ . '/config.php');
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $exchange = 'fanout_exclusive_example_exchange';
 $queue = ''; // if empty let RabbitMQ create a queue name
@@ -12,7 +12,7 @@ $queue = ''; // if empty let RabbitMQ create a queue name
 // to test exclusiveness
 $consumer_tag = 'consumer' . getmypid();
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 /*
