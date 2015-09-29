@@ -1,12 +1,12 @@
 <?php
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 
 include(__DIR__ . '/config.php');
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 /**

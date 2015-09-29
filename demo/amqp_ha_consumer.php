@@ -1,7 +1,7 @@
 <?php
 
 include(__DIR__ . '/config.php');
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Wire\AMQPTable;
 
 $exchange = 'router';
@@ -10,7 +10,7 @@ $specific_queue = 'specific-haqueue';
 
 $consumer_tag = 'consumer';
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 /*

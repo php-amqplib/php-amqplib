@@ -1,11 +1,11 @@
 <?php
 include(__DIR__ . '/config.php');
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
 
 
-$connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
 $exchName = 'topic_headers_test';

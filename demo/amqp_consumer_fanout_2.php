@@ -4,13 +4,13 @@
 // amqp_consumer_fanout_2.php to test
 
 include(__DIR__ . '/config.php');
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $exchange = 'fanout_example_exchange';
 $queue = 'fanout_group_2'; // Let RabbitMQ create a queue name
 $consumer_tag = 'consumer' . getmypid();
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 /*
