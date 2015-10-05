@@ -594,7 +594,6 @@ class AbstractConnection extends AbstractChannel
     public function channel($channel_id = null)
     {
         if (isset($this->channels[$channel_id])) {
-
             return $this->channels[$channel_id];
         }
 
@@ -642,15 +641,15 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param AMQPReader $args
+     * @param AMQPReader $reader
      * @throws \PhpAmqpLib\Exception\AMQPProtocolConnectionException
      */
-    protected function connection_close($args)
+    protected function connection_close(AMQPReader $reader)
     {
-        $reply_code = $args->read_short();
-        $reply_text = $args->read_shortstr();
-        $class_id = $args->read_short();
-        $method_id = $args->read_short();
+        $reply_code = $reader->read_short();
+        $reply_text = $reader->read_shortstr();
+        $class_id = $reader->read_short();
+        $method_id = $reader->read_short();
 
         $this->x_close_ok();
 
@@ -894,7 +893,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function isConnected()
     {
-        return $this->is_connected;
+        return (bool) $this->is_connected;
     }
 
     /**

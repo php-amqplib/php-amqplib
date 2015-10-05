@@ -32,6 +32,7 @@ class AMQPSocketConnection extends AbstractConnection
         $keepalive = false
     ) {
         $io = new SocketIO($host, $port, $timeout, $keepalive);
+
         parent::__construct(
             $user,
             $password,

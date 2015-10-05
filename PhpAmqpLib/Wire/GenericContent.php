@@ -29,19 +29,19 @@ abstract class GenericContent
     );
 
     /**
-     * @param array $props Message property content
-     * @param array $prop_types Message property definitions
+     * @param array $properties Message property content
+     * @param array $propertyTypes Message property definitions
      */
-    public function __construct($props = array(), $prop_types = array())
+    public function __construct($properties, $propertyTypes = null)
     {
         $this->prop_types = self::$propertyDefinitions;
 
-        if (!empty($prop_types)) {
-            $this->prop_types = $prop_types;
+        if (!empty($propertyTypes)) {
+            $this->prop_types = $propertyTypes;
         }
 
-        if (!empty($props)) {
-            $this->properties = array_intersect_key($props, $this->prop_types);
+        if (!empty($properties)) {
+            $this->properties = array_intersect_key($properties, $this->prop_types);
         }
     }
 
@@ -120,7 +120,7 @@ abstract class GenericContent
      * NOTE: do not mutate $reader
      * @return $this
      */
-    public function load_properties($reader)
+    public function load_properties(AMQPReader $reader)
     {
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();

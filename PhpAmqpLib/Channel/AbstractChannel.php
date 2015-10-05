@@ -6,7 +6,6 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\DebugHelper;
-use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\MethodMap080;
 use PhpAmqpLib\Helper\Protocol\MethodMap091;
 use PhpAmqpLib\Helper\Protocol\Protocol080;
@@ -298,7 +297,7 @@ abstract class AbstractChannel
         $message->setBody(implode('', $bodyChunks));
 
         $messageEncoding = $message->getContentEncoding();
-        
+
         if ($this->auto_decode && !empty($messageEncoding)) {
             try {
                 // Where does the decode() method come from if body is a string?
@@ -411,13 +410,13 @@ abstract class AbstractChannel
     protected function validate_frame($frame_type, $expected_type, $expected_msg)
     {
         if ($frame_type != $expected_type) {
-            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+            $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
             throw new AMQPRuntimeException(sprintf(
-                'Expecting %s, received frame type %s (%s)',
-                $expected_msg,
-                $frame_type,
-                $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-            ));
+                    'Expecting %s, received frame type %s (%s)',
+                    $expected_msg,
+                    $frame_type,
+                    $protocolClass::$FRAME_TYPES[$frame_type]
+                ));
         }
     }
 
@@ -446,19 +445,19 @@ abstract class AbstractChannel
 
     protected function should_dispatch_method($allowed_methods, $method_sig)
     {
-        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+        $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
 
         return $allowed_methods == null
             || in_array($method_sig, $allowed_methods)
-            || in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS);
+            || in_array($method_sig, $protocolClass::$CLOSE_METHODS);
     }
 
     protected function maybe_wait_for_content($method_sig)
     {
-        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+        $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
         $content = null;
 
-        if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
+        if (in_array($method_sig, $protocolClass::$CONTENT_METHODS)) {
             $content = $this->wait_content();
         }
 

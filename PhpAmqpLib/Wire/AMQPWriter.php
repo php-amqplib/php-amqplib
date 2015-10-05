@@ -362,7 +362,7 @@ class AMQPWriter extends AbstractClient
         if (!($a instanceof AMQPArray)) {
             $a = new AMQPArray($a);
         }
-        $data = new AMQPWriter();
+        $data = new self();
 
         foreach ($a as $v) {
             $data->write_value($v[0], $v[1]);
