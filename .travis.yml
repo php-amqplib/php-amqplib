@@ -9,6 +9,10 @@ php:
   - hhvm
   - hhvm-nightly
 
+# This triggers builds to run on the new TravisCI infrastructure.
+# See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+
 matrix:
   fast_finish: true
   allow_failures:
@@ -21,9 +25,6 @@ matrix:
 before_script:
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
-  - sudo rabbitmqctl add_vhost "phpamqplib_testbed"
-  - sudo rabbitmqctl add_user phpamqplib phpamqplib_password
-  - sudo rabbitmqctl set_permissions -p "phpamqplib_testbed" phpamqplib ".*" ".*" ".*"
 
 script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
