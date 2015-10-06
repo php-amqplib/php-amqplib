@@ -13,7 +13,11 @@ class AMQPMessage extends GenericContent
 
     /** @var string */
     public $body;
+
+    /** @var int */
     public $body_size;
+
+    /** @var bool */
     public $is_truncated = false;
 
     /** @var string */
@@ -48,14 +52,68 @@ class AMQPMessage extends GenericContent
     }
 
     /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
+    }
+
+    /**
      * Sets the message payload
      *
-     * @param mixed $body
+     * @param string $body
      * @return $this
      */
     public function setBody($body)
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentEncoding()
+    {
+        return $this->content_encoding;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBodySize()
+    {
+        return $this->body_size;
+    }
+
+    /**
+     * @param int $body_size Message body size in byte(s)
+     * @return AMQPMessage
+     */
+    public function setBodySize($body_size)
+    {
+        $this->body_size = (int) $body_size;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isTruncated()
+    {
+        return $this->is_truncated;
+    }
+
+    /**
+     * @param boolean $is_truncated
+     * @return AMQPMessage
+     */
+    public function setIsTruncated($is_truncated)
+    {
+        $this->is_truncated = (bool) $is_truncated;
 
         return $this;
     }

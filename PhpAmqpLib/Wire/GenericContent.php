@@ -118,6 +118,7 @@ abstract class GenericContent
      *
      * @param AMQPReader $reader
      * NOTE: do not mutate $reader
+     * @return $this
      */
     public function load_properties($reader)
     {
@@ -134,7 +135,7 @@ abstract class GenericContent
         }
 
         $shift = 0;
-        $d = array();
+        $data = array();
 
         foreach ($this->prop_types as $key => $proptype) {
             if ($shift === 0) {
@@ -146,12 +147,15 @@ abstract class GenericContent
             }
 
             if ($flag_bits & (1 << $shift)) {
-                $d[$key] = $reader->{'read_' . $proptype}();
+                $data[$key] = $reader->{'read_' . $proptype}();
             }
 
             $shift -= 1;
         }
-        $this->properties = $d;
+
+        $this->properties = $data;
+
+        return $this;
     }
 
 

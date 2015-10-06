@@ -44,10 +44,8 @@ abstract class AbstractChannel
     /** @var string */
     protected $protocolVersion;
 
-    /**
-     * @var int
-     */
-    protected $body_size_max = null;
+    /** @var int */
+    protected $maxBodySize;
 
     /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
     protected $protocolWriter;
@@ -140,15 +138,19 @@ abstract class AbstractChannel
         return $this->channel_id;
     }
 
+    /**
+     * @param int $max_bytes Max message body size for this channel
+     * @return $this
+     */
     public function setBodySizeLimit($max_bytes)
     {
-        $max_bytes = intval($max_bytes);
+        $max_bytes = (int) $max_bytes;
 
-        if ( $max_bytes > 0 ) {
-            $this->body_size_max = $max_bytes;
-        } else {
-            $this->body_size_max = null;
+        if ($max_bytes > 0) {
+            $this->maxBodySize = $max_bytes;
         }
+
+        return $this;
     }
 
     /**
@@ -255,51 +257,59 @@ abstract class AbstractChannel
         $class_id = $this->wait_content_reader->read_short();
         $weight = $this->wait_content_reader->read_short();
 
-        $body_size = $this->wait_content_reader->read_longlong();
-
         //hack to avoid creating new instances of AMQPReader;
         $this->msg_property_reader->reuse(mb_substr($payload, 12, mb_strlen($payload, 'ASCII') - 12, 'ASCII'));
 
-        $msg = new AMQPMessage();
-        $msg->load_properties($this->msg_property_reader);
-        $msg->body_size = $body_size;
-        list($msg_body, $is_truncated) = $this->build_msg_body($body_size);
-        $msg->body = $msg_body;
-        $msg->is_truncated = $is_truncated;
+        return $this->createMessage(
+            $this->msg_property_reader,
+            $this->wait_content_reader
+        );
+    }
 
-        if ($this->auto_decode && isset($msg->content_encoding)) {
+    /**
+     * @param AMQPReader $propertyReader
+     * @param AMQPReader $contentReader
+     * @return \PhpAmqpLib\Message\AMQPMessage
+     */
+    protected function createMessage($propertyReader, $contentReader)
+    {
+        $bodyChunks = array();
+        $bodyReceivedBytes = 0;
+
+        $message = new AMQPMessage();
+        $message
+            ->load_properties($propertyReader)
+            ->setBodySize($contentReader->read_longlong());
+
+        while (bccomp($message->getBodySize(), $bodyReceivedBytes, 0) == 1) {
+            list($frame_type, $payload) = $this->next_frame();
+
+            $this->validate_body_frame($frame_type);
+            $bodyReceivedBytes = bcadd($bodyReceivedBytes, mb_strlen($payload, 'ASCII'), 0);
+
+            if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize ) {
+                $message->setIsTruncated(true);
+                continue;
+            }
+
+            $bodyChunks[] = $payload;
+        }
+
+        $message->setBody(implode('', $bodyChunks));
+
+        $messageEncoding = $message->getContentEncoding();
+        
+        if ($this->auto_decode && !empty($messageEncoding)) {
             try {
-                $msg->body = $msg->body->decode($msg->content_encoding);
+                // Where does the decode() method come from if body is a string?
+                $decodedBody = $message->getBody()->decode($messageEncoding);
+                $message->setBody($decodedBody);
             } catch (\Exception $e) {
                 $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
             }
         }
 
-        return $msg;
-    }
-
-    protected function build_msg_body($body_size)
-    {
-        $body_parts = array();
-        $body_received = 0;
-        $is_truncated = false;
-
-        while (bccomp($body_size, $body_received, 0) == 1) {
-            list($frame_type, $payload) = $this->next_frame();
-
-            $this->validate_body_frame($frame_type);
-
-            $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
-
-            if (!is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
-                $is_truncated = true;
-                continue;
-            }
-
-            $body_parts[] = $payload;
-        }
-
-        return array(implode('', $body_parts), $is_truncated);
+        return $message;
     }
 
     /**
