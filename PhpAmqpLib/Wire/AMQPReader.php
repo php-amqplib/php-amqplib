@@ -115,7 +115,7 @@ class AMQPReader extends AbstractClient
     protected function wait()
     {
         if ($this->timeout == 0) {
-            return;
+            return null;
         }
 
         // wait ..

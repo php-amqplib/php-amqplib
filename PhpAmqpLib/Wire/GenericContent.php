@@ -116,15 +116,15 @@ abstract class GenericContent
      * into a dictionary stored in this object as an attribute named
      * 'properties'.
      *
-     * @param AMQPReader $r
+     * @param AMQPReader $reader
      * NOTE: do not mutate $reader
      */
-    public function load_properties($r)
+    public function load_properties($reader)
     {
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();
         while (true) {
-            $flag_bits = $r->read_short();
+            $flag_bits = $reader->read_short();
             $flags[] = $flag_bits;
             if (($flag_bits & 1) == 0) {
                 break;
@@ -142,7 +142,7 @@ abstract class GenericContent
                 $shift = 15;
             }
             if ($flag_bits & (1 << $shift)) {
-                $d[$key] = $r->{'read_' . $proptype}();
+                $d[$key] = $reader->{'read_' . $proptype}();
             }
 
             $shift -= 1;
