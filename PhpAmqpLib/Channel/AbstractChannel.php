@@ -260,7 +260,9 @@ abstract class AbstractChannel
         $msg = new AMQPMessage();
         $msg->load_properties($this->msg_property_reader);
         $msg->body_size = $body_size;
-        $msg->body = $this->build_msg_body($body_size);
+        list($msg_body, $is_truncated) = $this->build_msg_body($body_size);
+        $msg->body = $msg_body;
+        $msg->is_truncated = $is_truncated;
 
         if ($this->auto_decode && isset($msg->content_encoding)) {
             try {
@@ -276,6 +278,7 @@ abstract class AbstractChannel
     protected function build_msg_body($body_size) {
         $body_parts = array();
         $body_received = 0;
+        $is_truncated = false;
         while (bccomp($body_size, $body_received, 0) == 1) {
             list($frame_type, $payload) = $this->next_frame();
 
@@ -284,14 +287,14 @@ abstract class AbstractChannel
             $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
 
             if ( ! is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
-                $msg->is_truncated = true;
+                $is_truncated = true;
                 continue;
             }
 
             $body_parts[] = $payload;
         }
 
-        return implode('', $body_parts);
+        return array(implode('', $body_parts), $is_truncated);
     }
 
     /**
