@@ -156,7 +156,7 @@ class AMQPChannel extends AbstractChannel
         if ($this->is_open === false || $this->connection === null) {
             $this->do_close();
 
-            return; // already closed
+            return null; // already closed
         }
         list($class_id, $method_id, $args) = $this->protocolWriter->channelClose(
             $reply_code,
@@ -864,20 +864,20 @@ class AMQPChannel extends AbstractChannel
      */
     protected function basic_cancel_from_server(AMQPReader $args)
     {
-        $consumerTag = $args->read_shortstr();
-
-        throw new AMQPBasicCancelException($consumerTag);
+        throw new AMQPBasicCancelException($args->read_shortstr());
     }
 
     /**
      * Confirm a cancelled consumer
      *
      * @param AMQPReader $args
+     * @return string
      */
     protected function basic_cancel_ok($args)
     {
         $consumer_tag = $args->read_shortstr();
         unset($this->callbacks[$consumer_tag]);
+
         return $consumer_tag;
     }
 
@@ -1137,7 +1137,7 @@ class AMQPChannel extends AbstractChannel
     public function publish_batch()
     {
         if (empty($this->batch_messages)) {
-            return;
+            return null;
         }
 
         /** @var AMQPWriter $pkt */

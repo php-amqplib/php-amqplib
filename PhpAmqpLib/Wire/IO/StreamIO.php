@@ -268,7 +268,6 @@ class StreamIO extends AbstractIO
         }
 
         $this->last_write = microtime(true);
-        return;
     }
 
     /**
@@ -288,13 +287,13 @@ class StreamIO extends AbstractIO
         // fwrite notice that the stream isn't ready
         if (strstr($errstr, 'Resource temporarily unavailable')) {
              // it's allowed to retry
-             return;
+            return null;
         }
 
         // stream_select warning that it has been interrupted by a signal
         if (strstr($errstr, 'Interrupted system call')) {
              // it's allowed while processing signals
-             return;
+            return null;
         }
 
         // raise all other issues to exceptions

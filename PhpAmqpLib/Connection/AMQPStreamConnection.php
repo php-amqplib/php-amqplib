@@ -19,6 +19,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param int $read_write_timeout
      * @param null $context
      * @param bool $keepalive
+     * @param int $heartbeat
      */
     public function __construct(
         $host,
@@ -36,9 +37,27 @@ class AMQPStreamConnection extends AbstractConnection
         $keepalive = false,
         $heartbeat = 0
     ) {
-        $io = new StreamIO($host, $port, $connection_timeout, $read_write_timeout, $context, $keepalive, $heartbeat);
+        $io = new StreamIO(
+            $host,
+            $port,
+            $connection_timeout,
+            $read_write_timeout,
+            $context,
+            $keepalive,
+            $heartbeat
+        );
 
-        parent::__construct($user, $password, $vhost, $insist, $login_method, $login_response, $locale, $io, $heartbeat);
+        parent::__construct(
+            $user,
+            $password,
+            $vhost,
+            $insist,
+            $login_method,
+            $login_response,
+            $locale,
+            $io,
+            $heartbeat
+        );
 
         // save the params for the use of __clone, this will overwrite the parent
         $this->construct_params = func_get_args();

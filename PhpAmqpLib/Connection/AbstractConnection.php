@@ -213,7 +213,7 @@ class AbstractConnection extends AbstractChannel
 
                 $host = $this->x_open($this->vhost, '', $this->insist);
                 if (!$host) {
-                    return; // we weren't redirected
+                    return null; // we weren't redirected
                 }
 
                 $this->setIsConnected(false);
