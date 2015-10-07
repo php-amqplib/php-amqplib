@@ -520,7 +520,7 @@ class AMQPReader extends AbstractClient
     /**
      * Sets the timeout (second)
      *
-     * @param $timeout
+     * @param int $timeout
      */
     public function setTimeout($timeout)
     {

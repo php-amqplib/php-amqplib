@@ -131,7 +131,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write multiple bits as an octet
      *
-     * @param $bits
+     * @param boolean[] $bits
      * @return $this
      */
     public function write_bits($bits)
@@ -306,7 +306,7 @@ class AMQPWriter extends AbstractClient
 
     /**
      * @param int $n
-     * @return array
+     * @return int[]
      */
     private function splitIntoQuads($n)
     {

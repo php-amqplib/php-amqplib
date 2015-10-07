@@ -1,12 +1,13 @@
 <?php
 namespace PhpAmqpLib\Connection;
 
-use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 use PhpAmqpLib\Wire\IO\SocketIO;
@@ -436,7 +437,7 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param $channel
+     * @param string $channel
      * @param $method_sig
      * @param string $args
      * @param null $pkt
@@ -455,7 +456,7 @@ class AbstractConnection extends AbstractChannel
      * @param $method_sig
      * @param string $args
      * @param AMQPWriter $pkt
-     * @return null|AMQPWriter
+     * @return AMQPWriter
      */
     protected function prepare_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
@@ -773,15 +774,15 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param $client_properties
-     * @param $mechanism
-     * @param $response
-     * @param $locale
+     * @param AMQPTable|array $clientProperties
+     * @param string $mechanism
+     * @param string $response
+     * @param string $locale
      */
-    protected function x_start_ok($client_properties, $mechanism, $response, $locale)
+    protected function x_start_ok($clientProperties, $mechanism, $response, $locale)
     {
         $args = new AMQPWriter();
-        $args->write_table($client_properties);
+        $args->write_table($clientProperties);
         $args->write_shortstr($mechanism);
         $args->write_longstr($response);
         $args->write_shortstr($locale);

@@ -225,7 +225,7 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
-     * @param $active
+     * @param bool $active
      */
     protected function x_flow_ok($active)
     {
@@ -642,7 +642,7 @@ class AMQPChannel extends AbstractChannel
      * Confirms a queue definition
      *
      * @param AMQPReader $reader
-     * @return array
+     * @return string[]
      */
     protected function queue_declare_ok(AMQPReader $reader)
     {
@@ -791,7 +791,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param string $delivery_tag
      * @param bool $multiple
-     * @param $handler
+     * @param callable $handler
      */
     protected function internal_ack_handler($delivery_tag, $multiple, $handler)
     {
@@ -809,14 +809,18 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
-     * @param array $array
-     * @param $value
+     * @param AMQPMessage[] $messages
+     * @param string $value
      * @return mixed
      */
-    protected function get_keys_less_or_equal(array $array, $value)
+    protected function get_keys_less_or_equal(array $messages, $value)
     {
         $keys = array_reduce(
-            array_keys($array),
+            array_keys($messages),
+
+            /**
+             * @param string $key
+             */
             function ($keys, $key) use ($value) {
                 if (bccomp($key, $value, 0) <= 0) {
                     $keys[] = $key;

@@ -69,7 +69,7 @@ abstract class AbstractChannel
 
     /**
      * @param AbstractConnection $connection
-     * @param $channel_id
+     * @param string $channel_id
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function __construct(AbstractConnection $connection, $channel_id)
@@ -110,7 +110,6 @@ abstract class AbstractChannel
                     'Protocol: %s not implemented.',
                     $this->protocolVersion
                 ));
-                break;
         }
     }
 
@@ -232,8 +231,8 @@ abstract class AbstractChannel
      *
      * @param $method_sig
      * @param string $args
-     * @param null $pkt
-     * @return null|\PhpAmqpLib\Wire\AMQPWriter
+     * @param \PhpAmqpLib\Wire\AMQPWriter $pkt
+     * @return \PhpAmqpLib\Wire\AMQPWriter
      */
     protected function prepare_method_frame($method_sig, $args = '', $pkt = null)
     {
@@ -295,18 +294,6 @@ abstract class AbstractChannel
         }
 
         $message->setBody(implode('', $bodyChunks));
-
-        $messageEncoding = $message->getContentEncoding();
-
-        if ($this->auto_decode && !empty($messageEncoding)) {
-            try {
-                // Where does the decode() method come from if body is a string?
-                $decodedBody = $message->getBody()->decode($messageEncoding);
-                $message->setBody($decodedBody);
-            } catch (\Exception $e) {
-                $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
-            }
-        }
 
         return $message;
     }
@@ -407,15 +394,20 @@ abstract class AbstractChannel
         $this->validate_frame($frame_type, 3, 'AMQP Content body');
     }
 
-    protected function validate_frame($frame_type, $expected_type, $expected_msg)
+    /**
+     * @param int $frameType
+     * @param int $expectedType
+     * @param string $expectedMessage
+     */
+    protected function validate_frame($frameType, $expectedType, $expectedMessage)
     {
-        if ($frame_type != $expected_type) {
+        if ($frameType != $expectedType) {
             $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
             throw new AMQPRuntimeException(sprintf(
                     'Expecting %s, received frame type %s (%s)',
-                    $expected_msg,
-                    $frame_type,
-                    $protocolClass::$FRAME_TYPES[$frame_type]
+                    $expectedMessage,
+                    $frameType,
+                    $protocolClass::$FRAME_TYPES[$frameType]
                 ));
         }
     }
@@ -443,6 +435,11 @@ abstract class AbstractChannel
         return mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
     }
 
+    /**
+     * @param array $allowed_methods
+     * @param string $method_sig
+     * @return bool
+     */
     protected function should_dispatch_method($allowed_methods, $method_sig)
     {
         $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
@@ -452,6 +449,10 @@ abstract class AbstractChannel
             || in_array($method_sig, $protocolClass::$CLOSE_METHODS);
     }
 
+    /**
+     * @param string $method_sig
+     * @return AMQPMessage
+     */
     protected function maybe_wait_for_content($method_sig)
     {
         $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
@@ -465,7 +466,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @param $handler
+     * @param callable $handler
      * @param array $arguments
      */
     protected function dispatch_to_handler($handler, array $arguments)
