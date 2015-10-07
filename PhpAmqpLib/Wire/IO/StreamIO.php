@@ -97,8 +97,8 @@ class StreamIO extends AbstractIO
     private function isPcntlSignalEnabled()
     {
         return extension_loaded('pcntl')
-        && function_exists('pcntl_signal_dispatch')
-        && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
+            && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
 
     /**
