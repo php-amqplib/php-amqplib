@@ -436,7 +436,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @param array $allowed_methods
+     * @param array|null $allowed_methods
      * @param string $method_sig
      * @return bool
      */

@@ -306,7 +306,7 @@ class AMQPWriter extends AbstractClient
 
     /**
      * @param int $n
-     * @return int[]
+     * @return integer[]
      */
     private function splitIntoQuads($n)
     {

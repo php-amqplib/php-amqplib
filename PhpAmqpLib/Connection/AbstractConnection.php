@@ -71,7 +71,7 @@ class AbstractConnection extends AbstractChannel
     /** @var string */
     protected $login_method;
 
-    /** @var AMQPWriter */
+    /** @var string */
     protected $login_response;
 
     /** @var string */
@@ -452,8 +452,8 @@ class AbstractConnection extends AbstractChannel
     /**
      * Returns a new AMQPWriter or mutates the provided $pkt
      *
-     * @param $channel
-     * @param $method_sig
+     * @param string $channel
+     * @param string[] $method_sig
      * @param string $args
      * @param AMQPWriter $pkt
      * @return AMQPWriter
