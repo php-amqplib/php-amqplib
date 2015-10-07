@@ -44,10 +44,8 @@ abstract class AbstractChannel
     /** @var string */
     protected $protocolVersion;
 
-    /**
-     * @var int
-     */
-    protected $body_size_max = null;
+    /** @var int */
+    protected $maxBodySize;
 
     /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
     protected $protocolWriter;
@@ -109,8 +107,11 @@ abstract class AbstractChannel
                 $this->methodMap = new MethodMap080();
                 break;
             default:
-                //this is logic exception (requires code changes to fix), so OutOfRange, not OutOfBounds or Runtime
-                throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $this->protocolVersion));
+                throw new AMQPRuntimeException(sprintf(
+                    'Protocol: %s not implemented.',
+                    $this->protocolVersion
+                ));
+                break;
         }
     }
 
@@ -137,15 +138,19 @@ abstract class AbstractChannel
         return $this->channel_id;
     }
 
+    /**
+     * @param int $max_bytes Max message body size for this channel
+     * @return $this
+     */
     public function setBodySizeLimit($max_bytes)
     {
-        $max_bytes = intval($max_bytes);
+        $max_bytes = (int) $max_bytes;
 
-        if ( $max_bytes > 0 ) {
-            $this->body_size_max = $max_bytes;
-        } else {
-            $this->body_size_max = null;
+        if ($max_bytes > 0) {
+            $this->maxBodySize = $max_bytes;
         }
+
+        return $this;
     }
 
     /**
@@ -252,49 +257,59 @@ abstract class AbstractChannel
         $class_id = $this->wait_content_reader->read_short();
         $weight = $this->wait_content_reader->read_short();
 
-        $body_size = $this->wait_content_reader->read_longlong();
-
         //hack to avoid creating new instances of AMQPReader;
         $this->msg_property_reader->reuse(mb_substr($payload, 12, mb_strlen($payload, 'ASCII') - 12, 'ASCII'));
 
-        $msg = new AMQPMessage();
-        $msg->load_properties($this->msg_property_reader);
-        $msg->body_size = $body_size;
-        list($msg_body, $is_truncated) = $this->build_msg_body($body_size);
-        $msg->body = $msg_body;
-        $msg->is_truncated = $is_truncated;
+        return $this->createMessage(
+            $this->msg_property_reader,
+            $this->wait_content_reader
+        );
+    }
 
-        if ($this->auto_decode && isset($msg->content_encoding)) {
+    /**
+     * @param AMQPReader $propertyReader
+     * @param AMQPReader $contentReader
+     * @return \PhpAmqpLib\Message\AMQPMessage
+     */
+    protected function createMessage($propertyReader, $contentReader)
+    {
+        $bodyChunks = array();
+        $bodyReceivedBytes = 0;
+
+        $message = new AMQPMessage();
+        $message
+            ->load_properties($propertyReader)
+            ->setBodySize($contentReader->read_longlong());
+
+        while (bccomp($message->getBodySize(), $bodyReceivedBytes, 0) == 1) {
+            list($frame_type, $payload) = $this->next_frame();
+
+            $this->validate_body_frame($frame_type);
+            $bodyReceivedBytes = bcadd($bodyReceivedBytes, mb_strlen($payload, 'ASCII'), 0);
+
+            if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize ) {
+                $message->setIsTruncated(true);
+                continue;
+            }
+
+            $bodyChunks[] = $payload;
+        }
+
+        $message->setBody(implode('', $bodyChunks));
+
+        $messageEncoding = $message->getContentEncoding();
+        
+        if ($this->auto_decode && !empty($messageEncoding)) {
             try {
-                $msg->body = $msg->body->decode($msg->content_encoding);
+                // Where does the decode() method come from if body is a string?
+                $decodedBody = $message->getBody()->decode($messageEncoding);
+                $message->setBody($decodedBody);
             } catch (\Exception $e) {
                 $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
             }
         }
 
-        return $msg;
-    }
-
-    protected function build_msg_body($body_size) {
-        $body_parts = array();
-        $body_received = 0;
-        $is_truncated = false;
-        while (bccomp($body_size, $body_received, 0) == 1) {
-            list($frame_type, $payload) = $this->next_frame();
-
-            $this->validate_body_frame($frame_type);
-
-            $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
-
-            if ( ! is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
-                $is_truncated = true;
-                continue;
-            }
-
-            $body_parts[] = $payload;
-        }
-
-        return array(implode('', $body_parts), $is_truncated);
+        return $message;
     }
 
     /**
@@ -346,13 +361,16 @@ abstract class AbstractChannel
         }
     }
 
-    protected function process_deferred_methods($allowed_methods) {
+    protected function process_deferred_methods($allowed_methods)
+    {
         $dispatch = false;
         $queued_method = array();
+
         foreach ($this->method_queue as $qk => $qm) {
             $this->debug->debug_msg('checking queue method ' . $qk);
 
             $method_sig = $qm[0];
+
             if ($allowed_methods == null || in_array($method_sig, $allowed_methods)) {
                 unset($this->method_queue[$qk]);
                 $dispatch = true;
@@ -360,40 +378,46 @@ abstract class AbstractChannel
                 break;
             }
         }
+
         return array('dispatch' => $dispatch, 'queued_method' => $queued_method);
     }
 
-    protected function dispatch_deferred_method($queued_method) {
+    protected function dispatch_deferred_method($queued_method)
+    {
         $this->debug->debug_method_signature('Executing queued method: %s', $queued_method[0]);
+
         return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
     }
-
 
     /**
      * @param $frame_type
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    protected function validate_method_frame($frame_type) {
+    protected function validate_method_frame($frame_type)
+    {
         $this->validate_frame($frame_type, 1, 'AMQP method');
     }
 
-    protected function validate_header_frame($frame_type) {
+    protected function validate_header_frame($frame_type)
+    {
         $this->validate_frame($frame_type, 2, 'AMQP Content header');
     }
 
-    protected function validate_body_frame($frame_type) {
+    protected function validate_body_frame($frame_type)
+    {
         $this->validate_frame($frame_type, 3, 'AMQP Content body');
     }
 
-    protected function validate_frame($frame_type, $expected_type, $expected_msg) {
+    protected function validate_frame($frame_type, $expected_type, $expected_msg)
+    {
         if ($frame_type != $expected_type) {
             $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
             throw new AMQPRuntimeException(sprintf(
-                    'Expecting %s, received frame type %s (%s)',
-                    $expected_msg,
-                    $frame_type,
-                    $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-                ));
+                'Expecting %s, received frame type %s (%s)',
+                $expected_msg,
+                $frame_type,
+                $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
+            ));
         }
     }
 
@@ -401,34 +425,43 @@ abstract class AbstractChannel
      * @param $payload
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
-    protected function validate_frame_payload($payload) {
+    protected function validate_frame_payload($payload)
+    {
         if (mb_strlen($payload, 'ASCII') < 4) {
             throw new AMQPOutOfBoundsException('Method frame too short');
         }
     }
 
-    protected function build_method_signature($payload) {
+    protected function build_method_signature($payload)
+    {
         $method_sig_array = unpack('n2', mb_substr($payload, 0, 4, 'ASCII'));
-        return '' . $method_sig_array[1] . ',' . $method_sig_array[2];
+
+        return sprintf('%s,%s', $method_sig_array[1], $method_sig_array[2]);
     }
 
-    protected function extract_args($payload) {
+    protected function extract_args($payload)
+    {
         return mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
     }
 
-    protected function should_dispatch_method($allowed_methods, $method_sig) {
+    protected function should_dispatch_method($allowed_methods, $method_sig)
+    {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-        return $allowed_methods == null ||
-                in_array($method_sig, $allowed_methods) ||
-                in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS);
+
+        return $allowed_methods == null
+            || in_array($method_sig, $allowed_methods)
+            || in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS);
     }
 
-    protected function maybe_wait_for_content($method_sig) {
+    protected function maybe_wait_for_content($method_sig)
+    {
         $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
         $content = null;
+
         if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
             $content = $this->wait_content();
         }
+
         return $content;
     }
 

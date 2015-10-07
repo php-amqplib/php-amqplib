@@ -78,9 +78,7 @@ class StreamIO extends AbstractIO
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
         $this->canSelectNull = true;
-        $this->canDispatchPcntlSignal = extension_loaded('pcntl')
-            && function_exists('pcntl_signal_dispatch')
-            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
+        $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
         if (is_null($this->context)) {
             $this->context = stream_context_create();
@@ -91,6 +89,16 @@ class StreamIO extends AbstractIO
                 $this->canSelectNull = false;
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isPcntlSignalEnabled()
+    {
+        return extension_loaded('pcntl')
+            && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') && !AMQP_WITHOUT_SIGNALS);
     }
 
     /**
@@ -278,7 +286,8 @@ class StreamIO extends AbstractIO
      * @param  string $errfile
      * @param  int $errline
      * @param  array $errcontext
-     * @return void
+     * @return null
+     * @throws \ErrorException
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
