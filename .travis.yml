@@ -7,7 +7,6 @@ php:
   - 5.6
   - 7.0
   - hhvm
-  - hhvm-nightly
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
@@ -15,8 +14,6 @@ sudo: false
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: hhvm-nightly
   include:
     - php: 5.3
       env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
@@ -29,7 +26,7 @@ script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
-  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover; fi
+  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' && $TRAVIS_PHP_VERSION != '7.0' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover; fi
 
 services:
   rabbitmq
