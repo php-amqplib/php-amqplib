@@ -198,6 +198,10 @@ class StreamIO extends AbstractIO
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
+            if (($len - $read) > 8 * (1024 * 1024)) {
+                throw new AMQPRuntimeException('Trying to allocate 8M, aborting');
+            }
+
             set_error_handler(array($this, 'error_handler'));
             $buffer = fread($this->sock, ($len - $read));
             restore_error_handler();
