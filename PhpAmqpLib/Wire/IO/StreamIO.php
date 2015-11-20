@@ -248,7 +248,7 @@ class StreamIO extends AbstractIO
             }
 
             set_error_handler(array($this, 'error_handler'));
-            $buffer = fwrite($this->sock, $data);
+            $buffer = fwrite($this->sock, $data, 8192);
             restore_error_handler();
 
             if ($buffer === false) {
@@ -264,7 +264,10 @@ class StreamIO extends AbstractIO
             }
 
             $written += $buffer;
-            $data = mb_substr($data, $buffer, mb_strlen($data, 'ASCII') - $buffer, 'ASCII');
+
+            if ($buffer > 0) {
+                $data = mb_substr($data, $buffer, mb_strlen($data, 'ASCII') - $buffer, 'ASCII');
+            }
         }
 
         $this->last_write = microtime(true);
