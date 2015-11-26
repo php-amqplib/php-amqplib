@@ -5,6 +5,7 @@ use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
+use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
@@ -110,6 +111,7 @@ class AMQPReader extends AbstractClient
      *
      * AMQPTimeoutException can be raised if the timeout is set
      *
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      */
     protected function wait()
@@ -123,7 +125,7 @@ class AMQPReader extends AbstractClient
         $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
-            throw new AMQPRuntimeException('A network error occured while awaiting for incoming data');
+            throw new AMQPIOWaitException('A network error occured while awaiting for incoming data');
         }
 
         if ($result === 0) {
