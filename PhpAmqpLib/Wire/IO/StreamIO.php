@@ -239,9 +239,12 @@ class StreamIO extends AbstractIO
     public function write($data)
     {
         $written = 0;
+        $buffer  = false;
+        $tw      = false;
         $len = mb_strlen($data, 'ASCII');
         
         while ($written < $len) {
+	    if ($buffer !== 0 && $this->read_write_timeout) $tw = time();
 
             if (!is_resource($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
@@ -257,6 +260,10 @@ class StreamIO extends AbstractIO
 
             if ($buffer === 0 && feof($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
+            }
+
+            if ($buffer === 0 && $tw && (time() - $tw > $this->read_write_timeout)) {
+                throw new AMQPTimeoutException('Error sending data. write timed out');
             }
 
             if ($this->timed_out()) {
