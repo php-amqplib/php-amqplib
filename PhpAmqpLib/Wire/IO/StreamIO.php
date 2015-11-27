@@ -288,7 +288,7 @@ class StreamIO extends AbstractIO
             $written += $buffer;
 
             if ($buffer > 0) {
-                $data = mb_substr($data, $buffer, mb_strlen($data, 'ASCII') - $buffer, 'ASCII');
+                $data = substr($data, $buffer, strlen($data) - $buffer);
             }
         }
 
