@@ -255,8 +255,15 @@ class StreamIO extends AbstractIO
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
-            set_error_handler(array($this, 'error_handler'));
-            $buffer = fwrite($this->sock, $data, 8192);
+			set_error_handler(array($this, 'error_handler'));
+			// OpenSSL's C library function SSL_write() can balk on buffers > 8192
+			// bytes in length, so we're limiting the write size here. On both TLS
+			// and plaintext connections, the write loop will continue until the
+			// buffer has been fully written.
+			// This behavior has been observed in OpenSSL dating back to at least
+			// September 2002:
+			// http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
+			$buffer = fwrite($this->sock, $data, 8192);
             restore_error_handler();
 
             if ($buffer === false) {
