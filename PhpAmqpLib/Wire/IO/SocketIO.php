@@ -3,6 +3,7 @@ namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Helper\MiscHelper;
 
 class SocketIO extends AbstractIO
 {
@@ -12,7 +13,7 @@ class SocketIO extends AbstractIO
     /** @var int */
     protected $port;
 
-    /** @var int */
+    /** @var float */
     protected $timeout;
 
     /** @var resource */
@@ -24,7 +25,7 @@ class SocketIO extends AbstractIO
     /**
      * @param string $host
      * @param int $port
-     * @param int $timeout
+     * @param float $timeout
      * @param bool $keepalive
      */
     public function __construct($host, $port, $timeout, $keepalive = false)
@@ -44,8 +45,9 @@ class SocketIO extends AbstractIO
     {
         $this->sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $this->timeout, 'usec' => 0));
-        socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $this->timeout, 'usec' => 0));
+        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
+        socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
+        socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
         if (!socket_connect($this->sock, $this->host, $this->port)) {
             $errno = socket_last_error($this->sock);

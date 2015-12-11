@@ -15,7 +15,7 @@ class AMQPSocketConnection extends AbstractConnection
      * @param string $login_method
      * @param null $login_response
      * @param string $locale
-     * @param int $timeout
+     * @param float $timeout
      * @param bool $keepalive
      */
     public function __construct(
@@ -28,7 +28,7 @@ class AMQPSocketConnection extends AbstractConnection
         $login_method = 'AMQPLAIN',
         $login_response = null,
         $locale = 'en_US',
-        $timeout = 3,
+        $timeout = 3.0,
         $keepalive = false
     ) {
         $io = new SocketIO($host, $port, $timeout, $keepalive);
