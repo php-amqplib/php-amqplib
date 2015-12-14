@@ -114,12 +114,12 @@ class AMQPReader extends AbstractClient
      */
     protected function wait()
     {
-        if ($this->timeout == 0) {
-            return;
+        if ($this->getTimeout() == 0) {
+            return null;
         }
 
         // wait ..
-        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
+        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->getTimeout());
         $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
@@ -239,12 +239,12 @@ class AMQPReader extends AbstractClient
     public function read_php_int()
     {
         list(, $res) = unpack('N', $this->rawread(4));
+
         if ($this->is64bits) {
-            $sres = sprintf('%u', $res);
-            return (int) $sres;
-        } else {
-            return $res;
+            return (int) sprintf('%u', $res);
         }
+
+        return $res;
     }
 
     /**
@@ -379,6 +379,7 @@ class AMQPReader extends AbstractClient
 
         $table_data = new AMQPReader($this->rawread($tlen), null);
         $result = $returnObject ? new AMQPTable() : array();
+
         while ($table_data->tell() < $tlen) {
             $name = $table_data->read_shortstr();
             $ftype = AMQPAbstractCollection::getDataTypeForSymbol($ftypeSym = $table_data->rawread(1));
@@ -412,6 +413,7 @@ class AMQPReader extends AbstractClient
         $endOffset = $this->offset + $arrayLength;
 
         $result = $returnObject ? new AMQPArray() : array();
+
         // Read values until we reach the end of the array
         while ($this->offset < $endOffset) {
             $fieldType = AMQPAbstractCollection::getDataTypeForSymbol($this->rawread(1));
@@ -441,8 +443,8 @@ class AMQPReader extends AbstractClient
     public function read_value($fieldType, $collectionsAsObjects = false)
     {
         $this->bitcount = $this->bits = 0;
-
         $val = null;
+
         switch ($fieldType) {
             case AMQPAbstractCollection::T_INT_SHORTSHORT:
                 //according to AMQP091 spec, 'b' is not bit, it is short-short-int, also valid for rabbit/qpid

@@ -1,6 +1,11 @@
 # php-amqplib #
 
-[![Build Status](https://secure.travis-ci.org/videlalvaro/php-amqplib.png)](http://travis-ci.org/videlalvaro/php-amqplib)
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE)
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+[![Total Downloads][ico-downloads]][link-downloads]
 
 This library is a _pure PHP_ implementation of the AMQP protocol. It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
 
@@ -86,6 +91,10 @@ If you need to listen to the sockets used to connect to RabbitMQ then see the ex
 $ php amqp_consumer_non_blocking.php
 ```
 
+## Change log
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
 ## Tutorials ##
 
 To not repeat ourselves, if you want to learn more about this library,
@@ -127,12 +136,12 @@ You could send it every 50 messages, or every hundred. That's up to you.
 Another way to speed up your message publishing is by reusing the `AMQPMessage` message instances. You can create your new message like this:
 
 ```
-$properties = array('content_type' => 'text/plain', 'delivery_mode' => 2);
+$properties = array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT);
 $msg = new AMQPMessage($body, $properties);
 $ch->basic_publish($msg, $exchange);
 ```
 
-Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `2`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
+Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `AMQPMessage::DELIVERY_MODE_PERSISTENT`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
 
 ```php
 $msg->setBody($body2);
@@ -144,15 +153,15 @@ $ch->basic_publish($msg, $exchange);
 AMQP imposes no limit on the size of messages; if a very large message is received by a consumer, PHP's memory limit may be reached
 within the library before the callback passed to `basic_consume` is called.
 
-To avoid this, you can call the method `setBodySizeLimit(int $bytes)` on your Channel object. Body sizes exceeding this will be truncated, 
-and delivered to your callback with a `$msg->is_truncated` flag set. The property `$msg->body_size` will reflect the true body size of
-a received message, which will be higher than `strlen($msg->body)` if the message has been truncated.
+To avoid this, you can call the method `AMQPChannel::setBodySizeLimit(int $bytes)` on your Channel instance. Body sizes exceeding this limit will be truncated,
+and delivered to your callback with a `AMQPMessage::$is_truncated` flag set to `true`. The property `AMQPMessage::$body_size` will reflect the true body size of
+a received message, which will be higher than `strlen(AMQPMessage::getBody())` if the message has been truncated.
 
-Note that all data above the limit is read from the AMQP Channel and immediately discarded, so there is no way to retrieve it within your 
+Note that all data above the limit is read from the AMQP Channel and immediately discarded, so there is no way to retrieve it within your
 callback. If you have another consumer which can handle messages with larger payloads, you can use `basic_reject` or `basic_nack` to tell
 the server (which still has a complete copy) to forward it to a Dead Letter Exchange.
 
-By default, no truncation will occur. To disable truncation on a Channel that has had it enabled, pass `null` to `setBodySizeLimit`.
+By default, no truncation will occur. To disable truncation on a Channel that has had it enabled, pass `0` (or `null`) to `AMQPChannel::setBodySizeLimit()`.
 
 ##UNIX Signals##
 
@@ -232,6 +241,10 @@ Once your environment is set up you can run your tests like this:
 $ make test
 ```
 
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
 ## Using AMQP 0.8 ##
 
 If you still want to use the old version of the protocol then you can do it by settings the following constant in your configuration code:
@@ -268,3 +281,18 @@ For bug reports, please use bug tracking system at the project page.
 Patches are very welcome!
 
 Author: Vadim Zaliva <lord@crocodile.org>
+
+[ico-version]: https://img.shields.io/packagist/v/videlalvaro/php-amqplib.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-LGPL-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/videlalvaro/php-amqplib/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/videlalvaro/php-amqplib.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/videlalvaro/php-amqplib.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/videlalvaro/php-amqplib.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/videlalvaro/php-amqplib
+[link-travis]: https://travis-ci.org/videlalvaro/php-amqplib
+[link-scrutinizer]: https://scrutinizer-ci.com/g/videlalvaro/php-amqplib/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/videlalvaro/php-amqplib
+[link-downloads]: https://packagist.org/packages/videlalvaro/php-amqplib
+[link-author]: https://github.com/videlalvaro
+[link-contributors]: ../../contributors

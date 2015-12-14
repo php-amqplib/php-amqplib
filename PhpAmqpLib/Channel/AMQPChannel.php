@@ -95,9 +95,7 @@ class AMQPChannel extends AbstractChannel
         $this->publish_cache = array();
         $this->publish_cache_max_size = 100;
 
-        if ($this->debug) {
-            MiscHelper::debug_msg('using channel_id: ' . $channel_id);
-        }
+        $this->debug->debug_msg('using channel_id: ' . $channel_id);
 
         $this->default_ticket = 0;
         $this->is_open = false;
@@ -155,10 +153,10 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
-        if ($this->is_open !== true || null === $this->connection) {
+        if ($this->is_open === false || $this->connection === null) {
             $this->do_close();
 
-            return; // already closed
+            return null; // already closed
         }
         list($class_id, $method_id, $args) = $this->protocolWriter->channelClose(
             $reply_code,
@@ -270,9 +268,7 @@ class AMQPChannel extends AbstractChannel
     {
         $this->is_open = true;
 
-        if ($this->debug) {
-            MiscHelper::debug_msg('Channel open');
-        }
+        $this->debug->debug_msg('Channel open');
     }
 
     /**
@@ -753,7 +749,7 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                'Server ack\'ed unknown delivery_tag %s',
+                'Server ack\'ed unknown delivery_tag "%s"',
                 $delivery_tag
             ));
         }
@@ -774,7 +770,7 @@ class AMQPChannel extends AbstractChannel
 
         if (false === isset($this->published_messages[$delivery_tag])) {
             throw new AMQPRuntimeException(sprintf(
-                'Server nack\'ed unknown delivery_tag %s',
+                'Server nack\'ed unknown delivery_tag "%s"',
                 $delivery_tag
             ));
         }
@@ -844,12 +840,18 @@ class AMQPChannel extends AbstractChannel
      *
      * @param string $consumer_tag
      * @param bool $nowait
+     * @param bool $noreturn
      * @return mixed
      */
-    public function basic_cancel($consumer_tag, $nowait = false)
+    public function basic_cancel($consumer_tag, $nowait = false, $noreturn = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicCancel($consumer_tag, $nowait);
         $this->send_method_frame(array($class_id, $method_id), $args);
+
+        if ($nowait || $noreturn) {
+            unset($this->callbacks[$consumer_tag]);
+            return $consumer_tag;
+        }
 
         return $this->wait(array(
             $this->waitHelper->get_wait('basic.cancel_ok')
@@ -862,20 +864,21 @@ class AMQPChannel extends AbstractChannel
      */
     protected function basic_cancel_from_server(AMQPReader $args)
     {
-        $consumerTag = $args->read_shortstr();
-
-        throw new AMQPBasicCancelException($consumerTag);
+        throw new AMQPBasicCancelException($args->read_shortstr());
     }
 
     /**
      * Confirm a cancelled consumer
      *
      * @param AMQPReader $args
+     * @return string
      */
     protected function basic_cancel_ok($args)
     {
         $consumer_tag = $args->read_shortstr();
         unset($this->callbacks[$consumer_tag]);
+
+        return $consumer_tag;
     }
 
     /**
@@ -963,13 +966,7 @@ class AMQPChannel extends AbstractChannel
         );
 
         if (isset($this->callbacks[$consumer_tag])) {
-            $func = $this->callbacks[$consumer_tag];
-        } else {
-            $func = null;
-        }
-
-        if ($func != null) {
-            call_user_func($func, $msg);
+            call_user_func($this->callbacks[$consumer_tag], $msg);
         }
     }
 
@@ -1134,7 +1131,7 @@ class AMQPChannel extends AbstractChannel
     public function publish_batch()
     {
         if (empty($this->batch_messages)) {
-            return;
+            return null;
         }
 
         /** @var AMQPWriter $pkt */
@@ -1242,6 +1239,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $args
      * @param AMQPMessage $msg
+     * @return null
      */
     protected function basic_return($args, $msg)
     {
@@ -1249,19 +1247,20 @@ class AMQPChannel extends AbstractChannel
         $reply_text = $args->read_shortstr();
         $exchange = $args->read_shortstr();
         $routing_key = $args->read_shortstr();
+        $callback = $this->basic_return_callback;
 
-        if (null !== ($this->basic_return_callback)) {
-            call_user_func_array($this->basic_return_callback, array(
-                $reply_code,
-                $reply_text,
-                $exchange,
-                $routing_key,
-                $msg,
-            ));
-
-        } elseif ($this->debug) {
-            MiscHelper::debug_msg('Skipping unhandled basic_return message');
+        if (!is_callable($callback)) {
+            $this->debug->debug_msg('Skipping unhandled basic_return message');
+            return null;
         }
+
+        call_user_func_array($callback, array(
+            $reply_code,
+            $reply_text,
+            $exchange,
+            $routing_key,
+            $msg,
+        ));
     }
 
     /**
@@ -1438,7 +1437,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_return_listener($callback)
     {
-        if (false === is_callable($callback)) {
+        if (!is_callable($callback)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given callback "%s" should be callable. %s type was given.',
                 $callback,
@@ -1457,7 +1456,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_nack_handler($callback)
     {
-        if (false === is_callable($callback)) {
+        if (!is_callable($callback)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given callback "%s" should be callable. %s type was given.',
                 $callback,
@@ -1476,7 +1475,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_ack_handler($callback)
     {
-        if (false === is_callable($callback)) {
+        if (!is_callable($callback)) {
             throw new \InvalidArgumentException(sprintf(
                 'Given callback "%s" should be callable. %s type was given.',
                 $callback,

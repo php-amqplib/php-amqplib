@@ -5,6 +5,7 @@ use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Helper\DebugHelper;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Helper\Protocol\MethodMap080;
 use PhpAmqpLib\Helper\Protocol\MethodMap091;
@@ -15,7 +16,7 @@ use PhpAmqpLib\Helper\Protocol\Wait091;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
 
-class AbstractChannel
+abstract class AbstractChannel
 {
     const PROTOCOL_080 = '0.8';
     const PROTOCOL_091 = '0.9.1';
@@ -34,7 +35,7 @@ class AbstractChannel
     /** @var string */
     protected $amqp_protocol_header;
 
-    /** @var bool */
+    /** @var \PhpAmqpLib\Helper\DebugHelper */
     protected $debug;
 
     /** @var \PhpAmqpLib\Connection\AbstractConnection */
@@ -42,11 +43,9 @@ class AbstractChannel
 
     /** @var string */
     protected $protocolVersion;
-    
-    /**
-     * @var int
-     */
-    protected $body_size_max = null;
+
+    /** @var int */
+    protected $maxBodySize;
 
     /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
     protected $protocolWriter;
@@ -82,7 +81,6 @@ class AbstractChannel
         $this->frame_queue = array(); // Lower level queue for frames
         $this->method_queue = array(); // Higher level queue for methods
         $this->auto_decode = false;
-        $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
 
         $this->msg_property_reader = new AMQPReader(null);
         $this->wait_content_reader = new AMQPReader(null);
@@ -93,6 +91,7 @@ class AbstractChannel
             case self::PROTOCOL_091:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants091';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
+                $this->debug = new DebugHelper($c);
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
                 $this->protocolWriter = new Protocol091();
                 $this->waitHelper = new Wait091();
@@ -101,14 +100,18 @@ class AbstractChannel
             case self::PROTOCOL_080:
                 self::$PROTOCOL_CONSTANTS_CLASS = 'PhpAmqpLib\Wire\Constants080';
                 $c = self::$PROTOCOL_CONSTANTS_CLASS;
+                $this->debug = new DebugHelper($c);
                 $this->amqp_protocol_header = $c::$AMQP_PROTOCOL_HEADER;
                 $this->protocolWriter = new Protocol080();
                 $this->waitHelper = new Wait080();
                 $this->methodMap = new MethodMap080();
                 break;
             default:
-                //this is logic exception (requires code changes to fix), so OutOfRange, not OutOfBounds or Runtime
-                throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $this->protocolVersion));
+                throw new AMQPRuntimeException(sprintf(
+                    'Protocol: %s not implemented.',
+                    $this->protocolVersion
+                ));
+                break;
         }
     }
 
@@ -134,16 +137,20 @@ class AbstractChannel
     {
         return $this->channel_id;
     }
-    
+
+    /**
+     * @param int $max_bytes Max message body size for this channel
+     * @return $this
+     */
     public function setBodySizeLimit($max_bytes)
     {
-        $max_bytes = intval($max_bytes);
-        
-        if ( $max_bytes > 0 ) {
-            $this->body_size_max = $max_bytes;
-        } else {
-            $this->body_size_max = null;
+        $max_bytes = (int) $max_bytes;
+
+        if ($max_bytes > 0) {
+            $this->maxBodySize = $max_bytes;
         }
+
+        return $this;
     }
 
     /**
@@ -203,9 +210,7 @@ class AbstractChannel
      */
     public function next_frame($timeout = 0)
     {
-        if ($this->debug) {
-            MiscHelper::debug_msg('waiting for a new frame');
-        }
+        $this->debug->debug_msg('waiting for a new frame');
 
         if (!empty($this->frame_queue)) {
             return array_shift($this->frame_queue);
@@ -242,13 +247,9 @@ class AbstractChannel
      */
     public function wait_content()
     {
-        $frm = $this->next_frame();
-        $frame_type = $frm[0];
-        $payload = $frm[1];
+        list($frame_type, $payload) = $this->next_frame();
 
-        if ($frame_type != 2) {
-            throw new AMQPRuntimeException('Expecting Content header');
-        }
+        $this->validate_header_frame($frame_type);
 
         $this->wait_content_reader->reuse(mb_substr($payload, 0, 12, 'ASCII'));
 
@@ -256,54 +257,59 @@ class AbstractChannel
         $class_id = $this->wait_content_reader->read_short();
         $weight = $this->wait_content_reader->read_short();
 
-        $body_size = $this->wait_content_reader->read_longlong();
-
         //hack to avoid creating new instances of AMQPReader;
         $this->msg_property_reader->reuse(mb_substr($payload, 12, mb_strlen($payload, 'ASCII') - 12, 'ASCII'));
 
-        $msg = new AMQPMessage();
-        $msg->load_properties($this->msg_property_reader);
-        $msg->body_size = $body_size;
-        
-        $body_parts = array();
-        $body_received = 0;
-        while (bccomp($body_size, $body_received, 0) == 1) {
-            $frm = $this->next_frame();
-            $frame_type = $frm[0];
-            $payload = $frm[1];
+        return $this->createMessage(
+            $this->msg_property_reader,
+            $this->wait_content_reader
+        );
+    }
 
-            if ($frame_type != 3) {
-                $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
-                throw new AMQPRuntimeException(sprintf(
-                    'Expecting Content body, received frame type %s (%s)',
-                    $frame_type,
-                    $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-                ));
-            }
+    /**
+     * @param AMQPReader $propertyReader
+     * @param AMQPReader $contentReader
+     * @return \PhpAmqpLib\Message\AMQPMessage
+     */
+    protected function createMessage($propertyReader, $contentReader)
+    {
+        $bodyChunks = array();
+        $bodyReceivedBytes = 0;
 
-            $body_received = bcadd($body_received, mb_strlen($payload, 'ASCII'), 0);
+        $message = new AMQPMessage();
+        $message
+            ->load_properties($propertyReader)
+            ->setBodySize($contentReader->read_longlong());
 
-            if ( ! is_null($this->body_size_max) && $body_received > $this->body_size_max ) {
-                $msg->is_truncated = true;
+        while (bccomp($message->getBodySize(), $bodyReceivedBytes, 0) == 1) {
+            list($frame_type, $payload) = $this->next_frame();
+
+            $this->validate_body_frame($frame_type);
+            $bodyReceivedBytes = bcadd($bodyReceivedBytes, mb_strlen($payload, 'ASCII'), 0);
+
+            if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize ) {
+                $message->setIsTruncated(true);
                 continue;
             }
 
-            $body_parts[] = $payload;
+            $bodyChunks[] = $payload;
         }
 
-        $msg->body = implode('', $body_parts);
+        $message->setBody(implode('', $bodyChunks));
 
-        if ($this->auto_decode && isset($msg->content_encoding)) {
+        $messageEncoding = $message->getContentEncoding();
+        
+        if ($this->auto_decode && !empty($messageEncoding)) {
             try {
-                $msg->body = $msg->body->decode($msg->content_encoding);
+                // Where does the decode() method come from if body is a string?
+                $decodedBody = $message->getBody()->decode($messageEncoding);
+                $message->setBody($decodedBody);
             } catch (\Exception $e) {
-                if ($this->debug) {
-                    MiscHelper::debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
-                }
+                $this->debug->debug_msg('Ignoring body decoding exception: ' . $e->getMessage());
             }
         }
 
-        return $msg;
+        return $message;
     }
 
     /**
@@ -320,90 +326,143 @@ class AbstractChannel
      */
     public function wait($allowed_methods = null, $non_blocking = false, $timeout = 0)
     {
-        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+        $this->debug->debug_allowed_methods($allowed_methods);
 
-        if ($allowed_methods && $this->debug) {
-            MiscHelper::debug_msg('waiting for ' . implode(', ', $allowed_methods));
-        } elseif ($this->debug) {
-            MiscHelper::debug_msg('waiting for any method');
-        }
-
-        //Process deferred methods
-        foreach ($this->method_queue as $qk => $queued_method) {
-            if ($this->debug) {
-                MiscHelper::debug_msg('checking queue method ' . $qk);
-            }
-
-            $method_sig = $queued_method[0];
-            if ($allowed_methods == null || in_array($method_sig, $allowed_methods)) {
-                unset($this->method_queue[$qk]);
-
-                if ($this->debug) {
-                    MiscHelper::debug_msg(sprintf(
-                        'Executing queued method: %s: %s',
-                        $method_sig,
-                        $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-                    ));
-                }
-
-                return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
-            }
+        $deferred = $this->process_deferred_methods($allowed_methods);
+        if ($deferred['dispatch'] === true) {
+            return $this->dispatch_deferred_method($deferred['queued_method']);
         }
 
         // No deferred methods?  wait for new ones
         while (true) {
-            $frm = $this->next_frame($timeout);
-            $frame_type = $frm[0];
-            $payload = $frm[1];
+            list($frame_type, $payload) = $this->next_frame($timeout);
 
-            if ($frame_type != 1) {
-                throw new AMQPRuntimeException(sprintf(
-                    'Expecting AMQP method, received frame type: %s (%s)',
-                    $frame_type,
-                    $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
-                ));
-            }
+            $this->validate_method_frame($frame_type);
+            $this->validate_frame_payload($payload);
 
-            if (mb_strlen($payload, 'ASCII') < 4) {
-                throw new AMQPOutOfBoundsException('Method frame too short');
-            }
+            $method_sig = $this->build_method_signature($payload);
+            $args = $this->extract_args($payload);
 
-            $method_sig_array = unpack('n2', mb_substr($payload, 0, 4, 'ASCII'));
-            $method_sig = '' . $method_sig_array[1] . ',' . $method_sig_array[2];
-            $args = mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
+            $this->debug->debug_method_signature('> %s', $method_sig);
 
-            if ($this->debug) {
-                MiscHelper::debug_msg(sprintf(
-                    '> %s: %s',
-                    $method_sig,
-                    $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-                ));
-            }
+            $content = $this->maybe_wait_for_content($method_sig);
 
-            if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
-                $content = $this->wait_content();
-            } else {
-                $content = null;
-            }
-
-            if ($allowed_methods == null ||
-                in_array($method_sig, $allowed_methods) ||
-                in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS)
-            ) {
+            if ($this->should_dispatch_method($allowed_methods, $method_sig)) {
                 return $this->dispatch($method_sig, $args, $content);
             }
 
             // Wasn't what we were looking for? save it for later
-            if ($this->debug) {
-                MiscHelper::debug_msg('Queueing for later: $method_sig: '
-                    . $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]);
-            }
+            $this->debug->debug_method_signature('Queueing for later: %s', $method_sig);
             $this->method_queue[] = array($method_sig, $args, $content);
 
             if ($non_blocking) {
                 break;
             }
         }
+    }
+
+    protected function process_deferred_methods($allowed_methods)
+    {
+        $dispatch = false;
+        $queued_method = array();
+
+        foreach ($this->method_queue as $qk => $qm) {
+            $this->debug->debug_msg('checking queue method ' . $qk);
+
+            $method_sig = $qm[0];
+
+            if ($allowed_methods == null || in_array($method_sig, $allowed_methods)) {
+                unset($this->method_queue[$qk]);
+                $dispatch = true;
+                $queued_method = $qm;
+                break;
+            }
+        }
+
+        return array('dispatch' => $dispatch, 'queued_method' => $queued_method);
+    }
+
+    protected function dispatch_deferred_method($queued_method)
+    {
+        $this->debug->debug_method_signature('Executing queued method: %s', $queued_method[0]);
+
+        return $this->dispatch($queued_method[0], $queued_method[1], $queued_method[2]);
+    }
+
+    /**
+     * @param $frame_type
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
+    protected function validate_method_frame($frame_type)
+    {
+        $this->validate_frame($frame_type, 1, 'AMQP method');
+    }
+
+    protected function validate_header_frame($frame_type)
+    {
+        $this->validate_frame($frame_type, 2, 'AMQP Content header');
+    }
+
+    protected function validate_body_frame($frame_type)
+    {
+        $this->validate_frame($frame_type, 3, 'AMQP Content body');
+    }
+
+    protected function validate_frame($frame_type, $expected_type, $expected_msg)
+    {
+        if ($frame_type != $expected_type) {
+            $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+            throw new AMQPRuntimeException(sprintf(
+                'Expecting %s, received frame type %s (%s)',
+                $expected_msg,
+                $frame_type,
+                $PROTOCOL_CONSTANTS_CLASS::$FRAME_TYPES[$frame_type]
+            ));
+        }
+    }
+
+    /**
+     * @param $payload
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     */
+    protected function validate_frame_payload($payload)
+    {
+        if (mb_strlen($payload, 'ASCII') < 4) {
+            throw new AMQPOutOfBoundsException('Method frame too short');
+        }
+    }
+
+    protected function build_method_signature($payload)
+    {
+        $method_sig_array = unpack('n2', mb_substr($payload, 0, 4, 'ASCII'));
+
+        return sprintf('%s,%s', $method_sig_array[1], $method_sig_array[2]);
+    }
+
+    protected function extract_args($payload)
+    {
+        return mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
+    }
+
+    protected function should_dispatch_method($allowed_methods, $method_sig)
+    {
+        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+
+        return $allowed_methods == null
+            || in_array($method_sig, $allowed_methods)
+            || in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CLOSE_METHODS);
+    }
+
+    protected function maybe_wait_for_content($method_sig)
+    {
+        $PROTOCOL_CONSTANTS_CLASS = self::$PROTOCOL_CONSTANTS_CLASS;
+        $content = null;
+
+        if (in_array($method_sig, $PROTOCOL_CONSTANTS_CLASS::$CONTENT_METHODS)) {
+            $content = $this->wait_content();
+        }
+
+        return $content;
     }
 
     /**

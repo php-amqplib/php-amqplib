@@ -5,7 +5,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 
 /**
  * Abstract base class for AMQP content.  Subclasses should override
- * the PROPERTIES attribute.
+ * the propertyDefinitions attribute.
  */
 abstract class GenericContent
 {
@@ -24,23 +24,23 @@ abstract class GenericContent
     /**
      * @var array
      */
-    protected static $PROPERTIES = array(
+    protected static $propertyDefinitions = array(
         'dummy' => 'shortstr'
     );
 
     /**
-     * @param $props
-     * @param null $prop_types
+     * @param array $props Message property content
+     * @param array $prop_types Message property definitions
      */
-    public function __construct($props, $prop_types = null)
+    public function __construct($props = array(), $prop_types = array())
     {
-        if ($prop_types) {
+        $this->prop_types = self::$propertyDefinitions;
+
+        if (!empty($prop_types)) {
             $this->prop_types = $prop_types;
-        } else {
-            $this->prop_types = self::$PROPERTIES;
         }
 
-        if ($props) {
+        if (!empty($props)) {
             $this->properties = array_intersect_key($props, $this->prop_types);
         }
     }
@@ -116,38 +116,46 @@ abstract class GenericContent
      * into a dictionary stored in this object as an attribute named
      * 'properties'.
      *
-     * @param AMQPReader $r
+     * @param AMQPReader $reader
      * NOTE: do not mutate $reader
+     * @return $this
      */
-    public function load_properties($r)
+    public function load_properties($reader)
     {
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();
+
         while (true) {
-            $flag_bits = $r->read_short();
+            $flag_bits = $reader->read_short();
             $flags[] = $flag_bits;
-            if (($flag_bits & 1) == 0) {
+
+            if (($flag_bits & 1) === 0) {
                 break;
             }
         }
 
         $shift = 0;
-        $d = array();
+        $data = array();
+
         foreach ($this->prop_types as $key => $proptype) {
-            if ($shift == 0) {
+            if ($shift === 0) {
                 if (!$flags) {
                     break;
                 }
                 $flag_bits = array_shift($flags);
                 $shift = 15;
             }
+
             if ($flag_bits & (1 << $shift)) {
-                $d[$key] = $r->{'read_' . $proptype}();
+                $data[$key] = $reader->{'read_' . $proptype}();
             }
 
             $shift -= 1;
         }
-        $this->properties = $d;
+
+        $this->properties = $data;
+
+        return $this;
     }
 
 

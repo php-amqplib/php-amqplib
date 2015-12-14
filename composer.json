@@ -15,7 +15,8 @@
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "^3.7",
+        "scrutinizer/ocular": "^1.1"
     },
     "suggest": {
         "ext-sockets": "Use AMQPSocketConnection"
@@ -34,7 +35,7 @@
     "license": "LGPL-2.1",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.4-dev"
+            "dev-master": "2.7-dev"
         }
     }
 }

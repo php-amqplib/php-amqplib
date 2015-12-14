@@ -2,12 +2,12 @@
 
 ## Message Durability ##
 
-When creating a new message set the `delivery_mode` to __2__:
+When creating a new message set the `delivery_mode` to `AMQPMessage::DELIVERY_MODE_PERSISTENT`:
 
     $msg = new AMQPMessage(
         $msg_body,
         array(
-            'delivery_mode' = 2
+            'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT
         )
     );
 

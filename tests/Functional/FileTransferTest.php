@@ -43,7 +43,7 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
     {
         $this->msg_body = file_get_contents(__DIR__ . '/fixtures/data_1mb.bin');
 
-        $msg = new AMQPMessage($this->msg_body, array('delivery_mode' => 1));
+        $msg = new AMQPMessage($this->msg_body, array('delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT));
 
         $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name);
 
