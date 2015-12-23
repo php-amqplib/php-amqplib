@@ -53,7 +53,9 @@ class SocketIO extends AbstractIO
             );
         }
 
-        list($sec, $uSec) = $useFloat ? MiscHelper::splitSecondsMicroseconds($this->timeout) : [intval($this->timeout), 0];
+        list($sec, $uSec) = $useFloat
+            ? MiscHelper::splitSecondsMicroseconds($this->timeout)
+            : array(intval($this->timeout), 0);
         socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
