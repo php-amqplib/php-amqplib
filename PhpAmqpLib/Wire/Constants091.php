@@ -6,9 +6,14 @@ namespace PhpAmqpLib\Wire;
 
 class Constants091
 {
-
+    /**
+     * @var string
+     */
     public static $AMQP_PROTOCOL_HEADER = "AMQP\x00\x00\x09\x01";
 
+    /**
+     * @var array
+     */
     public static $FRAME_TYPES = array(
         1 => 'FRAME-METHOD',
         2 => 'FRAME-HEADER',
@@ -19,6 +24,9 @@ class Constants091
         501 => 'FRAME-ERROR',
     );
 
+    /**
+     * @var array
+     */
     public static $CONTENT_METHODS = array(
         0 => '60,40',
         1 => '60,50',
@@ -26,11 +34,17 @@ class Constants091
         3 => '60,71',
     );
 
+    /**
+     * @var array
+     */
     public static $CLOSE_METHODS = array(
         0 => '10,50',
         1 => '20,40',
     );
 
+    /**
+     * @var array
+     */
     public static $GLOBAL_METHOD_NAMES = array(
         '10,10' => 'Connection.start',
         '10,11' => 'Connection.start_ok',
@@ -97,5 +111,4 @@ class Constants091
         '85,10' => 'Confirm.select',
         '85,11' => 'Confirm.select_ok',
     );
-
 }

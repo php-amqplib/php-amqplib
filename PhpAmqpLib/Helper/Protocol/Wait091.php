@@ -6,7 +6,9 @@ namespace PhpAmqpLib\Helper\Protocol;
 
 class Wait091
 {
-
+    /**
+     * @var array
+     */
     protected $wait = array(
         'connection.start' => '10,10',
         'connection.start_ok' => '10,11',
@@ -74,11 +76,12 @@ class Wait091
         'confirm.select_ok' => '85,11',
     );
 
-
-
+    /**
+     * @var string
+     * @return string
+     */
     public function get_wait($method)
     {
         return $this->wait[$method];
     }
-
 }

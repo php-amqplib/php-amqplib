@@ -6,7 +6,9 @@ namespace PhpAmqpLib\Helper\Protocol;
 
 class Wait080
 {
-
+    /**
+     * @var array
+     */
     protected $wait = array(
         'connection.start' => '10,10',
         'connection.start_ok' => '10,11',
@@ -103,11 +105,12 @@ class Wait080
         'test.content_ok' => '120,41',
     );
 
-
-
+    /**
+     * @var string
+     * @return string
+     */
     public function get_wait($method)
     {
         return $this->wait[$method];
     }
-
 }
