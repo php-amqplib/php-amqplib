@@ -1,3 +1,7 @@
+# Looking for New Maintainer #
+
+See issue: https://github.com/videlalvaro/php-amqplib/issues/356
+
 # php-amqplib #
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
