@@ -207,6 +207,11 @@ class StreamIO extends AbstractIO
             }
 
             if ($buffer === '') {
+                $sockInfo = stream_get_meta_data($this->sock);
+                if ($sockInfo['timed_out']) {
+                    throw new AMQPRuntimeException('Error reading data. Connection timed out.');
+                }
+
                 if ($this->canDispatchPcntlSignal) {
                     // prevent cpu from being consumed while waiting
                     if ($this->canSelectNull) {
