@@ -4,7 +4,6 @@ namespace PhpAmqpLib\Channel;
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
-use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
