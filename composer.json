@@ -9,7 +9,18 @@
     "homepage": "https://github.com/php-amqplib/php-amqplib/",
     "authors": [
         {
-            "name" : "Alvaro Videla"
+            "name": "Alvaro Videla",
+            "role": "Original Maintainer"
+        },
+        {
+            "name": "John Kelly",
+            "email": "johnmkelly86@gmail.com",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Raúl Araya",
+            "email": "nubeiro@gmail.com",
+            "role": "Maintainer"
         }
     ],
     "require": {
