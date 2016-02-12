@@ -427,4 +427,14 @@ class StreamIO extends AbstractIO
         $socket = socket_import_stream($this->sock);
         socket_set_option($socket, SOL_SOCKET, SO_KEEPALIVE, 1);
     }
+
+    /**
+     * @return $this
+     */
+    public function disableHeartbeat()
+    {
+        $this->heartbeat = 0;
+
+        return $this;
+    }
 }

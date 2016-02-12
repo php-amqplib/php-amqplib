@@ -10,6 +10,7 @@ use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 use PhpAmqpLib\Wire\IO\SocketIO;
+use PhpAmqpLib\Wire\IO\StreamIO;
 
 class AbstractConnection extends AbstractChannel
 {
@@ -614,6 +615,11 @@ class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
+        if ($this->io instanceof StreamIO)
+        {
+            $this->io->disableHeartbeat();
+        }
+
         if (!$this->protocolWriter || !$this->isConnected()) {
             return null;
         }
