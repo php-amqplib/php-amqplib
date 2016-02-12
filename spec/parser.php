@@ -38,6 +38,39 @@ function to_snake_case($arg)
     return str_replace('-', '_', $arg);
 }
 
+function addPhpDocParams($arguments)
+{
+    $ret = array();
+    foreach ($arguments as $arg) {
+        $ret[] = ' * @param ' . translateType($arg) . ' $' . to_snake_case($arg['name']);
+    }
+
+    return implode("\n", $ret);
+}
+
+function translateType($argument)
+{
+    if (array_key_exists('default-value', $argument)) {
+        return gettype($argument['default-value']);
+    } elseif (array_key_exists('type', $argument)) {
+        switch ($argument['type']) {
+            case 'longstr':
+            case 'shortstr':
+                return 'string';
+            case 'short':
+            case 'long':
+            case 'longlong':
+                return 'integer';
+            case 'bit':
+                return 'boolean';
+            default:
+                return 'mixed';
+        }
+    }
+
+    return 'mixed';
+}
+
 function argument_default_val($arg)
 {
     return isset($arg['default-value']) ? " = " . default_value_to_string($arg['default-value']) : "";
@@ -72,7 +105,10 @@ function add_method_arguments($arguments)
 }
 
 /**
+ * @param array $domains
+ * @param string $domain
  * @return string
+ * @throws Exception
  */
 function domain_to_type($domains, $domain)
 {
@@ -85,21 +121,19 @@ function domain_to_type($domains, $domain)
 }
 
 /**
+ * @param array $domains
+ * @param array $arg
  * @return string
+ * @throws Exception
  */
 function argument_type($domains, $arg)
 {
     return isset($arg['type']) ? $arg['type'] : domain_to_type($domains, $arg['domain']);
 }
 
-
-
 class ArgumentWriter
 {
-
     protected $bit_args = array();
-
-
 
     public function call_write_argument($domains, $arg)
     {
@@ -112,12 +146,11 @@ class ArgumentWriter
             $ret = $this->write_bits();
 
             $a_name = '$' . to_snake_case($arg['name']);
-            $ret .= '$args->write_' . $a_type . '(' . ($a_type === 'table' ? 'empty(' . $a_name . ') ? array() : ' : '') . $a_name . ");\n";
+            $ret .= '$writer->write_' . $a_type . '(' . ($a_type === 'table' ? 'empty(' . $a_name . ') ? array() : ' : '') . $a_name . ");\n";
         }
 
         return $ret;
     }
-
 
 
     public function write_bits()
@@ -126,17 +159,16 @@ class ArgumentWriter
             return '';
         }
 
-        $ret = '$args->write_bits(array(' . implode(', ', $this->bit_args) . "));\n";
+        $ret = '$writer->write_bits(array(' . implode(', ', $this->bit_args) . "));\n";
         $this->bit_args = array();
+
         return $ret;
     }
 }
 
-
-
 function call_read_argument($domains, $arg)
 {
-    return '$args->read_' . argument_type($domains, $arg) . "();\n";
+    return '$reader->read_' . argument_type($domains, $arg) . "();\n";
 }
 
 function protocol_version($json_spec)
@@ -170,7 +202,7 @@ $out .= 'namespace PhpAmqpLib\Helper\Protocol;' . "\n\n";
 $out .= 'use PhpAmqpLib\Wire\AMQPWriter;' . "\n";
 $out .= 'use PhpAmqpLib\Wire\AMQPReader;' . "\n\n";
 $out .= 'class Protocol' . protocol_version($json_spec) . "\n";
-$out .= "{\n";
+$out .= "{";
 
 $methods = '';
 
@@ -179,14 +211,15 @@ foreach ($json_spec['classes'] as $c) {
         $methods .= "\n";
 
         if ($m['id'] % 10 == 0) {
-            $methodBody = '$args = new AMQPWriter();' . "\n";
+            $methodBody = '$writer = new AMQPWriter();' . "\n";
             foreach ($m['arguments'] as $arg) {
                 $methodBody .= $argumentWriter->call_write_argument($json_spec['domains'], $arg);
             }
             $methodBody .= $argumentWriter->write_bits();
-            $methodBody .= 'return array(' . $c['id'] . ", " . $m['id'] . ', $args);';
+            $methodBody .= 'return array(' . $c['id'] . ", " . $m['id'] . ', $writer);';
 
             $methods .= '/**' . "\n";
+            $methods .= addPhpDocParams($m['arguments']) . "\n";
             $methods .= ' * @return array' . "\n";
             $methods .= ' */' . "\n";
             $methods .= 'public function ' . method_name($c['name'], $m['name']) . "(";
@@ -196,26 +229,25 @@ foreach ($json_spec['classes'] as $c) {
             $methods .= "}\n";
 
         } else {
-            $methodBody = '$ret = array();' . "\n";
+            $methodBody = '$response = array();' . "\n";
             foreach ($m['arguments'] as $arg) {
-                $methodBody .= '$ret[] = ' . call_read_argument($json_spec['domains'], $arg);
+                $methodBody .= '$response[] = ' . call_read_argument($json_spec['domains'], $arg);
             }
-            $methodBody .= 'return $ret;';
+            $methodBody .= 'return $response;';
 
             $methods .= '/**' . "\n";
-            $methods .= ' * @param AMQPReader $args' . "\n";
+            $methods .= ' * @param AMQPReader $reader' . "\n";
             $methods .= ' * @return array' . "\n";
             $methods .= ' */' . "\n";
-            $methods .= 'public static function ' . method_name($c['name'], $m['name']) . '($args)' . "\n{\n";
+            $methods .= 'public static function ' . method_name($c['name'], $m['name'])
+                . '(AMQPReader $reader)' . "\n{\n";
             $methods .= indent($methodBody) . "\n";
             $methods .= "}\n";
         }
-
-        $methods .= "\n\n";
     }
 }
 
-$out .= indent(rtrim($methods)) . "\n\n";
+$out .= indent(rtrim($methods)) . "\n";
 $out .= "}\n";
 
 file_put_contents(__DIR__ . '/../PhpAmqpLib/Helper/Protocol/Protocol' . protocol_version($json_spec) . '.php', $out);
@@ -286,19 +318,42 @@ function global_method_names($json_spec)
     return export_property($ret);
 }
 
-$properties = '';
+/**
+ * @param string $type
+ * @param string $returnType (optional)
+ * @return string
+ */
+function get_type_phpdoc($type, $returnType = null)
+{
+    $properties = "/**\n";
+    $properties .= " * @var " . $type . "\n";
+
+    if ($returnType != null) {
+        $properties .= " * @return " . $returnType . "\n";
+    }
+
+    $properties .= " */\n";
+
+    return $properties;
+}
+
+$properties = get_type_phpdoc('string');
 $properties .= 'public static $AMQP_PROTOCOL_HEADER = ' . protocol_header($json_spec) . ";\n\n";
+$properties .= get_type_phpdoc('array');
 $properties .= 'public static $FRAME_TYPES = ' . frame_types($json_spec) . ";\n\n";
+$properties .= get_type_phpdoc('array');
 $properties .= 'public static $CONTENT_METHODS = ' . content_methods($json_spec) . ";\n\n";
+$properties .= get_type_phpdoc('array');
 $properties .= 'public static $CLOSE_METHODS = ' . close_methods($json_spec) . ";\n\n";
+$properties .= get_type_phpdoc('array');
 $properties .= 'public static $GLOBAL_METHOD_NAMES = ' . global_method_names($json_spec) . ";\n";
 
 $out = '<?php' . "\n\n";
 $out .= '/* This file was autogenerated by spec/parser.php - Do not modify */' . "\n\n";
 $out .= 'namespace PhpAmqpLib\Wire;' . "\n\n";
 $out .= "class Constants" . protocol_version($json_spec) . "\n";
-$out .= "{\n\n";
-$out .= indent($properties) . "\n";
+$out .= "{\n";
+$out .= indent($properties);
 $out .= "}\n";
 
 file_put_contents(__DIR__ . '/../PhpAmqpLib/Wire/Constants' . protocol_version($json_spec) . '.php', $out);
@@ -316,16 +371,18 @@ function method_waits($json_spec)
 }
 
 $classBody = '';
-$classBody .= "protected \$wait = " . method_waits($json_spec) . ";\n\n\n\n";
+$classBody .= get_type_phpdoc('array');
+$classBody .= "protected \$wait = " . method_waits($json_spec) . ";\n\n";
+$classBody .= get_type_phpdoc('string', 'string');
 $classBody .= 'public function get_wait($method)' . "\n{\n";
 $classBody .= indent('return $this->wait[$method];') . "\n";
-$classBody .= "}\n";
+$classBody .= "}";
 
 $out = '<?php' . "\n\n";
 $out .= '/* This file was autogenerated by spec/parser.php - Do not modify */' . "\n\n";
 $out .= 'namespace PhpAmqpLib\Helper\Protocol;' . "\n\n";
 $out .= "class Wait" . protocol_version($json_spec) . "\n";
-$out .= "{\n\n";
+$out .= "{\n";
 $out .= indent($classBody) . "\n";
 $out .= "}\n";
 
@@ -355,19 +412,22 @@ function method_map($json_spec)
 }
 
 $classBody = '';
-$classBody .= 'protected $method_map = ' . method_map($json_spec) . ";\n\n\n\n";
+$classBody .= get_type_phpdoc('array');
+$classBody .= 'protected $method_map = ' . method_map($json_spec) . ";\n\n";
+$classBody .= get_type_phpdoc('string', 'string');
 $classBody .= 'public function get_method($method_sig)' . "\n{\n";
 $classBody .= indent('return $this->method_map[$method_sig];') . "\n";
-$classBody .= "}\n\n\n\n";
+$classBody .= "}\n\n";
+$classBody .= get_type_phpdoc('string', 'boolean');
 $classBody .= 'public function valid_method($method_sig)' . "\n{\n";
 $classBody .= indent('return array_key_exists($method_sig, $this->method_map);') . "\n";
-$classBody .= "}\n";
+$classBody .= "}";
 
 $out = '<?php' . "\n\n";
 $out .= '/* This file was autogenerated by spec/parser.php - Do not modify */' . "\n\n";
 $out .= 'namespace PhpAmqpLib\Helper\Protocol;' . "\n\n";
 $out .= "class MethodMap" . protocol_version($json_spec) . "\n";
-$out .= "{\n\n";
+$out .= "{\n";
 $out .= indent($classBody) . "\n";
 $out .= "}\n";
 
