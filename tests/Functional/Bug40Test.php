@@ -8,117 +8,118 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class Bug40Test extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
+    protected $exchangeName = 'test_exchange';
 
-    protected $exchange_name = 'test_exchange';
+    /**
+     * @var string
+     */
+    protected $queueName1 = null;
 
-    protected $queue_name1 = null;
+    /**
+     * @var string
+     */
+    protected $queueName2 = null;
 
-    protected $queue_name2 = null;
-
-    protected $q1msgs = 0;
+    /**
+     * @var int
+     */
+    protected $queue1Messages = 0;
 
     /**
      * @var AMQPConnection
      */
-    protected $conn;
+    protected $connection;
 
     /**
      * @var AMQPChannel
      */
-    protected $ch;
+    protected $channel;
 
     /**
      * @var AMQPChannel
      */
-    protected $ch2;
-
-
+    protected $channel2;
 
     public function setUp()
     {
-        $this->conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
-        $this->ch = $this->conn->channel();
-        $this->ch2 = $this->conn->channel();
+        $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->channel = $this->connection->channel();
+        $this->channel2 = $this->connection->channel();
 
-        $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
-        list($this->queue_name1, ,) = $this->ch->queue_declare();
-        list($this->queue_name2, ,) = $this->ch->queue_declare();
-        $this->ch->queue_bind($this->queue_name1, $this->exchange_name, $this->queue_name1);
-        $this->ch->queue_bind($this->queue_name2, $this->exchange_name, $this->queue_name2);
+        $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
+        list($this->queueName1, ,) = $this->channel->queue_declare();
+        list($this->queueName2, ,) = $this->channel->queue_declare();
+        $this->channel->queue_bind($this->queueName1, $this->exchangeName, $this->queueName1);
+        $this->channel->queue_bind($this->queueName2, $this->exchangeName, $this->queueName2);
     }
-
-
 
     public function testFrameOrder()
     {
         $msg = new AMQPMessage('test message');
-        $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name1);
-        $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name1);
-        $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name2);
+        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName1);
+        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName1);
+        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName2);
 
-        $this->ch->basic_consume(
-            $this->queue_name1,
+        $this->channel->basic_consume(
+            $this->queueName1,
             '',
             false,
             true,
             false,
             false,
-            array($this, 'process_msg1')
+            array($this, 'processMessage1')
         );
 
-        while (count($this->ch->callbacks)) {
-            $this->ch->wait();
+        while (count($this->channel->callbacks)) {
+            $this->channel->wait();
         }
     }
 
-
-
-    public function process_msg1($msg)
+    public function processMessage1($msg)
     {
         $delivery_info = $msg->delivery_info;
-        $this->q1msgs++;
+        $this->queue1Messages++;
 
-        if ($this->q1msgs < 2) {
-            $this->ch2->basic_consume(
-                $this->queue_name2,
+        if ($this->queue1Messages < 2) {
+            $this->channel2->basic_consume(
+                $this->queueName2,
                 '',
                 false,
                 true,
                 false,
                 false,
-                array($this, 'process_msg2')
+                array($this, 'processMessage2')
             );
         }
 
-        while (count($this->ch2->callbacks)) {
-            $this->ch2->wait();
+        while (count($this->channel2->callbacks)) {
+            $this->channel2->wait();
         }
 
-        if ($this->q1msgs == 2) {
+        if ($this->queue1Messages == 2) {
             $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
         }
 
     }
 
-
-
-    public function process_msg2($msg)
+    public function processMessage2($msg)
     {
         $delivery_info = $msg->delivery_info;
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
     }
 
-
-
     public function tearDown()
     {
-        if ($this->ch) {
-            $this->ch->exchange_delete($this->exchange_name);
-            $this->ch->close();
+        if ($this->channel) {
+            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->close();
         }
 
-        if ($this->conn) {
-            $this->conn->close();
+        if ($this->connection) {
+            $this->connection->close();
         }
     }
 }

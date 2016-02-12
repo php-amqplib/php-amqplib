@@ -8,83 +8,83 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class FileTransferTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
+    protected $exchangeName = 'test_exchange';
 
-    protected $exchange_name = 'test_exchange';
-
-    protected $queue_name = null;
+    /**
+     * @var string
+     */
+    protected $queueName = null;
 
     /**
      * @var AMQPConnection
      */
-    protected $conn;
+    protected $connection;
 
     /**
      * @var AMQPChannel
      */
-    protected $ch;
+    protected $channel;
 
-    protected $msg_body;
-
-
+    /**
+     * @var string
+     */
+    protected $messageBody;
 
     public function setUp()
     {
-        $this->conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
-        $this->ch = $this->conn->channel();
+        $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->channel = $this->connection->channel();
 
-        $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
-        list($this->queue_name, ,) = $this->ch->queue_declare();
-        $this->ch->queue_bind($this->queue_name, $this->exchange_name, $this->queue_name);
+        $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
+        list($this->queueName, ,) = $this->channel->queue_declare();
+        $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
-
-
 
     public function testSendFile()
     {
-        $this->msg_body = file_get_contents(__DIR__ . '/fixtures/data_1mb.bin');
+        $this->messageBody = file_get_contents(__DIR__ . '/fixtures/data_1mb.bin');
 
-        $msg = new AMQPMessage($this->msg_body, array('delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT));
+        $msg = new AMQPMessage($this->messageBody, array('delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT));
 
-        $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name);
+        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);
 
-        $this->ch->basic_consume(
-            $this->queue_name,
+        $this->channel->basic_consume(
+            $this->queueName,
             '',
             false,
             false,
             false,
             false,
-            array($this, 'process_msg')
+            array($this, 'processMessage')
         );
 
-        while (count($this->ch->callbacks)) {
-            $this->ch->wait();
+        while (count($this->channel->callbacks)) {
+            $this->channel->wait();
         }
     }
 
-
-
-    public function process_msg($msg)
+    public function processMessage($msg)
     {
         $delivery_info = $msg->delivery_info;
 
         $delivery_info['channel']->basic_ack($delivery_info['delivery_tag']);
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
 
-        $this->assertEquals($this->msg_body, $msg->body);
+        $this->assertEquals($this->messageBody, $msg->body);
     }
-
-
 
     public function tearDown()
     {
-        if ($this->ch) {
-            $this->ch->exchange_delete($this->exchange_name);
-            $this->ch->close();
+        if ($this->channel) {
+            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->close();
         }
 
-        if ($this->conn) {
-            $this->conn->close();
+        if ($this->connection) {
+            $this->connection->close();
         }
     }
 }

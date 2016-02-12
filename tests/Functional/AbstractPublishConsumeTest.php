@@ -9,56 +9,58 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var string
+     */
+    protected $exchangeName = 'test_exchange';
 
-    protected $exchange_name = 'test_exchange';
+    /**
+     * @var string
+     */
+    protected $queueName = null;
 
-    protected $queue_name = null;
-
-    protected $msg_body;
+    /**
+     * @var string
+     */
+    protected $msgBody;
 
     /**
      * @var AMQPStreamConnection|AMQPSocketConnection
      */
-    protected $conn;
+    protected $connection;
 
     /**
      * @var AMQPChannel
      */
-    protected $ch;
-
-
+    protected $channel;
 
     public function setUp()
     {
-        $this->conn = $this->createConnection();
-        $this->ch = $this->conn->channel();
+        $this->connection = $this->createConnection();
+        $this->channel = $this->connection->channel();
 
-        $this->ch->exchange_declare($this->exchange_name, 'direct', false, false, false);
-        list($this->queue_name, ,) = $this->ch->queue_declare();
-        $this->ch->queue_bind($this->queue_name, $this->exchange_name, $this->queue_name);
+        $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
+        list($this->queueName, ,) = $this->channel->queue_declare();
+        $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
-
-
 
     abstract protected function createConnection();
 
-
-
     public function testPublishConsume()
     {
-        $this->msg_body = 'foo bar baz äëïöü';
+        $this->msgBody = 'foo bar baz äëïöü';
 
-        $msg = new AMQPMessage($this->msg_body, array(
+        $msg = new AMQPMessage($this->msgBody, array(
             'content_type' => 'text/plain',
             'delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT,
             'correlation_id' => 'my_correlation_id',
             'reply_to' => 'my_reply_to'
         ));
 
-        $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name);
+        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);
 
-        $this->ch->basic_consume(
-            $this->queue_name,
+        $this->channel->basic_consume(
+            $this->queueName,
             getmypid(),
             false,
             false,
@@ -67,8 +69,8 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
             array($this, 'process_msg')
         );
 
-        while (count($this->ch->callbacks)) {
-            $this->ch->wait();
+        while (count($this->channel->callbacks)) {
+            $this->channel->wait();
         }
     }
 
@@ -79,20 +81,18 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
 
         // Publish 3 messages with sizes: packet size - 1, equal packet size and packet size + 1
         for ($length = $frame_max - 9; $length <= $frame_max - 7; $length++) {
-            $this->msg_body = str_repeat('1', $length);
+            $this->msgBody = str_repeat('1', $length);
 
-            $msg = new AMQPMessage($this->msg_body, array(
+            $msg = new AMQPMessage($this->msgBody, array(
                 'content_type' => 'text/plain',
                 'delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT,
                 'correlation_id' => 'my_correlation_id',
                 'reply_to' => 'my_reply_to'
             ));
 
-            $this->ch->basic_publish($msg, $this->exchange_name, $this->queue_name);
+            $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);
         }
     }
-
-
 
     public function process_msg($msg)
     {
@@ -101,12 +101,12 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
         $delivery_info['channel']->basic_ack($delivery_info['delivery_tag']);
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
 
-        $this->assertEquals($this->msg_body, $msg->body);
+        $this->assertEquals($this->msgBody, $msg->body);
 
         //delivery tests
         $this->assertEquals(getmypid(), $delivery_info['consumer_tag']);
-        $this->assertEquals($this->queue_name, $delivery_info['routing_key']);
-        $this->assertEquals($this->exchange_name, $delivery_info['exchange']);
+        $this->assertEquals($this->queueName, $delivery_info['routing_key']);
+        $this->assertEquals($this->exchangeName, $delivery_info['exchange']);
         $this->assertEquals(false, $delivery_info['redelivered']);
 
         //msg property tests
@@ -118,17 +118,15 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
         $msg->get('no_property');
     }
 
-
-
     public function tearDown()
     {
-        if ($this->ch) {
-            $this->ch->exchange_delete($this->exchange_name);
-            $this->ch->close();
+        if ($this->channel) {
+            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->close();
         }
 
-        if ($this->conn) {
-            $this->conn->close();
+        if ($this->connection) {
+            $this->connection->close();
         }
     }
 }
