@@ -8,29 +8,16 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 class AMQPWriterTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var AMQPWriter
      */
-    protected $_writer;
-
-
+    protected $writer;
 
     public function setUp()
     {
         $this->setProtoVersion(AMQPArray::PROTOCOL_091);
-        $this->_writer = new AMQPWriter();
+        $this->writer = new AMQPWriter();
     }
-
-
-
-    public function tearDown()
-    {
-        $this->setProtoVersion(AMQPArray::PROTOCOL_RBT);
-        $this->_writer = null;
-    }
-
-
 
     protected function setProtoVersion($proto)
     {
@@ -39,18 +26,22 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
         $r->setValue(null, $proto);
     }
 
-
+    public function tearDown()
+    {
+        $this->setProtoVersion(AMQPArray::PROTOCOL_RBT);
+        $this->writer = null;
+    }
 
     public function testWriteArray()
     {
-        $this->_writer->write_array(array(
+        $this->writer->write_array(array(
             'rabbit@localhost',
             'hare@localhost',
             42,
             true
         ));
 
-        $out = $this->_writer->getvalue();
+        $out = $this->writer->getvalue();
 
         $this->assertEquals(51, mb_strlen($out, 'ASCII'));
 
@@ -59,11 +50,9 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $out);
     }
 
-
-
     public function testWriteAMQPArray()
     {
-        $this->_writer->write_array(
+        $this->writer->write_array(
             new AMQPArray(
                 array(
                     'rabbit@localhost',
@@ -75,15 +64,13 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals(
             "\x00\x00\x00\x2fS\x00\x00\x00\x10rabbit@localhostS\x00\x00\x00\x0Ehare@localhostI\x00\x00\x00\x2at\x01",
-            $this->_writer->getvalue()
+            $this->writer->getvalue()
         );
     }
 
-
-
     public function testWriteTable()
     {
-        $this->_writer->write_table(array(
+        $this->writer->write_table(array(
             'x-foo' => array('S', 'bar'),
             'x-bar' => array('A', array('baz', 'qux')),
             'x-baz' => array('I', 42),
@@ -96,16 +83,14 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
             'x-short-str' => array('s', 'foo')
         ));
 
-        $out = $this->_writer->getvalue();
+        $out = $this->writer->getvalue();
 
 
-        $expected = "\x00\x00\x00\x90\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00".
-                    "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo";
+        $expected = "\x00\x00\x00\x90\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
+            "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo";
 
         $this->assertEquals($expected, $out);
     }
-
-
 
     public function testWriteAMQPTable()
     {
@@ -121,21 +106,19 @@ class AMQPWriterTest extends \PHPUnit_Framework_TestCase
         $t->set('x-short-u', 125, AMQPTable::T_INT_SHORT_U);
         $t->set('x-short-str', 'foo', AMQPTable::T_STRING_SHORT);
 
-        $this->_writer->write_table($t);
+        $this->writer->write_table($t);
         $this->assertEquals(
             "\x00\x00\x00\x90\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
             "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo",
-            $this->_writer->getvalue()
+            $this->writer->getvalue()
         );
     }
-
-
 
     public function testWriteTableThrowsExceptionOnInvalidType()
     {
         $this->setExpectedException('PhpAmqpLib\Exception\AMQPOutOfRangeException');
 
-        $this->_writer->write_table(array(
+        $this->writer->write_table(array(
             'x-foo' => array('_', 'bar'),
         ));
     }

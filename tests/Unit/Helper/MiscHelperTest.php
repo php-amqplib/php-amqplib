@@ -6,7 +6,6 @@ use PhpAmqpLib\Helper\MiscHelper;
 
 class MiscHelperTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider getInputOutputForSplitSecondsMicroseconds
      * @param mixed $input

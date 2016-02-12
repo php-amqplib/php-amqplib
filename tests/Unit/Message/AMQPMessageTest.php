@@ -6,7 +6,6 @@ use PhpAmqpLib\Wire\AMQPReader;
 
 class AMQPMessageTest extends \PHPUnit_Framework_TestCase
 {
-
     public function propertiesDataProvider()
     {
         return array(
@@ -18,16 +17,36 @@ class AMQPMessageTest extends \PHPUnit_Framework_TestCase
             array(array('priority' => 0), array('priority' => 0)),
             array(array('priority' => false), array('priority' => false)),
             array(array('priority' => '0'), array('priority' => '0')),
-            array(array('application_headers' => array('x-foo' => '')), array('application_headers' => array('x-foo' => array('S', '')))),
-            array(array('application_headers' => array('x-foo' => '')), array('application_headers' => array('x-foo' => array('S', null)))),
-            array(array('application_headers' => array('x-foo' => 0)), array('application_headers' => array('x-foo' => array('I', 0)))),
-            array(array('application_headers' => array('x-foo' => 1)), array('application_headers' => array('x-foo' => array('I', true)))),
-            array(array('application_headers' => array('x-foo' => 0)), array('application_headers' => array('x-foo' => array('I', '0')))),
-            array(array('application_headers' => array('x-foo' => array())), array('application_headers' => array('x-foo' => array('A', array())))),
-            array(array('application_headers' => array('x-foo' => array(null))), array('application_headers' => array('x-foo' => array('A', array(null))))),
+            array(
+                array('application_headers' => array('x-foo' => '')),
+                array('application_headers' => array('x-foo' => array('S', '')))
+            ),
+            array(
+                array('application_headers' => array('x-foo' => '')),
+                array('application_headers' => array('x-foo' => array('S', null)))
+            ),
+            array(
+                array('application_headers' => array('x-foo' => 0)),
+                array('application_headers' => array('x-foo' => array('I', 0)))
+            ),
+            array(
+                array('application_headers' => array('x-foo' => 1)),
+                array('application_headers' => array('x-foo' => array('I', true)))
+            ),
+            array(
+                array('application_headers' => array('x-foo' => 0)),
+                array('application_headers' => array('x-foo' => array('I', '0')))
+            ),
+            array(
+                array('application_headers' => array('x-foo' => array())),
+                array('application_headers' => array('x-foo' => array('A', array())))
+            ),
+            array(
+                array('application_headers' => array('x-foo' => array(null))),
+                array('application_headers' => array('x-foo' => array('A', array(null))))
+            ),
         );
     }
-
 
 
     /**

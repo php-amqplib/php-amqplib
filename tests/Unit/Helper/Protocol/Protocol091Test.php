@@ -6,20 +6,15 @@ use PhpAmqpLib\Helper\Protocol\Protocol091;
 
 class Protocol091Test extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var Protocol091
      */
     protected $protocol091;
 
-
-
     public function setUp()
     {
         $this->protocol091 = new Protocol091();
     }
-
-
 
     public function testChannelClose()
     {
@@ -36,8 +31,6 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testFlow()
     {
         $expected = "\x01";
@@ -48,8 +41,6 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         list($class_id, $method_id, $args) = $this->protocol091->channelFlow(false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testXOpen()
     {
@@ -62,8 +53,6 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testAccessRequest()
     {
         $expected = "\x01/\x00";
@@ -71,11 +60,10 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
 
         $expected = "\x04/foo\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->accessRequest('/foo', false, false, false, false, false);
+        list($class_id, $method_id, $args) = $this->protocol091->accessRequest('/foo', false, false, false, false,
+            false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testExchangeDeclare()
     {
@@ -89,16 +77,12 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testExchangeDelete()
     {
         $expected = "\x00\x00\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeDelete(0, 'foo', false, false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testExchangeBind()
     {
@@ -107,16 +91,12 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testExchangeUnbind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeUnbind(0, 'foo', 'bar', 'baz', false, array());
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testQueueBind()
     {
@@ -125,16 +105,12 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testQueueUnbind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueUnbind(0, 'foo', 'bar', 'baz', array());
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testQueueDeclare()
     {
@@ -148,16 +124,12 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testQueueDelete()
     {
         $expected = "\x00\x00\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueDelete(0, 'foo', false, false, false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testQueuePurge()
     {
@@ -166,16 +138,12 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testBasicAck()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00\x01\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicAck(1, false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testBasicCancel()
     {
@@ -184,16 +152,13 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testBasicConsume()
     {
         $expected = "\x00\x00\x03foo\x03bar\x00\x00\x00\x00\x00";
-        list($class_id, $method_id, $args) = $this->protocol091->basicConsume(0, 'foo', 'bar', false, false, false, false);
+        list($class_id, $method_id, $args) = $this->protocol091->basicConsume(0, 'foo', 'bar', false, false, false,
+            false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testBasicGet()
     {
@@ -202,8 +167,6 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testBasicPublish()
     {
         $expected = "\x00\x00\x03foo\x03bar\x00";
@@ -211,16 +174,12 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testBasicQos()
     {
         $expected = "\x00\x00\x00\xA\x00\x01\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicQos(10, 1, false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testBasicRecover()
     {
@@ -233,8 +192,6 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $args->getvalue());
     }
 
-
-
     public function testBasicReject()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00\x01\x01";
@@ -245,8 +202,6 @@ class Protocol091Test extends \PHPUnit_Framework_TestCase
         list($class_id, $method_id, $args) = $this->protocol091->basicReject(1, false);
         $this->assertEquals($expected, $args->getvalue());
     }
-
-
 
     public function testConnectionBlocked()
     {
