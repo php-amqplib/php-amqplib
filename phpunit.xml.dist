@@ -20,6 +20,11 @@
     <filter>
         <whitelist>
             <directory suffix=".php">PhpAmqpLib/</directory>
+            <exclude>
+                <directory>PhpAmqpLib/Helper/Protocol</directory>
+                <file>PhpAmqpLib/Wire/Constants080.php</file>
+                <file>PhpAmqpLib/Wire/Constants091.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
