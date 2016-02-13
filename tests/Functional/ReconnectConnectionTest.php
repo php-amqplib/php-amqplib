@@ -4,6 +4,7 @@ namespace PhpAmqpLib\Tests\Functional;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
+use PhpAmqpLib\Connection\AMQPLazySocketConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -55,6 +56,14 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
     protected function getLazyConnection()
     {
         return new AMQPLazyConnection(HOST, PORT, USER, PASS, VHOST);
+    }
+
+    /**
+     * @return AMQPLazySocketConnection
+     */
+    protected function getLazySocketConnection()
+    {
+        return new AMQPLazySocketConnection(HOST, PORT, USER, PASS, VHOST);
     }
 
     /**
@@ -161,6 +170,31 @@ class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
 
         // Ensure normal publish then get works
         $this->assertEquals($this->msgBody, $this->publishGet()->body);
+    }
+
+    /**
+     * Test the reconnect logic on the lazy connection, which is also socket connection after its been closed
+     */
+    public function testLazySocketConnectionCloseReconnect()
+    {
+        $this->connection = $this->getLazySocketConnection();
+        $this->connection->close();
+
+        // Attempt the reconnect after its been manually closed
+        $this->connection->reconnect();
+        $this->setupChannel();
+
+        // Ensure normal publish then get works
+        $this->assertEquals($this->msgBody, $this->publishGet()->body);
+    }
+
+    /**
+     * Test the reconnect logic on the lazy connection, which is also socket connection
+     */
+    public function testLazyConnectionSocketReconnect()
+    {
+        $this->connection = $this->getLazySocketConnection();
+        $this->performTest();
     }
 
     /**
