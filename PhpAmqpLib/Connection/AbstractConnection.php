@@ -1,12 +1,13 @@
 <?php
 namespace PhpAmqpLib\Connection;
 
-use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 use PhpAmqpLib\Wire\IO\SocketIO;
@@ -70,7 +71,7 @@ class AbstractConnection extends AbstractChannel
     /** @var string */
     protected $login_method;
 
-    /** @var AMQPWriter */
+    /** @var string */
     protected $login_response;
 
     /** @var string */
@@ -436,7 +437,7 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param $channel
+     * @param string $channel
      * @param $method_sig
      * @param string $args
      * @param null $pkt
@@ -451,11 +452,11 @@ class AbstractConnection extends AbstractChannel
     /**
      * Returns a new AMQPWriter or mutates the provided $pkt
      *
-     * @param $channel
-     * @param $method_sig
+     * @param string $channel
+     * @param string[] $method_sig
      * @param string $args
      * @param AMQPWriter $pkt
-     * @return null|AMQPWriter
+     * @return AMQPWriter
      */
     protected function prepare_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
@@ -594,7 +595,6 @@ class AbstractConnection extends AbstractChannel
     public function channel($channel_id = null)
     {
         if (isset($this->channels[$channel_id])) {
-
             return $this->channels[$channel_id];
         }
 
@@ -642,15 +642,15 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param AMQPReader $args
+     * @param AMQPReader $reader
      * @throws \PhpAmqpLib\Exception\AMQPProtocolConnectionException
      */
-    protected function connection_close($args)
+    protected function connection_close(AMQPReader $reader)
     {
-        $reply_code = $args->read_short();
-        $reply_text = $args->read_shortstr();
-        $class_id = $args->read_short();
-        $method_id = $args->read_short();
+        $reply_code = $reader->read_short();
+        $reply_text = $reader->read_shortstr();
+        $class_id = $reader->read_short();
+        $method_id = $reader->read_short();
 
         $this->x_close_ok();
 
@@ -774,15 +774,15 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param $client_properties
-     * @param $mechanism
-     * @param $response
-     * @param $locale
+     * @param AMQPTable|array $clientProperties
+     * @param string $mechanism
+     * @param string $response
+     * @param string $locale
      */
-    protected function x_start_ok($client_properties, $mechanism, $response, $locale)
+    protected function x_start_ok($clientProperties, $mechanism, $response, $locale)
     {
         $args = new AMQPWriter();
-        $args->write_table($client_properties);
+        $args->write_table($clientProperties);
         $args->write_shortstr($mechanism);
         $args->write_longstr($response);
         $args->write_shortstr($locale);
@@ -894,7 +894,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function isConnected()
     {
-        return $this->is_connected;
+        return (bool) $this->is_connected;
     }
 
     /**

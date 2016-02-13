@@ -146,20 +146,22 @@ class AMQPReader extends AbstractClient
             $this->wait();
             $res = $this->io->read($n);
             $this->offset += $n;
-        } else {
-            if ($this->str_length < $n) {
-                throw new AMQPRuntimeException(sprintf(
-                    'Error reading data. Requested %s bytes while string buffer has only %s',
-                    $n,
-                    $this->str_length
-                ));
-            }
 
-            $res = mb_substr($this->str, 0, $n, 'ASCII');
-            $this->str = mb_substr($this->str, $n, mb_strlen($this->str, 'ASCII') - $n, 'ASCII');
-            $this->str_length -= $n;
-            $this->offset += $n;
+            return $res;
         }
+
+        if ($this->str_length < $n) {
+            throw new AMQPRuntimeException(sprintf(
+                'Error reading data. Requested %s bytes while string buffer has only %s',
+                $n,
+                $this->str_length
+            ));
+        }
+
+        $res = mb_substr($this->str, 0, $n, 'ASCII');
+        $this->str = mb_substr($this->str, $n, mb_strlen($this->str, 'ASCII') - $n, 'ASCII');
+        $this->str_length -= $n;
+        $this->offset += $n;
 
         return $res;
     }
@@ -443,7 +445,6 @@ class AMQPReader extends AbstractClient
     public function read_value($fieldType, $collectionsAsObjects = false)
     {
         $this->bitcount = $this->bits = 0;
-        $val = null;
 
         switch ($fieldType) {
             case AMQPAbstractCollection::T_INT_SHORTSHORT:
@@ -505,7 +506,7 @@ class AMQPReader extends AbstractClient
                 ));
         }
 
-        return $val;
+        return isset($val) ? $val : null;
     }
 
     /**
@@ -519,7 +520,7 @@ class AMQPReader extends AbstractClient
     /**
      * Sets the timeout (second)
      *
-     * @param $timeout
+     * @param int $timeout
      */
     public function setTimeout($timeout)
     {

@@ -122,6 +122,7 @@ abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
     {
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->queue_delete($this->queue_name);
             $this->channel->close();
         }
 

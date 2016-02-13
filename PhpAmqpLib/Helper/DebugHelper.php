@@ -33,22 +33,22 @@ class DebugHelper
 
     public function debug_method_signature($msg, $method_sig) {
         if ($this->debug) {
-            $PROTOCOL_CONSTANTS_CLASS = $this->PROTOCOL_CONSTANTS_CLASS;
+            $protocolClass = $this->PROTOCOL_CONSTANTS_CLASS;
             $this->debug_msg(sprintf(
-                    $msg . ': %s',
-                    MiscHelper::methodSig($method_sig),
-                    $PROTOCOL_CONSTANTS_CLASS::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-                ));
+                $msg . ': %s',
+                MiscHelper::methodSig($method_sig),
+                $protocolClass::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
+            ));
         }
     }
 
     public function debug_hexdump($data) {
         if ($this->debug) {
             $this->debug_msg(sprintf(
-                    '< [hex]: %s%s',
-                    PHP_EOL,
-                    MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true)
-                ));
+                '< [hex]: %s%s',
+                PHP_EOL,
+                MiscHelper::hexdump($data, $htmloutput = false, $uppercase = true, $return = true)
+            ));
         }
     }
 
