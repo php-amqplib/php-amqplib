@@ -509,6 +509,10 @@ class AbstractConnection extends AbstractChannel
             );
 
             $frame_type = $this->wait_frame_reader->read_octet();
+            $class = self::$PROTOCOL_CONSTANTS_CLASS;
+            if (!array_key_exists($frame_type, $class::$FRAME_TYPES)) {
+                throw new AMQPRuntimeException('Invalid frame type ' . $frame_type);
+            }
             $channel = $this->wait_frame_reader->read_short();
             $size = $this->wait_frame_reader->read_long();
 
