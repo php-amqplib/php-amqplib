@@ -1,6 +1,11 @@
 # Changelog
 
-All Notable changes to `PhpAmqpLib` will be documented in this file
+All Notable changes to `php-amqplib` will be documented in this file
+
+## [Unreleased]
+
+### Added
+- AbstractConnection::getServerProperties method to retrieve server properties.
 
 ## 2.6.0 - 2015-09-23
 

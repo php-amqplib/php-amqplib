@@ -938,4 +938,12 @@ class AbstractConnection extends AbstractChannel
     {
         return true;
     }
+
+    /**
+     * @return array
+     */
+    public function getServerProperties()
+    {
+        return $this->server_properties;
+    }
 }
