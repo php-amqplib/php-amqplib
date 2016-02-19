@@ -1238,7 +1238,6 @@ class Protocol080
     }
 
     /**
-
      * @return array
      */
     public function testContent()

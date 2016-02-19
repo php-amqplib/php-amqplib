@@ -235,7 +235,7 @@ abstract class AMQPAbstractCollection implements \Iterator
 
     /**
      * @param mixed $val
-     * @param integer $type
+     * @param int $type
      * @return array|bool|\DateTime|null
      */
     protected function decodeValue($val, $type)
@@ -390,7 +390,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     }
 
     /**
-     * @param integer $type
+     * @param int $type
      * @return string
      */
     final public static function getSymbolForDataType($type)

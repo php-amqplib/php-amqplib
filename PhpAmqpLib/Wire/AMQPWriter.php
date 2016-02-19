@@ -87,6 +87,8 @@ class AMQPWriter extends AbstractClient
 
     /**
      * Get what's been encoded so far.
+     *
+     * @return string
      */
     public function getvalue()
     {
@@ -100,6 +102,10 @@ class AMQPWriter extends AbstractClient
 
     /**
      * Write a plain PHP string, with no special encoding.
+     *
+     * @param string $s
+     *
+     * @return $this
      */
     public function write($s)
     {
@@ -113,7 +119,7 @@ class AMQPWriter extends AbstractClient
      * (deprecated, use write_bits instead)
      *
      * @deprecated
-     * @param $b
+     * @param bool $b
      * @return $this
      */
     public function write_bit($b)
@@ -131,7 +137,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write multiple bits as an octet
      *
-     * @param boolean[] $bits
+     * @param bool[] $bits
      * @return $this
      */
     public function write_bits($bits)
@@ -151,7 +157,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write an integer as an unsigned 8-bit value
      *
-     * @param $n
+     * @param int $n
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
@@ -166,6 +172,10 @@ class AMQPWriter extends AbstractClient
         return $this;
     }
 
+    /**
+     * @param int $n
+     * @return $this
+     */
     public function write_signed_octet($n)
     {
         if (($n < -128) || ($n > 127)) {
@@ -180,7 +190,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write an integer as an unsigned 16-bit value
      *
-     * @param $n
+     * @param int $n
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
@@ -195,6 +205,10 @@ class AMQPWriter extends AbstractClient
         return $this;
     }
 
+    /**
+     * @param int $n
+     * @return $this
+     */
     public function write_signed_short($n)
     {
         if (($n < -32768) || ($n > 32767)) {
@@ -209,7 +223,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write an integer as an unsigned 32-bit value
      *
-     * @param $n
+     * @param int $n
      * @return $this
      */
     public function write_long($n)
@@ -228,7 +242,7 @@ class AMQPWriter extends AbstractClient
     }
 
     /**
-     * @param $n
+     * @param int $n
      * @return $this
      */
     private function write_signed_long($n)
@@ -246,7 +260,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write an integer as an unsigned 64-bit value
      *
-     * @param $n
+     * @param int $n
      * @return $this
      */
     public function write_longlong($n)
@@ -277,6 +291,10 @@ class AMQPWriter extends AbstractClient
         return $this;
     }
 
+    /**
+     * @param int $n
+     * @return $this
+     */
     public function write_signed_longlong($n)
     {
         if ((bcadd($n, PHP_INT_MAX, 0) >= -1) && (bcadd($n, -PHP_INT_MAX, 0) <= 0)) {
@@ -305,7 +323,7 @@ class AMQPWriter extends AbstractClient
     }
 
     /**
-     * @param int $n
+     * @param int|string $n
      * @return integer[]
      */
     private function splitIntoQuads($n)
@@ -319,7 +337,7 @@ class AMQPWriter extends AbstractClient
      * Write a string up to 255 bytes long after encoding.
      * Assume UTF-8 encoding
      *
-     * @param $s
+     * @param string $s
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
@@ -339,7 +357,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write a string up to 2**32 bytes long.  Assume UTF-8 encoding
      *
-     * @param $s
+     * @param string $s
      * @return $this
      */
     public function write_longstr($s)
@@ -378,7 +396,7 @@ class AMQPWriter extends AbstractClient
     /**
      * Write unix time_t value as 64 bit timestamp
      *
-     * @param $v
+     * @param int $v
      * @return $this
      */
     public function write_timestamp($v)
@@ -393,7 +411,7 @@ class AMQPWriter extends AbstractClient
      * values are (type,value) tuples.
      *
      * @param AMQPTable|array $d Instance of AMQPTable or PHP array WITH format hints (unlike write_array())
-     * @return self
+     * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_table($d)
@@ -416,6 +434,9 @@ class AMQPWriter extends AbstractClient
 
     /**
      * for compat with method mapping used by AMQPMessage
+     *
+     * @param AMQPTable|array
+     * @return $this
      */
     public function write_table_object($d)
     {

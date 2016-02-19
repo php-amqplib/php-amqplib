@@ -4,13 +4,13 @@ namespace PhpAmqpLib\Wire\IO;
 abstract class AbstractIO
 {
     /**
-     * @param $n
+     * @param int $n
      * @return mixed
      */
     abstract public function read($n);
 
     /**
-     * @param $data
+     * @param string $data
      * @return mixed
      */
     abstract public function write($data);
@@ -21,8 +21,8 @@ abstract class AbstractIO
     abstract public function close();
 
     /**
-     * @param $sec
-     * @param $usec
+     * @param int $sec
+     * @param int $usec
      * @return mixed
      */
     abstract public function select($sec, $usec);

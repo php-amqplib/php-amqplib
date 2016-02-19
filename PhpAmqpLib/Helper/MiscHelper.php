@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Helper;
 class MiscHelper
 {
     /**
-     * @param $a
+     * @param string|array $a
      * @return string
      */
     public static function methodSig($a)
@@ -17,7 +17,7 @@ class MiscHelper
     }
 
     /**
-     * @param $bytes
+     * @param string $bytes
      */
     public static function saveBytes($bytes)
     {
@@ -31,7 +31,7 @@ class MiscHelper
      * decimal part mutliplied by 10^6. Useful for some PHP stream functions that need seconds and microseconds as
      * different arguments
      *
-     * @param $number
+     * @param int|float $number
      * @return array
      */
     public static function splitSecondsMicroseconds($number)
@@ -120,7 +120,7 @@ class MiscHelper
     }
 
     /**
-     * @param $table
+     * @param array $table
      * @return string
      */
     public static function dump_table($table)

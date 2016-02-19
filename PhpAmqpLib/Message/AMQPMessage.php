@@ -108,7 +108,7 @@ class AMQPMessage extends GenericContent
     }
 
     /**
-     * @param boolean $is_truncated
+     * @param bool $is_truncated
      * @return AMQPMessage
      */
     public function setIsTruncated($is_truncated)

@@ -96,7 +96,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @param $n
+     * @param int $n
      * @return string
      */
     public function read($n)
@@ -137,7 +137,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @param $n
+     * @param int $n
      * @return string
      * @throws \RuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException

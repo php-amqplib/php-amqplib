@@ -438,7 +438,7 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * @param string $channel
-     * @param $method_sig
+     * @param string $method_sig
      * @param string $args
      * @param null $pkt
      */
@@ -674,6 +674,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Confirm a connection close
+     *
+     * @param AMQPReader $args
      */
     protected function connection_close_ok($args)
     {
@@ -747,6 +749,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Security mechanism response
+     *
+     * @param string $response
      */
     protected function x_secure_ok($response)
     {
@@ -821,9 +825,9 @@ class AbstractConnection extends AbstractChannel
     /**
      * Negotiates connection tuning parameters
      *
-     * @param $channel_max
-     * @param $frame_max
-     * @param $heartbeat
+     * @param int $channel_max
+     * @param int $frame_max
+     * @param int $heartbeat
      */
     protected function x_tune_ok($channel_max, $frame_max, $heartbeat)
     {
@@ -864,6 +868,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Handles connection unblocked notifications
+     *
+     * @param AMQPReader $args
      */
     protected function connection_unblocked(AMQPReader $args)
     {
@@ -894,7 +900,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Gets the connection status
      *
-     * @return bool
+     * @return boolean
      */
     public function isConnected()
     {
@@ -932,7 +938,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Should the connection be attempted during construction?
      *
-     * @return bool
+     * @return boolean
      */
     public function connectOnConstruct()
     {
