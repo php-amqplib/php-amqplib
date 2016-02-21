@@ -348,7 +348,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @param string $allowed_methods
+     * @param array $allowed_methods
      * @return array
      */
     protected function process_deferred_methods($allowed_methods)
