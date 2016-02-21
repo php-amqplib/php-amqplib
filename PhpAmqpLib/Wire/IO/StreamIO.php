@@ -69,6 +69,10 @@ class StreamIO extends AbstractIO
         $keepalive = false,
         $heartbeat = 0
     ) {
+        if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
+            throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
+        }
+
         $this->protocol = 'tcp';
         $this->host = $host;
         $this->port = $port;
