@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Helper;
 class DebugHelper
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $debug;
 
