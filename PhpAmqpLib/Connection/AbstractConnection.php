@@ -439,7 +439,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * @param string $channel
      * @param string $method_sig
-     * @param string $args
+     * @param AMQPWriter|string $args
      * @param null $pkt
      */
     protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
@@ -454,7 +454,7 @@ class AbstractConnection extends AbstractChannel
      *
      * @param string $channel
      * @param string[] $method_sig
-     * @param string $args
+     * @param AMQPWriter|string $args
      * @param AMQPWriter $pkt
      * @return AMQPWriter
      */
