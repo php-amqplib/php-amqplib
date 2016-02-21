@@ -229,7 +229,7 @@ abstract class AbstractChannel
     /**
      * This is here for performance reasons to batch calls to fwrite from basic.publish
      *
-     * @param string[] $method_sig
+     * @param array $method_sig
      * @param \PhpAmqpLib\Wire\AMQPWriter|string $args
      * @param \PhpAmqpLib\Wire\AMQPWriter $pkt
      * @return \PhpAmqpLib\Wire\AMQPWriter
