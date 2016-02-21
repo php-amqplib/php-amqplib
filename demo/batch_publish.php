@@ -42,7 +42,7 @@ $time = microtime(true);
 $max = isset($argv[1]) ? (int) $argv[1] : 1;
 $batch = isset($argv[2]) ? (int) $argv[2] : 2;
 
-// Publishes $max messages using $msg_body as the content.
+// Publishes $max messages using $messageBody as the content.
 for ($i = 0; $i < $max; $i++) {
     $channel->batch_basic_publish($message, $exchange);
 

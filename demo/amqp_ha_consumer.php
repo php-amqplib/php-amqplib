@@ -85,13 +85,13 @@ function process_message($message)
 $channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
 
 /**
- * @param \PhpAmqpLib\Channel\AMQPChannel $ch
- * @param \PhpAmqpLib\Connection\AbstractConnection $conn
+ * @param \PhpAmqpLib\Channel\AMQPChannel $channel
+ * @param \PhpAmqpLib\Connection\AbstractConnection $connection
  */
-function shutdown($ch, $conn)
+function shutdown($channel, $connection)
 {
-    $ch->close();
-    $conn->close();
+    $channel->close();
+    $connection->close();
 }
 
 register_shutdown_function('shutdown', $channel, $connection);
