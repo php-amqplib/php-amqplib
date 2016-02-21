@@ -1,24 +1,24 @@
 <?php
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
 
-
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$exchName = 'topic_headers_test';
-$channel->exchange_declare($exchName, 'topic', $passv = false, $durable = false, $autodel = true);
+$exchangeName = 'topic_headers_test';
+$channel->exchange_declare($exchangeName, 'topic', false, false, true);
 
-$routing_key = empty($argv[1]) ? '' : $argv[1];
+$routingKey = empty($argv[1]) ? '' : $argv[1];
 $data = implode(' ', array_slice($argv, 2));
 if (empty($data)) {
     $data = "Hello World!";
 }
 
-$msg = new AMQPMessage($data);
-$hdrs=new Wire\AMQPTable(array(
+$message = new AMQPMessage($data);
+$headers = new Wire\AMQPTable(array(
    'x-foo'=>'bar',
    'table'=>array('figuf', 'ghf'=>5, 5=>675),
    'num1' => -4294967295,
@@ -45,17 +45,17 @@ $hdrs=new Wire\AMQPTable(array(
    '64bit_uint' => '18446744073709600000',
    '64bitint_neg' => -pow(2, 40)
 ));
-$hdrs->set('shortshort', -5, Wire\AMQPTable::T_INT_SHORTSHORT);
-$hdrs->set('short', -1024, Wire\AMQPTable::T_INT_SHORT);
+$headers->set('shortshort', -5, Wire\AMQPTable::T_INT_SHORTSHORT);
+$headers->set('short', -1024, Wire\AMQPTable::T_INT_SHORT);
 
 echo PHP_EOL . PHP_EOL . 'SENDING MESSAGE WITH HEADERS' . PHP_EOL . PHP_EOL;
-var_dump($hdrs->getNativeData());
+var_dump($headers->getNativeData());
 echo PHP_EOL;
 
-$msg->set('application_headers', $hdrs);
-$channel->basic_publish($msg, $exchName, $routing_key);
+$message->set('application_headers', $headers);
+$channel->basic_publish($message, $exchangeName, $routingKey);
 
-echo " [x] Sent ", $routing_key, ':', $data, " \n";
+echo " [x] Sent ", $routingKey, ':', $data, " \n";
 
 $channel->close();
 $connection->close();

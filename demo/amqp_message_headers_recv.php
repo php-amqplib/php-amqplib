@@ -1,10 +1,11 @@
 <?php
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
-
-$binding_keys = array_slice($argv, 1);
-if (empty($binding_keys)) {
+$bindingKeys = array_slice($argv, 1);
+if (empty($bindingKeys)) {
     file_put_contents('php://stderr', "Usage: $argv[0] [binding_key]\n");
     exit(1);
 }
@@ -13,25 +14,25 @@ if (empty($binding_keys)) {
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$exchName = 'topic_headers_test';
-$channel->exchange_declare($exchName, 'topic', $passv = false, $durable = false, $autodel = true);
+$exchangeName = 'topic_headers_test';
+$channel->exchange_declare($exchangeName, 'topic', false, false, true);
 
-list($queue_name, ,) = $channel->queue_declare("", $passv = false, $durable = false, $exclusive = true, $autoDel = true);
+list($queueName, ,) = $channel->queue_declare("", false, false, true, true);
 
-foreach ($binding_keys as $binding_key) {
-    $channel->queue_bind($queue_name, $exchName, $binding_key);
+foreach ($bindingKeys as $bindingKey) {
+    $channel->queue_bind($queueName, $exchangeName, $bindingKey);
 }
 
 echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";
 
-$callback = function ($msg) {
-    echo PHP_EOL . ' [x] ', $msg->delivery_info['routing_key'], ':', $msg->body, "\n";
+$callback = function (AMQPMessage $message) {
+    echo PHP_EOL . ' [x] ', $message->delivery_info['routing_key'], ':', $message->body, "\n";
     echo 'Message headers follows' . PHP_EOL;
-    var_dump($msg->get('application_headers')->getNativeData());
+    var_dump($message->get('application_headers')->getNativeData());
     echo PHP_EOL;
 };
 
-$channel->basic_consume($queue_name, '', $noLocal = false, $noAck = true, $exclusive = true, $noWait = false, $callback);
+$channel->basic_consume($queueName, '', false, true, true, false, $callback);
 while (count($channel->callbacks)) {
     $channel->wait();
     echo '*' . PHP_EOL;

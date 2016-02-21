@@ -1,21 +1,22 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 $source = 'my_source_exchange';
-$dest = 'my_dest_exchange';
+$destination = 'my_dest_exchange';
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
-$ch->exchange_declare($source, 'topic', false, true, false);
+$channel->exchange_declare($source, 'topic', false, true, false);
 
-$ch->exchange_declare($dest, 'direct', false, true, false);
+$channel->exchange_declare($destination, 'direct', false, true, false);
 
-$ch->exchange_bind($dest, $source);
+$channel->exchange_bind($destination, $source);
 
-$ch->exchange_unbind($source, $dest);
+$channel->exchange_unbind($source, $destination);
 
-$ch->close();
-$conn->close();
+$channel->close();
+$connection->close();

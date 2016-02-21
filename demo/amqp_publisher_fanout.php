@@ -1,13 +1,14 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'fanout_example_exchange';
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
 /*
     name: $exchange
@@ -17,11 +18,11 @@ $ch = $conn->channel();
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$ch->exchange_declare($exchange, 'fanout', false, false, true);
+$channel->exchange_declare($exchange, 'fanout', false, false, true);
 
-$msg_body = implode(' ', array_slice($argv, 1));
-$msg = new AMQPMessage($msg_body, array('content_type' => 'text/plain'));
-$ch->basic_publish($msg, $exchange);
+$messageBody = implode(' ', array_slice($argv, 1));
+$message = new AMQPMessage($messageBody, array('content_type' => 'text/plain'));
+$channel->basic_publish($message, $exchange);
 
-$ch->close();
-$conn->close();
+$channel->close();
+$connection->close();
