@@ -4,7 +4,7 @@ include(__DIR__ . '/config.php');
 
 /**
  * This class shows how you can use signals to handle consumers
- * 
+ *
  */
 class Consumer
 {
@@ -17,8 +17,8 @@ class Consumer
             define('AMQP_WITHOUT_SIGNALS', false);
 
             pcntl_signal(SIGTERM, [$this, 'signalHandler']);
-            pcntl_signal(SIGHUP,  [$this, 'signalHandler']);
-            pcntl_signal(SIGINT,  [$this, 'signalHandler']);
+            pcntl_signal(SIGHUP, [$this, 'signalHandler']);
+            pcntl_signal(SIGINT, [$this, 'signalHandler']);
             pcntl_signal(SIGQUIT, [$this, 'signalHandler']);
             pcntl_signal(SIGUSR1, [$this, 'signalHandler']);
             pcntl_signal(SIGUSR2, [$this, 'signalHandler']);
@@ -35,8 +35,13 @@ class Consumer
                 'verify_peer_name' => false
             ];
         }
-        $this->_connection = new PhpAmqpLib\Connection\AMQPSSLConnection(
-            HOST, PORT, USER, PASS, VHOST, $ssl,
+        $this->connection = new PhpAmqpLib\Connection\AMQPSSLConnection(
+            HOST,
+            PORT,
+            USER,
+            PASS,
+            VHOST,
+            $ssl,
             [
                 'read_write_timeout' => 30,    // needs to be at least 2x heartbeat
                 'keepalive'          => false, // doesn't work with ssl connections
@@ -47,7 +52,7 @@ class Consumer
 
     /**
      * Signal handler
-     * 
+     *
      * @param  int $signalNumber
      * @return void
      */
@@ -83,14 +88,13 @@ class Consumer
 
     /**
      * Alarm handler
-     * 
+     *
      * @param  int $signalNumber
      * @return void
      */
     public function alarmHandler($signalNumber)
     {
         echo 'Handling alarm: #' . $signalNumber . PHP_EOL;
-        global $consumer;
 
         echo memory_get_usage(true) . PHP_EOL;
         return;
@@ -98,7 +102,7 @@ class Consumer
 
     /**
      * Message handler
-     * 
+     *
      * @param  PhpAmqpLib\Message\AMQPMessage $message
      * @return void
      */
@@ -116,30 +120,35 @@ class Consumer
 
     /**
      * Start a consumer on an existing connection
-     * 
+     *
      * @return void
      */
     public function start()
     {
         echo 'Starting consumer.' . PHP_EOL;
-        
+
         $exchange = 'router';
         $queue    = 'msgs';
 
-        $this->_channel = $this->_connection->channel();
-        $this->_channel->queue_declare($queue, false, true, false, false);
-        $this->_channel->exchange_declare($exchange, 'direct', false, true, false);
-        $this->_channel->queue_bind($queue, $exchange);
-        $this->_channel->basic_consume(
-            $queue, $this->_tag, false, false, false, false, 
+        $this->channel = $this->connection->channel();
+        $this->channel->queue_declare($queue, false, true, false, false);
+        $this->channel->exchange_declare($exchange, 'direct', false, true, false);
+        $this->channel->queue_bind($queue, $exchange);
+        $this->channel->basic_consume(
+            $queue,
+            $this->consumerTag,
+            false,
+            false,
+            false,
+            false,
             [$this,'messageHandler'],
             null,
             ['x-cancel-on-ha-failover' => ['t', true]] // fail over to another node
         );
 
         echo 'Enter wait.' . PHP_EOL;
-        while (count($this->_channel->callbacks)) {
-            $this->_channel->wait();
+        while (count($this->channel->callbacks)) {
+            $this->channel->wait();
         }
         echo 'Exit wait.' . PHP_EOL;
     }
@@ -160,7 +169,7 @@ class Consumer
     public function stopHard()
     {
         echo 'Stopping consumer by closing connection.' . PHP_EOL;
-        $this->_connection->close();
+        $this->connection->close();
     }
 
     /**
@@ -169,9 +178,9 @@ class Consumer
     public function stopSoft()
     {
         echo 'Stopping consumer by closing channel.' . PHP_EOL;
-        $this->_channel->close();
+        $this->channel->close();
     }
-    
+
     /**
      * Tell the server you are going to stop consuming
      * It will finish up the last message and not send you any more
@@ -180,29 +189,29 @@ class Consumer
     {
         echo 'Stopping consumer by cancel command.' . PHP_EOL;
         // this gets stuck and will not exit without the last two parameters set
-        $this->_channel->basic_cancel($this->_tag, false, true);
+        $this->channel->basic_cancel($this->consumerTag, false, true);
     }
 
     /**
-     * Current connection 
-     * 
+     * Current connection
+     *
      * @var PhpAmqpLib\Connection\AMQPSSLConnection
      */
-    protected $_connection = null;
+    protected $connection = null;
 
     /**
      * Current channel
-     * 
+     *
      * @var PhpAmqpLib\Channel\AMQPChannel
      */
-    protected $_channel = null;
-    
+    protected $channel = null;
+
     /**
      * Consumer tag
-     * 
+     *
      * @var string
      */
-    protected $_tag = 'consumer';
+    protected $consumerTag = 'consumer';
 }
 
 $consumer = new Consumer();

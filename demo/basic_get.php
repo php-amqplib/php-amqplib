@@ -7,8 +7,8 @@ use PhpAmqpLib\Message\AMQPMessage;
 $exchange = 'basic_get_test';
 $queue = 'basic_get_queue';
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
 /*
     The following code is the same both in the consumer and the producer.
@@ -23,7 +23,7 @@ $ch = $conn->channel();
     exclusive: false // the queue can be accessed in other channels
     auto_delete: false //the queue won't be deleted once the channel is closed.
 */
-$ch->queue_declare($queue, false, true, false, false);
+$channel->queue_declare($queue, false, true, false, false);
 
 /*
     name: $exchange
@@ -33,18 +33,18 @@ $ch->queue_declare($queue, false, true, false, false);
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$ch->exchange_declare($exchange, 'direct', false, true, false);
+$channel->exchange_declare($exchange, 'direct', false, true, false);
 
-$ch->queue_bind($queue, $exchange);
+$channel->queue_bind($queue, $exchange);
 
 $toSend = new AMQPMessage('test message', array('content_type' => 'text/plain', 'delivery_mode' => 2));
-$ch->basic_publish($toSend, $exchange);
+$channel->basic_publish($toSend, $exchange);
 
-$msg = $ch->basic_get($queue);
+$message = $channel->basic_get($queue);
 
-$ch->basic_ack($msg->delivery_info['delivery_tag']);
+$channel->basic_ack($message->delivery_info['delivery_tag']);
 
-var_dump($msg->body);
+var_dump($message->body);
 
-$ch->close();
-$conn->close();
+$channel->close();
+$connection->close();

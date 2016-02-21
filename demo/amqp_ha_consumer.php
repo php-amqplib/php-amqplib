@@ -1,17 +1,18 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Wire\AMQPTable;
 
 $exchange = 'router';
 $queue = 'haqueue';
-$specific_queue = 'specific-haqueue';
+$specificQueue = 'specific-haqueue';
 
-$consumer_tag = 'consumer';
+$consumerTag = 'consumer';
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
 /*
     The following code is the same both in the consumer and the producer.
@@ -19,9 +20,9 @@ $ch = $conn->channel();
         exchange where to publish messages.
 */
 
-$ha_connection = new AMQPTable(array('x-ha-policy' => 'all'));
+$haConnection = new AMQPTable(array('x-ha-policy' => 'all'));
 
-$ha_specific_connection = new AMQPTable(array(
+$haSpecificConnection = new AMQPTable(array(
    'x-ha-policy' => 'nodes',
    'x-ha-policy-params' => array(
       'rabbit@' . HOST,
@@ -38,8 +39,8 @@ $ha_specific_connection = new AMQPTable(array(
     nowait: false // Doesn't wait on replies for certain things.
     parameters: array // How you send certain extra data to the queue declare
 */
-$ch->queue_declare($queue, false, false, false, false, false, $ha_connection);
-$ch->queue_declare($specific_queue, false, false, false, false, false, $ha_specific_connection);
+$channel->queue_declare($queue, false, false, false, false, false, $haConnection);
+$channel->queue_declare($specificQueue, false, false, false, false, false, $haSpecificConnection);
 
 /*
     name: $exchange
@@ -49,25 +50,25 @@ $ch->queue_declare($specific_queue, false, false, false, false, false, $ha_speci
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$ch->exchange_declare($exchange, 'direct', false, true, false);
+$channel->exchange_declare($exchange, 'direct', false, true, false);
 
-$ch->queue_bind($queue, $exchange);
-$ch->queue_bind($specific_queue, $exchange);
+$channel->queue_bind($queue, $exchange);
+$channel->queue_bind($specificQueue, $exchange);
 
 /**
- * @param \PhpAmqpLib\Message\AMQPMessage $msg
+ * @param \PhpAmqpLib\Message\AMQPMessage $message
  */
-function process_message($msg)
+function process_message($message)
 {
     echo "\n--------\n";
-    echo $msg->body;
+    echo $message->body;
     echo "\n--------\n";
 
-    $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 
     // Send a message with the string "quit" to cancel the consumer.
-    if ($msg->body === 'quit') {
-        $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
+    if ($message->body === 'quit') {
+        $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
     }
 }
 
@@ -81,7 +82,7 @@ function process_message($msg)
     callback: A PHP Callback
 */
 
-$ch->basic_consume($queue, $consumer_tag, false, false, false, false, 'process_message');
+$channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $ch
@@ -93,9 +94,9 @@ function shutdown($ch, $conn)
     $conn->close();
 }
 
-register_shutdown_function('shutdown', $ch, $conn);
+register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while (count($ch->callbacks)) {
-    $ch->wait();
+while (count($channel->callbacks)) {
+    $channel->wait();
 }

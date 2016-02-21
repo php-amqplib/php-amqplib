@@ -10,10 +10,10 @@ $exchange = 'fanout_exclusive_example_exchange';
 $queue = ''; // if empty let RabbitMQ create a queue name
 // set a queue name and run multiple instances
 // to test exclusiveness
-$consumer_tag = 'consumer' . getmypid();
+$consumerTag = 'consumer' . getmypid();
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
 /*
     name: $queue    // should be unique in fanout exchange. Let RabbitMQ create
@@ -23,7 +23,7 @@ $ch = $conn->channel();
     exclusive: true // the queue can not be accessed by other channels
     auto_delete: true //the queue will be deleted once the channel is closed.
 */
-list($queue_name, ,) = $ch->queue_declare($queue, false, false, true, true);
+list($queueName, ,) = $channel->queue_declare($queue, false, false, true, true);
 
 /*
     name: $exchange
@@ -33,24 +33,24 @@ list($queue_name, ,) = $ch->queue_declare($queue, false, false, true, true);
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$ch->exchange_declare($exchange, 'fanout', false, false, true);
+$channel->exchange_declare($exchange, 'fanout', false, false, true);
 
-$ch->queue_bind($queue_name, $exchange);
+$channel->queue_bind($queueName, $exchange);
 
 /**
- * @param \PhpAmqpLib\Message\AMQPMessage $msg
+ * @param \PhpAmqpLib\Message\AMQPMessage $message
  */
-function process_message($msg)
+function process_message($message)
 {
     echo "\n--------\n";
-    echo $msg->body;
+    echo $message->body;
     echo "\n--------\n";
 
-    $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 
     // Send a message with the string "quit" to cancel the consumer.
-    if ($msg->body === 'quit') {
-        $msg->delivery_info['channel']->basic_cancel($msg->delivery_info['consumer_tag']);
+    if ($message->body === 'quit') {
+        $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
     }
 }
 
@@ -65,21 +65,21 @@ function process_message($msg)
     callback: A PHP Callback
 */
 
-$ch->basic_consume($queue_name, $consumer_tag, false, false, true, false, 'process_message');
+$channel->basic_consume($queueName, $consumerTag, false, false, true, false, 'process_message');
 
 /**
- * @param \PhpAmqpLib\Channel\AMQPChannel $ch
- * @param \PhpAmqpLib\Connection\AbstractConnection $conn
+ * @param \PhpAmqpLib\Channel\AMQPChannel $channel
+ * @param \PhpAmqpLib\Connection\AbstractConnection $connection
  */
-function shutdown($ch, $conn)
+function shutdown($channel, $connection)
 {
-    $ch->close();
-    $conn->close();
+    $channel->close();
+    $connection->close();
 }
 
-register_shutdown_function('shutdown', $ch, $conn);
+register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while (count($ch->callbacks)) {
-    $ch->wait();
+while (count($channel->callbacks)) {
+    $channel->wait();
 }

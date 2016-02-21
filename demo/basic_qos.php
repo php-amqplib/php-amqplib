@@ -1,23 +1,25 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 
-$ch = $conn->channel();
+$channel = $connection->channel();
 
-$ch->queue_declare('qos_queue', false, true, false, false);
+$channel->queue_declare('qos_queue', false, true, false, false);
 
-$ch->basic_qos(null, 10000, null);
+$channel->basic_qos(null, 10000, null);
 
-function process_message($msg) {
-    $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+function process_message($message)
+{
+    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 }
 
-$ch->basic_consume('qos_queue', '', false, false, false, false, 'process_message');
+$channel->basic_consume('qos_queue', '', false, false, false, false, 'process_message');
 
-while (count($ch->callbacks)) {
+while (count($channel->callbacks)) {
     // After 10 seconds there will be a timeout exception.
-    $ch->wait(null, false, 10);
+    $channel->wait(null, false, 10);
 }

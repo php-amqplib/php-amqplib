@@ -1,14 +1,15 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'router';
 $queue = 'msgs';
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
 /*
     The following code is the same both in the consumer and the producer.
@@ -23,7 +24,7 @@ $ch = $conn->channel();
     exclusive: false // the queue can be accessed in other channels
     auto_delete: false //the queue won't be deleted once the channel is closed.
 */
-$ch->queue_declare($queue, false, true, false, false);
+$channel->queue_declare($queue, false, true, false, false);
 
 /*
     name: $exchange
@@ -33,13 +34,13 @@ $ch->queue_declare($queue, false, true, false, false);
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$ch->exchange_declare($exchange, 'direct', false, true, false);
+$channel->exchange_declare($exchange, 'direct', false, true, false);
 
-$ch->queue_bind($queue, $exchange);
+$channel->queue_bind($queue, $exchange);
 
-$msg_body = implode(' ', array_slice($argv, 1));
-$msg = new AMQPMessage($msg_body, array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
-$ch->basic_publish($msg, $exchange);
+$messageBody = implode(' ', array_slice($argv, 1));
+$message = new AMQPMessage($messageBody, array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT));
+$channel->basic_publish($message, $exchange);
 
-$ch->close();
-$conn->close();
+$channel->close();
+$connection->close();

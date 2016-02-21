@@ -6,8 +6,8 @@ use PhpAmqpLib\Wire\AMQPTable;
 
 include(__DIR__ . '/config.php');
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
 /**
  * Declares exchange
@@ -21,7 +21,7 @@ $ch = $conn->channel();
  * @param bool $nowait
  * @return mixed|null
  */
-$ch->exchange_declare('delayed_exchange', 'x-delayed-message', false, true, false, false, false, new AMQPTable(array(
+$channel->exchange_declare('delayed_exchange', 'x-delayed-message', false, true, false, false, false, new AMQPTable(array(
    "x-delayed-type" => "fanout"
 )));
 
@@ -38,22 +38,23 @@ $ch->exchange_declare('delayed_exchange', 'x-delayed-message', false, true, fals
  * @param null $ticket
  * @return mixed|null
  */
-$ch->queue_declare('delayed_queue', false, false, false, false, false, new AMQPTable(array(
+$channel->queue_declare('delayed_queue', false, false, false, false, false, new AMQPTable(array(
    "x-dead-letter-exchange" => "delayed"
 )));
 
-$ch->queue_bind('delayed_queue', 'delayed_exchange');
+$channel->queue_bind('delayed_queue', 'delayed_exchange');
 
-$hdrs = new AMQPTable(array("x-delay" => 7000));
-$msg = new AMQPMessage('hello', array('delivery_mode' => 2));
-$msg->set('application_headers', $hdrs);
-$ch->basic_publish($msg, 'delayed_exchange');
+$headers = new AMQPTable(array("x-delay" => 7000));
+$message = new AMQPMessage('hello', array('delivery_mode' => 2));
+$message->set('application_headers', $headers);
+$channel->basic_publish($message, 'delayed_exchange');
 
-function process_message($msg) {
-    $hdrs = $msg->get('application_headers');
-    $arr = $hdrs->getNativeData();
-    var_dump($arr['x-delay']);
-    $msg->delivery_info['channel']->basic_nack($msg->delivery_info['delivery_tag']);
+function process_message(AMQPMessage $message)
+{
+    $headers = $message->get('application_headers');
+    $nativeData = $headers->getNativeData();
+    var_dump($nativeData['x-delay']);
+    $message->delivery_info['channel']->basic_nack($message->delivery_info['delivery_tag']);
 }
 
 /*
@@ -66,21 +67,21 @@ function process_message($msg) {
     callback: A PHP Callback
 */
 
-$ch->basic_consume('delayed_queue', '', false, true, false, false, 'process_message');
+$channel->basic_consume('delayed_queue', '', false, true, false, false, 'process_message');
 
 /**
- * @param \PhpAmqpLib\Channel\AMQPChannel $ch
- * @param \PhpAmqpLib\Connection\AbstractConnection $conn
+ * @param \PhpAmqpLib\Channel\AMQPChannel $channel
+ * @param \PhpAmqpLib\Connection\AbstractConnection $connection
  */
-function shutdown($ch, $conn)
+function shutdown($channel, $connection)
 {
-    $ch->close();
-    $conn->close();
+    $channel->close();
+    $connection->close();
 }
 
-register_shutdown_function('shutdown', $ch, $conn);
+register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while (count($ch->callbacks)) {
-    $ch->wait();
+while (count($channel->callbacks)) {
+    $channel->wait();
 }

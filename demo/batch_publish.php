@@ -1,11 +1,9 @@
 <?php
-
 /**
  * Usage:
  *  php batch_publish.php msg_count batch_size
  * The integer arguments tells the script how many messages to publish.
  */
-
 include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
@@ -14,17 +12,17 @@ use PhpAmqpLib\Message\AMQPMessage;
 $exchange = 'bench_exchange';
 $queue = 'bench_queue';
 
-$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
-$ch = $conn->channel();
+$connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+$channel = $connection->channel();
 
-$ch->queue_declare($queue, false, false, false, false);
+$channel->queue_declare($queue, false, false, false, false);
 
-$ch->exchange_declare($exchange, 'direct', false, false, false);
+$channel->exchange_declare($exchange, 'direct', false, false, false);
 
-$ch->queue_bind($queue, $exchange);
+$channel->queue_bind($queue, $exchange);
 
 
-$msg_body = <<<EOT
+$messageBody = <<<EOT
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
@@ -37,7 +35,7 @@ abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzab
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyza
 EOT;
 
-$msg = new AMQPMessage($msg_body);
+$message = new AMQPMessage($messageBody);
 
 $time = microtime(true);
 
@@ -46,19 +44,18 @@ $batch = isset($argv[2]) ? (int) $argv[2] : 2;
 
 // Publishes $max messages using $msg_body as the content.
 for ($i = 0; $i < $max; $i++) {
-    $ch->batch_basic_publish($msg, $exchange);
+    $channel->batch_basic_publish($message, $exchange);
 
     if ($i % $batch == 0) {
-        $ch->publish_batch();
+        $channel->publish_batch();
     }
 }
 
-$ch->publish_batch();
+$channel->publish_batch();
 
 echo microtime(true) - $time, "\n";
 
-$ch->basic_publish(new AMQPMessage('quit'), $exchange);
+$channel->basic_publish(new AMQPMessage('quit'), $exchange);
 
-$ch->close();
-$conn->close();
-?>
+$channel->close();
+$connection->close();
