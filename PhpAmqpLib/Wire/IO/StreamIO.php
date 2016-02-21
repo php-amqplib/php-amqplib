@@ -69,6 +69,10 @@ class StreamIO extends AbstractIO
         $keepalive = false,
         $heartbeat = 0
     ) {
+        $this->minimumInterval = 1;
+        $this->interval = 1;
+        $this->exponent = 2;
+        $this->maximumInterval = 60;
         $this->protocol = 'tcp';
         $this->host = $host;
         $this->port = $port;
@@ -111,6 +115,48 @@ class StreamIO extends AbstractIO
     {
         $errstr = $errno = null;
 
+        do {
+            if ($this->context) {
+                $remote = sprintf('ssl://%s:%s', $this->host, $this->port);
+                $this->sock = @stream_socket_client(
+                    $remote,
+                    $errno,
+                    $errstr,
+                    $this->connection_timeout,
+                    STREAM_CLIENT_CONNECT,
+                    $this->context
+                );
+            } else {
+                $remote = sprintf('tcp://%s:%s', $this->host, $this->port);
+                $this->sock = @stream_socket_client(
+                    $remote,
+                    $errno,
+                    $errstr,
+                    $this->connection_timeout,
+                    STREAM_CLIENT_CONNECT
+                );
+            }
+
+            if($this->sock) {
+                    break;
+            }
+            else {
+                if($this->interval < $this->maximumInterval/$this->exponent) {
+                    $this->interval = $this->interval * $this->exponent;
+                }
+                else {
+                    $this->interval = $this->maximumInterval;
+                }
+                throw new AMQPRuntimeException(sprintf(
+                    'Error Connecting to server (%s): %s',
+                    $errno,
+                    $errstr
+                    ), $errno);
+
+                sleep($this->interval);                
+            }            
+
+        } while (!$this->sock);
         $remote = sprintf(
             '%s://%s:%s',
             $this->protocol,
