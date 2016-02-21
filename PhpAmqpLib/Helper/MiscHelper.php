@@ -55,7 +55,7 @@ class MiscHelper
      * @param bool $htmloutput Set to false for non-HTML output
      * @param bool $uppercase Set to true for uppercase hex
      * @param bool $return Set to true to return the dump
-     * @return string
+     * @return string|null
      */
     public static function hexdump($data, $htmloutput = true, $uppercase = false, $return = false)
     {
