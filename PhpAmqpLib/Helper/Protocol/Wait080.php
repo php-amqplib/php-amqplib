@@ -106,7 +106,7 @@ class Wait080
     );
 
     /**
-     * @var string
+     * @var string $method
      * @return string
      */
     public function get_wait($method)

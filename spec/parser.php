@@ -320,13 +320,19 @@ function global_method_names($json_spec)
 
 /**
  * @param string $type
+ * @param string $variableName
  * @param string $returnType (optional)
  * @return string
  */
-function get_type_phpdoc($type, $returnType = null)
+function get_type_phpdoc($type, $variableName = null, $returnType = null)
 {
     $properties = "/**\n";
-    $properties .= " * @var " . $type . "\n";
+    $properties .= " * @var " . $type;
+
+    if ($variableName != null) {
+        $properties .= " " . $variableName;
+    }
+    $properties .= "\n";
 
     if ($returnType != null) {
         $properties .= " * @return " . $returnType . "\n";
@@ -373,7 +379,7 @@ function method_waits($json_spec)
 $classBody = '';
 $classBody .= get_type_phpdoc('array');
 $classBody .= "protected \$wait = " . method_waits($json_spec) . ";\n\n";
-$classBody .= get_type_phpdoc('string', 'string');
+$classBody .= get_type_phpdoc('string', '$method', 'string');
 $classBody .= 'public function get_wait($method)' . "\n{\n";
 $classBody .= indent('return $this->wait[$method];') . "\n";
 $classBody .= "}";
@@ -414,11 +420,11 @@ function method_map($json_spec)
 $classBody = '';
 $classBody .= get_type_phpdoc('array');
 $classBody .= 'protected $method_map = ' . method_map($json_spec) . ";\n\n";
-$classBody .= get_type_phpdoc('string', 'string');
+$classBody .= get_type_phpdoc('string', '$method_sig', 'string');
 $classBody .= 'public function get_method($method_sig)' . "\n{\n";
 $classBody .= indent('return $this->method_map[$method_sig];') . "\n";
 $classBody .= "}\n\n";
-$classBody .= get_type_phpdoc('string', 'boolean');
+$classBody .= get_type_phpdoc('string', '$method_sig', 'boolean');
 $classBody .= 'public function valid_method($method_sig)' . "\n{\n";
 $classBody .= indent('return array_key_exists($method_sig, $this->method_map);') . "\n";
 $classBody .= "}";
