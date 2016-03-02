@@ -4,8 +4,38 @@ All Notable changes to `php-amqplib` will be documented in this file
 
 ## [Unreleased]
 
+## 2.6.2 - 2016-03-02
+
 ### Added
+- Added AMQPLazySocketConnection
 - AbstractConnection::getServerProperties method to retrieve server properties.
+- AMQPReader::wait() will throw IOWaitException on stream_select failure
+- Add PHPDocs to Auto-generated Protocol Classes
+
+### Fixed
+- Disable heartbeat when closing connection
+- Fix for when the default error handler is not restored in StreamIO
+
+### Enhancements
+- Cleanup tests and improve testing performance
+- Confirm received valid frame type on wait_frame in AbstractConnection
+- Update DEMO files closer to PSR-2 standards
+
+## 2.6.1 - 2016-02-12
+
+### Added
+- Add constants for delivery modes to AMQPMessage
+
+### Fixed
+- Fix some PHPDoc problems
+- AbstractCollection value de/encoding on PHP7
+- StreamIO: fix "bad write retry" in SSL mode
+
+### Enhancements
+- Update PHPUnit configuration
+- Add scrutinizer-ci configuration
+- Organizational changes from videlalvaro to php-amqplib org
+- Minor complexity optimizations, code organization, and code cleanup
 
 ## 2.6.0 - 2015-09-23
 
