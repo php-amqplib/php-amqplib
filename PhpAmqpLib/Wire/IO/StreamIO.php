@@ -120,14 +120,19 @@ class StreamIO extends AbstractIO
 
         set_error_handler(array($this, 'error_handler'));
 
-        $this->sock = stream_socket_client(
-            $remote,
-            $errno,
-            $errstr,
-            $this->connection_timeout,
-            STREAM_CLIENT_CONNECT,
-            $this->context
-        );
+        try {
+            $this->sock = stream_socket_client(
+                $remote,
+                $errno,
+                $errstr,
+                $this->connection_timeout,
+                STREAM_CLIENT_CONNECT,
+                $this->context
+            );
+        } catch (\Exception $e) {
+            restore_error_handler();
+            throw $e;
+        }
 
         restore_error_handler();
 
