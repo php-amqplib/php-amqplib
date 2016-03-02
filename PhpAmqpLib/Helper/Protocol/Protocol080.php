@@ -10,8 +10,8 @@ use PhpAmqpLib\Wire\AMQPReader;
 class Protocol080
 {
     /**
-     * @param integer $version_major
-     * @param integer $version_minor
+     * @param int $version_major
+     * @param int $version_minor
      * @param mixed $server_properties
      * @param string $mechanisms
      * @param string $locales
@@ -65,9 +65,9 @@ class Protocol080
     }
 
     /**
-     * @param integer $channel_max
-     * @param integer $frame_max
-     * @param integer $heartbeat
+     * @param int $channel_max
+     * @param int $frame_max
+     * @param int $heartbeat
      * @return array
      */
     public function connectionTune($channel_max = 0, $frame_max = 0, $heartbeat = 0)
@@ -95,7 +95,7 @@ class Protocol080
     /**
      * @param string $virtual_host
      * @param string $capabilities
-     * @param boolean $insist
+     * @param bool $insist
      * @return array
      */
     public function connectionOpen($virtual_host = '/', $capabilities = '', $insist = false)
@@ -132,10 +132,10 @@ class Protocol080
     }
 
     /**
-     * @param integer $reply_code
+     * @param int $reply_code
      * @param string $reply_text
-     * @param integer $class_id
-     * @param integer $method_id
+     * @param int $class_id
+     * @param int $method_id
      * @return array
      */
     public function connectionClose($reply_code, $reply_text = '', $class_id, $method_id)
@@ -180,7 +180,7 @@ class Protocol080
     }
 
     /**
-     * @param boolean $active
+     * @param bool $active
      * @return array
      */
     public function channelFlow($active)
@@ -202,7 +202,7 @@ class Protocol080
     }
 
     /**
-     * @param integer $reply_code
+     * @param int $reply_code
      * @param string $reply_text
      * @param array $details
      * @return array
@@ -217,10 +217,10 @@ class Protocol080
     }
 
     /**
-     * @param integer $reply_code
+     * @param int $reply_code
      * @param string $reply_text
-     * @param integer $class_id
-     * @param integer $method_id
+     * @param int $class_id
+     * @param int $method_id
      * @return array
      */
     public function channelClose($reply_code, $reply_text = '', $class_id, $method_id)
@@ -245,11 +245,11 @@ class Protocol080
 
     /**
      * @param string $realm
-     * @param boolean $exclusive
-     * @param boolean $passive
-     * @param boolean $active
-     * @param boolean $write
-     * @param boolean $read
+     * @param bool $exclusive
+     * @param bool $passive
+     * @param bool $active
+     * @param bool $write
+     * @param bool $read
      * @return array
      */
     public function accessRequest($realm = '/data', $exclusive = false, $passive = true, $active = true, $write = true, $read = true)
@@ -272,14 +272,14 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $exchange
      * @param string $type
-     * @param boolean $passive
-     * @param boolean $durable
-     * @param boolean $auto_delete
-     * @param boolean $internal
-     * @param boolean $nowait
+     * @param bool $passive
+     * @param bool $durable
+     * @param bool $auto_delete
+     * @param bool $internal
+     * @param bool $nowait
      * @param array $arguments
      * @return array
      */
@@ -305,10 +305,10 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $exchange
-     * @param boolean $if_unused
-     * @param boolean $nowait
+     * @param bool $if_unused
+     * @param bool $nowait
      * @return array
      */
     public function exchangeDelete($ticket = 1, $exchange, $if_unused = false, $nowait = false)
@@ -331,13 +331,13 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
-     * @param boolean $passive
-     * @param boolean $durable
-     * @param boolean $exclusive
-     * @param boolean $auto_delete
-     * @param boolean $nowait
+     * @param bool $passive
+     * @param bool $durable
+     * @param bool $exclusive
+     * @param bool $auto_delete
+     * @param bool $nowait
      * @param array $arguments
      * @return array
      */
@@ -365,11 +365,11 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
      * @param string $exchange
      * @param string $routing_key
-     * @param boolean $nowait
+     * @param bool $nowait
      * @param array $arguments
      * @return array
      */
@@ -396,9 +396,9 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
-     * @param boolean $nowait
+     * @param bool $nowait
      * @return array
      */
     public function queuePurge($ticket = 1, $queue = '', $nowait = false)
@@ -422,11 +422,11 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
-     * @param boolean $if_unused
-     * @param boolean $if_empty
-     * @param boolean $nowait
+     * @param bool $if_unused
+     * @param bool $if_empty
+     * @param bool $nowait
      * @return array
      */
     public function queueDelete($ticket = 1, $queue = '', $if_unused = false, $if_empty = false, $nowait = false)
@@ -450,7 +450,7 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
      * @param string $exchange
      * @param string $routing_key
@@ -479,9 +479,9 @@ class Protocol080
     }
 
     /**
-     * @param integer $prefetch_size
-     * @param integer $prefetch_count
-     * @param boolean $global
+     * @param int $prefetch_size
+     * @param int $prefetch_count
+     * @param bool $global
      * @return array
      */
     public function basicQos($prefetch_size = 0, $prefetch_count = 0, $global = false)
@@ -504,13 +504,13 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
      * @param string $consumer_tag
-     * @param boolean $no_local
-     * @param boolean $no_ack
-     * @param boolean $exclusive
-     * @param boolean $nowait
+     * @param bool $no_local
+     * @param bool $no_ack
+     * @param bool $exclusive
+     * @param bool $nowait
      * @return array
      */
     public function basicConsume($ticket = 1, $queue = '', $consumer_tag = '', $no_local = false, $no_ack = false, $exclusive = false, $nowait = false)
@@ -536,7 +536,7 @@ class Protocol080
 
     /**
      * @param string $consumer_tag
-     * @param boolean $nowait
+     * @param bool $nowait
      * @return array
      */
     public function basicCancel($consumer_tag, $nowait = false)
@@ -559,11 +559,11 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $exchange
      * @param string $routing_key
-     * @param boolean $mandatory
-     * @param boolean $immediate
+     * @param bool $mandatory
+     * @param bool $immediate
      * @return array
      */
     public function basicPublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false)
@@ -577,7 +577,7 @@ class Protocol080
     }
 
     /**
-     * @param integer $reply_code
+     * @param int $reply_code
      * @param string $reply_text
      * @param string $exchange
      * @param string $routing_key
@@ -595,8 +595,8 @@ class Protocol080
 
     /**
      * @param string $consumer_tag
-     * @param integer $delivery_tag
-     * @param boolean $redelivered
+     * @param int $delivery_tag
+     * @param bool $redelivered
      * @param string $exchange
      * @param string $routing_key
      * @return array
@@ -613,9 +613,9 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
-     * @param boolean $no_ack
+     * @param bool $no_ack
      * @return array
      */
     public function basicGet($ticket = 1, $queue = '', $no_ack = false)
@@ -654,8 +654,8 @@ class Protocol080
     }
 
     /**
-     * @param integer $delivery_tag
-     * @param boolean $multiple
+     * @param int $delivery_tag
+     * @param bool $multiple
      * @return array
      */
     public function basicAck($delivery_tag = 0, $multiple = false)
@@ -667,8 +667,8 @@ class Protocol080
     }
 
     /**
-     * @param integer $delivery_tag
-     * @param boolean $requeue
+     * @param int $delivery_tag
+     * @param bool $requeue
      * @return array
      */
     public function basicReject($delivery_tag, $requeue = true)
@@ -680,7 +680,7 @@ class Protocol080
     }
 
     /**
-     * @param boolean $requeue
+     * @param bool $requeue
      * @return array
      */
     public function basicRecoverAsync($requeue = false)
@@ -691,7 +691,7 @@ class Protocol080
     }
 
     /**
-     * @param boolean $requeue
+     * @param bool $requeue
      * @return array
      */
     public function basicRecover($requeue = false)
@@ -712,9 +712,9 @@ class Protocol080
     }
 
     /**
-     * @param integer $prefetch_size
-     * @param integer $prefetch_count
-     * @param boolean $global
+     * @param int $prefetch_size
+     * @param int $prefetch_count
+     * @param bool $global
      * @return array
      */
     public function fileQos($prefetch_size = 0, $prefetch_count = 0, $global = false)
@@ -737,13 +737,13 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
      * @param string $consumer_tag
-     * @param boolean $no_local
-     * @param boolean $no_ack
-     * @param boolean $exclusive
-     * @param boolean $nowait
+     * @param bool $no_local
+     * @param bool $no_ack
+     * @param bool $exclusive
+     * @param bool $nowait
      * @return array
      */
     public function fileConsume($ticket = 1, $queue = '', $consumer_tag = '', $no_local = false, $no_ack = false, $exclusive = false, $nowait = false)
@@ -769,7 +769,7 @@ class Protocol080
 
     /**
      * @param string $consumer_tag
-     * @param boolean $nowait
+     * @param bool $nowait
      * @return array
      */
     public function fileCancel($consumer_tag, $nowait = false)
@@ -793,7 +793,7 @@ class Protocol080
 
     /**
      * @param string $identifier
-     * @param integer $content_size
+     * @param int $content_size
      * @return array
      */
     public function fileOpen($identifier, $content_size)
@@ -826,11 +826,11 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $exchange
      * @param string $routing_key
-     * @param boolean $mandatory
-     * @param boolean $immediate
+     * @param bool $mandatory
+     * @param bool $immediate
      * @param string $identifier
      * @return array
      */
@@ -846,7 +846,7 @@ class Protocol080
     }
 
     /**
-     * @param integer $reply_code
+     * @param int $reply_code
      * @param string $reply_text
      * @param string $exchange
      * @param string $routing_key
@@ -864,8 +864,8 @@ class Protocol080
 
     /**
      * @param string $consumer_tag
-     * @param integer $delivery_tag
-     * @param boolean $redelivered
+     * @param int $delivery_tag
+     * @param bool $redelivered
      * @param string $exchange
      * @param string $routing_key
      * @param string $identifier
@@ -884,8 +884,8 @@ class Protocol080
     }
 
     /**
-     * @param integer $delivery_tag
-     * @param boolean $multiple
+     * @param int $delivery_tag
+     * @param bool $multiple
      * @return array
      */
     public function fileAck($delivery_tag = 0, $multiple = false)
@@ -897,8 +897,8 @@ class Protocol080
     }
 
     /**
-     * @param integer $delivery_tag
-     * @param boolean $requeue
+     * @param int $delivery_tag
+     * @param bool $requeue
      * @return array
      */
     public function fileReject($delivery_tag, $requeue = true)
@@ -910,10 +910,10 @@ class Protocol080
     }
 
     /**
-     * @param integer $prefetch_size
-     * @param integer $prefetch_count
-     * @param integer $consume_rate
-     * @param boolean $global
+     * @param int $prefetch_size
+     * @param int $prefetch_count
+     * @param int $consume_rate
+     * @param bool $global
      * @return array
      */
     public function streamQos($prefetch_size = 0, $prefetch_count = 0, $consume_rate = 0, $global = false)
@@ -937,12 +937,12 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $queue
      * @param string $consumer_tag
-     * @param boolean $no_local
-     * @param boolean $exclusive
-     * @param boolean $nowait
+     * @param bool $no_local
+     * @param bool $exclusive
+     * @param bool $nowait
      * @return array
      */
     public function streamConsume($ticket = 1, $queue = '', $consumer_tag = '', $no_local = false, $exclusive = false, $nowait = false)
@@ -968,7 +968,7 @@ class Protocol080
 
     /**
      * @param string $consumer_tag
-     * @param boolean $nowait
+     * @param bool $nowait
      * @return array
      */
     public function streamCancel($consumer_tag, $nowait = false)
@@ -991,11 +991,11 @@ class Protocol080
     }
 
     /**
-     * @param integer $ticket
+     * @param int $ticket
      * @param string $exchange
      * @param string $routing_key
-     * @param boolean $mandatory
-     * @param boolean $immediate
+     * @param bool $mandatory
+     * @param bool $immediate
      * @return array
      */
     public function streamPublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false)
@@ -1009,7 +1009,7 @@ class Protocol080
     }
 
     /**
-     * @param integer $reply_code
+     * @param int $reply_code
      * @param string $reply_text
      * @param string $exchange
      * @param string $routing_key
@@ -1027,7 +1027,7 @@ class Protocol080
 
     /**
      * @param string $consumer_tag
-     * @param integer $delivery_tag
+     * @param int $delivery_tag
      * @param string $exchange
      * @param string $queue
      * @return array
@@ -1156,9 +1156,9 @@ class Protocol080
 
     /**
      * @param mixed $integer_1
-     * @param integer $integer_2
-     * @param integer $integer_3
-     * @param integer $integer_4
+     * @param int $integer_2
+     * @param int $integer_3
+     * @param int $integer_4
      * @param mixed $operation
      * @return array
      */

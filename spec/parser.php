@@ -50,25 +50,33 @@ function addPhpDocParams($arguments)
 
 function translateType($argument)
 {
+    $type = null;
     if (array_key_exists('default-value', $argument)) {
-        return gettype($argument['default-value']);
+        $type = gettype($argument['default-value']);
     } elseif (array_key_exists('type', $argument)) {
-        switch ($argument['type']) {
-            case 'longstr':
-            case 'shortstr':
-                return 'string';
-            case 'short':
-            case 'long':
-            case 'longlong':
-                return 'integer';
-            case 'bit':
-                return 'boolean';
-            default:
-                return 'mixed';
-        }
+        $type = $argument['type'];
     }
 
-    return 'mixed';
+    switch ($type) {
+        case 'longstr':
+        case 'shortstr':
+        case 'string':
+            return 'string';
+        case 'short':
+        case 'long':
+        case 'longlong':
+        case 'integer':
+        case 'int':
+            return 'int';
+        case 'bit':
+        case 'boolean':
+        case 'bool':
+            return 'bool';
+        case 'array':
+            return 'array';
+        default:
+            return 'mixed';
+    }
 }
 
 function argument_default_val($arg)
@@ -424,7 +432,7 @@ $classBody .= get_type_phpdoc('string', '$method_sig', 'string');
 $classBody .= 'public function get_method($method_sig)' . "\n{\n";
 $classBody .= indent('return $this->method_map[$method_sig];') . "\n";
 $classBody .= "}\n\n";
-$classBody .= get_type_phpdoc('string', '$method_sig', 'boolean');
+$classBody .= get_type_phpdoc('string', '$method_sig', 'bool');
 $classBody .= 'public function valid_method($method_sig)' . "\n{\n";
 $classBody .= indent('return array_key_exists($method_sig, $this->method_map);') . "\n";
 $classBody .= "}";
