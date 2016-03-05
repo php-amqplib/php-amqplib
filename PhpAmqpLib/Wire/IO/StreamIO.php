@@ -320,8 +320,6 @@ class StreamIO extends AbstractIO
             return null;
         }
 
-        restore_error_handler();
-
         // raise all other issues to exceptions
         throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
