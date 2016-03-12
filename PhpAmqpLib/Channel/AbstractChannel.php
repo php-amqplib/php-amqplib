@@ -170,11 +170,11 @@ abstract class AbstractChannel
     /**
      * @param string $method_sig
      * @param string $args
-     * @param AMQPMessage|null $amqMessage
+     * @param AMQPMessage|null $amqpMessage
      * @return mixed
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    public function dispatch($method_sig, $args, $amqMessage)
+    public function dispatch($method_sig, $args, $amqpMessage)
     {
         if (!$this->methodMap->valid_method($method_sig)) {
             throw new AMQPRuntimeException(sprintf(
@@ -195,11 +195,11 @@ abstract class AbstractChannel
 
         $this->dispatch_reader->reuse($args);
 
-        if ($amqMessage == null) {
+        if ($amqpMessage == null) {
             return call_user_func(array($this, $amqp_method), $this->dispatch_reader);
         }
 
-        return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $amqMessage);
+        return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $amqpMessage);
     }
 
     /**
@@ -331,15 +331,15 @@ abstract class AbstractChannel
 
             $this->debug->debug_method_signature('> %s', $method_sig);
 
-            $amqMessage = $this->maybe_wait_for_content($method_sig);
+            $amqpMessage = $this->maybe_wait_for_content($method_sig);
 
             if ($this->should_dispatch_method($allowed_methods, $method_sig)) {
-                return $this->dispatch($method_sig, $args, $amqMessage);
+                return $this->dispatch($method_sig, $args, $amqpMessage);
             }
 
             // Wasn't what we were looking for? save it for later
             $this->debug->debug_method_signature('Queueing for later: %s', $method_sig);
-            $this->method_queue[] = array($method_sig, $args, $amqMessage);
+            $this->method_queue[] = array($method_sig, $args, $amqpMessage);
 
             if ($non_blocking) {
                 break;
@@ -480,13 +480,13 @@ abstract class AbstractChannel
     protected function maybe_wait_for_content($method_sig)
     {
         $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
-        $amqMessage = null;
+        $amqpMessage = null;
 
         if (in_array($method_sig, $protocolClass::$CONTENT_METHODS)) {
-            $amqMessage = $this->wait_content();
+            $amqpMessage = $this->wait_content();
         }
 
-        return $amqMessage;
+        return $amqpMessage;
     }
 
     /**
