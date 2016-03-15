@@ -45,17 +45,7 @@ class SocketIO extends AbstractIO
     {
         $this->sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        $useFloat = defined('AMQP_FLOAT_TIMEOUT_FOR_SOCKET') && AMQP_FLOAT_TIMEOUT_FOR_SOCKET === true;
-        if (!$useFloat && is_float($this->timeout)) {
-            trigger_error(
-                "Timeout value is implicitly cast to integer. Please define AMQP_FLOAT_TIMEOUT_FOR_SOCKET=true if you would like to use float value timeouts. This implicit cast will be eventually removed.",
-                E_USER_DEPRECATED
-            );
-        }
-
-        list($sec, $uSec) = $useFloat
-            ? MiscHelper::splitSecondsMicroseconds($this->timeout)
-            : array(intval($this->timeout), 0);
+        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
