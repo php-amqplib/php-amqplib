@@ -30,7 +30,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8",
-        "scrutinizer/ocular": "^1.1"
+        "scrutinizer/ocular": "^1.1",
+        "squizlabs/php_codesniffer": "^2.5"
     },
     "suggest": {
         "ext-sockets": "Use AMQPSocketConnection"
