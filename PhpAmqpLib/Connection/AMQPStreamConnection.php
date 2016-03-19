@@ -15,8 +15,8 @@ class AMQPStreamConnection extends AbstractConnection
      * @param string $login_method
      * @param null $login_response
      * @param string $locale
-     * @param int $connection_timeout
-     * @param int $read_write_timeout
+     * @param float $connection_timeout
+     * @param float $read_write_timeout
      * @param null $context
      * @param bool $keepalive
      * @param int $heartbeat
@@ -31,8 +31,8 @@ class AMQPStreamConnection extends AbstractConnection
         $login_method = 'AMQPLAIN',
         $login_response = null,
         $locale = 'en_US',
-        $connection_timeout = 3,
-        $read_write_timeout = 3,
+        $connection_timeout = 3.0,
+        $read_write_timeout = 3.0,
         $context = null,
         $keepalive = false,
         $heartbeat = 0

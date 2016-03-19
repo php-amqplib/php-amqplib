@@ -18,10 +18,10 @@ class StreamIO extends AbstractIO
     /** @var int */
     protected $port;
 
-    /** @var int */
+    /** @var float */
     protected $connection_timeout;
 
-    /** @var int */
+    /** @var float */
     protected $read_write_timeout;
 
     /** @var resource */
@@ -54,8 +54,8 @@ class StreamIO extends AbstractIO
     /**
      * @param string $host
      * @param int $port
-     * @param int $connection_timeout
-     * @param int $read_write_timeout
+     * @param float $connection_timeout
+     * @param float $read_write_timeout
      * @param null $context
      * @param bool $keepalive
      * @param int $heartbeat
