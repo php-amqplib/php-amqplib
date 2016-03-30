@@ -644,7 +644,7 @@ class AMQPChannel extends AbstractChannel
      * Confirms a queue definition
      *
      * @param AMQPReader $reader
-     * @return array
+     * @return string[]
      */
     protected function queue_declare_ok($reader)
     {

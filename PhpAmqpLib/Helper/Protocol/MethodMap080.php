@@ -116,7 +116,7 @@ class MethodMap080
 
     /**
      * @var string $method_sig
-     * @return boolean
+     * @return bool
      */
     public function valid_method($method_sig)
     {

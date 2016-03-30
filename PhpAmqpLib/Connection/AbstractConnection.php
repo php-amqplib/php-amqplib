@@ -900,7 +900,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Gets the connection status
      *
-     * @return boolean
+     * @return bool
      */
     public function isConnected()
     {
@@ -938,7 +938,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Should the connection be attempted during construction?
      *
-     * @return boolean
+     * @return bool
      */
     public function connectOnConstruct()
     {
