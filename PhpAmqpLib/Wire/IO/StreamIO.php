@@ -191,7 +191,7 @@ class StreamIO extends AbstractIO
     }
 
     /**
-     * @param $len
+     * @param int $len
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @return mixed|string
      */
@@ -253,7 +253,7 @@ class StreamIO extends AbstractIO
     }
 
     /**
-     * @param $data
+     * @param string $data
      * @return mixed|void
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
@@ -399,8 +399,8 @@ class StreamIO extends AbstractIO
     }
 
     /**
-     * @param $sec
-     * @param $usec
+     * @param int $sec
+     * @param int $usec
      * @return int|mixed
      */
     public function select($sec, $usec)

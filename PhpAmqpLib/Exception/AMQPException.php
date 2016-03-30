@@ -25,7 +25,7 @@ class AMQPException extends \Exception
     /**
      * @param string $reply_code
      * @param int $reply_text
-     * @param \Exception $method_sig
+     * @param array $method_sig
      */
     public function __construct($reply_code, $reply_text, $method_sig)
     {

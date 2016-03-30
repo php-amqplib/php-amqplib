@@ -3,21 +3,36 @@ namespace PhpAmqpLib\Helper;
 
 class DebugHelper
 {
+    /**
+     * @var bool
+     */
     protected $debug;
 
+    /**
+     * @var string
+     */
     protected $PROTOCOL_CONSTANTS_CLASS;
 
+    /**
+     * @param string $PROTOCOL_CONSTANTS_CLASS
+     */
     public function __construct($PROTOCOL_CONSTANTS_CLASS) {
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
         $this->PROTOCOL_CONSTANTS_CLASS = $PROTOCOL_CONSTANTS_CLASS;
     }
 
+    /**
+     * @param string $msg
+     */
     public function debug_msg($msg) {
         if ($this->debug) {
             $this->print_msg($msg);
         }
     }
 
+    /**
+     * @param array $allowed_methods
+     */
     public function debug_allowed_methods($allowed_methods) {
         if ($allowed_methods) {
             $msg = 'waiting for ' . implode(', ', $allowed_methods);
@@ -27,10 +42,17 @@ class DebugHelper
         $this->debug_msg($msg);
     }
 
+    /**
+     * @param string $method_sig
+     */
     public function debug_method_signature1($method_sig) {
         $this->debug_method_signature('< %s:', $method_sig);
     }
 
+    /**
+     * @param string $msg
+     * @param string $method_sig
+     */
     public function debug_method_signature($msg, $method_sig) {
         if ($this->debug) {
             $protocolClass = $this->PROTOCOL_CONSTANTS_CLASS;
@@ -42,6 +64,9 @@ class DebugHelper
         }
     }
 
+    /**
+     * @param string $data
+     */
     public function debug_hexdump($data) {
         if ($this->debug) {
             $this->debug_msg(sprintf(
@@ -52,6 +77,13 @@ class DebugHelper
         }
     }
 
+    /**
+     * @param int $version_major
+     * @param int $version_minor
+     * @param array $server_properties
+     * @param array $mechanisms
+     * @param array $locales
+     */
     public function debug_connection_start($version_major, $version_minor, $server_properties, $mechanisms, $locales) {
         if ($this->debug) {
             $this->debug_msg(sprintf(
@@ -65,6 +97,9 @@ class DebugHelper
         }
     }
 
+    /**
+     * @param string $s
+     */
     protected function print_msg($s) {
         echo $s . PHP_EOL;
     }

@@ -41,7 +41,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
     }
 
     /**
-     * @param $options
+     * @param array $options
      * @return resource
      */
     private function create_ssl_context($options)

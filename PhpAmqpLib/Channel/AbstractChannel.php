@@ -170,11 +170,11 @@ abstract class AbstractChannel
     /**
      * @param string $method_sig
      * @param string $args
-     * @param $content
+     * @param AMQPMessage|null $amqpMessage
      * @return mixed
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    public function dispatch($method_sig, $args, $content)
+    public function dispatch($method_sig, $args, $amqpMessage)
     {
         if (!$this->methodMap->valid_method($method_sig)) {
             throw new AMQPRuntimeException(sprintf(
@@ -195,11 +195,11 @@ abstract class AbstractChannel
 
         $this->dispatch_reader->reuse($args);
 
-        if ($content == null) {
+        if ($amqpMessage == null) {
             return call_user_func(array($this, $amqp_method), $this->dispatch_reader);
         }
 
-        return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $content);
+        return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $amqpMessage);
     }
 
     /**
@@ -218,8 +218,8 @@ abstract class AbstractChannel
     }
 
     /**
-     * @param $method_sig
-     * @param string $args
+     * @param array $method_sig
+     * @param \PhpAmqpLib\Wire\AMQPWriter|string $args
      */
     protected function send_method_frame($method_sig, $args = '')
     {
@@ -233,8 +233,8 @@ abstract class AbstractChannel
     /**
      * This is here for performance reasons to batch calls to fwrite from basic.publish
      *
-     * @param $method_sig
-     * @param string $args
+     * @param array $method_sig
+     * @param \PhpAmqpLib\Wire\AMQPWriter|string $args
      * @param \PhpAmqpLib\Wire\AMQPWriter $pkt
      * @return \PhpAmqpLib\Wire\AMQPWriter
      */
@@ -335,15 +335,15 @@ abstract class AbstractChannel
 
             $this->debug->debug_method_signature('> %s', $method_sig);
 
-            $content = $this->maybe_wait_for_content($method_sig);
+            $amqpMessage = $this->maybe_wait_for_content($method_sig);
 
             if ($this->should_dispatch_method($allowed_methods, $method_sig)) {
-                return $this->dispatch($method_sig, $args, $content);
+                return $this->dispatch($method_sig, $args, $amqpMessage);
             }
 
             // Wasn't what we were looking for? save it for later
             $this->debug->debug_method_signature('Queueing for later: %s', $method_sig);
-            $this->method_queue[] = array($method_sig, $args, $content);
+            $this->method_queue[] = array($method_sig, $args, $amqpMessage);
 
             if ($non_blocking) {
                 break;
@@ -351,6 +351,10 @@ abstract class AbstractChannel
         }
     }
 
+    /**
+     * @param array $allowed_methods
+     * @return array
+     */
     protected function process_deferred_methods($allowed_methods)
     {
         $dispatch = false;
@@ -372,6 +376,10 @@ abstract class AbstractChannel
         return array('dispatch' => $dispatch, 'queued_method' => $queued_method);
     }
 
+    /**
+     * @param array $queued_method
+     * @return mixed
+     */
     protected function dispatch_deferred_method($queued_method)
     {
         $this->debug->debug_method_signature('Executing queued method: %s', $queued_method[0]);
@@ -380,7 +388,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @param $frame_type
+     * @param int $frame_type
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     protected function validate_method_frame($frame_type)
@@ -388,11 +396,19 @@ abstract class AbstractChannel
         $this->validate_frame($frame_type, 1, 'AMQP method');
     }
 
+    /**
+     * @param int $frame_type
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     protected function validate_header_frame($frame_type)
     {
         $this->validate_frame($frame_type, 2, 'AMQP Content header');
     }
 
+    /**
+     * @param int $frame_type
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     */
     protected function validate_body_frame($frame_type)
     {
         $this->validate_frame($frame_type, 3, 'AMQP Content body');
@@ -417,7 +433,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @param $payload
+     * @param string $payload
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     protected function validate_frame_payload($payload)
@@ -427,6 +443,10 @@ abstract class AbstractChannel
         }
     }
 
+    /**
+     * @param string $payload
+     * @return string
+     */
     protected function build_method_signature($payload)
     {
         $method_sig_array = unpack('n2', mb_substr($payload, 0, 4, 'ASCII'));
@@ -434,6 +454,10 @@ abstract class AbstractChannel
         return sprintf('%s,%s', $method_sig_array[1], $method_sig_array[2]);
     }
 
+    /**
+     * @param string $payload
+     * @return string
+     */
     protected function extract_args($payload)
     {
         return mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
@@ -455,18 +479,18 @@ abstract class AbstractChannel
 
     /**
      * @param string $method_sig
-     * @return AMQPMessage
+     * @return AMQPMessage|null
      */
     protected function maybe_wait_for_content($method_sig)
     {
         $protocolClass = self::$PROTOCOL_CONSTANTS_CLASS;
-        $content = null;
+        $amqpMessage = null;
 
         if (in_array($method_sig, $protocolClass::$CONTENT_METHODS)) {
-            $content = $this->wait_content();
+            $amqpMessage = $this->wait_content();
         }
 
-        return $content;
+        return $amqpMessage;
     }
 
     /**
