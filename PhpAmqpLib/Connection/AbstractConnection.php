@@ -438,8 +438,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * @param string $channel
-     * @param $method_sig
-     * @param string $args
+     * @param array $method_sig
+     * @param AMQPWriter|string $args
      * @param null $pkt
      */
     protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
@@ -453,8 +453,8 @@ class AbstractConnection extends AbstractChannel
      * Returns a new AMQPWriter or mutates the provided $pkt
      *
      * @param string $channel
-     * @param string[] $method_sig
-     * @param string $args
+     * @param array $method_sig
+     * @param AMQPWriter|string $args
      * @param AMQPWriter $pkt
      * @return AMQPWriter
      */
@@ -674,6 +674,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Confirm a connection close
+     *
+     * @param AMQPReader $args
      */
     protected function connection_close_ok($args)
     {
@@ -747,6 +749,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Security mechanism response
+     *
+     * @param string $response
      */
     protected function x_secure_ok($response)
     {
@@ -821,9 +825,9 @@ class AbstractConnection extends AbstractChannel
     /**
      * Negotiates connection tuning parameters
      *
-     * @param $channel_max
-     * @param $frame_max
-     * @param $heartbeat
+     * @param int $channel_max
+     * @param int $frame_max
+     * @param int $heartbeat
      */
     protected function x_tune_ok($channel_max, $frame_max, $heartbeat)
     {
@@ -864,6 +868,8 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Handles connection unblocked notifications
+     *
+     * @param AMQPReader $args
      */
     protected function connection_unblocked(AMQPReader $args)
     {

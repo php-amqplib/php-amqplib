@@ -23,8 +23,8 @@ class AMQPDecimal
     protected $e;
 
     /**
-     * @param $n
-     * @param $e
+     * @param int $n
+     * @param int $e
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function __construct($n, $e)

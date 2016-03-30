@@ -85,7 +85,7 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * @param $n
+     * @param int $n
      * @return mixed|string
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
@@ -122,7 +122,7 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * @param $data
+     * @param string $data
      * @return mixed|void
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
@@ -170,8 +170,8 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * @param $sec
-     * @param $usec
+     * @param int $sec
+     * @param int $usec
      * @return int|mixed
      */
     public function select($sec, $usec)
