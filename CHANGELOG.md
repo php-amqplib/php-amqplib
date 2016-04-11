@@ -4,6 +4,19 @@ All Notable changes to `php-amqplib` will be documented in this file
 
 ## [Unreleased]
 
+## 2.6.3 - 2016-04-11
+
+### Added
+- Added the ability to set timeout as float
+
+### Fixed
+- Fixed restoring of error_handler on connection error
+
+### Enhancements
+- Verify read_write_timeout is at least 2x the heartbeat (if set)
+- Many PHPDoc fixes
+- Throw exception when trying to create an exchange on a closed connection
+
 ## 2.6.2 - 2016-03-02
 
 ### Added
