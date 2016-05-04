@@ -43,9 +43,26 @@ class FileTransferTest extends \PHPUnit_Framework_TestCase
         $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
+    private function generateRandomBytes($num_bytes)
+    {
+        // If random_bytes exists (PHP 7) or has been polyfilled, use it
+        if ( function_exists('random_bytes') ) {
+            return random_bytes($num_bytes);
+        }
+        // Otherwise, just make some noise quickly
+        else {
+            $data = '';
+            for ($i = 0; $i < $num_bytes; $i++) {
+                $data .= chr(rand(0, 255));
+            }
+
+            return $data;
+        }
+    }
+
     public function testSendFile()
     {
-        $this->messageBody = file_get_contents(__DIR__ . '/fixtures/data_1mb.bin');
+        $this->messageBody = $this->generateRandomBytes(1024 * 1024);
 
         $msg = new AMQPMessage($this->messageBody, array('delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT));
 
