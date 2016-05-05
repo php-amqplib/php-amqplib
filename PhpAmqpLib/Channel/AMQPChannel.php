@@ -84,6 +84,7 @@ class AMQPChannel extends AbstractChannel
      * @throws \Exception
      * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function __construct($connection, $channel_id = null, $auto_decode = true)
     {
@@ -466,6 +467,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
@@ -517,6 +520,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
@@ -745,6 +750,10 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function queue_delete_ok($reader)
     {
@@ -906,6 +915,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $delivery_tag
      * @param bool $multiple
      * @param bool $requeue
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basic_nack($delivery_tag, $multiple = false, $requeue = false)
     {
@@ -1179,6 +1189,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $mandatory
      * @param bool $immediate
      * @param int $ticket
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function basic_publish(
         $msg,
@@ -1230,6 +1242,8 @@ class AMQPChannel extends AbstractChannel
      * Publish batch
      *
      * @return void
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function publish_batch()
     {
