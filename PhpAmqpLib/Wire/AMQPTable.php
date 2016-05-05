@@ -19,6 +19,8 @@ class AMQPTable extends AMQPAbstractCollection
      * @param string $key
      * @param mixed $val
      * @param int|null $type
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function set($key, $val, $type = null)
     {

@@ -20,6 +20,10 @@ class AMQPStreamConnection extends AbstractConnection
      * @param null $context
      * @param bool $keepalive
      * @param int $heartbeat
+     * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         $host,

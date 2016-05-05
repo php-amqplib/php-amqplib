@@ -119,6 +119,10 @@ abstract class GenericContent
      * @param AMQPReader $reader
      * NOTE: do not mutate $reader
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function load_properties(AMQPReader $reader)
     {
@@ -165,6 +169,7 @@ abstract class GenericContent
      * list, suitable for putting into a content frame header.
      *
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @todo Inject the AMQPWriter to make the method easier to test
      */
     public function serialize_properties()

@@ -133,6 +133,8 @@ class AbstractConnection extends AbstractChannel
      * @param AbstractIO $io
      * @param int $heartbeat
      * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function __construct(
         $user,
@@ -183,6 +185,7 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * Connects to the AMQP server
+     * @throws \Exception
      */
     protected function connect()
     {
@@ -236,6 +239,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Reconnects using the original connection settings.
      * This will not recreate any channels that were established previously
+     * @throws \Exception
      */
     public function reconnect()
     {
@@ -318,6 +322,7 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * @param $data
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function write($data)
     {
@@ -361,6 +366,8 @@ class AbstractConnection extends AbstractChannel
      * @param string $packed_properties
      * @param string $body
      * @param AMQPWriter $pkt
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function send_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt = null)
     {
@@ -379,6 +386,7 @@ class AbstractConnection extends AbstractChannel
      * @param string $body
      * @param AMQPWriter $pkt
      * @return AMQPWriter
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt = null)
     {
@@ -441,6 +449,8 @@ class AbstractConnection extends AbstractChannel
      * @param array $method_sig
      * @param AMQPWriter|string $args
      * @param null $pkt
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
@@ -457,6 +467,7 @@ class AbstractConnection extends AbstractChannel
      * @param AMQPWriter|string $args
      * @param AMQPWriter $pkt
      * @return AMQPWriter
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function prepare_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
@@ -487,6 +498,8 @@ class AbstractConnection extends AbstractChannel
      *
      * @param int $timeout
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      * @throws \Exception
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
@@ -545,6 +558,12 @@ class AbstractConnection extends AbstractChannel
      * @param string $channel_id
      * @param int $timeout
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \Exception
      */
     protected function wait_channel($channel_id, $timeout = 0)
     {
@@ -595,6 +614,9 @@ class AbstractConnection extends AbstractChannel
      *
      * @param string $channel_id
      * @return AMQPChannel
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \Exception
      */
     public function channel($channel_id = null)
     {
@@ -616,6 +638,8 @@ class AbstractConnection extends AbstractChannel
      * @param string $reply_text
      * @param array $method_sig
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
@@ -648,6 +672,10 @@ class AbstractConnection extends AbstractChannel
     /**
      * @param AMQPReader $reader
      * @throws \PhpAmqpLib\Exception\AMQPProtocolConnectionException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function connection_close(AMQPReader $reader)
     {
@@ -687,6 +715,9 @@ class AbstractConnection extends AbstractChannel
      * @param string $capabilities
      * @param bool $insist
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function x_open($virtual_host, $capabilities = '', $insist = false)
     {
@@ -711,6 +742,10 @@ class AbstractConnection extends AbstractChannel
      * Signals that the connection is ready
      *
      * @param AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function connection_open_ok($args)
     {
@@ -723,6 +758,10 @@ class AbstractConnection extends AbstractChannel
      *
      * @param AMQPReader $args
      * @return string
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function connection_redirect($args)
     {
@@ -741,6 +780,11 @@ class AbstractConnection extends AbstractChannel
      * Security mechanism challenge
      *
      * @param AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function connection_secure($args)
     {
@@ -751,6 +795,7 @@ class AbstractConnection extends AbstractChannel
      * Security mechanism response
      *
      * @param string $response
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function x_secure_ok($response)
     {
@@ -763,6 +808,12 @@ class AbstractConnection extends AbstractChannel
      * Starts connection negotiation
      *
      * @param AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     protected function connection_start($args)
     {
@@ -786,6 +837,8 @@ class AbstractConnection extends AbstractChannel
      * @param string $mechanism
      * @param string $response
      * @param string $locale
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     protected function x_start_ok($clientProperties, $mechanism, $response, $locale)
     {
@@ -801,6 +854,11 @@ class AbstractConnection extends AbstractChannel
      * Proposes connection tuning parameters
      *
      * @param AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function connection_tune($args)
     {
@@ -828,6 +886,7 @@ class AbstractConnection extends AbstractChannel
      * @param int $channel_max
      * @param int $frame_max
      * @param int $heartbeat
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function x_tune_ok($channel_max, $frame_max, $heartbeat)
     {
@@ -859,6 +918,10 @@ class AbstractConnection extends AbstractChannel
      * Handles connection blocked notifications
      *
      * @param AMQPReader $args
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function connection_blocked(AMQPReader $args)
     {

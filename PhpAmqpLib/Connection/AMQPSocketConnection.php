@@ -15,8 +15,11 @@ class AMQPSocketConnection extends AbstractConnection
      * @param string $login_method
      * @param null $login_response
      * @param string $locale
-     * @param float $timeout
+     * @param float|int $timeout
      * @param bool $keepalive
+     * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function __construct(
         $host,

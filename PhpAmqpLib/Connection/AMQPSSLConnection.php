@@ -11,6 +11,8 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param string $vhost
      * @param array $ssl_options
      * @param array $options
+     * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function __construct(
         $host,

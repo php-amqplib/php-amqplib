@@ -40,6 +40,7 @@ class SocketIO extends AbstractIO
      * Sets up the socket connection
      *
      * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
      */
     public function connect()
     {
@@ -77,6 +78,7 @@ class SocketIO extends AbstractIO
 
     /**
      * Reconnects the socket
+     * @throws \Exception
      */
     public function reconnect()
     {

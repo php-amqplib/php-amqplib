@@ -79,13 +79,15 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * @param \PhpAmqpLib\Connection\AbstractConnection $connection
-     * @param null $channel_id
+     * @param int|null $channel_id
      * @param bool $auto_decode
      * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function __construct($connection, $channel_id = null, $auto_decode = true)
     {
-        if ($channel_id == null) {
+        if ($channel_id === null) {
             $channel_id = $connection->get_free_channel_id();
         }
 
@@ -133,6 +135,12 @@ class AMQPChannel extends AbstractChannel
      * fatal errors are sent through this method.
      *
      * @param AMQPReader $reader
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     protected function channel_alert($reader)
     {
@@ -149,6 +157,8 @@ class AMQPChannel extends AbstractChannel
      * @param string $reply_text
      * @param array $method_sig
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
@@ -174,6 +184,10 @@ class AMQPChannel extends AbstractChannel
     /**
      * @param AMQPReader $reader
      * @throws \PhpAmqpLib\Exception\AMQPProtocolChannelException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function channel_close($reader)
     {
@@ -204,6 +218,8 @@ class AMQPChannel extends AbstractChannel
      *
      * @param $active
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function flow($active)
     {
@@ -217,6 +233,10 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * @param AMQPReader $reader
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function channel_flow($reader)
     {
@@ -236,6 +256,10 @@ class AMQPChannel extends AbstractChannel
     /**
      * @param AMQPReader $reader
      * @return bool
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function channel_flow_ok($reader)
     {
@@ -245,6 +269,8 @@ class AMQPChannel extends AbstractChannel
     /**
      * @param string $out_of_band
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     protected function x_open($out_of_band = '')
     {
@@ -280,6 +306,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $write
      * @param bool $read
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function access_request(
         $realm,
@@ -310,6 +338,10 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @return string
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function access_request_ok($reader)
     {
@@ -331,6 +363,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function exchange_declare(
         $exchange,
@@ -383,8 +417,10 @@ class AMQPChannel extends AbstractChannel
      * @param string $exchange
      * @param bool $if_unused
      * @param bool $nowait
-     * @param null $ticket
+     * @param int|null $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function exchange_delete(
         $exchange,
@@ -430,6 +466,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function exchange_bind(
         $destination,
@@ -479,6 +517,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function exchange_unbind($destination, $source, $routing_key = '', $arguments = null, $ticket = null)
     {
@@ -519,6 +559,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function queue_bind($queue, $exchange, $routing_key = '', $nowait = false, $arguments = null, $ticket = null)
     {
@@ -563,6 +605,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function queue_unbind($queue, $exchange, $routing_key = '', $arguments = null, $ticket = null)
     {
@@ -604,6 +648,8 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function queue_declare(
         $queue = '',
@@ -645,6 +691,10 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @return string[]
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function queue_declare_ok($reader)
     {
@@ -664,6 +714,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $nowait
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function queue_delete($queue = '', $if_unused = false, $if_empty = false, $nowait = false, $ticket = null)
     {
@@ -706,6 +758,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $nowait
      * @param int $ticket
      * @return mixed|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function queue_purge($queue = '', $nowait = false, $ticket = null)
     {
@@ -728,6 +782,10 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @return string
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function queue_purge_ok($reader)
     {
@@ -751,6 +809,9 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @throws AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function basic_ack_from_server(AMQPReader $reader)
     {
@@ -772,6 +833,9 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @throws AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function basic_nack_from_server($reader)
     {
@@ -856,6 +920,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $nowait
      * @param bool $noreturn
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function basic_cancel($consumer_tag, $nowait = false, $noreturn = false)
     {
@@ -875,6 +941,10 @@ class AMQPChannel extends AbstractChannel
     /**
      * @param AMQPReader $reader
      * @throws \PhpAmqpLib\Exception\AMQPBasicCancelException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     protected function basic_cancel_from_server(AMQPReader $reader)
     {
@@ -886,6 +956,10 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @return string
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function basic_cancel_ok($reader)
     {
@@ -908,6 +982,8 @@ class AMQPChannel extends AbstractChannel
      * @param int|null $ticket
      * @param array $arguments
      * @return mixed|string
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function basic_consume(
         $queue = '',
@@ -950,8 +1026,12 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @return string
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
-    protected function basic_consume_ok($reader)
+    protected function basic_consume_ok(AMQPReader $reader)
     {
         return $reader->read_shortstr();
     }
@@ -961,8 +1041,12 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @param AMQPMessage $message
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
-    protected function basic_deliver($reader, $message)
+    protected function basic_deliver(AMQPReader $reader, AMQPMessage $message)
     {
         $consumer_tag = $reader->read_shortstr();
         $delivery_tag = $reader->read_longlong();
@@ -991,6 +1075,8 @@ class AMQPChannel extends AbstractChannel
      * @param bool $no_ack
      * @param int $ticket
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function basic_get($queue = '', $no_ack = false, $ticket = null)
     {
@@ -1020,6 +1106,10 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @param AMQPMessage $message
      * @return AMQPMessage
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function basic_get_ok($reader, $message)
     {
@@ -1189,6 +1279,8 @@ class AMQPChannel extends AbstractChannel
      * @param int $prefetch_count
      * @param bool $a_global
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function basic_qos($prefetch_size, $prefetch_count, $a_global)
     {
@@ -1218,6 +1310,8 @@ class AMQPChannel extends AbstractChannel
      *
      * @param bool $requeue
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function basic_recover($requeue = false)
     {
@@ -1255,6 +1349,10 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @param AMQPMessage $message
      * @return null
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     protected function basic_return($reader, $message)
     {
@@ -1280,6 +1378,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function tx_commit()
     {
@@ -1302,6 +1402,8 @@ class AMQPChannel extends AbstractChannel
      * Rollbacks the current transaction
      *
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function tx_rollback()
     {
@@ -1327,6 +1429,8 @@ class AMQPChannel extends AbstractChannel
      *
      * @param bool $nowait
      * @return null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function confirm_select($nowait = false)
     {
@@ -1356,6 +1460,8 @@ class AMQPChannel extends AbstractChannel
      * If there are no pending acks, the method returns immediately
      *
      * @param int $timeout Waits until $timeout value is reached
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function wait_for_pending_acks($timeout = 0)
     {
@@ -1377,6 +1483,8 @@ class AMQPChannel extends AbstractChannel
      * Waits for pending acks, nacks and returns from the server. If there are no pending acks, the method returns immediately.
      *
      * @param int $timeout If set to value > 0 the method will wait at most $timeout seconds for pending acks.
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function wait_for_pending_acks_returns($timeout = 0)
     {
@@ -1399,6 +1507,8 @@ class AMQPChannel extends AbstractChannel
      * Selects standard transaction mode
      *
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function tx_select()
     {
