@@ -215,6 +215,11 @@ class AbstractConnection extends AbstractChannel
 
                 $host = $this->x_open($this->vhost, '', $this->insist);
                 if (!$host) {
+                    //Reconnected
+                    if ($this->io instanceof StreamIO)
+                    {
+                        $this->getIO()->reenableHeartbeat();
+                    }
                     return null; // we weren't redirected
                 }
 
