@@ -808,6 +808,7 @@ class AMQPChannel extends AbstractChannel
 
         } else {
             $message = $this->get_and_unset_message($delivery_tag);
+            $message->delivery_info['delivery_tag'] = $delivery_tag;
             $this->dispatch_to_handler($handler, array($message));
         }
     }
