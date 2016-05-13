@@ -230,6 +230,11 @@ class AbstractConnection extends AbstractChannel
             $this->setIsConnected(false);
             $this->closeChannels();
             throw $e; // Rethrow exception
+        } catch (\Throwable $e) {
+            // Something went wrong, set the connection status
+            $this->setIsConnected(false);
+            $this->closeChannels();
+            throw $e; // Rethrow exception
         }
     }
 
@@ -272,6 +277,8 @@ class AbstractConnection extends AbstractChannel
                 $this->close();
             }
         } catch (\Exception $e) {
+            // Nothing here
+        } catch (\Throwable $e) {
             // Nothing here
         }
     }
@@ -930,6 +937,8 @@ class AbstractConnection extends AbstractChannel
             try {
                 $channel->close();
             } catch (\Exception $e) {
+                /* Ignore closing errors */
+            } catch (\Throwable $e) {
                 /* Ignore closing errors */
             }
         }

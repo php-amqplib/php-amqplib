@@ -108,6 +108,9 @@ class AMQPChannel extends AbstractChannel
         } catch (\Exception $e) {
             $this->close();
             throw $e;
+        } catch (\Throwable $e) {
+            $this->close();
+            throw $e;
         }
     }
 
