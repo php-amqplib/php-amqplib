@@ -476,11 +476,12 @@ class AMQPChannel extends AbstractChannel
      * @param string $destination
      * @param string $source
      * @param string $routing_key
+     * @param bool $nowait
      * @param array $arguments
      * @param int $ticket
      * @return mixed
      */
-    public function exchange_unbind($destination, $source, $routing_key = '', $arguments = null, $ticket = null)
+    public function exchange_unbind($destination, $source, $routing_key = '', $nowait = false, $arguments = null, $ticket = null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -490,6 +491,7 @@ class AMQPChannel extends AbstractChannel
             $destination,
             $source,
             $routing_key,
+            $nowait,
             $arguments
         );
 
