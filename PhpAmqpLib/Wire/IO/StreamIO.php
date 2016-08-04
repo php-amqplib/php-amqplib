@@ -133,6 +133,11 @@ class StreamIO extends AbstractIO
                 STREAM_CLIENT_CONNECT,
                 $this->context
             );
+
+            //See: https://en.wikipedia.org/wiki/Nagle%27s_algorithm
+            $sock = socket_import_stream($this->sock);
+            socket_set_option($sock, SOL_TCP, TCP_NODELAY, 1);
+
         } catch (\ErrorException $e) {
             restore_error_handler();
             throw $e;

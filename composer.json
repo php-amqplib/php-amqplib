@@ -1,5 +1,5 @@
 {
-    "name": "php-amqplib/php-amqplib",
+    "name": "php-amqplib/php-amqplib-nodelay",
     "replace": {
         "videlalvaro/php-amqplib": "self.version"
     },
