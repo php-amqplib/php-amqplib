@@ -92,19 +92,16 @@ class SocketIO extends AbstractIO
      */
     public function read($n)
     {
+        if (is_null($this->sock)) {
+            throw new AMQPRuntimeException(sprintf(
+                'Socket was null! Last SocketError was: %s',
+                socket_strerror(socket_last_error())
+            ));
+        }
         $res = '';
         $read = 0;
-
         $buf = socket_read($this->sock, $n);
         while ($read < $n && $buf !== '' && $buf !== false) {
-            // Null sockets are invalid, throw exception
-            if (is_null($this->sock)) {
-                throw new AMQPRuntimeException(sprintf(
-                    'Socket was null! Last SocketError was: %s',
-                    socket_strerror(socket_last_error())
-                ));
-            }
-
             $read += mb_strlen($buf, 'ASCII');
             $res .= $buf;
             $buf = socket_read($this->sock, $n - $read);
