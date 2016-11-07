@@ -6,17 +6,19 @@ use PhpAmqpLib\Wire\IO\SocketIO;
 class AMQPSocketConnection extends AbstractConnection
 {
     /**
-     * @param string $host
-     * @param int $port
-     * @param string $user
-     * @param string $password
-     * @param string $vhost
-     * @param bool $insist
-     * @param string $login_method
-     * @param null $login_response
-     * @param string $locale
-     * @param float $timeout
-     * @param bool $keepalive
+     * @param string    $host
+     * @param int       $port
+     * @param string    $user
+     * @param string    $password
+     * @param string    $vhost
+     * @param bool      $insist
+     * @param string    $login_method
+     * @param null      $login_response
+     * @param string    $locale
+     * @param float|int $timeout
+     * @param int       $read_write_timeout
+     * @param bool      $keepalive
+     * @param int       $heartbeat
      */
     public function __construct(
         $host,
@@ -29,9 +31,11 @@ class AMQPSocketConnection extends AbstractConnection
         $login_response = null,
         $locale = 'en_US',
         $timeout = 3,
-        $keepalive = false
+        $read_write_timeout = 3,
+        $keepalive = false,
+        $heartbeat = 0
     ) {
-        $io = new SocketIO($host, $port, $timeout, $keepalive);
+        $io = new SocketIO($host, $port, $timeout, $read_write_timeout, $heartbeat, $keepalive);
 
         parent::__construct(
             $user,
@@ -41,7 +45,8 @@ class AMQPSocketConnection extends AbstractConnection
             $login_method,
             $login_response,
             $locale,
-            $io
+            $io,
+            $heartbeat
         );
     }
 }
