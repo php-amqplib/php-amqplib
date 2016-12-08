@@ -292,7 +292,7 @@ Patches are very welcome!
 Author: Vadim Zaliva <lord@crocodile.org>
 
 [ico-version]: https://img.shields.io/packagist/v/php-amqplib/php-amqplib.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-LGPL-brightgreen.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-LGPL_2.1-brightgreen.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/php-amqplib/php-amqplib/master.svg?style=flat-square
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/php-amqplib/php-amqplib.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/php-amqplib/php-amqplib.svg?style=flat-square
