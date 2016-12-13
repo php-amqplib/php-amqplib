@@ -224,7 +224,7 @@ class StreamIO extends AbstractIO
                 if ($this->canDispatchPcntlSignal) {
                     // prevent cpu from being consumed while waiting
                     if ($this->canSelectNull) {
-                        $this->select(null, null);
+                        $this->select($this->heartbeat ?  $this->heartbeat + 1 : null, null);
                         pcntl_signal_dispatch();
                     } else {
                         usleep(100000);
@@ -261,9 +261,14 @@ class StreamIO extends AbstractIO
     public function write($data)
     {
         $written = 0;
+        $buffer  = false;
+        $tw      = false;
         $len = mb_strlen($data, 'ASCII');
 
         while ($written < $len) {
+            if ($buffer !== 0 && $this->read_write_timeout) {
+                $tw = time();
+            }
 
             if (!is_resource($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
@@ -293,6 +298,10 @@ class StreamIO extends AbstractIO
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
+            if ($buffer === 0 && $tw && (time() - $tw > $this->read_write_timeout)) {
+                throw new AMQPTimeoutException('Error sending data. write timed out');
+            }
+
             if ($this->timed_out()) {
                 throw new AMQPTimeoutException('Error sending data. Socket connection timed out');
             }
@@ -300,7 +309,7 @@ class StreamIO extends AbstractIO
             $written += $buffer;
 
             if ($buffer > 0) {
-                $data = mb_substr($data, $buffer, mb_strlen($data, 'ASCII') - $buffer, 'ASCII');
+                $data = substr($data, $buffer, strlen($data) - $buffer);
             }
         }
 
