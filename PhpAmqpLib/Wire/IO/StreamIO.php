@@ -278,7 +278,7 @@ class StreamIO extends AbstractIO
             // September 2002:
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
-                $buffer = fwrite($this->sock, $data, 8192);
+                $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
             } catch (\ErrorException $e) {
                 restore_error_handler();
                 throw $e;
@@ -298,10 +298,6 @@ class StreamIO extends AbstractIO
             }
 
             $written += $buffer;
-
-            if ($buffer > 0) {
-                $data = mb_substr($data, $buffer, mb_strlen($data, 'ASCII') - $buffer, 'ASCII');
-            }
         }
 
         $this->last_write = microtime(true);
