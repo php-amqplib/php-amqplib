@@ -24,7 +24,7 @@ $channel->set_nack_handler(
 
 /*
  * bring the channel into publish confirm mode.
- * if you would call $ch->tx_select() befor or after you brought the channel into this mode
+ * if you would call $ch->tx_select() before or after you brought the channel into this mode
  * the next call to $ch->wait() would result in an exception as the publish confirm mode and transactions
  * are mutually exclusive
  */
