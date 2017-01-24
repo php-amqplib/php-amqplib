@@ -405,8 +405,11 @@ class StreamIO extends AbstractIO
         $write = null;
         $except = null;
         $result = false;
-        $sec = is_int($sec) ? $sec : 0;
-        $usec = is_int($usec) ? $usec : 0;
+
+        if (defined('HHVM_VERSION')) {
+            $sec = is_int($sec) ? $sec : 0;
+            $usec = is_int($usec) ? $usec : 0;
+        }
 
         set_error_handler(array($this, 'error_handler'));
         try {
