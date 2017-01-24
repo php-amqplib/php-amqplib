@@ -414,6 +414,11 @@ class StreamIO extends AbstractIO
         $except = null;
         $result = false;
 
+        if (defined('HHVM_VERSION')) {
+            $sec = is_int($sec) ? $sec : 0;
+            $usec = is_int($usec) ? $usec : 0;
+        }
+
         set_error_handler(array($this, 'error_handler'));
         try {
             $result = stream_select($read, $write, $except, $sec, $usec);
