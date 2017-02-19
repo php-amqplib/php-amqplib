@@ -183,8 +183,8 @@ $pcntlHandler = function ($signal) {
         case \SIGUSR1:
         case \SIGINT:
             // some stuff before stop consumer e.g. delete lock etc
-            exit(0);
-            break;
+            pcntl_signal($signal, SIG_DFL); // restore handler
+            posix_kill(posix_getpid(), $signal); // kill self with signal, see https://www.cons.org/cracauer/sigint.html
         case \SIGHUP:
             // some stuff to restart consumer
             break;
