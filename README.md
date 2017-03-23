@@ -172,7 +172,7 @@ the server (which still has a complete copy) to forward it to a Dead Letter Exch
 
 By default, no truncation will occur. To disable truncation on a Channel that has had it enabled, pass `0` (or `null`) to `AMQPChannel::setBodySizeLimit()`.
 
-##UNIX Signals##
+## UNIX Signals ##
 
 If you have installed [PCNTL extension](http://www.php.net/manual/en/book.pcntl.php) dispatching of signal will be handled when consumer is not processing message.
 
@@ -193,12 +193,10 @@ $pcntlHandler = function ($signal) {
     }
 };
 
-declare(ticks = 1) {
-    pcntl_signal(\SIGTERM, $pcntlHandler);
-    pcntl_signal(\SIGINT,  $pcntlHandler);
-    pcntl_signal(\SIGUSR1, $pcntlHandler);
-    pcntl_signal(\SIGHUP,  $pcntlHandler);
-}
+pcntl_signal(\SIGTERM, $pcntlHandler);
+pcntl_signal(\SIGINT,  $pcntlHandler);
+pcntl_signal(\SIGUSR1, $pcntlHandler);
+pcntl_signal(\SIGHUP,  $pcntlHandler);
 ```
 
 To disable this feature just define constant `AMQP_WITHOUT_SIGNALS` as `true`
