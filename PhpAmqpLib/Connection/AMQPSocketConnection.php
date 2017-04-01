@@ -16,8 +16,8 @@ class AMQPSocketConnection extends AbstractConnection
      * @param null      $login_response
      * @param string    $locale
      * @param float|int $timeout
-     * @param int       $read_write_timeout
      * @param bool      $keepalive
+     * @param int       $read_write_timeout
      * @param int       $heartbeat
      */
     public function __construct(
@@ -31,11 +31,11 @@ class AMQPSocketConnection extends AbstractConnection
         $login_response = null,
         $locale = 'en_US',
         $timeout = 3,
-        $read_write_timeout = 3,
         $keepalive = false,
+        $read_write_timeout = 3,
         $heartbeat = 0
     ) {
-        $io = new SocketIO($host, $port, $timeout, $read_write_timeout, $heartbeat, $keepalive);
+        $io = new SocketIO($host, $port, $timeout, $keepalive, $read_write_timeout, $heartbeat);
 
         parent::__construct(
             $user,
