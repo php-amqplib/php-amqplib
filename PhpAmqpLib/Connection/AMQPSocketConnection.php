@@ -35,7 +35,7 @@ class AMQPSocketConnection extends AbstractConnection
         $read_write_timeout = 3,
         $heartbeat = 0
     ) {
-        $io = new SocketIO($host, $port, $timeout, $keepalive, $read_write_timeout, $heartbeat);
+        $io = new SocketIO($host, $port, $read_write_timeout, $keepalive, $timeout, $heartbeat);
 
         parent::__construct(
             $user,

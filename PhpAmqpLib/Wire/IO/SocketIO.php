@@ -38,12 +38,12 @@ class SocketIO extends AbstractIO
     /**
      * @param string     $host
      * @param int        $port
-     * @param float      $send_timeout
-     * @param bool       $keepalive
      * @param float|null $read_timeout if null - defaults to $send_timeout
+     * @param bool       $keepalive
+     * @param float      $send_timeout
      * @param int        $heartbeat
      */
-    public function __construct($host, $port, $send_timeout, $keepalive = false, $read_timeout = null, $heartbeat)
+    public function __construct($host, $port, $read_timeout = null, $keepalive = false, $send_timeout, $heartbeat)
     {
         $this->host = $host;
         $this->port = $port;
