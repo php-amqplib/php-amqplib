@@ -197,12 +197,12 @@ class StreamIO extends AbstractIO
      */
     public function read($len)
     {
+        $this->check_heartbeat();
+
         $read = 0;
         $data = '';
 
         while ($read < $len) {
-            $this->check_heartbeat();
-
             if (!is_resource($this->sock) || feof($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
@@ -401,6 +401,8 @@ class StreamIO extends AbstractIO
      */
     public function select($sec, $usec)
     {
+        $this->check_heartbeat();
+
         $read = array($this->sock);
         $write = null;
         $except = null;
