@@ -565,26 +565,25 @@ class AbstractConnection extends AbstractChannel
                 }
                 continue;
 
-            } else {
+            } 
 
-                if ($frame_channel == $channel_id) {
-                    return array($frame_type, $payload);
-                }
+            if ($frame_channel == $channel_id) {
+                return array($frame_type, $payload);
+            }
 
-                // Not the channel we were looking for.  Queue this frame
-                //for later, when the other channel is looking for frames.
-                // Make sure the channel still exists, it could have been
-                // closed by a previous Exception.
-                if (isset($this->channels[$frame_channel])) {
-                    array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
-                }
+            // Not the channel we were looking for.  Queue this frame
+            //for later, when the other channel is looking for frames.
+            // Make sure the channel still exists, it could have been
+            // closed by a previous Exception.
+            if (isset($this->channels[$frame_channel])) {
+                array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
+            }
 
-                // If we just queued up a method for channel 0 (the Connection
-                // itself) it's probably a close method in reaction to some
-                // error, so deal with it right away.
-                if (($frame_type == 1) && ($frame_channel == 0)) {
-                    $this->wait();
-                }
+            // If we just queued up a method for channel 0 (the Connection
+            // itself) it's probably a close method in reaction to some
+            // error, so deal with it right away.
+            if (($frame_type == 1) && ($frame_channel == 0)) {
+                $this->wait();
             }
         }
     }
