@@ -624,7 +624,7 @@ class AbstractConnection extends AbstractChannel
             $this->io->disableHeartbeat();
         }
 
-        if (!$this->protocolWriter || !$this->isConnected()) {
+        if (empty($this->protocolWriter) || !$this->isConnected()) {
             return null;
         }
 
