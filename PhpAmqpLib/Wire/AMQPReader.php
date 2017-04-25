@@ -1,11 +1,11 @@
 <?php
 namespace PhpAmqpLib\Wire;
 
+use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
-use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 
