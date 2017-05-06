@@ -42,6 +42,9 @@ class StreamIO extends AbstractIO
     /** @var array */
     protected $last_error;
 
+    /** @var int */
+    private $initial_heartbeat;
+
     /** @var resource */
     private $sock;
 
@@ -81,6 +84,7 @@ class StreamIO extends AbstractIO
         $this->context = $context;
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
+        $this->initial_heartbeat = $heartbeat;
         $this->canSelectNull = true;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
@@ -456,6 +460,16 @@ class StreamIO extends AbstractIO
     public function disableHeartbeat()
     {
         $this->heartbeat = 0;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function reenableHeartbeat()
+    {
+        $this->heartbeat = $this->initial_heartbeat;
 
         return $this;
     }
