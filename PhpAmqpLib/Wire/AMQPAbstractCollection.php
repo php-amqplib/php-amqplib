@@ -207,7 +207,10 @@ abstract class AMQPAbstractCollection implements \Iterator
             $val = $this->encodeBool($val);
         } elseif (is_null($val)) {
             $val = $this->encodeVoid();
+        } elseif ($val instanceof \DateTimeInterface) {
+            $val = array(self::T_TIMESTAMP, $val->getTimestamp());
         } elseif ($val instanceof \DateTime) {
+            // PHP <= 5.4 has no DateTimeInterface
             $val = array(self::T_TIMESTAMP, $val->getTimestamp());
         } elseif ($val instanceof AMQPDecimal) {
             $val = array(self::T_DECIMAL, $val);
