@@ -15,12 +15,12 @@ The library was used for the PHP examples of [RabbitMQ in Action](http://manning
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-## New Maintainers (Feb 10th, 2016) ##
+## Project Maintainers
 
-Thanks to [videlalvaro](https://github.com/videlalvaro) for his hard work in maintaining php-amqplib!  He's done a fantastic job
-and has left big shoes to fill.
+Thanks to [videlalvaro](https://github.com/videlalvaro) and [postalservice14](https://github.com/postalservice14) for their hard work maintaining php-amqplib! The library wouldn't be where it is without them.
 
-The package will now be maintained by [postalservice14](https://github.com/postalservice14) and [nubeiro](https://github.com/nubeiro).
+The package is now maintained by [nubeiro](https://github.com/nubeiro) and several Pivotal engineers
+working on RabbitMQ and related projects.
 
 ## Supported RabbitMQ Versions ##
 
