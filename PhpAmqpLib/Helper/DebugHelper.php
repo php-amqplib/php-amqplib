@@ -107,6 +107,6 @@ class DebugHelper
      * @param string $s
      */
     protected function print_msg($s) {
-        fprintf($this->debug_output, $s . PHP_EOL);
+        fwrite($this->debug_output, $s . PHP_EOL);
     }
 }
