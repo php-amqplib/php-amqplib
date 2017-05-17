@@ -12,6 +12,11 @@ It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
 
 **Requirements: PHP 5.3** due to the use of `namespaces`.
 
+**Requirements: bcmath and mbstring extensions** This library utilizes the bcmath and mbstring PHP extensions.  The installation steps vary per PHP version and the underlying OS.  The following example shows how to add to an existing PHP installation on Ubuntu 15.10:
+
+sudo apt-get install php7.0-mbstring
+sudo apt-get install php7.0-bcmath
+
 The library was used for the PHP examples of [RabbitMQ in Action](http://manning.com/videla/) and the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
