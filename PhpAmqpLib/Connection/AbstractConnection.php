@@ -598,7 +598,7 @@ class AbstractConnection extends AbstractChannel
      * Fetches a channel object identified by the numeric channel_id, or
      * create that object if it doesn't already exist.
      *
-     * @param integer $channel_id
+     * @param int $channel_id
      * @return AMQPChannel
      */
     public function channel($channel_id = null)
