@@ -72,4 +72,16 @@ class AMQPMessageTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals($expected, $props);
     }
+
+    public function testGetAndSetBodyMethods()
+    {
+        $message = new AMQPMessage('');
+        $message->setBody('body');
+        $message->setIsTruncated(true);
+        $message->content_encoding = 'shortstr';
+
+        $this->assertEquals($message->getBody(),'body');
+        $this->assertTrue($message->isTruncated());
+        $this->assertEquals($message->getContentEncoding(),'shortstr');
+    }
 }

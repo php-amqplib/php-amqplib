@@ -44,4 +44,15 @@ class MiscHelperTest extends \PHPUnit_Framework_TestCase
         $res = MiscHelper::hexdump('FM', $htmlOutput, $uppercase, $return);
         $this->assertRegExp('/000\s+46 4D\s+FM/', $res);
     }
+
+    public function testMethodSigForString()
+    {
+        $this->assertEquals('test',MiscHelper::methodSig('test'));
+    }
+
+    public function testSaveBytes()
+    {
+        MiscHelper::saveBytes('bytes');
+        $this->assertStringEqualsFile('/tmp/bytes','bytes');
+    }
 }

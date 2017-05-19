@@ -255,7 +255,6 @@ abstract class AbstractChannel
 
         $this->wait_content_reader->reuse(mb_substr($payload, 0, 12, 'ASCII'));
 
-        // $payload_reader = new AMQPReader(substr($payload,0,12));
         $class_id = $this->wait_content_reader->read_short();
         $weight = $this->wait_content_reader->read_short();
 
