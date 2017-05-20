@@ -34,9 +34,6 @@ class ChannelTest extends AbstractPublishConsumeTest
         $connection->close();
     }
 
-    /**
-     * @group by
-     */
     public function testPublishWithConfirm()
     {
         $connection = $this->createConnection();
