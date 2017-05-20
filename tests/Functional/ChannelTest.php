@@ -77,7 +77,7 @@ class ChannelTest extends AbstractPublishConsumeTest
         $this->assertSame('foo', $msg1->getBody());
         $this->assertSame('bar', $msg2->getBody());
 
-        $this->assertSame([1,2], $deliveryTags);
+        $this->assertSame(array(1,2), $deliveryTags);
 
         $channel2->queue_delete('tst.queue3');
         $channel->exchange_delete('tst.exchange3');
