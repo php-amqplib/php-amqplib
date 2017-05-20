@@ -189,6 +189,8 @@ class SocketIO extends AbstractIO
             socket_close($this->sock);
         }
         $this->sock = null;
+        $this->last_read = null;
+        $this->last_write = null;
     }
 
     /**
