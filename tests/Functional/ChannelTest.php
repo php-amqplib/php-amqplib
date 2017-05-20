@@ -46,7 +46,7 @@ class ChannelTest extends AbstractPublishConsumeTest
             // Do Nothing
         }
 
-        $deliveryTags = [];
+        $deliveryTags = array();
 
         $channel->set_ack_handler(function (AMQPMessage $message) use (&$deliveryTags) {
             $deliveryTags[] = (int) $message->get('delivery_tag');
