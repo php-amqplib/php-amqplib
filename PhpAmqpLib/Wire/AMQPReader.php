@@ -98,6 +98,10 @@ class AMQPReader extends AbstractClient
     /**
      * @param int $n
      * @return string
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public function read($n)
     {
@@ -139,6 +143,8 @@ class AMQPReader extends AbstractClient
     /**
      * @param int $n
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      * @throws \RuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
@@ -170,6 +176,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return bool
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_bit()
     {
@@ -187,6 +197,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_octet()
     {
@@ -198,6 +212,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_signed_octet()
     {
@@ -209,6 +227,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_short()
     {
@@ -220,6 +242,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_signed_short()
     {
@@ -239,6 +265,10 @@ class AMQPReader extends AbstractClient
      * -2^31...+2^31 range.
      *
      * Use with caution!
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_php_int()
     {
@@ -256,6 +286,10 @@ class AMQPReader extends AbstractClient
      * so we return it as a string
      *
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_long()
     {
@@ -267,6 +301,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return integer
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     private function read_signed_long()
     {
@@ -282,6 +320,10 @@ class AMQPReader extends AbstractClient
      * as a string.
      *
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_longlong()
     {
@@ -304,6 +346,10 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_signed_longlong()
     {
@@ -330,6 +376,11 @@ class AMQPReader extends AbstractClient
     /**
      * Read a utf-8 encoded string that's stored in up to
      * 255 bytes.  Return it decoded as a PHP unicode object.
+     * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_shortstr()
     {
@@ -343,6 +394,12 @@ class AMQPReader extends AbstractClient
      * Read a string that's up to 2**32 bytes, the encoding
      * isn't specified in the AMQP spec, so just return it as
      * a plain PHP string.
+     * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_longstr()
     {
@@ -359,6 +416,11 @@ class AMQPReader extends AbstractClient
     /**
      * Read and AMQP timestamp, which is a 64-bit integer representing
      * seconds since the Unix epoch in 1-second resolution.
+     *
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public function read_timestamp()
     {
@@ -371,6 +433,12 @@ class AMQPReader extends AbstractClient
      *
      * @param bool $returnObject Whether to return AMQPArray instance instead of plain array
      * @return array|AMQPTable
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public function read_table($returnObject = false)
     {
@@ -396,6 +464,12 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return array|AMQPTable
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public function read_table_object()
     {
@@ -407,6 +481,12 @@ class AMQPReader extends AbstractClient
      *
      * @param bool $returnObject Whether to return AMQPArray instance instead of plain array
      * @return array|AMQPArray
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public function read_array($returnObject = false)
     {
@@ -430,6 +510,12 @@ class AMQPReader extends AbstractClient
 
     /**
      * @return array|AMQPArray
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public function read_array_object()
     {
@@ -442,6 +528,11 @@ class AMQPReader extends AbstractClient
      * @param int $fieldType One of AMQPAbstractCollection::T_* constants
      * @param bool $collectionsAsObjects Description
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read_value($fieldType, $collectionsAsObjects = false)

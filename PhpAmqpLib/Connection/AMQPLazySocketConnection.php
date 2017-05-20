@@ -11,6 +11,7 @@ class AMQPLazySocketConnection extends AMQPSocketConnection
      * Gets socket from current connection
      *
      * @deprecated
+     * @throws \Exception
      */
     public function getSocket()
     {
@@ -31,6 +32,7 @@ class AMQPLazySocketConnection extends AMQPSocketConnection
 
     /**
      * @return null|\PhpAmqpLib\Wire\IO\AbstractIO
+     * @throws \Exception
      */
     protected function getIO()
     {

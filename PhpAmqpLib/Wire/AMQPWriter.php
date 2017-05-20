@@ -34,6 +34,8 @@ class AMQPWriter extends AbstractClient
      * @param int|string $x Value to pack
      * @param int $bytes Must be multiply of 2
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     private static function packBigEndian($x, $bytes)
     {
@@ -175,6 +177,7 @@ class AMQPWriter extends AbstractClient
     /**
      * @param int $n
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_signed_octet($n)
     {
@@ -208,6 +211,7 @@ class AMQPWriter extends AbstractClient
     /**
      * @param int $n
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_signed_short($n)
     {
@@ -225,6 +229,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param int $n
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_long($n)
     {
@@ -244,6 +249,7 @@ class AMQPWriter extends AbstractClient
     /**
      * @param int $n
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     private function write_signed_long($n)
     {
@@ -262,6 +268,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param int $n
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_longlong($n)
     {
@@ -294,6 +301,7 @@ class AMQPWriter extends AbstractClient
     /**
      * @param int $n
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_signed_longlong($n)
     {
@@ -359,6 +367,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param string $s
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_longstr($s)
     {
@@ -374,6 +383,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param AMQPArray|array $a Instance of AMQPArray or PHP array WITHOUT format hints (unlike write_table())
      * @return self
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_array($a)
     {
@@ -398,6 +408,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param int $v
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_timestamp($v)
     {
@@ -412,6 +423,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param AMQPTable|array $d Instance of AMQPTable or PHP array WITH format hints (unlike write_array())
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_table($d)
@@ -437,6 +449,7 @@ class AMQPWriter extends AbstractClient
      *
      * @param AMQPTable|array
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function write_table_object($d)
     {
@@ -446,6 +459,8 @@ class AMQPWriter extends AbstractClient
     /**
      * @param int $type One of AMQPAbstractCollection::T_* constants
      * @param mixed $val
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     private function write_value($type, $val)
     {

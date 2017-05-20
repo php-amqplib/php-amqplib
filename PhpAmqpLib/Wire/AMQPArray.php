@@ -25,6 +25,8 @@ class AMQPArray extends AMQPAbstractCollection
      * @param mixed $val
      * @param null $type
      * @return $this
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function push($val, $type = null)
     {

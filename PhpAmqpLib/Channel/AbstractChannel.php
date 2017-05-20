@@ -71,6 +71,7 @@ abstract class AbstractChannel
      * @param AbstractConnection $connection
      * @param string $channel_id
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function __construct(AbstractConnection $connection, $channel_id)
     {
@@ -271,6 +272,7 @@ abstract class AbstractChannel
      * @param AMQPReader $propertyReader
      * @param AMQPReader $contentReader
      * @return \PhpAmqpLib\Message\AMQPMessage
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     protected function createMessage($propertyReader, $contentReader)
     {
@@ -364,7 +366,7 @@ abstract class AbstractChannel
 
             $method_sig = $qm[0];
 
-            if ($allowed_methods == null || in_array($method_sig, $allowed_methods)) {
+            if ($allowed_methods === null || in_array($method_sig, $allowed_methods)) {
                 unset($this->method_queue[$qk]);
                 $dispatch = true;
                 $queued_method = $qm;
@@ -378,6 +380,7 @@ abstract class AbstractChannel
     /**
      * @param array $queued_method
      * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     protected function dispatch_deferred_method($queued_method)
     {
@@ -417,6 +420,7 @@ abstract class AbstractChannel
      * @param int $frameType
      * @param int $expectedType
      * @param string $expectedMessage
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     protected function validate_frame($frameType, $expectedType, $expectedMessage)
     {
@@ -479,6 +483,7 @@ abstract class AbstractChannel
     /**
      * @param string $method_sig
      * @return AMQPMessage|null
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     protected function maybe_wait_for_content($method_sig)
     {

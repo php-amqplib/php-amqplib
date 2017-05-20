@@ -16,6 +16,8 @@ class Protocol080
      * @param string $mechanisms
      * @param string $locales
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function connectionStart($version_major = 0, $version_minor = 8, $server_properties, $mechanisms = 'PLAIN', $locales = 'en_US')
     {
@@ -31,6 +33,12 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function connectionStartOk(AMQPReader $reader)
     {
@@ -45,6 +53,7 @@ class Protocol080
     /**
      * @param string $challenge
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function connectionSecure($challenge)
     {
@@ -56,6 +65,11 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function connectionSecureOk(AMQPReader $reader)
     {
@@ -69,6 +83,7 @@ class Protocol080
      * @param int $frame_max
      * @param int $heartbeat
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function connectionTune($channel_max = 0, $frame_max = 0, $heartbeat = 0)
     {
@@ -82,6 +97,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function connectionTuneOk(AMQPReader $reader)
     {
@@ -97,6 +116,7 @@ class Protocol080
      * @param string $capabilities
      * @param bool $insist
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function connectionOpen($virtual_host = '/', $capabilities = '', $insist = false)
     {
@@ -110,6 +130,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function connectionOpenOk(AMQPReader $reader)
     {
@@ -122,6 +146,7 @@ class Protocol080
      * @param string $host
      * @param string $known_hosts
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function connectionRedirect($host, $known_hosts = '')
     {
@@ -137,6 +162,7 @@ class Protocol080
      * @param int $class_id
      * @param int $method_id
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function connectionClose($reply_code, $reply_text = '', $class_id, $method_id)
     {
@@ -161,6 +187,7 @@ class Protocol080
     /**
      * @param string $out_of_band
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function channelOpen($out_of_band = '')
     {
@@ -193,6 +220,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function channelFlowOk(AMQPReader $reader)
     {
@@ -206,6 +237,8 @@ class Protocol080
      * @param string $reply_text
      * @param array $details
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function channelAlert($reply_code, $reply_text = '', $details = array())
     {
@@ -222,6 +255,7 @@ class Protocol080
      * @param int $class_id
      * @param int $method_id
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function channelClose($reply_code, $reply_text = '', $class_id, $method_id)
     {
@@ -251,6 +285,7 @@ class Protocol080
      * @param bool $write
      * @param bool $read
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function accessRequest($realm = '/data', $exclusive = false, $passive = true, $active = true, $write = true, $read = true)
     {
@@ -263,6 +298,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function accessRequestOk(AMQPReader $reader)
     {
@@ -282,6 +321,8 @@ class Protocol080
      * @param bool $nowait
      * @param array $arguments
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function exchangeDeclare($ticket = 1, $exchange, $type = 'direct', $passive = false, $durable = false, $auto_delete = false, $internal = false, $nowait = false, $arguments = array())
     {
@@ -310,6 +351,7 @@ class Protocol080
      * @param bool $if_unused
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function exchangeDelete($ticket = 1, $exchange, $if_unused = false, $nowait = false)
     {
@@ -340,6 +382,8 @@ class Protocol080
      * @param bool $nowait
      * @param array $arguments
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function queueDeclare($ticket = 1, $queue = '', $passive = false, $durable = false, $exclusive = false, $auto_delete = false, $nowait = false, $arguments = array())
     {
@@ -354,6 +398,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function queueDeclareOk(AMQPReader $reader)
     {
@@ -372,6 +420,8 @@ class Protocol080
      * @param bool $nowait
      * @param array $arguments
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function queueBind($ticket = 1, $queue = '', $exchange, $routing_key = '', $nowait = false, $arguments = array())
     {
@@ -400,6 +450,7 @@ class Protocol080
      * @param string $queue
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function queuePurge($ticket = 1, $queue = '', $nowait = false)
     {
@@ -413,6 +464,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function queuePurgeOk(AMQPReader $reader)
     {
@@ -428,6 +483,7 @@ class Protocol080
      * @param bool $if_empty
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function queueDelete($ticket = 1, $queue = '', $if_unused = false, $if_empty = false, $nowait = false)
     {
@@ -441,6 +497,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function queueDeleteOk(AMQPReader $reader)
     {
@@ -456,6 +516,8 @@ class Protocol080
      * @param string $routing_key
      * @param array $arguments
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function queueUnbind($ticket = 1, $queue = '', $exchange, $routing_key = '', $arguments = array())
     {
@@ -483,6 +545,7 @@ class Protocol080
      * @param int $prefetch_count
      * @param bool $global
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicQos($prefetch_size = 0, $prefetch_count = 0, $global = false)
     {
@@ -512,6 +575,7 @@ class Protocol080
      * @param bool $exclusive
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicConsume($ticket = 1, $queue = '', $consumer_tag = '', $no_local = false, $no_ack = false, $exclusive = false, $nowait = false)
     {
@@ -526,6 +590,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function basicConsumeOk(AMQPReader $reader)
     {
@@ -538,6 +606,7 @@ class Protocol080
      * @param string $consumer_tag
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicCancel($consumer_tag, $nowait = false)
     {
@@ -550,6 +619,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function basicCancelOk(AMQPReader $reader)
     {
@@ -565,6 +638,7 @@ class Protocol080
      * @param bool $mandatory
      * @param bool $immediate
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicPublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false)
     {
@@ -582,6 +656,7 @@ class Protocol080
      * @param string $exchange
      * @param string $routing_key
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicReturn($reply_code, $reply_text = '', $exchange, $routing_key)
     {
@@ -600,6 +675,7 @@ class Protocol080
      * @param string $exchange
      * @param string $routing_key
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicDeliver($consumer_tag, $delivery_tag, $redelivered = false, $exchange, $routing_key)
     {
@@ -617,6 +693,7 @@ class Protocol080
      * @param string $queue
      * @param bool $no_ack
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicGet($ticket = 1, $queue = '', $no_ack = false)
     {
@@ -630,6 +707,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function basicGetOk(AMQPReader $reader)
     {
@@ -645,6 +726,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function basicGetEmpty(AMQPReader $reader)
     {
@@ -657,6 +742,7 @@ class Protocol080
      * @param int $delivery_tag
      * @param bool $multiple
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicAck($delivery_tag = 0, $multiple = false)
     {
@@ -670,6 +756,7 @@ class Protocol080
      * @param int $delivery_tag
      * @param bool $requeue
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function basicReject($delivery_tag, $requeue = true)
     {
@@ -716,6 +803,7 @@ class Protocol080
      * @param int $prefetch_count
      * @param bool $global
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileQos($prefetch_size = 0, $prefetch_count = 0, $global = false)
     {
@@ -745,6 +833,7 @@ class Protocol080
      * @param bool $exclusive
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileConsume($ticket = 1, $queue = '', $consumer_tag = '', $no_local = false, $no_ack = false, $exclusive = false, $nowait = false)
     {
@@ -759,6 +848,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function fileConsumeOk(AMQPReader $reader)
     {
@@ -771,6 +864,7 @@ class Protocol080
      * @param string $consumer_tag
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileCancel($consumer_tag, $nowait = false)
     {
@@ -783,6 +877,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function fileCancelOk(AMQPReader $reader)
     {
@@ -795,6 +893,7 @@ class Protocol080
      * @param string $identifier
      * @param int $content_size
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileOpen($identifier, $content_size)
     {
@@ -807,6 +906,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function fileOpenOk(AMQPReader $reader)
     {
@@ -833,6 +936,7 @@ class Protocol080
      * @param bool $immediate
      * @param string $identifier
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function filePublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false, $identifier)
     {
@@ -851,6 +955,7 @@ class Protocol080
      * @param string $exchange
      * @param string $routing_key
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileReturn($reply_code = 200, $reply_text = '', $exchange, $routing_key)
     {
@@ -870,6 +975,7 @@ class Protocol080
      * @param string $routing_key
      * @param string $identifier
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileDeliver($consumer_tag, $delivery_tag, $redelivered = false, $exchange, $routing_key, $identifier)
     {
@@ -887,6 +993,7 @@ class Protocol080
      * @param int $delivery_tag
      * @param bool $multiple
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileAck($delivery_tag = 0, $multiple = false)
     {
@@ -900,6 +1007,7 @@ class Protocol080
      * @param int $delivery_tag
      * @param bool $requeue
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function fileReject($delivery_tag, $requeue = true)
     {
@@ -915,6 +1023,7 @@ class Protocol080
      * @param int $consume_rate
      * @param bool $global
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function streamQos($prefetch_size = 0, $prefetch_count = 0, $consume_rate = 0, $global = false)
     {
@@ -944,6 +1053,7 @@ class Protocol080
      * @param bool $exclusive
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function streamConsume($ticket = 1, $queue = '', $consumer_tag = '', $no_local = false, $exclusive = false, $nowait = false)
     {
@@ -958,6 +1068,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function streamConsumeOk(AMQPReader $reader)
     {
@@ -970,6 +1084,7 @@ class Protocol080
      * @param string $consumer_tag
      * @param bool $nowait
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function streamCancel($consumer_tag, $nowait = false)
     {
@@ -982,6 +1097,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function streamCancelOk(AMQPReader $reader)
     {
@@ -997,6 +1116,7 @@ class Protocol080
      * @param bool $mandatory
      * @param bool $immediate
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function streamPublish($ticket = 1, $exchange = '', $routing_key = '', $mandatory = false, $immediate = false)
     {
@@ -1014,6 +1134,7 @@ class Protocol080
      * @param string $exchange
      * @param string $routing_key
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function streamReturn($reply_code = 200, $reply_text = '', $exchange, $routing_key)
     {
@@ -1031,6 +1152,7 @@ class Protocol080
      * @param string $exchange
      * @param string $queue
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function streamDeliver($consumer_tag, $delivery_tag, $exchange, $queue)
     {
@@ -1125,6 +1247,7 @@ class Protocol080
     /**
      * @param string $dtx_identifier
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function dtxStart($dtx_identifier)
     {
@@ -1146,6 +1269,8 @@ class Protocol080
     /**
      * @param mixed $meta_data
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function tunnelRequest($meta_data)
     {
@@ -1161,6 +1286,7 @@ class Protocol080
      * @param int $integer_4
      * @param mixed $operation
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function testInteger($integer_1, $integer_2, $integer_3, $integer_4, $operation)
     {
@@ -1176,6 +1302,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function testIntegerOk(AMQPReader $reader)
     {
@@ -1189,6 +1319,7 @@ class Protocol080
      * @param string $string_2
      * @param mixed $operation
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function testString($string_1, $string_2, $operation)
     {
@@ -1202,6 +1333,11 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \RuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public static function testStringOk(AMQPReader $reader)
     {
@@ -1215,6 +1351,8 @@ class Protocol080
      * @param mixed $integer_op
      * @param mixed $string_op
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function testTable($table, $integer_op, $string_op)
     {
@@ -1228,6 +1366,11 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \RuntimeException
      */
     public static function testTableOk(AMQPReader $reader)
     {
@@ -1250,6 +1393,10 @@ class Protocol080
     /**
      * @param AMQPReader $reader
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \RuntimeException
      */
     public static function testContentOk(AMQPReader $reader)
     {

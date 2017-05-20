@@ -62,6 +62,7 @@ class StreamIO extends AbstractIO
      * @param null $context
      * @param bool $keepalive
      * @param int $heartbeat
+     * @throws \InvalidArgumentException
      */
     public function __construct(
         $host,
@@ -114,6 +115,8 @@ class StreamIO extends AbstractIO
      *
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @throws \ErrorException
      */
     public function connect()
     {
@@ -187,6 +190,8 @@ class StreamIO extends AbstractIO
 
     /**
      * Reconnects the socket
+     * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function reconnect()
     {
@@ -198,6 +203,8 @@ class StreamIO extends AbstractIO
      * @param int $len
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @return mixed|string
+     * @throws \ErrorException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function read($len)
     {
@@ -259,6 +266,7 @@ class StreamIO extends AbstractIO
     /**
      * @param string $data
      * @return mixed|void
+     * @throws \ErrorException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      */
@@ -363,6 +371,9 @@ class StreamIO extends AbstractIO
 
     /**
      * Sends a heartbeat message
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     protected function write_heartbeat()
     {
@@ -404,6 +415,7 @@ class StreamIO extends AbstractIO
      * @param int $sec
      * @param int $usec
      * @return int|mixed
+     * @throws \ErrorException
      */
     public function select($sec, $usec)
     {

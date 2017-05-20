@@ -116,6 +116,8 @@ abstract class AMQPAbstractCollection implements \Iterator
      * @param mixed $val
      * @param int $type
      * @param string $key
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     final protected function setValue($val, $type = null, $key = null)
     {
@@ -167,6 +169,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     /**
      * @param array $val
      * @return array
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     final protected function encodeCollection(array $val)
     {
@@ -240,6 +243,7 @@ abstract class AMQPAbstractCollection implements \Iterator
      * @param mixed $val
      * @param int $type
      * @return array|bool|\DateTime|null
+     * @throws \PhpAmqpLib\Exception\AMQPLogicException
      */
     protected function decodeValue($val, $type)
     {
@@ -326,6 +330,7 @@ abstract class AMQPAbstractCollection implements \Iterator
 
     /**
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     final public static function getProtocol()
     {
@@ -349,6 +354,7 @@ abstract class AMQPAbstractCollection implements \Iterator
 
     /**
      * @return array  [dataTypeConstant => dataTypeSymbol]
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     final public static function getSupportedDataTypes()
     {
@@ -373,6 +379,7 @@ abstract class AMQPAbstractCollection implements \Iterator
      * @param string $type
      * @param bool $return Whether to return or raise AMQPOutOfRangeException
      * @return boolean
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     final public static function checkDataTypeIsSupported($type, $return = true)
     {
@@ -395,6 +402,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     /**
      * @param int $type
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     final public static function getSymbolForDataType($type)
     {
@@ -409,6 +417,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     /**
      * @param string $symbol
      * @return integer
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     final public static function getDataTypeForSymbol($symbol)
     {
