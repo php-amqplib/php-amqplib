@@ -70,9 +70,9 @@ class ChannelTest extends AbstractPublishConsumeTest
         $channel->wait_for_pending_acks_returns(1);
 
         $msg1 = $channel2->basic_get('tst.queue3');
-        $this->assertInstanceOf(AMQPMessage::class, $msg1);
+        $this->assertInstanceOf('PhpAmqpLib\Message\AMQPMessage', $msg1);
         $msg2 = $channel2->basic_get('tst.queue3');
-        $this->assertInstanceOf(AMQPMessage::class, $msg2);
+        $this->assertInstanceOf('PhpAmqpLib\Message\AMQPMessage', $msg2);
 
         $this->assertSame('foo', $msg1->getBody());
         $this->assertSame('bar', $msg2->getBody());
