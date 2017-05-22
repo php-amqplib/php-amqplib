@@ -6,9 +6,9 @@ All Notable changes to `php-amqplib` will be documented in this file
 
 ## 2.7.0-rc1 - 2017-05-22
 ### Added
-- Increased overall test coverage.
+- Increased overall test coverage
 - Bring heartbeat support to socket connection
-- Add message delivery tag for internal ack handler
+- Add message delivery tag for publisher confirms
 - Add support for serializing DateTimeImmutable objects
 
 ### Fixed
@@ -16,8 +16,8 @@ All Notable changes to `php-amqplib` will be documented in this file
 - Fixed signal handling exit example
 - Fixed exchange_unbind arguments
 - Fixed invalid annotation for channel_id
-- Fixed socket null error on php 5.3 version.
-- Fixed timeout parameters on HHVM before calling stream_select.
+- Fixed socket null error on php 5.3 version
+- Fixed timeout parameters on HHVM before calling stream_select
 
 ### Changed
 - declare(ticks=1) no longer needed after PHP5.3 / amqplib 2.4.1
@@ -26,7 +26,7 @@ All Notable changes to `php-amqplib` will be documented in this file
 - Add extensions requirements to README.md
 - Add PHP 7.1 to Travis build
 - Reduce memory usage in StreamIO::write()
-- Re-enable heartbeats after reconnection.
+- Re-enable heartbeats after reconnection
 
 ## 2.6.3 - 2016-04-11
 
