@@ -54,6 +54,9 @@ class StreamIO extends AbstractIO
     /** @var bool */
     private $canDispatchPcntlSignal;
 
+    /** @var int */
+    private $amqpHeaderAsInt;
+
     /**
      * @param string $host
      * @param int $port
@@ -62,6 +65,7 @@ class StreamIO extends AbstractIO
      * @param null $context
      * @param bool $keepalive
      * @param int $heartbeat
+     * @param int $amqpHeaderAsInt
      */
     public function __construct(
         $host,
@@ -70,7 +74,8 @@ class StreamIO extends AbstractIO
         $read_write_timeout,
         $context = null,
         $keepalive = false,
-        $heartbeat = 0
+        $heartbeat = 0,
+        $amqpHeaderAsInt = 1342177291
     ) {
         if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
@@ -87,6 +92,11 @@ class StreamIO extends AbstractIO
         $this->initial_heartbeat = $heartbeat;
         $this->canSelectNull = true;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
+
+        //Used to prevent an OOM error when the client re-sends the AMQP header
+        // to an already-connected broker
+        //See http://john.eckersberg.com/debugging-rabbitmq-frame_too_large-error.html
+        $this->amqpHeaderAsInt = $amqpHeaderAsInt;
 
         if (is_null($this->context)) {
             $this->context = stream_context_create();
@@ -209,6 +219,10 @@ class StreamIO extends AbstractIO
         while ($read < $len) {
             if (!is_resource($this->sock) || feof($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
+            }
+
+            if (($len - $read) >= $this->amqpHeaderAsInt) {
+                throw new AMQPRuntimeException('Frame too large');
             }
 
             set_error_handler(array($this, 'error_handler'));
