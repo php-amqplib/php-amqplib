@@ -846,7 +846,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $multiple
      * @param bool $requeue
      */
-    public function basic_nack($delivery_tag, $multiple = false, $requeue = false)
+    public function basic_nack($delivery_tag, $multiple = false, $requeue = true)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicNack($delivery_tag, $multiple, $requeue);
         $this->send_method_frame(array($class_id, $method_id), $args);
@@ -1246,7 +1246,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $delivery_tag
      * @param bool $requeue
      */
-    public function basic_reject($delivery_tag, $requeue)
+    public function basic_reject($delivery_tag, $requeue = true)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicReject($delivery_tag, $requeue);
         $this->send_method_frame(array($class_id, $method_id), $args);
