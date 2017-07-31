@@ -12,6 +12,7 @@ php:
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: false
 
+# required to test HHVM
 # see https://travis-ci.org/php-amqplib/php-amqplib/jobs/259347861
 dist: trusty
 
