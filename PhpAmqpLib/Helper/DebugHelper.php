@@ -7,7 +7,12 @@ class DebugHelper
      * @var bool
      */
     protected $debug;
-
+    
+    /**
+     * @var resource
+     */
+    protected $debug_output;
+    
     /**
      * @var string
      */
@@ -18,6 +23,7 @@ class DebugHelper
      */
     public function __construct($PROTOCOL_CONSTANTS_CLASS) {
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
+        $this->debug_output = defined('AMQP_DEBUG_OUTPUT') ? AMQP_DEBUG_OUTPUT : STDOUT;
         $this->PROTOCOL_CONSTANTS_CLASS = $PROTOCOL_CONSTANTS_CLASS;
     }
 
@@ -101,6 +107,6 @@ class DebugHelper
      * @param string $s
      */
     protected function print_msg($s) {
-        echo $s . PHP_EOL;
+        fwrite($this->debug_output, $s . PHP_EOL);
     }
 }
