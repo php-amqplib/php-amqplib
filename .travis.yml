@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
@@ -15,12 +14,6 @@ sudo: false
 
 # see https://travis-ci.org/php-amqplib/php-amqplib/jobs/259347861
 dist: trusty
-
-matrix:
-  fast_finish: true
-  include:
-    - php: 5.3
-      env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
 
 before_script:
   - travis_retry composer self-update
