@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Interop;
 
 use Interop\Amqp\AmqpMessage;
 
-class Buffer
+final class Buffer
 {
     /**
      * @var array ['aTag' => [AmqpMessage, AmqpMessage ...]]

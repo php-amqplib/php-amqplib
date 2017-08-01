@@ -14,7 +14,7 @@ use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage as LibAMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 
-class AmqpConsumer implements InteropAmqpConsumer
+final class AmqpConsumer implements InteropAmqpConsumer
 {
     /**
      * @var AMQPChannel

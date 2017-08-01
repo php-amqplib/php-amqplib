@@ -9,7 +9,7 @@ use PhpAmqpLib\Connection\AMQPLazySocketConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-class AmqpConnectionFactory implements InteropAmqpConnectionFactory
+final class AmqpConnectionFactory implements InteropAmqpConnectionFactory
 {
     /**
      * @var array

@@ -18,7 +18,7 @@ use Interop\Queue\PsrTopic;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 
-class AmqpContext implements InteropAmqpContext
+final class AmqpContext implements InteropAmqpContext
 {
     /**
      * @var AbstractConnection

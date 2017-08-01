@@ -15,7 +15,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Message\AMQPMessage as LibAMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 
-class AmqpProducer implements InteropAmqpProducer
+final class AmqpProducer implements InteropAmqpProducer
 {
     /**
      * @var AMQPChannel
