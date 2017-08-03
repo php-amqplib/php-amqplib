@@ -23,7 +23,6 @@ class DebugHelper
      */
     public function __construct($PROTOCOL_CONSTANTS_CLASS) {
         if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
-        if(!defined('STDERR')) define('STDERR', fopen('php://stderr', 'w'));
 
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
         $this->debug_output = defined('AMQP_DEBUG_OUTPUT') ? AMQP_DEBUG_OUTPUT : STDOUT;
