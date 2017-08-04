@@ -44,6 +44,10 @@ Since the library uses `AMQP 0.9.1` we added support for the following RabbitMQ 
 
 Extensions that modify existing methods like `alternate exchanges` are also supported.
 
+### AMQP interop
+
+There is [amqp interop](https://github.com/queue-interop/amqp-interop) compatible wrapper(s) for the php-amqplib.
+
 ## Setup ##
 
  Add a `composer.json` file to your project:
