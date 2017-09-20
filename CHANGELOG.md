@@ -2,9 +2,11 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## [Unreleased]
+## ## 2.8.0-rc1 [Unreleased]
 
-## 2.7.0-rc1 - 2017-05-22
+No changes yet.
+
+## 2.7.0 - 2017-09-20
 ### Added
 - Increased overall test coverage
 - Bring heartbeat support to socket connection
@@ -21,6 +23,7 @@ All Notable changes to `php-amqplib` will be documented in this file
 
 ### Changed
 - declare(ticks=1) no longer needed after PHP5.3 / amqplib 2.4.1
+- Minor DebugHelper improvements
 
 ### Enhancements
 - Add extensions requirements to README.md
