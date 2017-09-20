@@ -31,7 +31,8 @@ working on RabbitMQ and related projects.
 ## Supported RabbitMQ Versions ##
 
 Starting with version 2.0 this library uses `AMQP 0.9.1` by default and thus requires [RabbitMQ 2.0 or later version](http://www.rabbitmq.com/download.html).
-You shouldn't need to change your code, but test before upgrading.
+Usually server upgrades do not require any application code changes since
+the protocol changes very infrequently but please conduct your own testing before upgrading.
 
 ## Supported RabbitMQ Extensions ##
 
