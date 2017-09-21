@@ -14,8 +14,10 @@ It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
 
 **Requirements: bcmath and mbstring extensions** This library utilizes the bcmath and mbstring PHP extensions.  The installation steps vary per PHP version and the underlying OS.  The following example shows how to add to an existing PHP installation on Ubuntu 15.10:
 
+```bash
 sudo apt-get install php7.0-mbstring
 sudo apt-get install php7.0-bcmath
+```
 
 The library was used for the PHP examples of [RabbitMQ in Action](http://manning.com/videla/) and the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 
