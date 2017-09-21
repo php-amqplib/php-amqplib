@@ -52,7 +52,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 ```javascript
 {
   "require": {
-      "php-amqplib/php-amqplib": "2.6.*"
+      "php-amqplib/php-amqplib": "2.7.*"
   }
 }
 ```
