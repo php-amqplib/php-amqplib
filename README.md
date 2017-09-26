@@ -49,7 +49,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 
 ### Related libraries
 
-* [enqueue/amqp-ext](https://github.com/php-enqueue/amqp-lib) is a [amqp interop](https://github.com/queue-interop/queue-interop#amqp-interop) compatible wrapper.
+* [enqueue/amqp-lib](https://github.com/php-enqueue/amqp-lib) is a [amqp interop](https://github.com/queue-interop/queue-interop#amqp-interop) compatible wrapper.
 
 ## Setup ##
 
