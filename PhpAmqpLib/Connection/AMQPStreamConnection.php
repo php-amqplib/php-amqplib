@@ -56,7 +56,8 @@ class AMQPStreamConnection extends AbstractConnection
             $login_response,
             $locale,
             $io,
-            $heartbeat
+            $heartbeat,
+            $connection_timeout
         );
 
         // save the params for the use of __clone, this will overwrite the parent
