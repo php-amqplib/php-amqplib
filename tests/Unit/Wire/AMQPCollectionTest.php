@@ -3,8 +3,9 @@
 namespace PhpAmqpLib\Tests\Unit;
 
 use PhpAmqpLib\Wire;
+use PHPUnit\Framework\TestCase;
 
-class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
+class AMQPCollectionTest extends TestCase
 {
     public function testEncode080()
     {

@@ -2,7 +2,9 @@
 
 namespace PhpAmqpLib\Tests\Unit\Channel;
 
-class AMQPChannelTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class AMQPChannelTest extends TestCase
 {
     public function testCloseDoesNotEmitUndefinedPropertyWarningWhenSomeMethodsAreMocked()
     {

@@ -5,8 +5,9 @@ namespace PhpAmqpLib\Tests\Unit;
 use PhpAmqpLib\Wire\AMQPArray;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
+use PHPUnit\Framework\TestCase;
 
-class AMQPWriterTest extends \PHPUnit_Framework_TestCase
+class AMQPWriterTest extends TestCase
 {
     /**
      * @var AMQPWriter

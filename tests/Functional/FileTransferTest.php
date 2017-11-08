@@ -5,8 +5,9 @@ namespace PhpAmqpLib\Tests\Functional;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PHPUnit\Framework\TestCase;
 
-class FileTransferTest extends \PHPUnit_Framework_TestCase
+class FileTransferTest extends TestCase
 {
     /**
      * @var string

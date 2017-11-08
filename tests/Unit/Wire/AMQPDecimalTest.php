@@ -3,8 +3,9 @@
 namespace PhpAmqpLib\tests\Unit\Wire;
 
 use PhpAmqpLib\Wire\AMQPDecimal;
+use PHPUnit\Framework\TestCase;
 
-class AMQPDecimalTest extends \PHPUnit_Framework_TestCase
+class AMQPDecimalTest extends TestCase
 {
     public function testDecimal()
     {

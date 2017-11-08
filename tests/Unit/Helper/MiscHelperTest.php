@@ -3,8 +3,9 @@
 namespace PhpAmqpLib\Tests\Unit\Helper\Protocol;
 
 use PhpAmqpLib\Helper\MiscHelper;
+use PHPUnit\Framework\TestCase;
 
-class MiscHelperTest extends \PHPUnit_Framework_TestCase
+class MiscHelperTest extends TestCase
 {
     /**
      * @dataProvider getInputOutputForSplitSecondsMicroseconds
