@@ -907,7 +907,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $no_ack
      * @param bool $exclusive
      * @param bool $nowait
-     * @param callback|null $callback
+     * @param callable|null $callback
      * @param int|null $ticket
      * @param array $arguments
      * @return mixed|string
