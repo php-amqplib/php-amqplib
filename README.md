@@ -53,20 +53,10 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 
 ## Setup ##
 
- Add a `composer.json` file to your project:
-
-```javascript
-{
-  "require": {
-      "php-amqplib/php-amqplib": "2.7.*"
-  }
-}
-```
-
-Then provided you have [composer](http://getcomposer.org) installed, you can run the following command:
+Ensure you have [composer](http://getcomposer.org) installed, then run the following command:
 
 ```bash
-$ composer.phar install
+$ composer require php-amqplib/php-amqplib
 ```
 
 That will fetch the library and its dependencies inside your vendor folder. Then you can add the following to your
