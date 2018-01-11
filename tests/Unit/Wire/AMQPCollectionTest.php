@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit;
+namespace PhpAmqpLib\Tests\Unit\Wire;
 
 use PhpAmqpLib\Wire;
 
