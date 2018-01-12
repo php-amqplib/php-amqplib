@@ -168,6 +168,14 @@ abstract class AbstractChannel
     }
 
     /**
+     * @return bool
+     */
+    public function hasPendingMethods()
+    {
+        return !empty($this->method_queue);
+    }
+
+    /**
      * @param string $method_sig
      * @param string $args
      * @param AMQPMessage|null $amqpMessage
