@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\tests\Unit\Wire;
+namespace PhpAmqpLib\Tests\Unit\Wire;
 
 use PhpAmqpLib\Wire\AMQPDecimal;
 use PHPUnit\Framework\TestCase;

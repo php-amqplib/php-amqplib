@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit\Helper\Protocol;
+namespace PhpAmqpLib\Tests\Unit\Helper;
 
 use PhpAmqpLib\Helper\MiscHelper;
 use PHPUnit\Framework\TestCase;
