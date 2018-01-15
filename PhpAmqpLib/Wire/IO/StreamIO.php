@@ -89,7 +89,16 @@ class StreamIO extends AbstractIO
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
         if (is_null($this->context)) {
-            $this->context = stream_context_create();
+            // tcp_nodelay was added in 7.1.0
+            if (PHP_VERSION_ID >= 70100) {
+                $this->context = stream_context_create([
+                    "socket" => [
+                        "tcp_nodelay" => true
+                    ]
+                ]);
+            } else {
+                $this->context = stream_context_create();
+            }
         } else {
             $this->protocol = 'ssl';
             // php bugs 41631 & 65137 prevent select null from working on ssl streams
