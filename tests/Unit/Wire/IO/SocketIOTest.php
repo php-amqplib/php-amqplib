@@ -2,8 +2,9 @@
 namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
 use PhpAmqpLib\Wire\IO\SocketIO;
+use PHPUnit\Framework\TestCase;
 
-class SocketIOTest extends \PHPUnit_Framework_TestCase
+class SocketIOTest extends TestCase
 {
     public function testConnect()
     {

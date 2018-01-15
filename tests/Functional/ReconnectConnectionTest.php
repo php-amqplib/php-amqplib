@@ -7,8 +7,9 @@ use PhpAmqpLib\Connection\AMQPLazyConnection;
 use PhpAmqpLib\Connection\AMQPLazySocketConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PHPUnit\Framework\TestCase;
 
-class ReconnectConnectionTest extends \PHPUnit_Framework_TestCase
+class ReconnectConnectionTest extends TestCase
 {
     /**
      * Hold onto the connection

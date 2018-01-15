@@ -5,8 +5,9 @@ namespace PhpAmqpLib\Tests\Functional;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Exception\AMQPProtocolException;
+use PHPUnit\Framework\TestCase;
 
-class Bug49Test extends \PHPUnit_Framework_TestCase
+class Bug49Test extends TestCase
 {
     /**
      * @var AMQPConnection

@@ -8,8 +8,9 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
+use PHPUnit\Framework\TestCase;
 
-class Bug256Test extends \PHPUnit_Framework_TestCase
+class Bug256Test extends TestCase
 {
     /**
      * @var string

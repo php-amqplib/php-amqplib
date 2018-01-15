@@ -1,10 +1,12 @@
 <?php
+
 namespace PhpAmqpLib\Tests\Unit\Message;
 
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
+use PHPUnit\Framework\TestCase;
 
-class AMQPMessageTest extends \PHPUnit_Framework_TestCase
+class AMQPMessageTest extends TestCase
 {
     public function propertiesDataProvider()
     {

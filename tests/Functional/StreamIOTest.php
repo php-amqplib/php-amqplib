@@ -3,8 +3,9 @@
 namespace PhpAmqpLib\Tests\Functional;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PHPUnit\Framework\TestCase;
 
-class StreamIOTest extends \PHPUnit_Framework_TestCase
+class StreamIOTest extends TestCase
 {
     public function testErrorHandlerIsRestoredOnFailedConnection()
     {
