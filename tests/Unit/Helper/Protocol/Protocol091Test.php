@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit\Helper\Writer;
+namespace PhpAmqpLib\Tests\Unit\Helper\Protocol;
 
 use PhpAmqpLib\Helper\Protocol\Protocol091;
 

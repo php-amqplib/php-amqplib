@@ -1,5 +1,5 @@
 <?php
-namespace PhpAmqpLib\tests\Unit\Wire\IO;
+namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
 use PhpAmqpLib\Wire\IO\SocketIO;
 
