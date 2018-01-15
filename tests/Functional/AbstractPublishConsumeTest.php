@@ -6,8 +6,9 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractPublishConsumeTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractPublishConsumeTest extends TestCase
 {
     /**
      * @var string

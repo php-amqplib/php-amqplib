@@ -6,8 +6,9 @@ use PhpAmqpLib\Wire\AMQPArray;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
+use PHPUnit\Framework\TestCase;
 
-class WireTest extends \PHPUnit_Framework_TestCase
+class WireTest extends TestCase
 {
     const LONG_RND_ITERS = 100000;
 
