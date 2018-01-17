@@ -2,11 +2,21 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## ## 2.8.0-rc1 [Unreleased]
+## 2.7.1-rc1 - 2018-01-17
 
-No changes yet.
+### Added
+
+### Fixed
+
+### Changed
+
+### Enhancements
+- Support PHPUnit 6 [PR](https://github.com/php-amqplib/php-amqplib/pull/530)
+- Use `tcp_nodelay` for `StreamIO` [PR](https://github.com/php-amqplib/php-amqplib/pull/517)
+- Pass connection timeout to `wait` method [PR](https://github.com/php-amqplib/php-amqplib/pull/512)
 
 ## 2.7.0 - 2017-09-20
+
 ### Added
 - Increased overall test coverage
 - Bring heartbeat support to socket connection
