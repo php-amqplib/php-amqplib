@@ -1,4 +1,4 @@
 [submodule "docs"]
 	path = docs
-	url = git@github.com:php-amqplib/php-amqplib.git
+	url = https://github.com/php-amqplib/php-amqplib.git
 	branch = gh-pages
