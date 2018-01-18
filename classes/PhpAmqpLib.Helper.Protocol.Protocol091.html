@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>    php-amqplib &raquo; \PhpAmqpLib\Helper\Protocol\Protocol091
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+            <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+            <!--[if lt IE 9]>
+        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+        <![endif]-->
+        <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
+        <script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="../js/bootstrap.js" type="text/javascript"></script>
+        <script src="../js/template.js" type="text/javascript"></script>
+        <script src="../js/prettify/prettify.min.js" type="text/javascript"></script>
+    
+            <link rel="shortcut icon" href="../img/favicon.ico"/>
+        <link rel="apple-touch-icon" href="../img/apple-touch-icon.png"/>
+        <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png"/>
+        <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png"/>
+    </head>
+<body>
+
+        <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span> <span class="icon-bar"></span>
+                    <span class="icon-bar"></span> </a>
+                <a class="brand" href="../index.html">php-amqplib</a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li class="dropdown">
+                            <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                API Documentation <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                                                    <li><a>Namespaces</a></li>
+                                                                        <li><a href="../namespaces/PhpAmqpLib.html">PhpAmqpLib</a></li>
+                                                                                                                                </ul>
+                        </li>
+                        <li class="dropdown" id="charts-menu">
+                            <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                Charts <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../graph_class.html">
+                                        <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="reports-menu">
+                            <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                Reports <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="../errors.html">
+                                        <i class="icon-list-alt"></i>&#160;Errors
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../markers.html">
+                                        <i class="icon-list-alt"></i>&#160;Markers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="../deprecated.html">
+                                        <i class="icon-list-alt"></i>&#160;Deprecated
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="go_to_top">
+            <a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>
+        </div>
+    </div>
+    
+    <div id="___" class="container">
+        <noscript>
+            <div class="alert alert-warning">
+                Javascript is disabled; several features are only available if Javascript is enabled.
+            </div>
+        </noscript>
+
+        
+            <style>
+        .deprecated h2 {
+            text-decoration: line-through;
+        }
+    </style>
+    <div class="row">
+        <div class="span4">
+                    <div class="btn-group view pull-right" data-toggle="buttons-radio">
+        <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
+        <button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+    </div>
+    <div class="btn-group visibility" data-toggle="buttons-checkbox">
+        <button class="btn public active" title="Show public elements">Public</button>
+        <button class="btn protected" title="Show protected elements">Protected</button>
+        <button class="btn private" title="Show private elements">Private</button>
+        <button class="btn inherited active" title="Show inherited elements">Inherited</button>
+    </div>
+
+        <ul class="side-nav nav nav-list">
+        <li class="nav-header">
+            <i class="icon-custom icon-method"></i> Methods
+            <ul>
+                                                                                                    <li class="method public">
+        <a href="#method_accessRequest" title="accessRequest :: ">
+            <span class="description"></span><pre>accessRequest</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_accessRequestOk" title="accessRequestOk :: ">
+            <span class="description"></span><pre>accessRequestOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicAck" title="basicAck :: ">
+            <span class="description"></span><pre>basicAck</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicCancel" title="basicCancel :: ">
+            <span class="description"></span><pre>basicCancel</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicCancelOk" title="basicCancelOk :: ">
+            <span class="description"></span><pre>basicCancelOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicConsume" title="basicConsume :: ">
+            <span class="description"></span><pre>basicConsume</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicConsumeOk" title="basicConsumeOk :: ">
+            <span class="description"></span><pre>basicConsumeOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicDeliver" title="basicDeliver :: ">
+            <span class="description"></span><pre>basicDeliver</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicGet" title="basicGet :: ">
+            <span class="description"></span><pre>basicGet</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicGetEmpty" title="basicGetEmpty :: ">
+            <span class="description"></span><pre>basicGetEmpty</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicGetOk" title="basicGetOk :: ">
+            <span class="description"></span><pre>basicGetOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicNack" title="basicNack :: ">
+            <span class="description"></span><pre>basicNack</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicPublish" title="basicPublish :: ">
+            <span class="description"></span><pre>basicPublish</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicQos" title="basicQos :: ">
+            <span class="description"></span><pre>basicQos</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicQosOk" title="basicQosOk :: ">
+            <span class="description"></span><pre>basicQosOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicRecover" title="basicRecover :: ">
+            <span class="description"></span><pre>basicRecover</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicRecoverAsync" title="basicRecoverAsync :: ">
+            <span class="description"></span><pre>basicRecoverAsync</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicRecoverOk" title="basicRecoverOk :: ">
+            <span class="description"></span><pre>basicRecoverOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicReject" title="basicReject :: ">
+            <span class="description"></span><pre>basicReject</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_basicReturn" title="basicReturn :: ">
+            <span class="description"></span><pre>basicReturn</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_channelClose" title="channelClose :: ">
+            <span class="description"></span><pre>channelClose</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_channelCloseOk" title="channelCloseOk :: ">
+            <span class="description"></span><pre>channelCloseOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_channelFlow" title="channelFlow :: ">
+            <span class="description"></span><pre>channelFlow</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_channelFlowOk" title="channelFlowOk :: ">
+            <span class="description"></span><pre>channelFlowOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_channelOpen" title="channelOpen :: ">
+            <span class="description"></span><pre>channelOpen</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_channelOpenOk" title="channelOpenOk :: ">
+            <span class="description"></span><pre>channelOpenOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_confirmSelect" title="confirmSelect :: ">
+            <span class="description"></span><pre>confirmSelect</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_confirmSelectOk" title="confirmSelectOk :: ">
+            <span class="description"></span><pre>confirmSelectOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionBlocked" title="connectionBlocked :: ">
+            <span class="description"></span><pre>connectionBlocked</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionClose" title="connectionClose :: ">
+            <span class="description"></span><pre>connectionClose</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionCloseOk" title="connectionCloseOk :: ">
+            <span class="description"></span><pre>connectionCloseOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionOpen" title="connectionOpen :: ">
+            <span class="description"></span><pre>connectionOpen</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionOpenOk" title="connectionOpenOk :: ">
+            <span class="description"></span><pre>connectionOpenOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionSecure" title="connectionSecure :: ">
+            <span class="description"></span><pre>connectionSecure</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionSecureOk" title="connectionSecureOk :: ">
+            <span class="description"></span><pre>connectionSecureOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionStart" title="connectionStart :: ">
+            <span class="description"></span><pre>connectionStart</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionStartOk" title="connectionStartOk :: ">
+            <span class="description"></span><pre>connectionStartOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionTune" title="connectionTune :: ">
+            <span class="description"></span><pre>connectionTune</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionTuneOk" title="connectionTuneOk :: ">
+            <span class="description"></span><pre>connectionTuneOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_connectionUnblocked" title="connectionUnblocked :: ">
+            <span class="description"></span><pre>connectionUnblocked</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeBind" title="exchangeBind :: ">
+            <span class="description"></span><pre>exchangeBind</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeBindOk" title="exchangeBindOk :: ">
+            <span class="description"></span><pre>exchangeBindOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeDeclare" title="exchangeDeclare :: ">
+            <span class="description"></span><pre>exchangeDeclare</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeDeclareOk" title="exchangeDeclareOk :: ">
+            <span class="description"></span><pre>exchangeDeclareOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeDelete" title="exchangeDelete :: ">
+            <span class="description"></span><pre>exchangeDelete</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeDeleteOk" title="exchangeDeleteOk :: ">
+            <span class="description"></span><pre>exchangeDeleteOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeUnbind" title="exchangeUnbind :: ">
+            <span class="description"></span><pre>exchangeUnbind</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_exchangeUnbindOk" title="exchangeUnbindOk :: ">
+            <span class="description"></span><pre>exchangeUnbindOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueBind" title="queueBind :: ">
+            <span class="description"></span><pre>queueBind</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueBindOk" title="queueBindOk :: ">
+            <span class="description"></span><pre>queueBindOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueDeclare" title="queueDeclare :: ">
+            <span class="description"></span><pre>queueDeclare</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueDeclareOk" title="queueDeclareOk :: ">
+            <span class="description"></span><pre>queueDeclareOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueDelete" title="queueDelete :: ">
+            <span class="description"></span><pre>queueDelete</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueDeleteOk" title="queueDeleteOk :: ">
+            <span class="description"></span><pre>queueDeleteOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queuePurge" title="queuePurge :: ">
+            <span class="description"></span><pre>queuePurge</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queuePurgeOk" title="queuePurgeOk :: ">
+            <span class="description"></span><pre>queuePurgeOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueUnbind" title="queueUnbind :: ">
+            <span class="description"></span><pre>queueUnbind</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_queueUnbindOk" title="queueUnbindOk :: ">
+            <span class="description"></span><pre>queueUnbindOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_txCommit" title="txCommit :: ">
+            <span class="description"></span><pre>txCommit</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_txCommitOk" title="txCommitOk :: ">
+            <span class="description"></span><pre>txCommitOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_txRollback" title="txRollback :: ">
+            <span class="description"></span><pre>txRollback</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_txRollbackOk" title="txRollbackOk :: ">
+            <span class="description"></span><pre>txRollbackOk</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_txSelect" title="txSelect :: ">
+            <span class="description"></span><pre>txSelect</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_txSelectOk" title="txSelectOk :: ">
+            <span class="description"></span><pre>txSelectOk</pre>
+        </a>
+    </li>
+
+                                                </ul>
+        </li>
+        <li class="nav-header protected">» Protected
+            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </ul>
+        </li>
+        <li class="nav-header private">» Private
+            <ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </ul>
+        </li>
+        <li class="nav-header">
+            <i class="icon-custom icon-constant"></i> Constants
+            <ul>
+                            </ul>
+        </li>
+    </ul>
+
+
+        </div>
+
+        <div class="span8">
+            <div class="element class">
+                <h1>Protocol091</h1>
+                <small style="display: block; text-align: right">
+                                                        </small>
+                <p class="short_description"></p>
+                <div class="details">
+                    <div class="long_description">
+                        
+                    </div>
+                    <table class="table table-bordered">
+                                                                                    <tr>
+                                    <th>
+                                        package
+                                                                            </th>
+                                    <td>
+                                                                                    
+                                                                                <p>PhpAmqpLib</p>
+                                    </td>
+                                </tr>
+                                                                                                                                                                                </table>
+
+                    <h3><i class="icon-custom icon-method"></i> Methods</h3>
+                                                                <a id="method_accessRequest"></a>
+                        <div class="element clickable method public  method_accessRequest" data-toggle="collapse" data-target=".method_accessRequest .collapse">
+                            <h2>accessRequest</h2>
+                            <pre>accessRequest(string $realm = &#039;/data&#039;, boolean $exclusive = false, boolean $passive = true, boolean $active = true, boolean $write = true, boolean $read = true) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$realm</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exclusive</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$passive</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$active</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$write</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$read</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_accessRequestOk"></a>
+                        <div class="element clickable method public  method_accessRequestOk" data-toggle="collapse" data-target=".method_accessRequestOk .collapse">
+                            <h2>accessRequestOk</h2>
+                            <pre>accessRequestOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicAck"></a>
+                        <div class="element clickable method public  method_basicAck" data-toggle="collapse" data-target=".method_basicAck .collapse">
+                            <h2>basicAck</h2>
+                            <pre>basicAck(integer $delivery_tag, boolean $multiple = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$delivery_tag</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$multiple</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicCancel"></a>
+                        <div class="element clickable method public  method_basicCancel" data-toggle="collapse" data-target=".method_basicCancel .collapse">
+                            <h2>basicCancel</h2>
+                            <pre>basicCancel(string $consumer_tag, boolean $nowait = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$consumer_tag</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicCancelOk"></a>
+                        <div class="element clickable method public  method_basicCancelOk" data-toggle="collapse" data-target=".method_basicCancelOk .collapse">
+                            <h2>basicCancelOk</h2>
+                            <pre>basicCancelOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicConsume"></a>
+                        <div class="element clickable method public  method_basicConsume" data-toggle="collapse" data-target=".method_basicConsume .collapse">
+                            <h2>basicConsume</h2>
+                            <pre>basicConsume(integer $ticket, string $queue = &#039;&#039;, string $consumer_tag = &#039;&#039;, boolean $no_local = false, boolean $no_ack = false, boolean $exclusive = false, boolean $nowait = false, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$consumer_tag</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$no_local</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$no_ack</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exclusive</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicConsumeOk"></a>
+                        <div class="element clickable method public  method_basicConsumeOk" data-toggle="collapse" data-target=".method_basicConsumeOk .collapse">
+                            <h2>basicConsumeOk</h2>
+                            <pre>basicConsumeOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicDeliver"></a>
+                        <div class="element clickable method public  method_basicDeliver" data-toggle="collapse" data-target=".method_basicDeliver .collapse">
+                            <h2>basicDeliver</h2>
+                            <pre>basicDeliver(string $consumer_tag, integer $delivery_tag, boolean $redelivered = false, string $exchange, string $routing_key) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$consumer_tag</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$delivery_tag</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$redelivered</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicGet"></a>
+                        <div class="element clickable method public  method_basicGet" data-toggle="collapse" data-target=".method_basicGet .collapse">
+                            <h2>basicGet</h2>
+                            <pre>basicGet(integer $ticket, string $queue = &#039;&#039;, boolean $no_ack = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$no_ack</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicGetEmpty"></a>
+                        <div class="element clickable method public  method_basicGetEmpty" data-toggle="collapse" data-target=".method_basicGetEmpty .collapse">
+                            <h2>basicGetEmpty</h2>
+                            <pre>basicGetEmpty(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicGetOk"></a>
+                        <div class="element clickable method public  method_basicGetOk" data-toggle="collapse" data-target=".method_basicGetOk .collapse">
+                            <h2>basicGetOk</h2>
+                            <pre>basicGetOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicNack"></a>
+                        <div class="element clickable method public  method_basicNack" data-toggle="collapse" data-target=".method_basicNack .collapse">
+                            <h2>basicNack</h2>
+                            <pre>basicNack(integer $delivery_tag, boolean $multiple = false, boolean $requeue = true) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$delivery_tag</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$multiple</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$requeue</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicPublish"></a>
+                        <div class="element clickable method public  method_basicPublish" data-toggle="collapse" data-target=".method_basicPublish .collapse">
+                            <h2>basicPublish</h2>
+                            <pre>basicPublish(integer $ticket, string $exchange = &#039;&#039;, string $routing_key = &#039;&#039;, boolean $mandatory = false, boolean $immediate = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mandatory</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$immediate</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicQos"></a>
+                        <div class="element clickable method public  method_basicQos" data-toggle="collapse" data-target=".method_basicQos .collapse">
+                            <h2>basicQos</h2>
+                            <pre>basicQos(integer $prefetch_size, integer $prefetch_count, boolean $global = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$prefetch_size</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$prefetch_count</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$global</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicQosOk"></a>
+                        <div class="element clickable method public  method_basicQosOk" data-toggle="collapse" data-target=".method_basicQosOk .collapse">
+                            <h2>basicQosOk</h2>
+                            <pre>basicQosOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicRecover"></a>
+                        <div class="element clickable method public  method_basicRecover" data-toggle="collapse" data-target=".method_basicRecover .collapse">
+                            <h2>basicRecover</h2>
+                            <pre>basicRecover(boolean $requeue = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$requeue</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicRecoverAsync"></a>
+                        <div class="element clickable method public  method_basicRecoverAsync" data-toggle="collapse" data-target=".method_basicRecoverAsync .collapse">
+                            <h2>basicRecoverAsync</h2>
+                            <pre>basicRecoverAsync(boolean $requeue = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$requeue</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicRecoverOk"></a>
+                        <div class="element clickable method public  method_basicRecoverOk" data-toggle="collapse" data-target=".method_basicRecoverOk .collapse">
+                            <h2>basicRecoverOk</h2>
+                            <pre>basicRecoverOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicReject"></a>
+                        <div class="element clickable method public  method_basicReject" data-toggle="collapse" data-target=".method_basicReject .collapse">
+                            <h2>basicReject</h2>
+                            <pre>basicReject(integer $delivery_tag, boolean $requeue = true) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$delivery_tag</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$requeue</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_basicReturn"></a>
+                        <div class="element clickable method public  method_basicReturn" data-toggle="collapse" data-target=".method_basicReturn .collapse">
+                            <h2>basicReturn</h2>
+                            <pre>basicReturn(integer $reply_code, string $reply_text = &#039;&#039;, string $exchange, string $routing_key) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reply_code</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reply_text</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_channelClose"></a>
+                        <div class="element clickable method public  method_channelClose" data-toggle="collapse" data-target=".method_channelClose .collapse">
+                            <h2>channelClose</h2>
+                            <pre>channelClose(integer $reply_code, string $reply_text = &#039;&#039;, integer $class_id, integer $method_id) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reply_code</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reply_text</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$class_id</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$method_id</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_channelCloseOk"></a>
+                        <div class="element clickable method public  method_channelCloseOk" data-toggle="collapse" data-target=".method_channelCloseOk .collapse">
+                            <h2>channelCloseOk</h2>
+                            <pre>channelCloseOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_channelFlow"></a>
+                        <div class="element clickable method public  method_channelFlow" data-toggle="collapse" data-target=".method_channelFlow .collapse">
+                            <h2>channelFlow</h2>
+                            <pre>channelFlow(boolean $active) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$active</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_channelFlowOk"></a>
+                        <div class="element clickable method public  method_channelFlowOk" data-toggle="collapse" data-target=".method_channelFlowOk .collapse">
+                            <h2>channelFlowOk</h2>
+                            <pre>channelFlowOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_channelOpen"></a>
+                        <div class="element clickable method public  method_channelOpen" data-toggle="collapse" data-target=".method_channelOpen .collapse">
+                            <h2>channelOpen</h2>
+                            <pre>channelOpen(string $out_of_band = &#039;&#039;) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$out_of_band</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_channelOpenOk"></a>
+                        <div class="element clickable method public  method_channelOpenOk" data-toggle="collapse" data-target=".method_channelOpenOk .collapse">
+                            <h2>channelOpenOk</h2>
+                            <pre>channelOpenOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_confirmSelect"></a>
+                        <div class="element clickable method public  method_confirmSelect" data-toggle="collapse" data-target=".method_confirmSelect .collapse">
+                            <h2>confirmSelect</h2>
+                            <pre>confirmSelect(boolean $nowait = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_confirmSelectOk"></a>
+                        <div class="element clickable method public  method_confirmSelectOk" data-toggle="collapse" data-target=".method_confirmSelectOk .collapse">
+                            <h2>confirmSelectOk</h2>
+                            <pre>confirmSelectOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionBlocked"></a>
+                        <div class="element clickable method public  method_connectionBlocked" data-toggle="collapse" data-target=".method_connectionBlocked .collapse">
+                            <h2>connectionBlocked</h2>
+                            <pre>connectionBlocked(string $reason = &#039;&#039;) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reason</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionClose"></a>
+                        <div class="element clickable method public  method_connectionClose" data-toggle="collapse" data-target=".method_connectionClose .collapse">
+                            <h2>connectionClose</h2>
+                            <pre>connectionClose(integer $reply_code, string $reply_text = &#039;&#039;, integer $class_id, integer $method_id) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reply_code</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reply_text</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$class_id</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$method_id</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionCloseOk"></a>
+                        <div class="element clickable method public  method_connectionCloseOk" data-toggle="collapse" data-target=".method_connectionCloseOk .collapse">
+                            <h2>connectionCloseOk</h2>
+                            <pre>connectionCloseOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionOpen"></a>
+                        <div class="element clickable method public  method_connectionOpen" data-toggle="collapse" data-target=".method_connectionOpen .collapse">
+                            <h2>connectionOpen</h2>
+                            <pre>connectionOpen(string $virtual_host = &#039;/&#039;, string $capabilities = &#039;&#039;, boolean $insist = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$virtual_host</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$capabilities</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$insist</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionOpenOk"></a>
+                        <div class="element clickable method public  method_connectionOpenOk" data-toggle="collapse" data-target=".method_connectionOpenOk .collapse">
+                            <h2>connectionOpenOk</h2>
+                            <pre>connectionOpenOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionSecure"></a>
+                        <div class="element clickable method public  method_connectionSecure" data-toggle="collapse" data-target=".method_connectionSecure .collapse">
+                            <h2>connectionSecure</h2>
+                            <pre>connectionSecure(string $challenge) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$challenge</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionSecureOk"></a>
+                        <div class="element clickable method public  method_connectionSecureOk" data-toggle="collapse" data-target=".method_connectionSecureOk .collapse">
+                            <h2>connectionSecureOk</h2>
+                            <pre>connectionSecureOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionStart"></a>
+                        <div class="element clickable method public  method_connectionStart" data-toggle="collapse" data-target=".method_connectionStart .collapse">
+                            <h2>connectionStart</h2>
+                            <pre>connectionStart(integer $version_major, integer $version_minor = 9, mixed $server_properties, string $mechanisms = &#039;PLAIN&#039;, string $locales = &#039;en_US&#039;) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$version_major</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$version_minor</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$server_properties</h4>
+                                                <code>mixed</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mechanisms</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$locales</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionStartOk"></a>
+                        <div class="element clickable method public  method_connectionStartOk" data-toggle="collapse" data-target=".method_connectionStartOk .collapse">
+                            <h2>connectionStartOk</h2>
+                            <pre>connectionStartOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionTune"></a>
+                        <div class="element clickable method public  method_connectionTune" data-toggle="collapse" data-target=".method_connectionTune .collapse">
+                            <h2>connectionTune</h2>
+                            <pre>connectionTune(integer $channel_max, integer $frame_max, integer $heartbeat) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$channel_max</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$frame_max</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$heartbeat</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionTuneOk"></a>
+                        <div class="element clickable method public  method_connectionTuneOk" data-toggle="collapse" data-target=".method_connectionTuneOk .collapse">
+                            <h2>connectionTuneOk</h2>
+                            <pre>connectionTuneOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_connectionUnblocked"></a>
+                        <div class="element clickable method public  method_connectionUnblocked" data-toggle="collapse" data-target=".method_connectionUnblocked .collapse">
+                            <h2>connectionUnblocked</h2>
+                            <pre>connectionUnblocked(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeBind"></a>
+                        <div class="element clickable method public  method_exchangeBind" data-toggle="collapse" data-target=".method_exchangeBind .collapse">
+                            <h2>exchangeBind</h2>
+                            <pre>exchangeBind(integer $ticket, string $destination, string $source, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$destination</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$source</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeBindOk"></a>
+                        <div class="element clickable method public  method_exchangeBindOk" data-toggle="collapse" data-target=".method_exchangeBindOk .collapse">
+                            <h2>exchangeBindOk</h2>
+                            <pre>exchangeBindOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeDeclare"></a>
+                        <div class="element clickable method public  method_exchangeDeclare" data-toggle="collapse" data-target=".method_exchangeDeclare .collapse">
+                            <h2>exchangeDeclare</h2>
+                            <pre>exchangeDeclare(integer $ticket, string $exchange, string $type = &#039;direct&#039;, boolean $passive = false, boolean $durable = false, boolean $auto_delete = false, boolean $internal = false, boolean $nowait = false, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$type</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$passive</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$durable</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$auto_delete</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$internal</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeDeclareOk"></a>
+                        <div class="element clickable method public  method_exchangeDeclareOk" data-toggle="collapse" data-target=".method_exchangeDeclareOk .collapse">
+                            <h2>exchangeDeclareOk</h2>
+                            <pre>exchangeDeclareOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeDelete"></a>
+                        <div class="element clickable method public  method_exchangeDelete" data-toggle="collapse" data-target=".method_exchangeDelete .collapse">
+                            <h2>exchangeDelete</h2>
+                            <pre>exchangeDelete(integer $ticket, string $exchange, boolean $if_unused = false, boolean $nowait = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$if_unused</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeDeleteOk"></a>
+                        <div class="element clickable method public  method_exchangeDeleteOk" data-toggle="collapse" data-target=".method_exchangeDeleteOk .collapse">
+                            <h2>exchangeDeleteOk</h2>
+                            <pre>exchangeDeleteOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeUnbind"></a>
+                        <div class="element clickable method public  method_exchangeUnbind" data-toggle="collapse" data-target=".method_exchangeUnbind .collapse">
+                            <h2>exchangeUnbind</h2>
+                            <pre>exchangeUnbind(integer $ticket, string $destination, string $source, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$destination</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$source</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_exchangeUnbindOk"></a>
+                        <div class="element clickable method public  method_exchangeUnbindOk" data-toggle="collapse" data-target=".method_exchangeUnbindOk .collapse">
+                            <h2>exchangeUnbindOk</h2>
+                            <pre>exchangeUnbindOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueBind"></a>
+                        <div class="element clickable method public  method_queueBind" data-toggle="collapse" data-target=".method_queueBind .collapse">
+                            <h2>queueBind</h2>
+                            <pre>queueBind(integer $ticket, string $queue = &#039;&#039;, string $exchange, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueBindOk"></a>
+                        <div class="element clickable method public  method_queueBindOk" data-toggle="collapse" data-target=".method_queueBindOk .collapse">
+                            <h2>queueBindOk</h2>
+                            <pre>queueBindOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueDeclare"></a>
+                        <div class="element clickable method public  method_queueDeclare" data-toggle="collapse" data-target=".method_queueDeclare .collapse">
+                            <h2>queueDeclare</h2>
+                            <pre>queueDeclare(integer $ticket, string $queue = &#039;&#039;, boolean $passive = false, boolean $durable = false, boolean $exclusive = false, boolean $auto_delete = false, boolean $nowait = false, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$passive</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$durable</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exclusive</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$auto_delete</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueDeclareOk"></a>
+                        <div class="element clickable method public  method_queueDeclareOk" data-toggle="collapse" data-target=".method_queueDeclareOk .collapse">
+                            <h2>queueDeclareOk</h2>
+                            <pre>queueDeclareOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueDelete"></a>
+                        <div class="element clickable method public  method_queueDelete" data-toggle="collapse" data-target=".method_queueDelete .collapse">
+                            <h2>queueDelete</h2>
+                            <pre>queueDelete(integer $ticket, string $queue = &#039;&#039;, boolean $if_unused = false, boolean $if_empty = false, boolean $nowait = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$if_unused</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$if_empty</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueDeleteOk"></a>
+                        <div class="element clickable method public  method_queueDeleteOk" data-toggle="collapse" data-target=".method_queueDeleteOk .collapse">
+                            <h2>queueDeleteOk</h2>
+                            <pre>queueDeleteOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queuePurge"></a>
+                        <div class="element clickable method public  method_queuePurge" data-toggle="collapse" data-target=".method_queuePurge .collapse">
+                            <h2>queuePurge</h2>
+                            <pre>queuePurge(integer $ticket, string $queue = &#039;&#039;, boolean $nowait = false) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$nowait</h4>
+                                                <code>boolean</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queuePurgeOk"></a>
+                        <div class="element clickable method public  method_queuePurgeOk" data-toggle="collapse" data-target=".method_queuePurgeOk .collapse">
+                            <h2>queuePurgeOk</h2>
+                            <pre>queuePurgeOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueUnbind"></a>
+                        <div class="element clickable method public  method_queueUnbind" data-toggle="collapse" data-target=".method_queueUnbind .collapse">
+                            <h2>queueUnbind</h2>
+                            <pre>queueUnbind(integer $ticket, string $queue = &#039;&#039;, string $exchange, string $routing_key = &#039;&#039;, array $arguments = array()) : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ticket</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$queue</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$exchange</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$routing_key</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$arguments</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_queueUnbindOk"></a>
+                        <div class="element clickable method public  method_queueUnbindOk" data-toggle="collapse" data-target=".method_queueUnbindOk .collapse">
+                            <h2>queueUnbindOk</h2>
+                            <pre>queueUnbindOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_txCommit"></a>
+                        <div class="element clickable method public  method_txCommit" data-toggle="collapse" data-target=".method_txCommit .collapse">
+                            <h2>txCommit</h2>
+                            <pre>txCommit() : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_txCommitOk"></a>
+                        <div class="element clickable method public  method_txCommitOk" data-toggle="collapse" data-target=".method_txCommitOk .collapse">
+                            <h2>txCommitOk</h2>
+                            <pre>txCommitOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_txRollback"></a>
+                        <div class="element clickable method public  method_txRollback" data-toggle="collapse" data-target=".method_txRollback .collapse">
+                            <h2>txRollback</h2>
+                            <pre>txRollback() : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_txRollbackOk"></a>
+                        <div class="element clickable method public  method_txRollbackOk" data-toggle="collapse" data-target=".method_txRollbackOk .collapse">
+                            <h2>txRollbackOk</h2>
+                            <pre>txRollbackOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_txSelect"></a>
+                        <div class="element clickable method public  method_txSelect" data-toggle="collapse" data-target=".method_txSelect .collapse">
+                            <h2>txSelect</h2>
+                            <pre>txSelect() : array</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_txSelectOk"></a>
+                        <div class="element clickable method public  method_txSelectOk" data-toggle="collapse" data-target=".method_txSelectOk .collapse">
+                            <h2>txSelectOk</h2>
+                            <pre>txSelectOk(\PhpAmqpLib\Wire\AMQPReader $reader) : array</pre>
+                            <div class="labels">
+                                                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$reader</h4>
+                                                <code><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">\PhpAmqpLib\Wire\AMQPReader</a></code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>array</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                    
+                    
+                                                        </div>
+            </div>
+            <a id="\PhpAmqpLib\Helper\Protocol\Protocol091"></a>
+            <ul class="breadcrumb">
+                <li><a href="../index.html"><i class="icon-custom icon-class"></i></a></li>
+                    
+    
+    <li><span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Helper.Protocol.html">Protocol</a></li>
+
+                <li class="active"><span class="divider">\</span><a href="../classes/PhpAmqpLib.Helper.Protocol.Protocol091.html">Protocol091</a></li>
+            </ul>
+        </div>
+    </div>
+
+    </div>
+
+        <footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
+            <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
+            generated on Thu, 18 Jan 2018 00:22:33 +0000.<br/>
+    </footer>
+    </body>
+</html>
