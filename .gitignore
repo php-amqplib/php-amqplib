@@ -2,3 +2,4 @@ vendor/
 composer.lock
 phpunit.xml
 build/
+docs/

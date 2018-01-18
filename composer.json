@@ -47,7 +47,7 @@
             "PhpAmqpLib\\Tests\\Unit\\": "tests/Unit"
         }
     },
-    "license": "LGPL-2.1",
+    "license": "LGPL-2.1-or-later",
     "extra": {
         "branch-alias": {
             "dev-master": "2.7-dev"
