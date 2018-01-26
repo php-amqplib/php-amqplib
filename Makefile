@@ -1,5 +1,9 @@
+.PHONY: test
 test:
-	vendor/bin/phpunit
+	./vendor/bin/phpunit
+.PHONY: docs
+docs:
+	./vendor/bin/phpdoc --template=responsive-twig --defaultpackagename=PhpAmqpLib --title='php-amqplib' -d ./PhpAmqpLib -t ./docs
 .PHONY: benchmark
 benchmark:
 	@echo "Publishing 4000 msgs with 1KB of content:"
