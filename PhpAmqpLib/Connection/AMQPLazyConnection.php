@@ -30,7 +30,7 @@ class AMQPLazyConnection extends AMQPStreamConnection
      */
     protected function getIO()
     {
-        if (!$this->io) {
+        if (empty($this->io)) {
             $this->connect();
         }
 

@@ -31,7 +31,8 @@
     "require-dev": {
         "phpunit/phpunit": "^4.8",
         "scrutinizer/ocular": "^1.1",
-        "squizlabs/php_codesniffer": "^2.5"
+        "squizlabs/php_codesniffer": "^2.5",
+        "phpdocumentor/phpdocumentor": "^2.9"
     },
     "suggest": {
         "ext-sockets": "Use AMQPSocketConnection"
@@ -47,7 +48,7 @@
             "PhpAmqpLib\\Tests\\Unit\\": "tests/Unit"
         }
     },
-    "license": "LGPL-2.1",
+    "license": "LGPL-2.1-or-later",
     "extra": {
         "branch-alias": {
             "dev-master": "2.7-dev"

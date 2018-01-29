@@ -476,11 +476,12 @@ class AMQPChannel extends AbstractChannel
      * @param string $destination
      * @param string $source
      * @param string $routing_key
+     * @param bool $nowait
      * @param array $arguments
      * @param int $ticket
      * @return mixed
      */
-    public function exchange_unbind($destination, $source, $routing_key = '', $arguments = null, $ticket = null)
+    public function exchange_unbind($destination, $source, $routing_key = '', $nowait = false, $arguments = null, $ticket = null)
     {
         $arguments = $this->getArguments($arguments);
         $ticket = $this->getTicket($ticket);
@@ -490,6 +491,7 @@ class AMQPChannel extends AbstractChannel
             $destination,
             $source,
             $routing_key,
+            $nowait,
             $arguments
         );
 
@@ -806,6 +808,7 @@ class AMQPChannel extends AbstractChannel
 
         } else {
             $message = $this->get_and_unset_message($delivery_tag);
+            $message->delivery_info['delivery_tag'] = $delivery_tag;
             $this->dispatch_to_handler($handler, array($message));
         }
     }
@@ -904,7 +907,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $no_ack
      * @param bool $exclusive
      * @param bool $nowait
-     * @param callback|null $callback
+     * @param callable|null $callback
      * @param int|null $ticket
      * @param array $arguments
      * @return mixed|string

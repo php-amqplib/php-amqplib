@@ -1,10 +1,11 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit\Helper\Protocol;
+namespace PhpAmqpLib\Tests\Unit\Helper;
 
 use PhpAmqpLib\Helper\MiscHelper;
+use PHPUnit\Framework\TestCase;
 
-class MiscHelperTest extends \PHPUnit_Framework_TestCase
+class MiscHelperTest extends TestCase
 {
     /**
      * @dataProvider getInputOutputForSplitSecondsMicroseconds
@@ -43,5 +44,16 @@ class MiscHelperTest extends \PHPUnit_Framework_TestCase
         $uppercase = true;
         $res = MiscHelper::hexdump('FM', $htmlOutput, $uppercase, $return);
         $this->assertRegExp('/000\s+46 4D\s+FM/', $res);
+    }
+
+    public function testMethodSigForString()
+    {
+        $this->assertEquals('test',MiscHelper::methodSig('test'));
+    }
+
+    public function testSaveBytes()
+    {
+        MiscHelper::saveBytes('bytes');
+        $this->assertStringEqualsFile('/tmp/bytes','bytes');
     }
 }

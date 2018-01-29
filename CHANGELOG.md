@@ -2,7 +2,44 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## [Unreleased]
+## 2.7.1-rc1 - 2018-01-17
+
+### Added
+
+### Fixed
+
+### Changed
+
+### Enhancements
+- Support PHPUnit 6 [PR](https://github.com/php-amqplib/php-amqplib/pull/530)
+- Use `tcp_nodelay` for `StreamIO` [PR](https://github.com/php-amqplib/php-amqplib/pull/517)
+- Pass connection timeout to `wait` method [PR](https://github.com/php-amqplib/php-amqplib/pull/512)
+
+## 2.7.0 - 2017-09-20
+
+### Added
+- Increased overall test coverage
+- Bring heartbeat support to socket connection
+- Add message delivery tag for publisher confirms
+- Add support for serializing DateTimeImmutable objects
+
+### Fixed
+- Fixed infinite loop on reconnect - check_heartbeat
+- Fixed signal handling exit example
+- Fixed exchange_unbind arguments
+- Fixed invalid annotation for channel_id
+- Fixed socket null error on php 5.3 version
+- Fixed timeout parameters on HHVM before calling stream_select
+
+### Changed
+- declare(ticks=1) no longer needed after PHP5.3 / amqplib 2.4.1
+- Minor DebugHelper improvements
+
+### Enhancements
+- Add extensions requirements to README.md
+- Add PHP 7.1 to Travis build
+- Reduce memory usage in StreamIO::write()
+- Re-enable heartbeats after reconnection
 
 ## 2.6.3 - 2016-04-11
 

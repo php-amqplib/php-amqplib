@@ -1,12 +1,14 @@
 <?php
+
+namespace PhpAmqpLib\Tests\Unit\Wire\IO;
+
+use PhpAmqpLib\Wire\IO\StreamIO;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Tests StreamIO.
  */
-namespace PhpAmqpLib\Tests\Unit\Wire\IO;
-
-use \PhpAmqpLib\Wire\IO\StreamIO;
-
-class StreamIOTest extends \PHPUnit_Framework_TestCase
+class StreamIOTest extends TestCase
 {
 
     /**

@@ -59,7 +59,7 @@ class AMQPReader extends AbstractClient
     {
         parent::__construct();
 
-        $this->str = $str;
+        $this->str = is_string($str) ? $str : '';
         $this->str_length = mb_strlen($this->str, 'ASCII');
         $this->io = $io;
         $this->offset = 0;
@@ -173,7 +173,7 @@ class AMQPReader extends AbstractClient
      */
     public function read_bit()
     {
-        if (!$this->bitcount) {
+        if (empty($this->bitcount)) {
             $this->bits = ord($this->rawread(1));
             $this->bitcount = 8;
         }
@@ -262,7 +262,7 @@ class AMQPReader extends AbstractClient
         $this->bitcount = $this->bits = 0;
         list(, $res) = unpack('N', $this->rawread(4));
 
-        return !$this->is64bits && self::getLongMSB($res) ? sprintf('%u', $res) : $res;
+        return empty($this->is64bits) && self::getLongMSB($res) ? sprintf('%u', $res) : $res;
     }
 
     /**
@@ -290,7 +290,7 @@ class AMQPReader extends AbstractClient
         list(, $hi, $lo) = unpack('N2', $this->rawread(8));
         $msb = self::getLongMSB($hi);
 
-        if (!$this->is64bits) {
+        if (empty($this->is64bits)) {
             if ($msb) {
                 $hi = sprintf('%u', $hi);
             }

@@ -85,7 +85,7 @@ while (count($channel->callbacks)) {
     $except = null;
     if (false === ($changeStreamsCount = stream_select($read, $write, $except, 60))) {
         /* Error handling */
-    } elseif ($changeStreamsCount > 0) {
+    } elseif ($changeStreamsCount > 0 || $channel->hasPendingMethods()) {
         $channel->wait();
     }
 }

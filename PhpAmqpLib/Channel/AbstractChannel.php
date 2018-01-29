@@ -168,6 +168,14 @@ abstract class AbstractChannel
     }
 
     /**
+     * @return bool
+     */
+    public function hasPendingMethods()
+    {
+        return !empty($this->method_queue);
+    }
+
+    /**
      * @param string $method_sig
      * @param string $args
      * @param AMQPMessage|null $amqpMessage
@@ -255,7 +263,6 @@ abstract class AbstractChannel
 
         $this->wait_content_reader->reuse(mb_substr($payload, 0, 12, 'ASCII'));
 
-        // $payload_reader = new AMQPReader(substr($payload,0,12));
         $class_id = $this->wait_content_reader->read_short();
         $weight = $this->wait_content_reader->read_short();
 

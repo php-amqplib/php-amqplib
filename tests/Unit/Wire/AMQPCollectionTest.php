@@ -1,10 +1,11 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit;
+namespace PhpAmqpLib\Tests\Unit\Wire;
 
 use PhpAmqpLib\Wire;
+use PHPUnit\Framework\TestCase;
 
-class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
+class AMQPCollectionTest extends TestCase
 {
     public function testEncode080()
     {
@@ -19,7 +20,14 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
             false,
             array('foo' => 'bar'),
             array('foo'),
-            array()
+            array(),
+            new \DateTime('2009-02-13 23:31:30'),
+            (
+                // DateTimeImmutable was added in PHP 5.5
+                class_exists('DateTimeImmutable')
+                ? new \DateTimeImmutable('2009-02-13 23:31:30')
+                : new \DateTime('2009-02-13 23:31:30')
+            )
         ));
 
         $this->assertEquals(
@@ -39,7 +47,9 @@ class AMQPCollectionTest extends \PHPUnit_Framework_TestCase
                     Wire\AMQPAbstractCollection::getDataTypeForSymbol('F'),
                     array(0 => array(Wire\AMQPAbstractCollection::getDataTypeForSymbol('S'), 'foo'))
                 ),
-                array(Wire\AMQPAbstractCollection::getDataTypeForSymbol('F'), array())
+                array(Wire\AMQPAbstractCollection::getDataTypeForSymbol('F'), array()),
+                array(Wire\AMQPAbstractCollection::getDataTypeForSymbol('T'), 1234567890),
+                array(Wire\AMQPAbstractCollection::getDataTypeForSymbol('T'), 1234567890),
             ),
             $this->getEncodedRawData($a)
         );

@@ -1,10 +1,11 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit\Helper\Writer;
+namespace PhpAmqpLib\Tests\Unit\Helper\Protocol;
 
 use PhpAmqpLib\Helper\Protocol\Protocol091;
+use PHPUnit\Framework\TestCase;
 
-class Protocol091Test extends \PHPUnit_Framework_TestCase
+class Protocol091Test extends TestCase
 {
     /**
      * @var Protocol091

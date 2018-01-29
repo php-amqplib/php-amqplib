@@ -44,6 +44,9 @@ class StreamIO extends AbstractIO
     /** @var array */
     protected $last_error;
 
+    /** @var int */
+    private $initial_heartbeat;
+
     /** @var resource */
     private $sock;
 
@@ -80,10 +83,20 @@ class StreamIO extends AbstractIO
         $this->context = $context;
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
+        $this->initial_heartbeat = $heartbeat;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
         if (is_null($this->context)) {
-            $this->context = stream_context_create();
+            // tcp_nodelay was added in 7.1.0
+            if (PHP_VERSION_ID >= 70100) {
+                $this->context = stream_context_create([
+                    "socket" => [
+                        "tcp_nodelay" => true
+                    ]
+                ]);
+            } else {
+                $this->context = stream_context_create();
+            }
         } else {
             $this->protocol = 'ssl';
         }
@@ -191,12 +204,12 @@ class StreamIO extends AbstractIO
      */
     public function read($len)
     {
+        $this->check_heartbeat();
+
         $read = 0;
         $data = '';
 
         while ($read < $len) {
-            $this->check_heartbeat();
-
             if (!is_resource($this->sock) || feof($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
@@ -266,7 +279,7 @@ class StreamIO extends AbstractIO
             // September 2002:
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
-                $buffer = fwrite($this->sock, $data, 8192);
+                $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
             } catch (\ErrorException $e) {
                 restore_error_handler();
                 throw $e;
@@ -286,10 +299,6 @@ class StreamIO extends AbstractIO
             }
 
             $written += $buffer;
-
-            if ($buffer > 0) {
-                $data = mb_substr($data, $buffer, mb_strlen($data, 'ASCII') - $buffer, 'ASCII');
-            }
         }
 
         $this->last_write = microtime(true);
@@ -329,7 +338,7 @@ class StreamIO extends AbstractIO
     /**
      * Heartbeat logic: check connection health here
      */
-    protected function check_heartbeat()
+    public function check_heartbeat()
     {
         // ignore unless heartbeat interval is set
         if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
@@ -368,6 +377,8 @@ class StreamIO extends AbstractIO
             fclose($this->sock);
         }
         $this->sock = null;
+        $this->last_read = null;
+        $this->last_write = null;
     }
 
     /**
@@ -393,10 +404,16 @@ class StreamIO extends AbstractIO
      */
     public function select($sec, $usec)
     {
+        $this->check_heartbeat();
+
         $read = array($this->sock);
         $write = null;
         $except = null;
         $result = false;
+
+        if (defined('HHVM_VERSION')) {
+            $usec = is_int($usec) ? $usec : 0;
+        }
 
         set_error_handler(array($this, 'error_handler'));
         try {
@@ -444,6 +461,16 @@ class StreamIO extends AbstractIO
     public function disableHeartbeat()
     {
         $this->heartbeat = 0;
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function reenableHeartbeat()
+    {
+        $this->heartbeat = $this->initial_heartbeat;
 
         return $this;
     }

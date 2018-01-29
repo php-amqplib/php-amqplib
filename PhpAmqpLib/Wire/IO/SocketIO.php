@@ -4,6 +4,7 @@ namespace PhpAmqpLib\Wire\IO;
 use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Wire\AMQPWriter;
 
 class SocketIO extends AbstractIO
 {
@@ -14,7 +15,19 @@ class SocketIO extends AbstractIO
     protected $port;
 
     /** @var float */
-    protected $timeout;
+    protected $send_timeout;
+
+    /** @var float */
+    protected $read_timeout;
+
+    /** @var int */
+    protected $heartbeat;
+
+    /** @var float */
+    protected $last_read;
+
+    /** @var float */
+    protected $last_write;
 
     /** @var resource */
     private $sock;
@@ -25,14 +38,18 @@ class SocketIO extends AbstractIO
     /**
      * @param string $host
      * @param int $port
-     * @param float $timeout
+     * @param float $read_timeout
      * @param bool $keepalive
+     * @param float|null $write_timeout if null defaults to read timeout
+     * @param int $heartbeat how often to send heartbeat. 0 means off
      */
-    public function __construct($host, $port, $timeout, $keepalive = false)
+    public function __construct($host, $port, $read_timeout, $keepalive = false, $write_timeout = null, $heartbeat = 0)
     {
         $this->host = $host;
         $this->port = $port;
-        $this->timeout = $timeout;
+        $this->read_timeout = $read_timeout;
+        $this->send_timeout = $write_timeout ?: $read_timeout;
+        $this->heartbeat = $heartbeat;
         $this->keepalive = $keepalive;
     }
 
@@ -45,9 +62,10 @@ class SocketIO extends AbstractIO
     {
         $this->sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 
-        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->timeout);
-        socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
+        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->send_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
+        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
+        socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
         if (!socket_connect($this->sock, $this->host, $this->port)) {
             $errno = socket_last_error($this->sock);
@@ -92,18 +110,17 @@ class SocketIO extends AbstractIO
      */
     public function read($n)
     {
+        if (is_null($this->sock)) {
+            throw new AMQPRuntimeException(sprintf(
+                'Socket was null! Last SocketError was: %s',
+                socket_strerror(socket_last_error())
+            ));
+        }
         $res = '';
         $read = 0;
-
         $buf = socket_read($this->sock, $n);
         while ($read < $n && $buf !== '' && $buf !== false) {
-            // Null sockets are invalid, throw exception
-            if (is_null($this->sock)) {
-                throw new AMQPRuntimeException(sprintf(
-                    'Socket was null! Last SocketError was: %s',
-                    socket_strerror(socket_last_error())
-                ));
-            }
+            $this->check_heartbeat();
 
             $read += mb_strlen($buf, 'ASCII');
             $res .= $buf;
@@ -118,12 +135,15 @@ class SocketIO extends AbstractIO
             ));
         }
 
+        $this->last_read = microtime(true);
+
         return $res;
     }
 
     /**
      * @param string $data
-     * @return mixed|void
+     * @return void
+     *
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
@@ -159,6 +179,8 @@ class SocketIO extends AbstractIO
                 break;
             }
         }
+
+        $this->last_write = microtime(true);
     }
 
     public function close()
@@ -167,6 +189,8 @@ class SocketIO extends AbstractIO
             socket_close($this->sock);
         }
         $this->sock = null;
+        $this->last_read = null;
+        $this->last_write = null;
     }
 
     /**
@@ -193,5 +217,41 @@ class SocketIO extends AbstractIO
         }
 
         socket_set_option($this->sock, SOL_SOCKET, SO_KEEPALIVE, 1);
+    }
+
+    /**
+     * Heartbeat logic: check connection health here
+     */
+    protected function check_heartbeat()
+    {
+        // ignore unless heartbeat interval is set
+        if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
+            $t = microtime(true);
+            $t_read = round($t - $this->last_read);
+            $t_write = round($t - $this->last_write);
+
+            // server has gone away
+            if (($this->heartbeat * 2) < $t_read) {
+                $this->reconnect();
+            }
+
+            // time for client to send a heartbeat
+            if (($this->heartbeat / 2) < $t_write) {
+                $this->write_heartbeat();
+            }
+        }
+    }
+
+    /**
+     * Sends a heartbeat message
+     */
+    protected function write_heartbeat()
+    {
+        $pkt = new AMQPWriter();
+        $pkt->write_octet(8);
+        $pkt->write_short(0);
+        $pkt->write_long(0);
+        $pkt->write_octet(0xCE);
+        $this->write($pkt->getvalue());
     }
 }
