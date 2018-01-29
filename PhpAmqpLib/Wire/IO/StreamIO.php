@@ -48,9 +48,6 @@ class StreamIO extends AbstractIO
     private $sock;
 
     /** @var bool */
-    private $canSelectNull;
-
-    /** @var bool */
     private $canDispatchPcntlSignal;
 
     /**
@@ -83,17 +80,12 @@ class StreamIO extends AbstractIO
         $this->context = $context;
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
-        $this->canSelectNull = true;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
         if (is_null($this->context)) {
             $this->context = stream_context_create();
         } else {
             $this->protocol = 'ssl';
-            // php bugs 41631 & 65137 prevent select null from working on ssl streams
-            if (PHP_VERSION_ID < 50436) {
-                $this->canSelectNull = false;
-            }
         }
     }
 
@@ -224,14 +216,8 @@ class StreamIO extends AbstractIO
 
             if ($buffer === '') {
                 if ($this->canDispatchPcntlSignal) {
-                    // prevent cpu from being consumed while waiting
-                    if ($this->canSelectNull) {
-                        $this->select(0, self::READ_BUFFER_WAIT_INTERVAL);
-                        pcntl_signal_dispatch();
-                    } else {
-                        usleep(self::READ_BUFFER_WAIT_INTERVAL);
-                        pcntl_signal_dispatch();
-                    }
+                    $this->select(0, self::READ_BUFFER_WAIT_INTERVAL);
+                    pcntl_signal_dispatch();
                 }
                 continue;
             }
