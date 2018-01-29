@@ -2,7 +2,7 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## 2.7.1-rc1 - 2018-01-17
+## 2.7.1-rc2 - 2018-01-29
 
 ### Added
 
@@ -14,6 +14,7 @@ All Notable changes to `php-amqplib` will be documented in this file
 - Support PHPUnit 6 [PR](https://github.com/php-amqplib/php-amqplib/pull/530)
 - Use `tcp_nodelay` for `StreamIO` [PR](https://github.com/php-amqplib/php-amqplib/pull/517)
 - Pass connection timeout to `wait` method [PR](https://github.com/php-amqplib/php-amqplib/pull/512)
+- Fix possible indefinite waiting for data in StreamIO [PR](https://github.com/php-amqplib/php-amqplib/pull/423), [PR](https://github.com/php-amqplib/php-amqplib/pull/534)
 
 ## 2.7.0 - 2017-09-20
 
