@@ -222,7 +222,7 @@ class SocketIO extends AbstractIO
     /**
      * Heartbeat logic: check connection health here
      */
-    protected function check_heartbeat()
+    public function check_heartbeat()
     {
         // ignore unless heartbeat interval is set
         if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
