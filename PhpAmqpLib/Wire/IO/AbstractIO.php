@@ -41,4 +41,9 @@ abstract class AbstractIO
      * @return mixed
      */
     abstract public function getSocket();
+
+    /**
+     * @return mixed
+     */
+    abstract public function check_heartbeat();
 }

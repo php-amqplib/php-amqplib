@@ -28,7 +28,7 @@ class AMQPLazyConnection extends AMQPStreamConnection
     /**
      * @return null|\PhpAmqpLib\Wire\IO\AbstractIO
      */
-    protected function getIO()
+    public function getIO()
     {
         if (empty($this->io)) {
             $this->connect();
