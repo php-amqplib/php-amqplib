@@ -89,11 +89,11 @@ class StreamIO extends AbstractIO
         if (is_null($this->context)) {
             // tcp_nodelay was added in 7.1.0
             if (PHP_VERSION_ID >= 70100) {
-                $this->context = stream_context_create([
-                    "socket" => [
+                $this->context = stream_context_create(array(
+                    "socket" => array(
                         "tcp_nodelay" => true
-                    ]
-                ]);
+                    )
+                ));
             } else {
                 $this->context = stream_context_create();
             }
