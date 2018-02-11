@@ -2,15 +2,14 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
+## 2.7.2 - 2018-02-11
+
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/5)
+
+- PHP `5.3` compatibility [PR](https://github.com/php-amqplib/php-amqplib/issues/539)
+
 ## 2.7.1 - 2018-02-01
 
-### Added
-
-### Fixed
-
-### Changed
-
-### Enhancements
 - Support PHPUnit 6 [PR](https://github.com/php-amqplib/php-amqplib/pull/530)
 - Use `tcp_nodelay` for `StreamIO` [PR](https://github.com/php-amqplib/php-amqplib/pull/517)
 - Pass connection timeout to `wait` method [PR](https://github.com/php-amqplib/php-amqplib/pull/512)
