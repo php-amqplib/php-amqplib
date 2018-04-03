@@ -145,10 +145,18 @@ class AMQPReader extends AbstractClient
     protected function rawread($n)
     {
         if ($this->io) {
-            $this->wait();
-            $res = $this->io->read($n);
+            while (true) {
+                $this->wait();
+                try {
+                    $res = $this->io->read($n);
+                    break;
+                } catch (AMQPTimeoutException $e) {
+                    if ($this->getTimeout() > 0) {
+                        throw $e;
+                    }
+                }
+            }
             $this->offset += $n;
-
             return $res;
         }
 
