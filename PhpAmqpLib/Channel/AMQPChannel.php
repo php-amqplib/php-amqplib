@@ -619,7 +619,7 @@ class AMQPChannel extends AbstractChannel
      * @param int $ticket
      * @param int $timeout - optionally specify max number of seconds to wait 
      *                       for server confirmation before returning a 
-                             PhpAmqpLib\Exception\AMQPTimeoutException
+     *                       PhpAmqpLib\Exception\AMQPTimeoutException
      *                       This has no effect if nowait is set to true.
      * @return mixed|null
      */
