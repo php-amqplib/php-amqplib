@@ -991,7 +991,6 @@ class AbstractConnection extends AbstractChannel
             $password = $hosts[$i]['password'];
             $vhost = isset($hosts[$i]['vhost']) ? $hosts[$i]['vhost'] : "/";
             try {
-                echo "TRY" . PHP_EOL;
                 $conn = static::try_create_connection($host, $port, $user, $password, $vhost, $options);
                 return $conn;
             } catch (\Exception $e) {

@@ -121,8 +121,8 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 
 ## Multiple hosts connections ##
 
-If you have a cluster of multiple nodes your application can connect, you can start
-a connection with an array of hosts instead one. To do that you should use
+If you have a cluster of multiple nodes to which your application can connect,
+you can start a connection with an array of hosts. To do that you should use
 the `create_connection` static method.
 
 For example:
@@ -135,9 +135,9 @@ $options);
 ```
 
 This code will try to connect to `HOST1` first, and connect to `HOST2` if the
-first connection fails.
-The method returns a connection object for a first successful connection.
-Should all connections fail it will throw the last connection exception.
+first connection fails. The method returns a connection object for the first
+successful connection. Should all connections fail it will throw the exception
+from the last connection attempt.
 
 See `demo/amqp_connect_multiple_hosts.php` for more examples.
 
