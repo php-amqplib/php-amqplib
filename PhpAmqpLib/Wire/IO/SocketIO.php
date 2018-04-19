@@ -221,6 +221,7 @@ class SocketIO extends AbstractIO
 
     /**
      * Heartbeat logic: check connection health here
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function check_heartbeat()
     {
@@ -232,7 +233,8 @@ class SocketIO extends AbstractIO
 
             // server has gone away
             if (($this->heartbeat * 2) < $t_read) {
-                $this->reconnect();
+                $this->close();
+                throw new AMQPRuntimeException("Missed server heartbeat");
             }
 
             // time for client to send a heartbeat

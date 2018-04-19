@@ -199,7 +199,9 @@ class StreamIO extends AbstractIO
 
     /**
      * @param int $len
+     * @throws \ErrorException
      * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @return mixed|string
      */
     public function read($len)
@@ -337,6 +339,7 @@ class StreamIO extends AbstractIO
 
     /**
      * Heartbeat logic: check connection health here
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function check_heartbeat()
     {
@@ -348,7 +351,8 @@ class StreamIO extends AbstractIO
 
             // server has gone away
             if (($this->heartbeat * 2) < $t_read) {
-                $this->reconnect();
+                $this->close();
+                throw new AMQPRuntimeException("Missed server heartbeat");
             }
 
             // time for client to send a heartbeat
@@ -401,6 +405,8 @@ class StreamIO extends AbstractIO
      * @param int $sec
      * @param int $usec
      * @return int|mixed
+     * @throws \ErrorException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function select($sec, $usec)
     {
