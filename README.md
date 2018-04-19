@@ -175,6 +175,64 @@ the server (which still has a complete copy) to forward it to a Dead Letter Exch
 
 By default, no truncation will occur. To disable truncation on a Channel that has had it enabled, pass `0` (or `null`) to `AMQPChannel::setBodySizeLimit()`.
 
+## Connection recovery ##
+
+Some RabbitMQ clients using automated connection recovery mechanisms to reconnect
+and recover channels and consumers in case of network errors.
+
+Since this client is using a single-thread, you can set up connection recovery
+using exception handling mechanism.
+
+Exceptions which might be thrown in case of connection errors:
+
+```
+PhpAmqpLib\Exception\AMQPIOException
+\RuntimeException
+\ErrorException
+```
+
+Some other exceptions might be thrown, but connection can still be there. It's
+always a good idea to clean up an old connection when handling an exception
+before reconnecting.
+
+For example, if you want to set up a recovering connection:
+
+```
+$connection = null;
+$channel = null;
+while(true){
+    try {
+        $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+        // Your application code goes here.
+        do_something_with_connection($connection);
+    } catch(AMQPIOException $e) {
+        cleanup_connection($connection);
+        usleep(WAIT_BEFORE_RECONNECT_uS);
+    } catch(\RuntimeException $e) {
+        cleanup_connection($connection);
+        usleep(WAIT_BEFORE_RECONNECT_uS);
+    } catch(\ErrorException $e) {
+        cleanup_connection($connection);
+        usleep(WAIT_BEFORE_RECONNECT_uS);
+    }
+}
+
+```
+
+This code will reconnect and retry the application code every time the
+exception occurs. Some exceptions can still be thrown and should not be handled
+as a part of reconnection process, because they might be application errors.
+
+This approach makes sense mostly for consumer applications, producers will
+require some additional application code to avoid publishing the same message
+multiple times.
+
+This was a simplest example, in a real-life application you might want to
+control retr count and maybe gracefully degrade wait time to reconnection.
+
+You can find a more excessive example in #444
+
+
 ## UNIX Signals ##
 
 If you have installed [PCNTL extension](http://www.php.net/manual/en/book.pcntl.php) dispatching of signal will be handled when consumer is not processing message.
