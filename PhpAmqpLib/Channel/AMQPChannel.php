@@ -617,6 +617,10 @@ class AMQPChannel extends AbstractChannel
      * @param bool $nowait
      * @param array $arguments
      * @param int $ticket
+     * @param int $timeout - optionally specify max number of seconds to wait 
+     *                       for server confirmation before returning a 
+     *                       PhpAmqpLib\Exception\AMQPTimeoutException
+     *                       This has no effect if nowait is set to true.
      * @return mixed|null
      */
     public function queue_declare(
@@ -627,7 +631,8 @@ class AMQPChannel extends AbstractChannel
         $auto_delete = true,
         $nowait = false,
         $arguments = array(),
-        $ticket = null
+        $ticket = null,
+        $timeout = 0
     ) {
         $ticket = $this->getTicket($ticket);
 
@@ -648,9 +653,8 @@ class AMQPChannel extends AbstractChannel
             return null;
         }
 
-        return $this->wait(array(
-            $this->waitHelper->get_wait('queue.declare_ok')
-        ));
+        $callbacks = array($this->waitHelper->get_wait('queue.declare_ok'));
+        return $this->wait($callbacks, false, $timeout);
     }
 
     /**
