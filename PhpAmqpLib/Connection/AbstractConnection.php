@@ -980,4 +980,39 @@ class AbstractConnection extends AbstractChannel
     {
         return $this->server_properties;
     }
+
+    public static function create_connection($hosts, $options = array()){
+        $latest_exception = null;
+        for($i = 0; $i < count($hosts); $i++) {
+            AbstractConnection::validate_host($hosts[$i]);
+            $host = $hosts[$i]['host'];
+            $port = $hosts[$i]['port'];
+            $user = $hosts[$i]['user'];
+            $password = $hosts[$i]['password'];
+            $vhost = isset($hosts[$i]['vhost']) ? $hosts[$i]['vhost'] : "/";
+            try {
+                echo "TRY" . PHP_EOL;
+                $conn = static::try_create_connection($host, $port, $user, $password, $vhost, $options);
+                return $conn;
+            } catch (\Exception $e) {
+                $latest_exception = $e;
+            }
+        }
+        throw $latest_exception;
+    }
+
+    public static function validate_host($host) {
+        if(!isset($host['host'])){
+            throw new \InvalidArgumentException("'host' key is required.");
+        }
+        if(!isset($host['port'])){
+            throw new \InvalidArgumentException("'port' key is required.");
+        }
+        if(!isset($host['user'])){
+            throw new \InvalidArgumentException("'user' key is required.");
+        }
+        if(!isset($host['password'])){
+            throw new \InvalidArgumentException("'password' key is required.");
+        }
+    }
 }

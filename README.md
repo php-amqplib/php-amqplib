@@ -119,6 +119,28 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demos fanout exchanges with named queues.
 - `basic_get.php`: demos obtaining messages from the queues by using the _basic get_ AMQP call.
 
+## Multiple hosts connections ##
+
+If you have a cluster of multiple nodes your application can connect, you can start
+a connection with an array of hosts instead one. To do that you should use
+the `create_connection` static method.
+
+For example:
+```
+$connection = AMQPStreamConnection::create_connection([
+    ['host' => HOST1, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST2, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
+],
+$options);
+```
+
+This code will try to connect to `HOST1` first, and connect to `HOST2` if the
+first connection fails.
+The method returns a connection object for a first successful connection.
+Should all connections fail it will throw the last connection exception.
+
+See `demo/amqp_connect_multiple_hosts.php` for more examples.
+
 ## Batch Publishing ##
 
 Let's say you have a process that generates a bunch of messages that are going to be published to the same `exchange` using the same `routing_key` and options like `mandatory`.
