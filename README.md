@@ -219,6 +219,8 @@ while(true){
 
 ```
 
+A full example is in `demo/connection_recovery_consume.php`.
+
 This code will reconnect and retry the application code every time the
 exception occurs. Some exceptions can still be thrown and should not be handled
 as a part of reconnection process, because they might be application errors.
