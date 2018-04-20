@@ -2,6 +2,7 @@
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 
 define('CERTS_PATH', '/git/rabbitmqinaction/av_scratchwork/openssl');
@@ -35,6 +36,40 @@ $connection = AMQPStreamConnection::create_connection([
     'keepalive' => false,
     'heartbeat' => 0
 ]);
+
+
+// Use empty options array for defaults
+$connection = AMQPStreamConnection::create_connection([
+    ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
+],
+[]);
+
+// Options keys are different for different connection types
+$connection = AMQPSocketConnection::create_connection([
+    ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
+],
+[
+    'insist' => false,
+    'login_method' => 'AMQPLAIN',
+    'login_response' => null,
+    'locale' => 'en_US',
+    'read_timeout' => 3,
+    'keepalive' => false,
+    'write_timeout' => 3,
+    'heartbeat' => 0
+]);
+
+// Use empty options array for defaults
+$connection = AMQPSocketConnection::create_connection([
+    ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+    ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
+], []);
+
 
 /*
     For SSL connections you should set 'ssl_options' in the options array

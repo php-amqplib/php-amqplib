@@ -17,6 +17,7 @@ const PORT3 = 5674;
 */
 
 function connect() {
+    // If you want a better load-balancing, you cann reshuffle the list.
     return AMQPStreamConnection::create_connection([
         ['host' => HOST, 'port' => PORT1, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
         ['host' => HOST, 'port' => PORT2, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
