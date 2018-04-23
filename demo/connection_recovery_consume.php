@@ -5,6 +5,37 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 const WAIT_BEFORE_RECONNECT_uS = 1000000;
 
+// Assume we have a cluster of nodes on ports 5672, 5673 and 5674.
+// This should be possible to start on localhost using RABBITMQ_NODE_PORT
+const PORT1 = 5672;
+const PORT2 = 5673;
+const PORT3 = 5674;
+
+/*
+    To handle arbitrary node restart you can use a combination of connection
+    recovery and mulltiple hosts connection.
+*/
+
+function connect() {
+    // If you want a better load-balancing, you cann reshuffle the list.
+    return AMQPStreamConnection::create_connection([
+        ['host' => HOST, 'port' => PORT1, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+        ['host' => HOST, 'port' => PORT2, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
+        ['host' => HOST, 'port' => PORT3, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
+    ],
+    [
+        'insist' => false,
+        'login_method' => 'AMQPLAIN',
+        'login_response' => null,
+        'locale' => 'en_US',
+        'connection_timeout' => 3.0,
+        'read_write_timeout' => 3.0,
+        'context' => null,
+        'keepalive' => false,
+        'heartbeat' => 0
+    ]);
+}
+
 function cleanup_connection($connection) {
     // Connection might already be closed.
     // Ignoring exceptions.
@@ -20,7 +51,7 @@ $connection = null;
 
 while(true){
     try {
-        $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+        $connection = connect();
         register_shutdown_function('shutdown', $connection);
         // Your application code goes here.
         do_something_with_connection($connection);
