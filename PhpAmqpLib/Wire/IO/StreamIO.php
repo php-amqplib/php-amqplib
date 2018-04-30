@@ -282,7 +282,7 @@ class StreamIO extends AbstractIO
                 $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
             } catch (\ErrorException $e) {
                 restore_error_handler();
-                throw $e;
+                throw new AMQPRuntimeException($e->getMessage());
             }
             restore_error_handler();
 
