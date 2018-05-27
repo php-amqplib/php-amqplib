@@ -501,6 +501,9 @@ class AMQPReader extends AbstractClient
             case AMQPAbstractCollection::T_VOID:
                 $val = null;
                 break;
+            case AMQPAbstractCollection::T_BYTES:
+                $val = $this->read_longstr();
+                break;
             default:
                 throw new AMQPInvalidArgumentException(sprintf(
                     'Unsupported type "%s"',

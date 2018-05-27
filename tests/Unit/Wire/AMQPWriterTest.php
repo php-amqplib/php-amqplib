@@ -81,14 +81,15 @@ class AMQPWriterTest extends TestCase
             'x-shortshort-u' => array('B', 5),
             'x-short' => array('U', -1024),
             'x-short-u' => array('u', 125),
-            'x-short-str' => array('s', 'foo')
+            'x-short-str' => array('s', 'foo'),
+            'x-bytes' => array('x', 'foobar'),
         ));
 
         $out = $this->writer->getvalue();
 
 
-        $expected = "\x00\x00\x00\x90\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
-            "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo";
+        $expected = "\x00\x00\x00\xa3\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
+            "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo\x07x-bytesx\x00\x00\x00\x06foobar";
 
         $this->assertEquals($expected, $out);
     }
