@@ -95,6 +95,7 @@ abstract class AMQPAbstractCollection implements \Iterator
         self::T_STRING_LONG => 'S',
         self::T_ARRAY => 'A',
         self::T_TABLE => 'F',
+        self::T_BYTES => 'x',
     );
 
     /**
