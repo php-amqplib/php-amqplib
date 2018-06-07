@@ -22,7 +22,7 @@ dist: trusty
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
   - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
