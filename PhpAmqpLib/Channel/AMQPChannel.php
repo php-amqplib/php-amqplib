@@ -1127,7 +1127,7 @@ class AMQPChannel extends AbstractChannel
 
         if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag] = $msg;
-            $this->next_delivery_tag = bcadd($this->next_delivery_tag, '1', 0);
+            $this->next_delivery_tag += 1;
         }
     }
 
@@ -1187,7 +1187,7 @@ class AMQPChannel extends AbstractChannel
 
             if ($this->next_delivery_tag > 0) {
                 $this->published_messages[$this->next_delivery_tag] = $msg;
-                $this->next_delivery_tag = bcadd($this->next_delivery_tag, '1', 0);
+                $this->next_delivery_tag += 1;
             }
         }
 

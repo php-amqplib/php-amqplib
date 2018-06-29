@@ -299,7 +299,11 @@ class AMQPReader extends AbstractClient
             }
         }
 
-        return bcadd($this->is64bits && !$msb ? $hi << 32 : bcmul($hi, '4294967296', 0), $lo, 0);
+        if ($this->is64bits && !$msb) {
+            return ($hi << 32) + $lo;
+        } else {
+            return $hi * 4294967296 + $lo;
+        }
     }
 
     /**
@@ -312,9 +316,11 @@ class AMQPReader extends AbstractClient
         list(, $hi, $lo) = unpack('N2', $this->rawread(8));
 
         if ($this->is64bits) {
-            return bcadd($hi << 32, $lo, 0);
+            return ($hi << 32) + $lo;
+        } elseif (self::getLongMSB($lo)) {
+            return $hi * 4294967296 + sprintf('%u', $lo);
         } else {
-            return bcadd(bcmul($hi, '4294967296', 0), self::getLongMSB($lo) ? sprintf('%u', $lo) : $lo, 0);
+            return $hi * 4294967296 + $lo;
         }
     }
 

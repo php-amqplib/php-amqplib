@@ -224,7 +224,7 @@ class WireTest extends TestCase
      */
     public function signed_longlong_wr_out_of_range_lower()
     {
-        $this->wr('-9223372036854775809', 'write_signed_longlong', 'read_signed_longlong');
+        $this->wr('-99223372036854775809', 'write_signed_longlong', 'read_signed_longlong');
     }
 
     /**
@@ -233,7 +233,7 @@ class WireTest extends TestCase
      */
     public function signed_longlong_wr_out_of_range_upper()
     {
-        $this->wr('9223372036854775808', 'write_signed_longlong', 'read_signed_longlong');
+        $this->wr('99223372036854775808', 'write_signed_longlong', 'read_signed_longlong');
     }
 
     /**
