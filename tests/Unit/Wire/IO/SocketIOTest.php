@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
 use PhpAmqpLib\Wire\IO\SocketIO;
@@ -6,47 +7,47 @@ use PHPUnit\Framework\TestCase;
 
 class SocketIOTest extends TestCase
 {
-    public function testConnect()
+    /**
+     * @test
+     */
+    public function connect()
     {
-        $socketIO = new SocketIO(HOST,PORT,1,true);
+        $socketIO = new SocketIO(HOST, PORT, 1, true);
         $socketIO->connect();
 
         return $socketIO;
     }
 
     /**
+     * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPIOException
      */
-    public function testConnectWithInValidCredentials()
+    public function connect_with_invalid_credentials()
     {
-        \PHPUnit_Framework_Error_Warning::$enabled = false;
+        $socket = new SocketIO('invalid_host', 1, 1, true);
 
-        $socket = new SocketIO('invalid_host',1,1,true);
-        $socket->connect();
-        $socket->close();
-        $socket->read(1);
-
+        @$socket->connect();
     }
 
     /**
-     * @depends testConnect
+     * @test
+     * @depends connect
      * @expectedException \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    public function testReadWhenClosed(SocketIO $socketIO)
+    public function read_when_closed(SocketIO $socketIO)
     {
-        \PHPUnit_Framework_Error_Warning::$enabled = false;
-
         $socketIO->close();
+
         $socketIO->read(1);
     }
 
     /**
-     * @depends testConnect
+     * @test
+     * @depends connect
      * @expectedException \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    public function testWriteWhenClosed(SocketIO $socketIO)
+    public function write_when_closed(SocketIO $socketIO)
     {
-        \PHPUnit_Framework_Error_Warning::$enabled = false;
         $socketIO->write('data');
     }
 }
