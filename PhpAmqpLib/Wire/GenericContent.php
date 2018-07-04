@@ -102,6 +102,10 @@ abstract class GenericContent
                 $name
             ));
         }
+        
+        if ($this->properties[$name] !== $value) {
+            $this->serialized_properties = null;
+        }
 
         $this->properties[$name] = $value;
     }
