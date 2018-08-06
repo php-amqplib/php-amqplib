@@ -8,6 +8,8 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 class SocketIO extends AbstractIO
 {
+    const EAGAIN_ERROR_CODE = 35;
+
     /** @var string */
     protected $host;
 
@@ -119,7 +121,7 @@ class SocketIO extends AbstractIO
         $res = '';
         $read = 0;
         $buf = socket_read($this->sock, $n);
-        while ($read < $n && $buf !== '' && $buf !== false) {
+        while ($read < $n && ($buf !== '' && $buf !== false || socket_last_error() == self::EAGAIN_ERROR_CODE)) {
             $this->check_heartbeat();
 
             $read += mb_strlen($buf, 'ASCII');
