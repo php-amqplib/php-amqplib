@@ -13,9 +13,9 @@ $channel = $connection->channel();
 /*
     name: $exchange
     type: fanout
-    passive: false // don't check is an exchange with the same name exists
+    passive: false // don't check if an exchange with the same name exists
     durable: false // the exchange won't survive server restarts
-    auto_delete: true //the exchange will be deleted once the channel is closed.
+    auto_delete: true // the exchange will be deleted once the channel is closed.
 */
 
 $channel->exchange_declare($exchange, 'fanout', false, false, true);
