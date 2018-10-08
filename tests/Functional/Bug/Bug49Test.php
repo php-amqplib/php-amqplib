@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Functional;
+namespace PhpAmqpLib\Tests\Functional\Bug;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
@@ -9,19 +9,10 @@ use PHPUnit\Framework\TestCase;
 
 class Bug49Test extends TestCase
 {
-    /**
-     * @var AMQPConnection
-     */
     protected $connection;
 
-    /**
-     * @var AMQPChannel
-     */
     protected $channel;
 
-    /**
-     * @var AMQPChannel
-     */
     protected $channel2;
 
     public function setUp()
@@ -31,7 +22,20 @@ class Bug49Test extends TestCase
         $this->channel2 = $this->connection->channel();
     }
 
-    public function testDeclaration()
+    public function tearDown()
+    {
+        if ($this->channel2) {
+            $this->channel2->close();
+        }
+        if ($this->connection) {
+            $this->connection->close();
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function declaration()
     {
         try {
             $this->channel->queue_declare('pretty.queue', true, true);
@@ -43,17 +47,6 @@ class Bug49Test extends TestCase
             } else {
                 $this->fail('Should have raised a 404 Error');
             }
-        }
-    }
-
-    public function tearDown()
-    {
-        if ($this->channel2) {
-            $this->channel2->close();
-        }
-
-        if ($this->connection) {
-            $this->connection->close();
         }
     }
 }

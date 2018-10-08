@@ -8,52 +8,63 @@ use PHPUnit\Framework\TestCase;
 class MiscHelperTest extends TestCase
 {
     /**
-     * @dataProvider getInputOutputForSplitSecondsMicroseconds
-     * @param mixed $input
-     * @param array $expected
+     * @dataProvider splitSecondsMicrosecondsData
+     * @test
      */
-    public function testSplitSecondsMicroseconds($input, $expected)
+    public function split_seconds_microseconds($input, $expected)
     {
         $this->assertEquals($expected, MiscHelper::splitSecondsMicroseconds($input));
     }
 
-    public function getInputOutputForSplitSecondsMicroseconds()
+    /**
+     * @dataProvider hexdumpData
+     * @test
+     */
+    public function hexdump($args, $expected)
     {
-        return array(
-            array(0, array(0, 0)),
-            array(0.3, array(0, 300000)),
-            array('0.3', array(0, 300000)),
-            array(3, array(3, 0)),
-            array('3', array(3, 0)),
-            array(3.0, array(3, 0)),
-            array('3.0', array(3, 0)),
-            array(3.1, array(3, 100000)),
-            array('3.1', array(3, 100000)),
-            array(3.123456, array(3, 123456)),
-            array('3.123456', array(3, 123456)),
-        );
+        $this->assertRegExp($expected, MiscHelper::hexdump($args[0], $args[1], $args[2], $args[3]));
     }
 
-    public function testHexDump()
+    /**
+     * @test
+     */
+    public function method_sig()
     {
-        $htmlOutput = false;
-        $uppercase = false;
-        $return = true;
-        $res = MiscHelper::hexdump('FM', $htmlOutput, $uppercase, $return);
-        $this->assertRegExp('/000\s+46 4d\s+FM/', $res);
-        $uppercase = true;
-        $res = MiscHelper::hexdump('FM', $htmlOutput, $uppercase, $return);
-        $this->assertRegExp('/000\s+46 4D\s+FM/', $res);
+        $this->assertEquals('test', MiscHelper::methodSig('test'));
     }
 
-    public function testMethodSigForString()
-    {
-        $this->assertEquals('test',MiscHelper::methodSig('test'));
-    }
-
-    public function testSaveBytes()
+    /**
+     * @test
+     */
+    public function save_bytes()
     {
         MiscHelper::saveBytes('bytes');
-        $this->assertStringEqualsFile('/tmp/bytes','bytes');
+
+        $this->assertStringEqualsFile('/tmp/bytes', 'bytes');
+    }
+
+    public function splitSecondsMicrosecondsData()
+    {
+        return [
+            [0, [0, 0]],
+            [0.3, [0, 300000]],
+            ['0.3', [0, 300000]],
+            [3, [3, 0]],
+            ['3', [3, 0]],
+            [3.0, [3, 0]],
+            ['3.0', [3, 0]],
+            [3.1, [3, 100000]],
+            ['3.1', [3, 100000]],
+            [3.123456, [3, 123456]],
+            ['3.123456', [3, 123456]],
+        ];
+    }
+
+    public function hexdumpData()
+    {
+        return [
+            [['FM', false, false, true], '/000\s+46 4d\s+FM/'],
+            [['FM', false, true, true], '/000\s+46 4D\s+FM/'],
+        ];
     }
 }
