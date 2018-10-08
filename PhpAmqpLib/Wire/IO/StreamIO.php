@@ -233,6 +233,8 @@ class StreamIO extends AbstractIO
                 if ($this->canDispatchPcntlSignal) {
                     $this->select(0, self::READ_BUFFER_WAIT_INTERVAL);
                     pcntl_signal_dispatch();
+                } else {
+                    $this->check_heartbeat();
                 }
                 continue;
             }
