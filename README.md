@@ -317,17 +317,7 @@ $ make benchmark
 
 ## Tests ##
 
-To successfully run the tests you need to first setup the test `user` and test `virtual host`.
-
-You can do that by running the following commands after starting RabbitMQ:
-
-```bash
-$ rabbitmqctl add_vhost phpamqplib_testbed
-$ rabbitmqctl add_user phpamqplib phpamqplib_password
-$ rabbitmqctl set_permissions -p phpamqplib_testbed phpamqplib ".*" ".*" ".*"
-```
-
-Once your environment is set up you can run your tests like this:
+To successfully run the tests you need to first have a stock RabbitMQ broker running locally.Then, run tests like this:
 
 ```bash
 $ make test

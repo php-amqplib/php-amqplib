@@ -38,6 +38,7 @@ abstract class AMQPAbstractCollection implements \Iterator
     const T_ARRAY = 15;
     const T_TABLE = 16;
 
+    const T_BYTES = 17;
     /**
      * @var string
      */
@@ -75,7 +76,8 @@ abstract class AMQPAbstractCollection implements \Iterator
         self::T_STRING_SHORT => 's',
         self::T_STRING_LONG => 'S',
         self::T_ARRAY => 'A',
-        self::T_TABLE => 'F'
+        self::T_TABLE => 'F',
+        self::T_BYTES => 'x',
     );
 
     /**
@@ -92,7 +94,8 @@ abstract class AMQPAbstractCollection implements \Iterator
         self::T_BOOL => 't',
         self::T_STRING_LONG => 'S',
         self::T_ARRAY => 'A',
-        self::T_TABLE => 'F'
+        self::T_TABLE => 'F',
+        self::T_BYTES => 'x',
     );
 
     /**
