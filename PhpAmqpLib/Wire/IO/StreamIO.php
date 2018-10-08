@@ -288,7 +288,7 @@ class StreamIO extends AbstractIO
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
                 restore_error_handler();
-                throw $e;
+                throw new AMQPRuntimeException($e->getMessage());
             }
             restore_error_handler();
 
