@@ -129,7 +129,7 @@ class StreamIO extends AbstractIO
             $this->port
         );
 
-        set_error_handler(array($this, 'error_handler'));
+        $this->set_error_handler();
 
         try {
             $this->sock = stream_socket_client(
@@ -140,6 +140,7 @@ class StreamIO extends AbstractIO
                 STREAM_CLIENT_CONNECT,
                 $this->context
             );
+            $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
             restore_error_handler();
             throw $e;
@@ -216,14 +217,14 @@ class StreamIO extends AbstractIO
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
-            set_error_handler(array($this, 'error_handler'));
+            $this->set_error_handler();
             try {
                 $buffer = fread($this->sock, ($len - $read));
+                $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
                 restore_error_handler();
                 throw $e;
             }
-            restore_error_handler();
 
             if ($buffer === false) {
                 throw new AMQPRuntimeException('Error receiving data');
@@ -274,7 +275,7 @@ class StreamIO extends AbstractIO
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
             }
 
-            set_error_handler(array($this, 'error_handler'));
+            $this->set_error_handler();
             // OpenSSL's C library function SSL_write() can balk on buffers > 8192
             // bytes in length, so we're limiting the write size here. On both TLS
             // and plaintext connections, the write loop will continue until the
@@ -284,6 +285,7 @@ class StreamIO extends AbstractIO
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
                 $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
+                $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
                 restore_error_handler();
                 throw $e;
@@ -321,8 +323,6 @@ class StreamIO extends AbstractIO
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
-        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline', 'errcontext');
-
         // fwrite notice that the stream isn't ready
         if (strstr($errstr, 'Resource temporarily unavailable')) {
              // it's allowed to retry
@@ -335,8 +335,31 @@ class StreamIO extends AbstractIO
             return null;
         }
 
-        // raise all other issues to exceptions
-        throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        // throwing an exception in an error handler will halt execution
+        //   set the last error and continue
+        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline', 'errcontext');
+    }
+
+    /**
+     * Begin tracking errors and set the error handler
+     */
+    protected function set_error_handler()
+    {
+        $this->last_error = null;
+        set_error_handler(array($this, 'error_handler'));
+    }
+
+    /**
+     * throws an ErrorException if an error was handled
+     */
+    protected function cleanup_error_handler()
+    {
+        if ($this->last_error !== null) {
+            throw new \ErrorException($this->last_error['errstr'], 0, $this->last_error['errno'], $this->last_error['errfile'], $this->last_error['errline']);
+        }
+
+        // no error was caught
+        restore_error_handler();
     }
 
     /**
@@ -423,9 +446,10 @@ class StreamIO extends AbstractIO
             $usec = is_int($usec) ? $usec : 0;
         }
 
-        set_error_handler(array($this, 'error_handler'));
+        $this->set_error_handler();
         try {
             $result = stream_select($read, $write, $except, $sec, $usec);
+            $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
             restore_error_handler();
             throw $e;
