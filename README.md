@@ -10,13 +10,7 @@
 This library is a _pure PHP_ implementation of the [AMQP 0-9-1 protocol](http://www.rabbitmq.com/tutorials/amqp-concepts.html).
 It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
 
-**Requirements: PHP 5.3** due to the use of `namespaces`.
-
-**Requirements: bcmath extension** This library utilizes the bcmath PHP extension. The installation steps vary per PHP version and the underlying OS. The following example shows how to add to an existing PHP installation on Ubuntu 15.10:
-
-```bash
-sudo apt-get install php7.0-bcmath
-```
+**Requirement: PHP 5.4 or newer**
 
 The library was used for the PHP examples of [RabbitMQ in Action](http://manning.com/videla/) and the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutorials/tutorial-one-php.html).
 

@@ -838,7 +838,7 @@ class AMQPChannel extends AbstractChannel
              * @param string $key
              */
             function ($keys, $key) use ($value) {
-                if (bccomp($key, $value, 0) <= 0) {
+                if ($key <= $value) {
                     $keys[] = $key;
                 }
 

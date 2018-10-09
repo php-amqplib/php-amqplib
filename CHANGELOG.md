@@ -2,6 +2,13 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
+## 2.8.0 - 2018-10-10
+
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/3)
+
+- Drop testing and support for PHP 5.3
+- Remove `bcmath` and `mbstring` requirements
+
 ## 2.7.2 - 2018-02-11
 
 [GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/5)

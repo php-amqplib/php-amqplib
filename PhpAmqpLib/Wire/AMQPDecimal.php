@@ -42,7 +42,7 @@ class AMQPDecimal
      */
     public function asBCvalue()
     {
-        return bcdiv($this->n, bcpow(10, $this->e));
+        return $this->n / (10 ** $this->e);
     }
 
     /**

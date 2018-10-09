@@ -64,8 +64,8 @@ class AMQPWriter extends AbstractClient
 
         $res = array();
         for ($b = 0; $b < $bytes; $b += 2) {
-            $chnk = (int) bcmod($x, 65536);
-            $x = bcdiv($x, 65536, 0);
+            $chnk = (int)($x % 65536);
+            $x = $x / 65536;
             $res[] = pack('n', $isNeg ? ~$chnk : $chnk);
         }
 
