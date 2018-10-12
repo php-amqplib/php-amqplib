@@ -146,7 +146,18 @@ class AMQPReader extends AbstractClient
     {
         if ($this->io) {
             $this->wait();
-            $res = $this->io->read($n);
+
+            while (true) {
+                try {
+                    $res = $this->io->read($n);
+                    break;
+                } catch (AMQPTimeoutException $e) {
+                    if ($this->timeout > 0) {
+                        throw $e;
+                    }
+                }
+            }
+
             $this->offset += $n;
 
             return $res;

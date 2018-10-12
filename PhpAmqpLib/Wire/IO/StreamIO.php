@@ -9,7 +9,8 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 class StreamIO extends AbstractIO
 {
-    const READ_BUFFER_WAIT_INTERVAL = 100000;
+    const READ_BUFFER_WAIT_INTERVAL = 100000; // 0.1 second
+    const READ_BUFFER_LIMIT         = 300; // 30 seconds / 0.1 second
 
     /** @var string */
     protected $protocol;
@@ -212,6 +213,7 @@ class StreamIO extends AbstractIO
         $read = 0;
         $data = '';
 
+        $wait_buffer_count = 0;
         while ($read < $len) {
             if (!is_resource($this->sock) || feof($this->sock)) {
                 throw new AMQPRuntimeException('Broken pipe or closed connection');
@@ -232,6 +234,12 @@ class StreamIO extends AbstractIO
 
             if ($buffer === '') {
                 if ($this->canDispatchPcntlSignal) {
+                    $wait_buffer_count++;
+                    if ($wait_buffer_count > self::READ_BUFFER_LIMIT) {
+                        // No bytes has been being read during READ_BUFFER_WAIT_INTERVAL * READ_BUFFER_LIMIT seconds.
+                        // We assume the connection hangs if the timeout is set.
+                        throw new AMQPTimeoutException('Too many read attempts detected in StreamIO');
+                    }
                     $this->select(0, self::READ_BUFFER_WAIT_INTERVAL);
                     pcntl_signal_dispatch();
                 } else {
