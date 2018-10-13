@@ -1,6 +1,9 @@
 <?php
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Exception\AMQPConnectionClosedException;
+use PhpAmqpLib\Exception\AMQPDataReadException;
+use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
@@ -202,7 +205,7 @@ class StreamIO extends AbstractIO
      * @param int $len
      * @throws \ErrorException
      * @throws \PhpAmqpLib\Exception\AMQPIOException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPDataReadException
      * @return mixed|string
      */
     public function read($len)
@@ -214,7 +217,7 @@ class StreamIO extends AbstractIO
 
         while ($read < $len) {
             if (!is_resource($this->sock) || feof($this->sock)) {
-                throw new AMQPRuntimeException('Broken pipe or closed connection');
+                throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
             $this->set_error_handler();
@@ -227,7 +230,7 @@ class StreamIO extends AbstractIO
             }
 
             if ($buffer === false) {
-                throw new AMQPRuntimeException('Error receiving data');
+                throw new AMQPDataReadException('Error receiving data');
             }
 
             if ($buffer === '') {
@@ -245,7 +248,7 @@ class StreamIO extends AbstractIO
         }
 
         if (mb_strlen($data, 'ASCII') !== $len) {
-            throw new AMQPRuntimeException(
+            throw new AMQPDataReadException(
                 sprintf(
                     'Error reading data. Received %s instead of expected %s bytes',
                     mb_strlen($data, 'ASCII'),
@@ -272,7 +275,7 @@ class StreamIO extends AbstractIO
         while ($written < $len) {
 
             if (!is_resource($this->sock)) {
-                throw new AMQPRuntimeException('Broken pipe or closed connection');
+                throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
             $this->set_error_handler();
@@ -297,7 +300,7 @@ class StreamIO extends AbstractIO
             }
 
             if ($buffer === 0 && feof($this->sock)) {
-                throw new AMQPRuntimeException('Broken pipe or closed connection');
+                throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
             if ($this->timed_out()) {
@@ -377,7 +380,7 @@ class StreamIO extends AbstractIO
             // server has gone away
             if (($this->heartbeat * 2) < $t_read) {
                 $this->close();
-                throw new AMQPRuntimeException("Missed server heartbeat");
+                throw new AMQPHeartbeatMissedException("Missed server heartbeat");
             }
 
             // time for client to send a heartbeat

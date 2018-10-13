@@ -1,8 +1,9 @@
 <?php
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOException;
-use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
 
@@ -107,11 +108,12 @@ class SocketIO extends AbstractIO
      * @return mixed|string
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function read($n)
     {
         if (is_null($this->sock)) {
-            throw new AMQPRuntimeException(sprintf(
+            throw new AMQPSocketException(sprintf(
                 'Socket was null! Last SocketError was: %s',
                 socket_strerror(socket_last_error())
             ));
@@ -145,7 +147,7 @@ class SocketIO extends AbstractIO
      * @return void
      *
      * @throws \PhpAmqpLib\Exception\AMQPIOException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function write($data)
     {
@@ -154,7 +156,7 @@ class SocketIO extends AbstractIO
         while (true) {
             // Null sockets are invalid, throw exception
             if (is_null($this->sock)) {
-                throw new AMQPRuntimeException(sprintf(
+                throw new AMQPSocketException(sprintf(
                     'Socket was null! Last SocketError was: %s',
                     socket_strerror(socket_last_error())
                 ));
@@ -234,7 +236,7 @@ class SocketIO extends AbstractIO
             // server has gone away
             if (($this->heartbeat * 2) < $t_read) {
                 $this->close();
-                throw new AMQPRuntimeException("Missed server heartbeat");
+                throw new AMQPHeartbeatMissedException("Missed server heartbeat");
             }
 
             // time for client to send a heartbeat

@@ -16,8 +16,7 @@ class DirectExchangeTest extends ChannelTestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPRuntimeException
-     * @expectedExceptionMessage Channel connection is closed.
+     * @expectedException \PhpAmqpLib\Exception\AMQPChannelClosedException
      */
     public function exchange_declare_with_closed_connection()
     {
@@ -28,8 +27,7 @@ class DirectExchangeTest extends ChannelTestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPRuntimeException
-     * @expectedExceptionMessage Channel connection is closed.
+     * @expectedException \PhpAmqpLib\Exception\AMQPChannelClosedException
      */
     public function exchange_declare_with_closed_channel()
     {

@@ -3,6 +3,9 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Channel\AbstractChannel;
+use PhpAmqpLib\Exception\AMQPConnectionClosedException;
+use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
+use PhpAmqpLib\Exception\AMQPInvalidFrameException;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
@@ -510,7 +513,7 @@ class AbstractConnection extends AbstractChannel
         if (is_null($this->input))
         {
             $this->setIsConnected(false);
-            throw new AMQPRuntimeException('Broken pipe or closed connection');
+            throw new AMQPConnectionClosedException('Broken pipe or closed connection');
         }
 
         $currentTimeout = $this->input->getTimeout();
@@ -525,7 +528,7 @@ class AbstractConnection extends AbstractChannel
             $frame_type = $this->wait_frame_reader->read_octet();
             $class = self::$PROTOCOL_CONSTANTS_CLASS;
             if (!array_key_exists($frame_type, $class::$FRAME_TYPES)) {
-                throw new AMQPRuntimeException('Invalid frame type ' . $frame_type);
+                throw new AMQPInvalidFrameException('Invalid frame type ' . $frame_type);
             }
             $channel = $this->wait_frame_reader->read_short();
             $size = $this->wait_frame_reader->read_long();
@@ -544,7 +547,7 @@ class AbstractConnection extends AbstractChannel
         $this->input->setTimeout($currentTimeout);
 
         if ($ch != 0xCE) {
-            throw new AMQPRuntimeException(sprintf(
+            throw new AMQPInvalidFrameException(sprintf(
                 'Framing error, unexpected byte: %x',
                 $ch
             ));
@@ -573,7 +576,7 @@ class AbstractConnection extends AbstractChannel
                 if ( $this->heartbeat && microtime(true) - ($this->heartbeat*2) > $this->last_frame ) {
                     $this->debug->debug_msg("missed server heartbeat (at threshold * 2)");
                     $this->setIsConnected(false);
-                    throw new AMQPRuntimeException("Missed server heartbeat");
+                    throw new AMQPHeartbeatMissedException("Missed server heartbeat");
                 }
 
                 throw $e;
