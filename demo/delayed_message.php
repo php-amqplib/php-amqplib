@@ -54,7 +54,7 @@ function process_message(AMQPMessage $message)
     $headers = $message->get('application_headers');
     $nativeData = $headers->getNativeData();
     var_dump($nativeData['x-delay']);
-    $message->delivery_info['channel']->basic_nack($message->delivery_info['delivery_tag']);
+    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
 }
 
 /*
@@ -67,7 +67,7 @@ function process_message(AMQPMessage $message)
     callback: A PHP Callback
 */
 
-$channel->basic_consume('delayed_queue', '', false, true, false, false, 'process_message');
+$channel->basic_consume('delayed_queue', '', false, false, false, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $channel
