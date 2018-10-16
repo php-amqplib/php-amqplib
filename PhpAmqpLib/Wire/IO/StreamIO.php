@@ -323,14 +323,14 @@ class StreamIO extends AbstractIO
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
-        // fwrite notice that the stream isn't ready - errno=11, EAGAIN or EWOULDBLOCK
-        if ($errno == 11) {
+        // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
+        if ($errno == SOCKET_EAGAIN || $errno == SOCKET_EWOULDBLOCK) {
              // it's allowed to retry
             return null;
         }
 
-        // stream_select warning that it has been interrupted by a signal - errno=4, EINTR
-        if ($errno == 4) {
+        // stream_select warning that it has been interrupted by a signal - EINTR
+        if ($errno == SOCKET_EINTR) {
              // it's allowed while processing signals
             return null;
         }
