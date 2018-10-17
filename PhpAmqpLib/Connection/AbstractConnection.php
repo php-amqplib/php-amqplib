@@ -212,7 +212,12 @@ class AbstractConnection extends AbstractChannel
 
                 $this->write($this->amqp_protocol_header);
                 $this->wait(array($this->waitHelper->get_wait('connection.start')),false,$this->connection_timeout);
-                $this->x_start_ok(self::$LIBRARY_PROPERTIES, $this->login_method, $this->login_response, $this->locale);
+                $this->x_start_ok(
+                    $this->getLibraryProperties(),
+                    $this->login_method,
+                    $this->login_response,
+                    $this->locale
+                );
 
                 $this->wait_tune_ok = true;
                 while ($this->wait_tune_ok) {
@@ -979,6 +984,16 @@ class AbstractConnection extends AbstractChannel
     public function getServerProperties()
     {
         return $this->server_properties;
+    }
+
+    /**
+     * Get the library properties for populating the client protocol information
+     *
+     * @return array
+     */
+    public function getLibraryProperties()
+    {
+        return self::$LIBRARY_PROPERTIES;
     }
 
     public static function create_connection($hosts, $options = array()){
