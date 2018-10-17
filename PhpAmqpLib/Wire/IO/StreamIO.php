@@ -235,7 +235,7 @@ class StreamIO extends AbstractIO
                     if ($wait_buffer_count > self::READ_BUFFER_LIMIT) {
                         // No bytes has been being read during READ_BUFFER_WAIT_INTERVAL * READ_BUFFER_LIMIT seconds.
                         // We assume the connection hangs if the timeout is set.
-                        throw new AMQPTimeoutException('Too many read attempts detected in StreamIO');
+                        throw new AMQPRuntimeException('Too many read attempts detected in StreamIO');
                     }
                     $this->select(0, self::READ_BUFFER_WAIT_INTERVAL);
                     pcntl_signal_dispatch();
