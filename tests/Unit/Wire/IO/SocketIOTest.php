@@ -32,7 +32,7 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @depends connect
-     * @expectedException \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function read_when_closed(SocketIO $socketIO)
     {
@@ -44,7 +44,7 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @depends connect
-     * @expectedException \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function write_when_closed(SocketIO $socketIO)
     {

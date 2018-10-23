@@ -1,9 +1,9 @@
 <?php
 namespace PhpAmqpLib\Wire;
 
+use PhpAmqpLib\Exception\AMQPDataReadException;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
-use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Helper\MiscHelper;
@@ -140,7 +140,7 @@ class AMQPReader extends AbstractClient
      * @param int $n
      * @return string
      * @throws \RuntimeException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPDataReadException
      */
     protected function rawread($n)
     {
@@ -153,7 +153,7 @@ class AMQPReader extends AbstractClient
         }
 
         if ($this->str_length < $n) {
-            throw new AMQPRuntimeException(sprintf(
+            throw new AMQPDataReadException(sprintf(
                 'Error reading data. Requested %s bytes while string buffer has only %s',
                 $n,
                 $this->str_length
@@ -442,7 +442,7 @@ class AMQPReader extends AbstractClient
      * @param int $fieldType One of AMQPAbstractCollection::T_* constants
      * @param bool $collectionsAsObjects Description
      * @return mixed
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPDataReadException
      */
     public function read_value($fieldType, $collectionsAsObjects = false)
     {
