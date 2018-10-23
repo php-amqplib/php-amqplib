@@ -2,11 +2,12 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## 2.8.0 - 2018-10-11
+## 2.8.0 - 2018-10-22
 
 [GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/3)
 
 - Drop testing and support for PHP 5.3
+- Use specific exceptions instead of general `AMQPRuntimeException`: [PR](https://github.com/php-amqplib/php-amqplib/pull/600)
 
 ## 2.7.2 - 2018-02-11
 
