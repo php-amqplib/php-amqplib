@@ -132,6 +132,12 @@ class AbstractConnection extends AbstractChannel
     private $prepare_content_cache_max_size;
 
     /**
+     * Maximum time to wait for channel operations, in seconds
+     * @var float $channel_rpc_timeout
+     */
+    private $channel_rpc_timeout;
+
+    /**
      * @param string $user
      * @param string $password
      * @param string $vhost
@@ -142,6 +148,7 @@ class AbstractConnection extends AbstractChannel
      * @param AbstractIO $io
      * @param int $heartbeat
      * @param int $connection_timeout
+     * @param float $channel_rpc_timeout
      * @throws \Exception
      */
     public function __construct(
@@ -154,7 +161,8 @@ class AbstractConnection extends AbstractChannel
         $locale = 'en_US',
         AbstractIO $io,
         $heartbeat = 0,
-        $connection_timeout = 0
+        $connection_timeout = 0,
+        $channel_rpc_timeout = 0.0
     ) {
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
@@ -639,7 +647,7 @@ class AbstractConnection extends AbstractChannel
         }
 
         $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
-        $ch = new AMQPChannel($this->connection, $channel_id);
+        $ch = new AMQPChannel($this->connection, $channel_id, $this->channel_rpc_timeout);
         $this->channels[$channel_id] = $ch;
 
         return $ch;
