@@ -39,6 +39,10 @@ class AMQPStreamConnection extends AbstractConnection
         $heartbeat = 0,
         $channel_rpc_timeout = 0.0
     ) {
+        if ($channel_rpc_timeout > $read_write_timeout) {
+            throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read-write timeout');
+        }
+
         $io = new StreamIO(
             $host,
             $port,

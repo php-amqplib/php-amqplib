@@ -176,6 +176,7 @@ class AbstractConnection extends AbstractChannel
         $this->io = $io;
         $this->heartbeat = $heartbeat;
         $this->connection_timeout = $connection_timeout;
+        $this->channel_rpc_timeout = $channel_rpc_timeout;
 
         if ($user && $password) {
             $this->login_response = new AMQPWriter();
@@ -647,7 +648,7 @@ class AbstractConnection extends AbstractChannel
         }
 
         $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
-        $ch = new AMQPChannel($this->connection, $channel_id, $this->channel_rpc_timeout);
+        $ch = new AMQPChannel($this->connection, $channel_id, true, $this->channel_rpc_timeout);
         $this->channels[$channel_id] = $ch;
 
         return $ch;
