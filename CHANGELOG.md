@@ -2,6 +2,12 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
+## 2.8.1 - 2018-10-24
+
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/6)
+
+- `ext-sockets` is now required: [PR](https://github.com/php-amqplib/php-amqplib/pull/610)
+
 ## 2.8.0 - 2018-10-23
 
 [GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/3)
