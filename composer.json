@@ -21,20 +21,23 @@
             "name": "Raúl Araya",
             "email": "nubeiro@gmail.com",
             "role": "Maintainer"
+        },
+        {
+            "name": "Luke Bakken",
+            "email": "luke@bakken.io",
+            "role": "Maintainer"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "ext-bcmath": "*"
+        "ext-bcmath": "*",
+        "ext-sockets": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8",
         "scrutinizer/ocular": "^1.1",
         "squizlabs/php_codesniffer": "^2.5",
         "phpdocumentor/phpdocumentor": "^2.9"
-    },
-    "suggest": {
-        "ext-sockets": "Use AMQPSocketConnection"
     },
     "autoload": {
         "psr-4": {
