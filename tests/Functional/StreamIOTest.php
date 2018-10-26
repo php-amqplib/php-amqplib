@@ -12,6 +12,8 @@ class StreamIOTest extends TestCase
      */
     public function error_handler_is_restored_on_failed_connection()
     {
+        set_error_handler(array($this, 'custom_error_handler'));
+
         error_reporting(~E_NOTICE);
 
         $exceptionThrown = false;
@@ -33,5 +35,26 @@ class StreamIOTest extends TestCase
         $this->assertFalse($exceptionThrown, 'Default error handler was not restored.');
 
         error_reporting(E_ALL);
+
+        $previousErrorHandler = set_error_handler(array($this, 'custom_error_handler'));
+        $this->assertSame('custom_error_handler', $previousErrorHandler[1]);
+    }
+
+    /**
+     * @test
+     */
+    public function error_handler_is_restored_on_success()
+    {
+        set_error_handler(array($this, 'custom_error_handler'));
+
+        new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+
+        $previousErrorHandler = set_error_handler(array($this, 'custom_error_handler'));
+
+        $this->assertSame('custom_error_handler', $previousErrorHandler[1]);
+    }
+
+    public function custom_error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    {
     }
 }

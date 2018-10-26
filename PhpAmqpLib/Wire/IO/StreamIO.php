@@ -147,8 +147,6 @@ class StreamIO extends AbstractIO
             throw $e;
         }
 
-        restore_error_handler();
-
         if (false === $this->sock) {
             throw new AMQPRuntimeException(
                 sprintf(
@@ -300,7 +298,6 @@ class StreamIO extends AbstractIO
                 restore_error_handler();
                 throw new AMQPRuntimeException($e->getMessage());
             }
-            restore_error_handler();
 
             if ($buffer === false) {
                 throw new AMQPRuntimeException('Error sending data');
@@ -464,7 +461,6 @@ class StreamIO extends AbstractIO
             restore_error_handler();
             throw $e;
         }
-        restore_error_handler();
 
         return $result;
     }
