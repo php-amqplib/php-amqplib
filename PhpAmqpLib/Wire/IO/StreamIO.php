@@ -330,14 +330,16 @@ class StreamIO extends AbstractIO
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
+        $socket_errno = socket_last_error($this->socket);
+
         // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-        if ($errno == SOCKET_EAGAIN || $errno == SOCKET_EWOULDBLOCK) {
+        if ($socket_errno == SOCKET_EAGAIN || $socket_errno == SOCKET_EWOULDBLOCK) {
              // it's allowed to retry
             return null;
         }
 
         // stream_select warning that it has been interrupted by a signal - EINTR
-        if ($errno == SOCKET_EINTR) {
+        if ($socket_errno == SOCKET_EINTR) {
              // it's allowed while processing signals
             return null;
         }
