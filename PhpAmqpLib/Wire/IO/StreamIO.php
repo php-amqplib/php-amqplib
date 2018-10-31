@@ -54,6 +54,15 @@ class StreamIO extends AbstractIO
     /** @var bool */
     private $canDispatchPcntlSignal;
 
+    /** @var string */
+    private static $ERRNO_EQUALS_EAGAIN = 'errno=' . SOCKET_EAGAIN;
+
+    /** @var string */
+    private static $ERRNO_EQUALS_EWOULDBLOCK = 'errno=' . SOCKET_EWOULDBLOCK;
+
+    /** @var string */
+    private static $ERRNO_EQUALS_EINTR = 'errno=' . SOCKET_EINTR;
+
     /**
      * @param string $host
      * @param int $port
@@ -331,13 +340,13 @@ class StreamIO extends AbstractIO
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-        if (strpos($errstr, 'errno=' . SOCKET_EAGAIN) !== false || strpos($errstr, 'errno=' . SOCKET_EWOULDBLOCK) !== false) {
+        if (strpos($errstr, self::$ERRNO_EQUALS_EAGAIN) !== false || strpos($errstr, self::$ERRNO_EQUALS_EWOULDBLOCK) !== false) {
              // it's allowed to retry
             return null;
         }
 
         // stream_select warning that it has been interrupted by a signal - EINTR
-        if (strpos($errstr, 'errno=' . SOCKET_EINTR) !== false) {
+        if (strpos($errstr, self::$ERRNO_EQUALS_EINTR) !== false) {
              // it's allowed while processing signals
             return null;
         }
