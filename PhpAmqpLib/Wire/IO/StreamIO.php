@@ -55,13 +55,13 @@ class StreamIO extends AbstractIO
     private $canDispatchPcntlSignal;
 
     /** @var string */
-    private static $ERRNO_EQUALS_EAGAIN = 'errno=' . SOCKET_EAGAIN;
+    private static $ERRNO_EQUALS_EAGAIN;
 
     /** @var string */
-    private static $ERRNO_EQUALS_EWOULDBLOCK = 'errno=' . SOCKET_EWOULDBLOCK;
+    private static $ERRNO_EQUALS_EWOULDBLOCK;
 
     /** @var string */
-    private static $ERRNO_EQUALS_EINTR = 'errno=' . SOCKET_EINTR;
+    private static $ERRNO_EQUALS_EINTR;
 
     /**
      * @param string $host
@@ -84,6 +84,10 @@ class StreamIO extends AbstractIO
         if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
+
+        self::$ERRNO_EQUALS_EAGAIN = 'errno=' . SOCKET_EAGAIN;
+        self::$ERRNO_EQUALS_EWOULDBLOCK = 'errno=' . SOCKET_EWOULDBLOCK;
+        self::$ERRNO_EQUALS_EINTR = 'errno=' . SOCKET_EINTR;
 
         $this->protocol = 'tcp';
         $this->host = $host;
