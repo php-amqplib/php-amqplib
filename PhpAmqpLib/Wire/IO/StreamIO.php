@@ -331,9 +331,9 @@ class StreamIO extends AbstractIO
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         if (preg_match('/errno=(' . SOCKET_EAGAIN . '|' . SOCKET_EWOULDBLOCK . '|' . SOCKET_EINTR . ')/', $errstr)) {
-	    // Allow it to retry if it gets a notice that the stream isn't ready - EAGAIN or EWOULDBLOCK.
-	    // Allow it to retry if it gets a warning that it was interrupted by a signal that is being processed - EINTR.
-	    return null;
+            // Allow it to retry if it gets a notice that the stream isn't ready - EAGAIN or EWOULDBLOCK.
+            // Allow it to retry if it gets a warning that it was interrupted by a signal that is being processed - EINTR.
+            return null;
         }
 
         // throwing an exception in an error handler will halt execution
