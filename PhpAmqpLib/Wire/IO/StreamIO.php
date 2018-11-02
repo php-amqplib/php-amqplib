@@ -54,6 +54,15 @@ class StreamIO extends AbstractIO
     /** @var bool */
     private $canDispatchPcntlSignal;
 
+    /** @var string */
+    private static $ERRNO_EQUALS_EAGAIN;
+
+    /** @var string */
+    private static $ERRNO_EQUALS_EWOULDBLOCK;
+
+    /** @var string */
+    private static $ERRNO_EQUALS_EINTR;
+
     /**
      * @param string $host
      * @param int $port
@@ -75,6 +84,10 @@ class StreamIO extends AbstractIO
         if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
+
+        self::$ERRNO_EQUALS_EAGAIN = 'errno=' . SOCKET_EAGAIN;
+        self::$ERRNO_EQUALS_EWOULDBLOCK = 'errno=' . SOCKET_EWOULDBLOCK;
+        self::$ERRNO_EQUALS_EINTR = 'errno=' . SOCKET_EINTR;
 
         $this->protocol = 'tcp';
         $this->host = $host;
@@ -331,13 +344,13 @@ class StreamIO extends AbstractIO
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-        if ($errno == SOCKET_EAGAIN || $errno == SOCKET_EWOULDBLOCK) {
+        if (strpos($errstr, self::$ERRNO_EQUALS_EAGAIN) !== false || strpos($errstr, self::$ERRNO_EQUALS_EWOULDBLOCK) !== false) {
              // it's allowed to retry
             return null;
         }
 
         // stream_select warning that it has been interrupted by a signal - EINTR
-        if ($errno == SOCKET_EINTR) {
+        if (strpos($errstr, self::$ERRNO_EQUALS_EINTR) !== false) {
              // it's allowed while processing signals
             return null;
         }
