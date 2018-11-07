@@ -2,15 +2,15 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## 2.8.1 - 2018-10-24
+## 2.8.1 - 2018-11-12
 
-[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/6)
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/6?closed=1)
 
 - `ext-sockets` is now required: [PR](https://github.com/php-amqplib/php-amqplib/pull/610)
 
 ## 2.8.0 - 2018-10-23
 
-[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/3)
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/3?closed=1)
 
 - Drop testing and support for PHP 5.3
 - Use specific exceptions instead of general `AMQPRuntimeException`: [PR](https://github.com/php-amqplib/php-amqplib/pull/600)
@@ -18,7 +18,7 @@ All Notable changes to `php-amqplib` will be documented in this file
 
 ## 2.7.2 - 2018-02-11
 
-[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/5)
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/5?closed=1)
 
 - PHP `5.3` compatibility [PR](https://github.com/php-amqplib/php-amqplib/issues/539)
 
