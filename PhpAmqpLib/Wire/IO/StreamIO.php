@@ -276,6 +276,8 @@ class StreamIO extends AbstractIO
             );
         }
 
+        $this->last_read = microtime(true);
+
         return $data;
     }
 
