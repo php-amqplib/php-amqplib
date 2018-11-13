@@ -2,11 +2,12 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## 2.8.1 - 2018-11-12
+## 2.8.1 - 2018-11-13
 
 [GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/6?closed=1)
 
 - `ext-sockets` is now required: [PR](https://github.com/php-amqplib/php-amqplib/pull/610)
+- Fix `errno=11 Resource temporarily unavailable` error: [Issue](https://github.com/php-amqplib/php-amqplib/issues/613) / [PR](https://github.com/php-amqplib/php-amqplib/pull/615)
 
 ## 2.8.0 - 2018-10-23
 
