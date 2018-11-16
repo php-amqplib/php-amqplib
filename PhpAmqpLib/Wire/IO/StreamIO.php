@@ -85,7 +85,8 @@ class StreamIO extends AbstractIO
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
 
-        self::$ERRNO_EQUALS_EAGAIN = 'errno=' . SOCKET_EAGAIN;
+        // SOCKET_EAGAIN can't be accessed in Windows
+        self::$ERRNO_EQUALS_EAGAIN = 'errno=' . (defined('SOCKET_EAGAIN') ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
         self::$ERRNO_EQUALS_EWOULDBLOCK = 'errno=' . SOCKET_EWOULDBLOCK;
         self::$ERRNO_EQUALS_EINTR = 'errno=' . SOCKET_EINTR;
 
