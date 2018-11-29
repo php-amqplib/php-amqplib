@@ -55,13 +55,13 @@ class StreamIO extends AbstractIO
     private $canDispatchPcntlSignal;
 
     /** @var string */
-    private static $ERRNO_EQUALS_EAGAIN;
+    private static $SOCKET_STRERROR_EAGAIN;
 
     /** @var string */
-    private static $ERRNO_EQUALS_EWOULDBLOCK;
+    private static $SOCKET_STRERROR_EWOULDBLOCK;
 
     /** @var string */
-    private static $ERRNO_EQUALS_EINTR;
+    private static $SOCKET_STRERROR_EINTR;
 
     /**
      * @param string $host
@@ -85,10 +85,10 @@ class StreamIO extends AbstractIO
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
 
-        // SOCKET_EAGAIN can't be accessed in Windows
-        self::$ERRNO_EQUALS_EAGAIN = 'errno=' . (defined('SOCKET_EAGAIN') ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
-        self::$ERRNO_EQUALS_EWOULDBLOCK = 'errno=' . SOCKET_EWOULDBLOCK;
-        self::$ERRNO_EQUALS_EINTR = 'errno=' . SOCKET_EINTR;
+        // SOCKET_EAGAIN is not defined in Windows
+        self::$SOCKET_STRERROR_EAGAIN = socket_strerror(defined(SOCKET_EAGAIN) ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
+        self::$SOCKET_STRERROR_EWOULDBLOCK = socket_strerror(SOCKET_EWOULDBLOCK);
+        self::$SOCKET_STRERROR_EINTR = socket_strerror(SOCKET_EINTR);
 
         $this->protocol = 'tcp';
         $this->host = $host;
@@ -347,13 +347,14 @@ class StreamIO extends AbstractIO
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-        if (strpos($errstr, self::$ERRNO_EQUALS_EAGAIN) !== false || strpos($errstr, self::$ERRNO_EQUALS_EWOULDBLOCK) !== false) {
+        if (strpos($errstr, self::$SOCKET_STRERROR_EAGAIN) !== false
+            || strpos($errstr, self::$SOCKET_STRERROR_EWOULDBLOCK) !== false) {
              // it's allowed to retry
             return null;
         }
 
         // stream_select warning that it has been interrupted by a signal - EINTR
-        if (strpos($errstr, self::$ERRNO_EQUALS_EINTR) !== false) {
+        if (strpos($errstr, self::$SOCKET_STRERROR_EINTR) !== false) {
              // it's allowed while processing signals
             return null;
         }
