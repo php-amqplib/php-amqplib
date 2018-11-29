@@ -54,6 +54,15 @@ class StreamIO extends AbstractIO
     /** @var bool */
     private $canDispatchPcntlSignal;
 
+    /** @var string */
+    private static $SOCKET_STRERROR_EAGAIN;
+
+    /** @var string */
+    private static $SOCKET_STRERROR_EWOULDBLOCK;
+
+    /** @var string */
+    private static $SOCKET_STRERROR_EINTR;
+
     /**
      * @param string $host
      * @param int $port
@@ -75,6 +84,11 @@ class StreamIO extends AbstractIO
         if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
+
+        // SOCKET_EAGAIN is not defined in Windows
+        self::$SOCKET_STRERROR_EAGAIN = socket_strerror(defined(SOCKET_EAGAIN) ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
+        self::$SOCKET_STRERROR_EWOULDBLOCK = socket_strerror(SOCKET_EWOULDBLOCK);
+        self::$SOCKET_STRERROR_EINTR = socket_strerror(SOCKET_EINTR);
 
         $this->protocol = 'tcp';
         $this->host = $host;
@@ -332,18 +346,15 @@ class StreamIO extends AbstractIO
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
-        // SOCKET_EAGAIN is not defined in Windows
-        $SOCKET_EAGAIN = defined(SOCKET_EAGAIN) ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK;
-
         // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-        if (strpos($errstr, socket_strerror($SOCKET_EAGAIN)) !== false
-            || strpos($errstr, socket_strerror(SOCKET_EWOULDBLOCK)) !== false) {
+        if (strpos($errstr, self::$SOCKET_STRERROR_EAGAIN) !== false
+            || strpos($errstr, self::$SOCKET_STRERROR_EWOULDBLOCK) !== false) {
              // it's allowed to retry
             return null;
         }
 
         // stream_select warning that it has been interrupted by a signal - EINTR
-        if (strpos($errstr, socket_strerror(SOCKET_EINTR)) !== false) {
+        if (strpos($errstr, self::$SOCKET_STRERROR_EINTR) !== false) {
              // it's allowed while processing signals
             return null;
         }
