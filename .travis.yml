@@ -8,7 +8,11 @@ matrix:
     - php: 7.0
     - php: 7.1
     - php: 7.2
+    - php: 7.3
+    - php: nightly
     - php: hhvm
+  allow_failures:
+    - php: nightly
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
@@ -17,6 +21,11 @@ sudo: false
 # required to test HHVM
 # see https://travis-ci.org/php-amqplib/php-amqplib/jobs/259347861
 dist: trusty
+
+cache:
+  directories:
+    - $HOME/.composer
+    - vendor
 
 before_script:
   - travis_retry composer self-update
