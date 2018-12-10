@@ -321,6 +321,7 @@ abstract class AbstractChannel
      * @param int $timeout
      * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      * @throws \ErrorException
      * @return mixed
      */

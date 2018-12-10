@@ -19,6 +19,8 @@ class AMQPSocketConnection extends AbstractConnection
      * @param bool $keepalive
      * @param int $write_timeout
      * @param int $heartbeat
+     * @param float $channel_rpc_timeout
+     * @throws \Exception
      */
     public function __construct(
         $host,
@@ -33,8 +35,13 @@ class AMQPSocketConnection extends AbstractConnection
         $read_timeout = 3,
         $keepalive = false,
         $write_timeout = 3,
-        $heartbeat = 0
+        $heartbeat = 0,
+        $channel_rpc_timeout = 0.0
     ) {
+        if ($channel_rpc_timeout > $read_timeout) {
+            throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read timeout');
+        }
+
         $io = new SocketIO($host, $port, $read_timeout, $keepalive, $write_timeout, $heartbeat);
 
         parent::__construct(
@@ -46,7 +53,8 @@ class AMQPSocketConnection extends AbstractConnection
             $login_response,
             $locale,
             $io,
-            $heartbeat
+            $heartbeat,
+            $channel_rpc_timeout
         );
     }
 
