@@ -5,6 +5,7 @@ use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPDataReadException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOException;
+use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
@@ -157,7 +158,6 @@ class StreamIO extends AbstractIO
             );
             $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
-            restore_error_handler();
             throw $e;
         }
 
@@ -213,7 +213,6 @@ class StreamIO extends AbstractIO
 
     /**
      * @param int $len
-     * @throws \ErrorException
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPDataReadException
      * @return mixed|string
@@ -239,8 +238,7 @@ class StreamIO extends AbstractIO
                 $buffer = fread($this->sock, ($len - $read));
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
-                restore_error_handler();
-                throw $e;
+                throw new AMQPDataReadException($e->getMessage(), $e->getCode(), $e);
             }
 
             if ($buffer === false) {
@@ -311,8 +309,7 @@ class StreamIO extends AbstractIO
                 $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
-                restore_error_handler();
-                throw new AMQPRuntimeException($e->getMessage());
+                throw new AMQPRuntimeException($e->getMessage(). $e->getCode(), $e);
             }
 
             if ($buffer === false) {
@@ -342,7 +339,6 @@ class StreamIO extends AbstractIO
      * @param  int $errline
      * @param  array $errcontext
      * @return null
-     * @throws \ErrorException
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
@@ -375,15 +371,15 @@ class StreamIO extends AbstractIO
 
     /**
      * throws an ErrorException if an error was handled
+     * @throws \ErrorException
      */
     protected function cleanup_error_handler()
     {
+        restore_error_handler();
+
         if ($this->last_error !== null) {
             throw new \ErrorException($this->last_error['errstr'], 0, $this->last_error['errno'], $this->last_error['errfile'], $this->last_error['errline']);
         }
-
-        // no error was caught
-        restore_error_handler();
     }
 
     /**
@@ -454,8 +450,7 @@ class StreamIO extends AbstractIO
      * @param int $sec
      * @param int $usec
      * @return int|mixed
-     * @throws \ErrorException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
      */
     public function select($sec, $usec)
     {
@@ -475,8 +470,7 @@ class StreamIO extends AbstractIO
             $result = stream_select($read, $write, $except, $sec, $usec);
             $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
-            restore_error_handler();
-            throw $e;
+            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
         }
 
         return $result;

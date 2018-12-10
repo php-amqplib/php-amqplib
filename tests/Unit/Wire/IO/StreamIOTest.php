@@ -24,4 +24,22 @@ class StreamIOTest extends TestCase
             1
         );
     }
+
+    /**
+     * @test
+     * @expectedException \PhpAmqpLib\Exception\AMQPIOWaitException
+     */
+    public function select_must_throw_io_exception()
+    {
+        $property = new \ReflectionProperty('PhpAmqpLib\Wire\IO\StreamIO', 'sock');
+        $property->setAccessible(true);
+
+        $resource = fopen('php://temp', 'r');
+        fclose($resource);
+
+        $stream = new StreamIO('0.0.0.0', PORT, 0.1, 0.1);
+        $property->setValue($stream, $resource);
+
+        $stream->select(0, 0);
+    }
 }
