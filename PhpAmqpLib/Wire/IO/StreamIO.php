@@ -87,7 +87,7 @@ class StreamIO extends AbstractIO
         }
 
         // SOCKET_EAGAIN is not defined in Windows
-        self::$SOCKET_STRERROR_EAGAIN = socket_strerror(defined(SOCKET_EAGAIN) ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
+        self::$SOCKET_STRERROR_EAGAIN = socket_strerror(defined('SOCKET_EAGAIN') ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
         self::$SOCKET_STRERROR_EWOULDBLOCK = socket_strerror(SOCKET_EWOULDBLOCK);
         self::$SOCKET_STRERROR_EINTR = socket_strerror(SOCKET_EINTR);
 
