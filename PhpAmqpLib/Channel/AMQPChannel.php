@@ -174,7 +174,13 @@ class AMQPChannel extends AbstractChannel
             $method_sig[1]
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        try {
+            $this->send_method_frame(array($class_id, $method_id), $args);
+        } catch (\Exception $e) {
+            $this->do_close();
+
+            throw $e;
+        }
 
         return $this->wait(array(
             $this->waitHelper->get_wait('channel.close_ok')
