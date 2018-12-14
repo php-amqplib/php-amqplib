@@ -473,7 +473,7 @@ class AbstractConnection extends AbstractChannel
      * @param AMQPWriter|string $args
      * @param null $pkt
      */
-    protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
+    public function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
         $pkt = $this->prepare_channel_method_frame($channel, $method_sig, $args, $pkt);
         $this->write($pkt->getvalue());
