@@ -14,8 +14,6 @@ use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Wire\IO\AbstractIO;
-use PhpAmqpLib\Wire\IO\SocketIO;
-use PhpAmqpLib\Wire\IO\StreamIO;
 
 class AbstractConnection extends AbstractChannel
 {
@@ -86,9 +84,6 @@ class AbstractConnection extends AbstractChannel
 
     /** @var float */
     protected $last_frame;
-
-    /** @var SocketIO */
-    protected $sock;
 
     /** @var int */
     protected $channel_max = 65535;
@@ -243,10 +238,7 @@ class AbstractConnection extends AbstractChannel
                 $host = $this->x_open($this->vhost, '', $this->insist);
                 if (!$host) {
                     //Reconnected
-                    if ($this->io instanceof StreamIO)
-                    {
-                        $this->getIO()->reenableHeartbeat();
-                    }
+                    $this->getIO()->reenableHeartbeat();
                     return null; // we weren't redirected
                 }
 
@@ -351,7 +343,7 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param $data
+     * @param string $data
      */
     public function write($data)
     {
@@ -671,11 +663,7 @@ class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
-        if ($this->io instanceof StreamIO)
-        {
-            $this->io->disableHeartbeat();
-        }
-
+        $this->io->disableHeartbeat();
         if (empty($this->protocolWriter) || !$this->isConnected()) {
             return null;
         }
@@ -892,7 +880,7 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @return SocketIO
+     * @return AbstractIO
      */
     public function getSocket()
     {
