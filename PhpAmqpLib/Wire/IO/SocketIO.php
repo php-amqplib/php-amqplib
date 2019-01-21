@@ -3,6 +3,7 @@ namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOException;
+use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\AMQPWriter;
@@ -35,6 +36,9 @@ class SocketIO extends AbstractIO
 
     /** @var bool */
     private $keepalive;
+
+    /** @var array */
+    private $last_error;
 
     /**
      * @param string $host
@@ -205,8 +209,17 @@ class SocketIO extends AbstractIO
         $read = array($this->sock);
         $write = null;
         $except = null;
+        $result = false;
 
-        return socket_select($read, $write, $except, $sec, $usec);
+        $this->set_error_handler();
+        try {
+            $result = socket_select($read, $write, $except, $sec, $usec);
+            $this->cleanup_error_handler();
+        } catch (\ErrorException $e) {
+            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $result;
     }
 
     /**
@@ -257,5 +270,45 @@ class SocketIO extends AbstractIO
         $pkt->write_long(0);
         $pkt->write_octet(0xCE);
         $this->write($pkt->getvalue());
+    }
+
+    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    {
+        // socket_select warning that it has been interrupted by a signal - EINTR
+        if (false !== strrpos($errstr, socket_strerror(SOCKET_EINTR))) {
+            // it's allowed while processing signals
+            return;
+        }
+
+        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline', 'errcontext');
+    }
+
+    /**
+     * Begin tracking errors and set the error handler
+     */
+    protected function set_error_handler()
+    {
+        $this->last_error = null;
+        socket_clear_error($this->sock);
+        set_error_handler(array($this, 'error_handler'));
+    }
+
+    /**
+     * throws an ErrorException if an error was handled
+     * @throws \ErrorException
+     */
+    protected function cleanup_error_handler()
+    {
+        restore_error_handler();
+
+        if ($this->last_error !== null) {
+            throw new \ErrorException(
+                $this->last_error['errstr'],
+                0,
+                $this->last_error['errno'],
+                $this->last_error['errfile'],
+                $this->last_error['errline']
+            );
+        }
     }
 }

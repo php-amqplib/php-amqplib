@@ -32,11 +32,11 @@ class MiscHelper
      * different arguments
      *
      * @param int|float $number
-     * @return array
+     * @return int[]
      */
     public static function splitSecondsMicroseconds($number)
     {
-        return array(floor($number), ($number - floor($number)) * 1000000);
+        return array((int)floor($number), (int)(fmod($number, 1) * 1000000));
     }
 
     /**

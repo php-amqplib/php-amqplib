@@ -80,12 +80,7 @@ register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
 while (count($channel->callbacks)) {
-    $read = array($connection->getSocket()); // add here other sockets that you need to attend
-    $write = null;
-    $except = null;
-    if (false === ($changeStreamsCount = stream_select($read, $write, $except, 60))) {
-        /* Error handling */
-    } elseif ($changeStreamsCount > 0 || $channel->hasPendingMethods()) {
-        $channel->wait();
-    }
+    $channel->wait(null, true);
+    // do something else
+    usleep(300000);
 }
