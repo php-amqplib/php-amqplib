@@ -61,7 +61,7 @@ function process_message(AMQPMessage $message)
     queue: Queue from where to get the messages
     consumer_tag: Consumer identifier
     no_local: Don't receive messages published by this consumer.
-    no_ack: Tells the server if the consumer will acknowledge the messages.
+    no_ack: If set to true, automatic acknowledgement mode will be used by this consumer. See https://www.rabbitmq.com/confirms.html for details.
     exclusive: Request exclusive consumer access, meaning only this consumer can access the queue
     nowait:
     callback: A PHP Callback
