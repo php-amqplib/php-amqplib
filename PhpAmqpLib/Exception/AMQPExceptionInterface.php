@@ -1,6 +1,7 @@
 <?php
+
 namespace PhpAmqpLib\Exception;
 
-interface AMQPExceptionInterface
+interface AMQPExceptionInterface extends \Throwable
 {
 }
