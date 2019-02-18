@@ -18,7 +18,7 @@ class StreamIOTest extends TestCase
 
         $exceptionThrown = false;
         try {
-            new AMQPStreamConnection('google.com', PORT, USER, PASS, VHOST);
+            new AMQPStreamConnection(HOST, PORT - 1, USER, PASS, VHOST);
         } catch (\ErrorException $e) {
             $exceptionThrown = true;
         }

@@ -3,6 +3,7 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPDataReadException;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
+use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
@@ -41,7 +42,7 @@ class AMQPReader extends AbstractClient
     /** @var bool */
     protected $is64bits;
 
-    /** @var int */
+    /** @var int|float|null */
     protected $timeout;
 
     /** @var int */
@@ -111,28 +112,40 @@ class AMQPReader extends AbstractClient
      *
      * AMQPTimeoutException can be raised if the timeout is set
      *
-     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException
-     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException on network errors
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException when timeout is set and no data received
+     * @throws \PhpAmqpLib\Exception\AMQPNoDataException when no data is ready to read from IO
      */
     protected function wait()
     {
-        if ($this->getTimeout() == 0) {
-            return null;
+        $timeout = $this->getTimeout();
+        if (null === $timeout) {
+            // timeout=null just poll state and return instantly
+            $sec = 0;
+            $usec = 0;
+        } elseif ($timeout > 0) {
+            list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->getTimeout());
+        } else {
+            // wait indefinitely for data if timeout=0
+            $sec = null;
+            $usec = 0;
         }
 
-        // wait ..
-        list($sec, $usec) = MiscHelper::splitSecondsMicroseconds($this->getTimeout());
         $result = $this->io->select($sec, $usec);
 
         if ($result === false) {
-            throw new AMQPIOWaitException('A network error occured while awaiting for incoming data');
+            throw new AMQPIOWaitException('A network error occurred while awaiting for incoming data');
         }
 
         if ($result === 0) {
-            throw new AMQPTimeoutException(sprintf(
-                'The connection timed out after %s sec while awaiting incoming data',
-                $this->getTimeout()
-            ));
+            if ($timeout > 0) {
+                throw new AMQPTimeoutException(sprintf(
+                    'The connection timed out after %s sec while awaiting incoming data',
+                    $timeout
+                ));
+            } else {
+                throw new AMQPNoDataException('No data is ready to read');
+            }
         }
     }
 
@@ -141,6 +154,7 @@ class AMQPReader extends AbstractClient
      * @return string
      * @throws \RuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPDataReadException
+     * @throws \PhpAmqpLib\Exception\AMQPNoDataException
      */
     protected function rawread($n)
     {
@@ -533,7 +547,7 @@ class AMQPReader extends AbstractClient
     /**
      * Sets the timeout (second)
      *
-     * @param int $timeout
+     * @param int|float|null $timeout
      */
     public function setTimeout($timeout)
     {
@@ -541,7 +555,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @return int
+     * @return int|float
      */
     public function getTimeout()
     {

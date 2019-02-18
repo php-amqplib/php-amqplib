@@ -1,11 +1,12 @@
 <?php
 namespace PhpAmqpLib\Connection;
 
-use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Channel\AbstractChannel;
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
+use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
@@ -260,6 +261,8 @@ class AbstractConnection extends AbstractChannel
             // Something went wrong, set the connection status
             $this->setIsConnected(false);
             $this->closeChannels();
+            $this->close_input();
+            $this->close_socket();
             throw $e; // Rethrow exception
         }
     }
@@ -330,7 +333,7 @@ class AbstractConnection extends AbstractChannel
 
     protected function close_input()
     {
-        $this->debug->debug_msg('closing input');
+        $this->debug && $this->debug->debug_msg('closing input');
 
         if (!is_null($this->input)) {
             $this->input->close();
@@ -340,7 +343,7 @@ class AbstractConnection extends AbstractChannel
 
     protected function close_socket()
     {
-        $this->debug->debug_msg('closing socket');
+        $this->debug && $this->debug->debug_msg('closing socket');
 
         if (!is_null($this->getIO())) {
             $this->getIO()->close();
@@ -516,7 +519,7 @@ class AbstractConnection extends AbstractChannel
     /**
      * Waits for a frame from the server
      *
-     * @param int $timeout
+     * @param int|float|null $timeout
      * @return array
      * @throws \Exception
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
@@ -556,6 +559,9 @@ class AbstractConnection extends AbstractChannel
         } catch (AMQPTimeoutException $e) {
             $this->input->setTimeout($currentTimeout);
             throw $e;
+        } catch (AMQPNoDataException $e) {
+            $this->input->setTimeout($currentTimeout);
+            throw $e;
         }
 
         $this->input->setTimeout($currentTimeout);
@@ -574,7 +580,7 @@ class AbstractConnection extends AbstractChannel
      * Waits for a frame from the server destined for a particular channel.
      *
      * @param string $channel_id
-     * @param int $timeout
+     * @param int|float|null $timeout
      * @return array
      */
     protected function wait_channel($channel_id, $timeout = 0)
@@ -585,8 +591,7 @@ class AbstractConnection extends AbstractChannel
             $now = time();
             try {
                 list($frame_type, $frame_channel, $payload) = $this->wait_frame($_timeout);
-            }
-            catch ( AMQPTimeoutException $e ) {
+            } catch (AMQPTimeoutException $e) {
                 if ( $this->heartbeat && microtime(true) - ($this->heartbeat*2) > $this->last_frame ) {
                     $this->debug->debug_msg("missed server heartbeat (at threshold * 2)");
                     $this->setIsConnected(false);
