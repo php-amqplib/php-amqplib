@@ -31,10 +31,10 @@ $connection = AMQPStreamConnection::create_connection([
     'login_response' => null,
     'locale' => 'en_US',
     'connection_timeout' => 3.0,
-    'read_write_timeout' => 3.0,
+    'read_write_timeout' => 10.0,
     'context' => null,
     'keepalive' => false,
-    'heartbeat' => 0
+    'heartbeat' => 5
 ]);
 
 
@@ -57,10 +57,10 @@ $connection = AMQPSocketConnection::create_connection([
     'login_method' => 'AMQPLAIN',
     'login_response' => null,
     'locale' => 'en_US',
-    'read_timeout' => 3,
+    'read_timeout' => 10,
     'keepalive' => false,
-    'write_timeout' => 3,
-    'heartbeat' => 0
+    'write_timeout' => 10,
+    'heartbeat' => 5
 ]);
 
 // Use empty options array for defaults

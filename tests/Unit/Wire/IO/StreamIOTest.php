@@ -37,7 +37,7 @@ class StreamIOTest extends TestCase
         $resource = fopen('php://temp', 'r');
         fclose($resource);
 
-        $stream = new StreamIO('0.0.0.0', PORT, 0.1, 0.1);
+        $stream = new StreamIO('0.0.0.0', PORT, 0.1, 0.1, null, false, 0);
         $property->setValue($stream, $resource);
 
         $stream->select(0, 0);
