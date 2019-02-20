@@ -83,7 +83,6 @@ class Consumer
             default:
                 break;
         }
-        return;
     }
 
     /**
@@ -125,7 +124,12 @@ class Consumer
      */
     public function start()
     {
-        echo 'Starting consumer.' . PHP_EOL;
+        if ($this->restart) {
+            echo 'Restarting consumer.' . PHP_EOL;
+            $this->restart = false;
+        } else {
+            echo 'Starting consumer.' . PHP_EOL;
+        }
 
         $exchange = 'router';
         $queue    = 'msgs';
@@ -158,9 +162,8 @@ class Consumer
      */
     public function restart()
     {
-        echo 'Restarting consumer.' . PHP_EOL;
         $this->stopSoft();
-        $this->start();
+        $this->restart = true;
     }
 
     /**
@@ -192,6 +195,11 @@ class Consumer
         $this->channel->basic_cancel($this->consumerTag, false, true);
     }
 
+    public function shouldRestart()
+    {
+        return $this->restart;
+    }
+
     /**
      * Current connection
      *
@@ -212,7 +220,14 @@ class Consumer
      * @var string
      */
     protected $consumerTag = 'consumer';
+
+    /**
+     * @var bool
+     */
+    protected $restart = false;
 }
 
 $consumer = new Consumer();
-$consumer->start();
+do {
+    $consumer->start();
+} while ($consumer->shouldRestart());
