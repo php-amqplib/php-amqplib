@@ -26,7 +26,7 @@ class Bug458Test extends TestCase
      *
      * @test
      *
-     * @expectedException PhpAmqpLib\Exception\AMQPIOWaitException
+     * @expectedException \PhpAmqpLib\Exception\AMQPTimeoutException
      */
     public function stream_select_interruption()
     {

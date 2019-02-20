@@ -40,6 +40,9 @@ class SocketIO extends AbstractIO
     /** @var array */
     private $last_error;
 
+    /** @var bool */
+    private $canDispatchPcntlSignal;
+
     /**
      * @param string $host
      * @param int $port
@@ -56,6 +59,7 @@ class SocketIO extends AbstractIO
         $this->send_timeout = $write_timeout ?: $read_timeout;
         $this->heartbeat = $heartbeat;
         $this->keepalive = $keepalive;
+        $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
     }
 
     /**
@@ -219,6 +223,15 @@ class SocketIO extends AbstractIO
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
         }
 
+        if ($this->canDispatchPcntlSignal) {
+            pcntl_signal_dispatch();
+        }
+
+        // no exception and false result - either timeout or signal was sent
+        if ($result === false) {
+            $result = 0;
+        }
+
         return $result;
     }
 
@@ -310,5 +323,15 @@ class SocketIO extends AbstractIO
                 $this->last_error['errline']
             );
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isPcntlSignalEnabled()
+    {
+        return extension_loaded('pcntl')
+            && function_exists('pcntl_signal_dispatch')
+            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
 }

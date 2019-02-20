@@ -162,6 +162,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
+        $this->callbacks = array();
         if ($this->is_open === false || $this->connection === null) {
             $this->do_close();
 
