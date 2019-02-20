@@ -473,6 +473,15 @@ class StreamIO extends AbstractIO
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
         }
 
+        if ($this->canDispatchPcntlSignal) {
+            pcntl_signal_dispatch();
+        }
+
+        // no exception and false result - either timeout or signal was sent
+        if ($result === false) {
+            $result = 0;
+        }
+
         return $result;
     }
 

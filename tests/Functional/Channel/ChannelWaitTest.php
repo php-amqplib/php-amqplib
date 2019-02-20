@@ -11,10 +11,11 @@ class ChannelWaitTest extends TestCase
 {
     /**
      * @test
+     * @small
      * @dataProvider provide_channels
      * @param callable $factory
      */
-    public function should_wait_forever_by_default($factory)
+    public function should_wait_until_signal_by_default($factory)
     {
         $this->deferSignal(0.5);
         /** @var AMQPChannel $channel */
@@ -22,7 +23,7 @@ class ChannelWaitTest extends TestCase
         try {
             $channel->wait();
         } catch (\Exception $exception) {
-            $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPIOWaitException', $exception);
+            $this->fail($exception->getMessage());
         }
 
         $this->closeChannel($channel);
@@ -30,6 +31,7 @@ class ChannelWaitTest extends TestCase
 
     /**
      * @test
+     * @small
      * @dataProvider provide_channels
      * @param callable $factory
      * @expectedException \PhpAmqpLib\Exception\AMQPTimeoutException
@@ -43,6 +45,7 @@ class ChannelWaitTest extends TestCase
 
     /**
      * @test
+     * @small
      * @dataProvider provide_channels
      * @param callable $factory
      */
@@ -74,7 +77,7 @@ class ChannelWaitTest extends TestCase
 
     protected function channelFactory($stream = true, $connectionTimeout = 1, $heartBeat = 0)
     {
-        $factory = function() use ($stream, $connectionTimeout, $heartBeat) {
+        $factory = function () use ($stream, $connectionTimeout, $heartBeat) {
             try {
                 if ($stream) {
                     $connection = new AMQPStreamConnection(

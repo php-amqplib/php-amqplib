@@ -560,7 +560,9 @@ class AbstractConnection extends AbstractChannel
             $this->input->setTimeout($currentTimeout);
             throw $e;
         } catch (AMQPNoDataException $e) {
-            $this->input->setTimeout($currentTimeout);
+            if ($this->input) {
+                $this->input->setTimeout($currentTimeout);
+            }
             throw $e;
         }
 
