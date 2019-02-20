@@ -459,11 +459,6 @@ class StreamIO extends AbstractIO
         $read = array($this->sock);
         $write = null;
         $except = null;
-        $result = false;
-
-        if (defined('HHVM_VERSION')) {
-            $usec = is_int($usec) ? $usec : 0;
-        }
 
         $this->set_error_handler();
         try {

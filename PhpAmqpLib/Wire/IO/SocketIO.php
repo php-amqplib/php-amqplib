@@ -213,7 +213,6 @@ class SocketIO extends AbstractIO
         $read = array($this->sock);
         $write = null;
         $except = null;
-        $result = false;
 
         $this->set_error_handler();
         try {

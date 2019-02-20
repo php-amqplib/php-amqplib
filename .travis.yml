@@ -17,10 +17,6 @@ matrix:
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: false
 
-# required to test HHVM
-# see https://travis-ci.org/php-amqplib/php-amqplib/jobs/259347861
-dist: trusty
-
 cache:
   directories:
     - $HOME/.composer
@@ -33,7 +29,8 @@ script:
   - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
 
 after_script:
-  - if [[ $TRAVIS_PHP_VERSION != 'hhvm' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover; fi
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 services:
   rabbitmq
