@@ -33,10 +33,10 @@ class AMQPStreamConnection extends AbstractConnection
         $login_response = null,
         $locale = 'en_US',
         $connection_timeout = 3.0,
-        $read_write_timeout = 20.0,
+        $read_write_timeout = 130.0,
         $context = null,
         $keepalive = false,
-        $heartbeat = 10,
+        $heartbeat = 60,
         $channel_rpc_timeout = 0.0
     ) {
         if ($channel_rpc_timeout > $read_write_timeout) {
@@ -83,13 +83,13 @@ class AMQPStreamConnection extends AbstractConnection
         $connection_timeout = isset($options['connection_timeout']) ?
                                     $options['connection_timeout'] : 3.0;
         $read_write_timeout = isset($options['read_write_timeout']) ?
-                                    $options['read_write_timeout'] : 20.0;
+                                    $options['read_write_timeout'] : 130.0;
         $context = isset($options['context']) ?
                          $options['context'] : null;
         $keepalive = isset($options['keepalive']) ?
                            $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ?
-                           $options['heartbeat'] : 10;
+                           $options['heartbeat'] : 60;
         return new static($host,
                           $port,
                           $user,

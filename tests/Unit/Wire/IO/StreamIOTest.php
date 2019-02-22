@@ -10,9 +10,9 @@ class StreamIOTest extends TestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage read_write_timeout must be at least 2x the heartbeat
+     * @expectedExceptionMessage read_write_timeout must be greater than 2x the heartbeat
      */
-    public function read_write_timeout_must_be_at_least_2x_the_heartbeat()
+    public function read_write_timeout_must_be_greater_than_2x_the_heartbeat()
     {
         new StreamIO(
             'localhost',

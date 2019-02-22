@@ -12,7 +12,7 @@ class SocketIOTest extends TestCase
      */
     public function connect()
     {
-        $socketIO = new SocketIO(HOST, PORT, 20, true);
+        $socketIO = new SocketIO(HOST, PORT, 20, true, 20, 9);
         $socketIO->connect();
 
         return $socketIO;
@@ -31,9 +31,9 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage read_timeout must be at least 2x the heartbeat
+     * @expectedExceptionMessage read_timeout must be greater than 2x the heartbeat
      */
-    public function read_timeout_must_be_at_least_2x_the_heartbeat()
+    public function read_timeout_must_be_greater_than_2x_the_heartbeat()
     {
         new SocketIO('localhost', 5512, 1);
     }
@@ -41,11 +41,11 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage send_timeout must be at least 2x the heartbeat
+     * @expectedExceptionMessage send_timeout must be greater than 2x the heartbeat
      */
-    public function send_timeout_must_be_at_least_2x_the_heartbeat()
+    public function send_timeout_must_be_greater_than_2x_the_heartbeat()
     {
-        new SocketIO('localhost', '5512', 20, true, 1, 10);
+        new SocketIO('localhost', '5512', 30, true, 20, 10);
     }
 
     /**
