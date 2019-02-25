@@ -2,6 +2,7 @@
 include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
 
@@ -9,7 +10,7 @@ $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
 $exchangeName = 'topic_headers_test';
-$channel->exchange_declare($exchangeName, 'topic', false, false, true);
+$channel->exchange_declare($exchangeName, AMQPExchangeType::TOPIC, false, false, true);
 
 $routingKey = empty($argv[1]) ? '' : $argv[1];
 $data = implode(' ', array_slice($argv, 2));

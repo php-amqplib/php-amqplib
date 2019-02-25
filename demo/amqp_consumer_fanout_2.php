@@ -5,6 +5,7 @@
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 
 $exchange = 'fanout_example_exchange';
 $queue = 'fanout_group_2'; // Let RabbitMQ create a queue name
@@ -30,7 +31,7 @@ $channel->queue_declare($queue, false, false, false, true);
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, 'fanout', false, false, true);
+$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
 
 $channel->queue_bind($queue, $exchange);
 

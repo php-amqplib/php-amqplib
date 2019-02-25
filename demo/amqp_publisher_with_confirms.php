@@ -1,6 +1,7 @@
 <?php
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
 include(__DIR__ . '/config.php');
@@ -38,7 +39,7 @@ $channel->confirm_select();
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, 'fanout', false, false, true);
+$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
 
 $i = 1;
 $msg = new AMQPMessage($i, array('content_type' => 'text/plain'));

@@ -7,6 +7,7 @@
 include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'bench_exchange';
@@ -17,7 +18,7 @@ $channel = $connection->channel();
 
 $channel->queue_declare($queue, false, false, false, false);
 
-$channel->exchange_declare($exchange, 'direct', false, false, false);
+$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, false, false);
 
 $channel->queue_bind($queue, $exchange);
 

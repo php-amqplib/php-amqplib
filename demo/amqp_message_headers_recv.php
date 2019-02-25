@@ -2,6 +2,7 @@
 include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $bindingKeys = array_slice($argv, 1);
@@ -15,7 +16,7 @@ $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
 $exchangeName = 'topic_headers_test';
-$channel->exchange_declare($exchangeName, 'topic', false, false, true);
+$channel->exchange_declare($exchangeName, AMQPExchangeType::TOPIC, false, false, true);
 
 list($queueName, ,) = $channel->queue_declare("", false, false, true, true);
 

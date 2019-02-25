@@ -1,5 +1,7 @@
 <?php
 
+use PhpAmqpLib\Exchange\AMQPExchangeType;
+
 include(__DIR__ . '/config.php');
 
 /**
@@ -132,7 +134,7 @@ class Consumer
 
         $this->channel = $this->connection->channel();
         $this->channel->queue_declare($queue, false, true, false, false);
-        $this->channel->exchange_declare($exchange, 'direct', false, true, false);
+        $this->channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
         $this->channel->queue_bind($queue, $exchange);
         $this->channel->basic_consume(
             $queue,
