@@ -1,6 +1,7 @@
 <?php
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 
@@ -22,7 +23,7 @@ $channel = $connection->channel();
  * @return mixed|null
  */
 $channel->exchange_declare('delayed_exchange', 'x-delayed-message', false, true, false, false, false, new AMQPTable(array(
-   "x-delayed-type" => "fanout"
+   "x-delayed-type" => AMQPExchangeType::FANOUT
 )));
 
 /**

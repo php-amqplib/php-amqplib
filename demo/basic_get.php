@@ -2,6 +2,7 @@
 
 include(__DIR__ . '/config.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'basic_get_test';
@@ -33,7 +34,7 @@ $channel->queue_declare($queue, false, true, false, false);
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, 'direct', false, true, false);
+$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
 
 $channel->queue_bind($queue, $exchange);
 

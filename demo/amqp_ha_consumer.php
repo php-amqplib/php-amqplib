@@ -3,6 +3,7 @@
 include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Wire\AMQPTable;
 
 $exchange = 'router';
@@ -50,7 +51,7 @@ $channel->queue_declare($specificQueue, false, false, false, false, false, $haSp
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, 'direct', false, true, false);
+$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
 
 $channel->queue_bind($queue, $exchange);
 $channel->queue_bind($specificQueue, $exchange);

@@ -3,6 +3,7 @@
 include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'fanout_example_exchange';
@@ -18,7 +19,7 @@ $channel = $connection->channel();
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, 'fanout', false, false, true);
+$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
 
 $messageBody = implode(' ', array_slice($argv, 1));
 $message = new AMQPMessage($messageBody, array('content_type' => 'text/plain'));
