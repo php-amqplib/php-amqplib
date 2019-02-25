@@ -51,7 +51,7 @@ class SocketIO extends AbstractIO
      * @param float|null $write_timeout if null defaults to read timeout
      * @param int $heartbeat how often to send heartbeat. 0 means off
      */
-    public function __construct($host, $port, $read_timeout, $keepalive = false, $write_timeout = null, $heartbeat = 0)
+    public function __construct($host, $port, $read_timeout = 130, $keepalive = false, $write_timeout = null, $heartbeat = 60)
     {
         $this->host = $host;
         $this->port = $port;
@@ -60,6 +60,13 @@ class SocketIO extends AbstractIO
         $this->heartbeat = $heartbeat;
         $this->keepalive = $keepalive;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
+
+        if ($this->heartbeat !== 0 && ($this->read_timeout <= ($this->heartbeat * 2))) {
+            throw new \InvalidArgumentException('read_timeout must be greater than 2x the heartbeat');
+        }
+        if ($this->heartbeat !== 0 && ($this->send_timeout <= ($this->heartbeat * 2))) {
+            throw new \InvalidArgumentException('send_timeout must be greater than 2x the heartbeat');
+        }
     }
 
     /**

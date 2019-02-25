@@ -68,10 +68,10 @@ class ChannelWaitTest extends TestCase
         }
 
         return [
-            [$this->channelFactory(true, 0.1)],
-            [$this->channelFactory(false, 0.1)],
-            [$this->channelFactory(true, 2, 1)],
-            [$this->channelFactory(false, 2, 1)],
+            [$this->channelFactory(true, 0.1, 0)],
+            [$this->channelFactory(false, 0.1, 0)],
+            [$this->channelFactory(true, 3, 1)],
+            [$this->channelFactory(false, 3, 1)],
         ];
     }
 

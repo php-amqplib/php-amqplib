@@ -77,13 +77,13 @@ class StreamIO extends AbstractIO
         $host,
         $port,
         $connection_timeout,
-        $read_write_timeout,
+        $read_write_timeout = 130.0,
         $context = null,
         $keepalive = false,
-        $heartbeat = 0
+        $heartbeat = 60
     ) {
-        if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
-            throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
+        if ($heartbeat !== 0 && ($read_write_timeout <= ($heartbeat * 2))) {
+            throw new \InvalidArgumentException('read_write_timeout must be greater than 2x the heartbeat');
         }
 
         // SOCKET_EAGAIN is not defined in Windows

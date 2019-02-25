@@ -36,7 +36,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
             isset($options['read_write_timeout']) ? $options['read_write_timeout'] : 3,
             $ssl_context,
             isset($options['keepalive']) ? $options['keepalive'] : false,
-            isset($options['heartbeat']) ? $options['heartbeat'] : 0
+            isset($options['heartbeat']) ? $options['heartbeat'] : 60
         );
     }
 
