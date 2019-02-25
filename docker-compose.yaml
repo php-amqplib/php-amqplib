@@ -1,0 +1,30 @@
+version: '3'
+services:
+  php:
+    build: ./docker/php
+    volumes:
+      - .:/src
+    working_dir: /src
+    environment:
+      - TEST_RABBITMQ_HOST=rabbitmq
+      - TOXIPROXY_HOST=proxy
+      - TOXIPROXY_AMQP_PORT=5673
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+      - proxy
+    entrypoint: ['tail', '-f', '/dev/null']
+
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - "5672:5672"
+
+  proxy:
+    image: shopify/toxiproxy
+    ports:
+      - "8474:8474"
+      - "5673:5673"
+    links:
+      - rabbitmq
