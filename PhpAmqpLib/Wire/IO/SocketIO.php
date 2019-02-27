@@ -1,47 +1,20 @@
 <?php
 namespace PhpAmqpLib\Wire\IO;
 
-use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOException;
-use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Helper\MiscHelper;
-use PhpAmqpLib\Wire\AMQPWriter;
 
 class SocketIO extends AbstractIO
 {
-    /** @var string */
-    protected $host;
-
-    /** @var int */
-    protected $port;
-
     /** @var float */
     protected $send_timeout;
 
     /** @var float */
     protected $read_timeout;
 
-    /** @var int */
-    protected $heartbeat;
-
-    /** @var float */
-    protected $last_read;
-
-    /** @var float */
-    protected $last_write;
-
     /** @var resource */
     private $sock;
-
-    /** @var bool */
-    private $keepalive;
-
-    /** @var array */
-    private $last_error;
-
-    /** @var bool */
-    private $canDispatchPcntlSignal;
 
     /**
      * @param string $host
@@ -58,6 +31,7 @@ class SocketIO extends AbstractIO
         $this->read_timeout = $read_timeout;
         $this->send_timeout = $write_timeout ?: $read_timeout;
         $this->heartbeat = $heartbeat;
+        $this->initial_heartbeat = $heartbeat;
         $this->keepalive = $keepalive;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
@@ -70,9 +44,7 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * Sets up the socket connection
-     *
-     * @throws \Exception
+     * @inheritdoc
      */
     public function connect()
     {
@@ -83,7 +55,14 @@ class SocketIO extends AbstractIO
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
-        if (!socket_connect($this->sock, $this->host, $this->port)) {
+        $this->set_error_handler();
+        try {
+            $connected = socket_connect($this->sock, $this->host, $this->port);
+            $this->cleanup_error_handler();
+        } catch (\ErrorException $e) {
+            $connected = false;
+        }
+        if (!$connected) {
             $errno = socket_last_error($this->sock);
             $errstr = socket_strerror($errno);
             throw new AMQPIOException(sprintf(
@@ -102,7 +81,7 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * @return resource
+     * @inheritdoc
      */
     public function getSocket()
     {
@@ -110,17 +89,8 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * Reconnects the socket
-     */
-    public function reconnect()
-    {
-        $this->close();
-        $this->connect();
-    }
-
-    /**
      * @param int $n
-     * @return mixed|string
+     * @return string
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPSocketException
@@ -200,6 +170,9 @@ class SocketIO extends AbstractIO
         $this->last_write = microtime(true);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function close()
     {
         if (is_resource($this->sock)) {
@@ -211,34 +184,15 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * @param int $sec
-     * @param int $usec
-     * @return int|mixed
+     * @inheritdoc
      */
-    public function select($sec, $usec)
+    protected function do_select($sec, $usec)
     {
         $read = array($this->sock);
         $write = null;
         $except = null;
 
-        $this->set_error_handler();
-        try {
-            $result = socket_select($read, $write, $except, $sec, $usec);
-            $this->cleanup_error_handler();
-        } catch (\ErrorException $e) {
-            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
-        }
-
-        if ($this->canDispatchPcntlSignal) {
-            pcntl_signal_dispatch();
-        }
-
-        // no exception and false result - either timeout or signal was sent
-        if ($result === false) {
-            $result = 0;
-        }
-
-        return $result;
+        return socket_select($read, $write, $except, $sec, $usec);
     }
 
     /**
@@ -254,43 +208,8 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * Heartbeat logic: check connection health here
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @inheritdoc
      */
-    public function check_heartbeat()
-    {
-        // ignore unless heartbeat interval is set
-        if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
-            $t = microtime(true);
-            $t_read = round($t - $this->last_read);
-            $t_write = round($t - $this->last_write);
-
-            // server has gone away
-            if (($this->heartbeat * 2) < $t_read) {
-                $this->close();
-                throw new AMQPHeartbeatMissedException("Missed server heartbeat");
-            }
-
-            // time for client to send a heartbeat
-            if (($this->heartbeat / 2) < $t_write) {
-                $this->write_heartbeat();
-            }
-        }
-    }
-
-    /**
-     * Sends a heartbeat message
-     */
-    protected function write_heartbeat()
-    {
-        $pkt = new AMQPWriter();
-        $pkt->write_octet(8);
-        $pkt->write_short(0);
-        $pkt->write_long(0);
-        $pkt->write_octet(0xCE);
-        $this->write($pkt->getvalue());
-    }
-
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         // socket_select warning that it has been interrupted by a signal - EINTR
@@ -299,45 +218,15 @@ class SocketIO extends AbstractIO
             return;
         }
 
-        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline', 'errcontext');
+        parent::error_handler($errno, $errstr, $errfile, $errline, $errcontext);
     }
 
     /**
-     * Begin tracking errors and set the error handler
+     * @inheritdoc
      */
     protected function set_error_handler()
     {
-        $this->last_error = null;
+        parent::set_error_handler();
         socket_clear_error($this->sock);
-        set_error_handler(array($this, 'error_handler'));
-    }
-
-    /**
-     * throws an ErrorException if an error was handled
-     * @throws \ErrorException
-     */
-    protected function cleanup_error_handler()
-    {
-        restore_error_handler();
-
-        if ($this->last_error !== null) {
-            throw new \ErrorException(
-                $this->last_error['errstr'],
-                0,
-                $this->last_error['errno'],
-                $this->last_error['errfile'],
-                $this->last_error['errline']
-            );
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    private function isPcntlSignalEnabled()
-    {
-        return extension_loaded('pcntl')
-            && function_exists('pcntl_signal_dispatch')
-            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
 }
