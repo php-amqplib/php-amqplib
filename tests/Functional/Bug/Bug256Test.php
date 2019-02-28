@@ -2,15 +2,13 @@
 
 namespace PhpAmqpLib\Tests\Functional\Bug;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 use PhpAmqpLib\Wire\AMQPTable;
-use PHPUnit\Framework\TestCase;
 
-class Bug256Test extends TestCase
+class Bug256Test extends AbstractConnectionTest
 {
     protected $exchangeName = 'test_exchange';
 
@@ -30,12 +28,12 @@ class Bug256Test extends TestCase
 
     public function setUp()
     {
-        $this->connection = new AMQPSocketConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->connection = $this->conection_create('socket');
         $this->channel = $this->connection->channel();
 
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, true, false);
 
-        $this->connection2 = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->connection2 = $this->conection_create('stream');
         $this->channel2 = $this->connection->channel();
 
         list($this->queueName, ,) = $this->channel2->queue_declare();

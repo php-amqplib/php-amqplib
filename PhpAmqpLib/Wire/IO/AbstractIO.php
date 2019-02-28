@@ -8,11 +8,22 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 abstract class AbstractIO
 {
+    const BUFFER_SIZE = 8192;
+
     /** @var string */
     protected $host;
 
     /** @var int */
     protected $port;
+
+    /** @var int|float */
+    protected $connection_timeout;
+
+    /** @var int|float */
+    protected $read_timeout;
+
+    /** @var int|float */
+    protected $write_timeout;
 
     /** @var int */
     protected $heartbeat;
@@ -36,14 +47,22 @@ abstract class AbstractIO
     protected $canDispatchPcntlSignal = false;
 
     /**
-     * @param int $n
+     * @param int $len
      * @return string
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPSocketException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
      */
-    abstract public function read($n);
+    abstract public function read($len);
 
     /**
      * @param string $data
-     * @return mixed
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     * @throws \PhpAmqpLib\Exception\AMQPSocketException
+     * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      */
     abstract public function write($data);
 

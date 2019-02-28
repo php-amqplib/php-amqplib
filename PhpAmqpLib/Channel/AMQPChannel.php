@@ -2,6 +2,7 @@
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
+use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -121,6 +122,14 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
+     * @return bool
+     */
+    public function is_open()
+    {
+        return $this->is_open;
+    }
+
+    /**
      * Tear down this object, after we've agreed to close with the server.
      */
     protected function do_close()
@@ -130,6 +139,7 @@ class AMQPChannel extends AbstractChannel
         }
         $this->channel_id = $this->connection = null;
         $this->is_open = false;
+        $this->callbacks = array();
     }
 
     /**
@@ -1147,15 +1157,20 @@ class AMQPChannel extends AbstractChannel
         $pkt = new AMQPWriter();
         $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 
-        $this->connection->send_content(
-            $this->channel_id,
-            60,
-            0,
-            mb_strlen($msg->body, 'ASCII'),
-            $msg->serialize_properties(),
-            $msg->body,
-            $pkt
-        );
+        try {
+            $this->connection->send_content(
+                $this->channel_id,
+                60,
+                0,
+                mb_strlen($msg->body, 'ASCII'),
+                $msg->serialize_properties(),
+                $msg->body,
+                $pkt
+            );
+        } catch (AMQPConnectionClosedException $e) {
+            $this->do_close();
+            throw $e;
+        }
 
         if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag] = $msg;

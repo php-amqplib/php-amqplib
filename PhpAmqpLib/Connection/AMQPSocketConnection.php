@@ -54,6 +54,7 @@ class AMQPSocketConnection extends AbstractConnection
             $locale,
             $io,
             $heartbeat,
+            max($read_timeout, $write_timeout),
             $channel_rpc_timeout
         );
     }
