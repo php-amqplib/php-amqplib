@@ -34,9 +34,11 @@
         "ext-sockets": "*"
     },
     "require-dev": {
+        "ext-curl": "*",
         "phpunit/phpunit": "^4.8",
         "squizlabs/php_codesniffer": "^2.5",
-        "phpdocumentor/phpdocumentor": "^2.9"
+        "phpdocumentor/phpdocumentor": "^2.9",
+        "nategood/httpful": "^0.2.20"
     },
     "autoload": {
         "psr-4": {

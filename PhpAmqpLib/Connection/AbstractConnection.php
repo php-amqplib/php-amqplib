@@ -351,6 +351,9 @@ class AbstractConnection extends AbstractChannel
 
         try {
             $this->getIO()->write($data);
+        } catch (AMQPConnectionClosedException $e) {
+            $this->do_close();
+            throw $e;
         } catch (AMQPRuntimeException $e) {
             $this->setIsConnected(false);
             throw $e;
@@ -556,6 +559,9 @@ class AbstractConnection extends AbstractChannel
                 $this->input->setTimeout($currentTimeout);
             }
             throw $e;
+        } catch (AMQPConnectionClosedException $exception) {
+            $this->do_close();
+            throw $exception;
         }
 
         $this->input->setTimeout($currentTimeout);

@@ -3,6 +3,7 @@ namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPChannelClosedException;
+use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
 use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPNotImplementedException;
@@ -347,6 +348,11 @@ abstract class AbstractChannel
             } catch (AMQPNoDataException $e) {
                 // no data ready for non-blocking actions - stop and exit
                 break;
+            } catch (AMQPConnectionClosedException $exception) {
+                if ($this instanceof AMQPChannel) {
+                    $this->do_close();
+                }
+                throw $exception;
             }
 
             $this->validate_method_frame($frame_type);

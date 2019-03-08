@@ -13,12 +13,6 @@ class StreamIO extends AbstractIO
     /** @var string */
     protected $protocol;
 
-    /** @var float */
-    protected $connection_timeout;
-
-    /** @var float */
-    protected $read_write_timeout;
-
     /** @var resource */
     protected $context;
 
@@ -65,7 +59,8 @@ class StreamIO extends AbstractIO
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;
-        $this->read_write_timeout = $read_write_timeout;
+        $this->read_timeout = $read_write_timeout;
+        $this->write_timeout = $read_write_timeout;
         $this->context = $context;
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
@@ -138,7 +133,7 @@ class StreamIO extends AbstractIO
             );
         }
 
-        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
+        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds(max($this->read_timeout, $this->write_timeout));
         if (!stream_set_timeout($this->sock, $sec, $uSec)) {
             throw new AMQPIOException('Timeout could not be set');
         }
@@ -151,25 +146,23 @@ class StreamIO extends AbstractIO
                 stream_set_read_buffer($this->sock, 0);
             }
         } else {
-            stream_set_blocking($this->sock, 1);
+            stream_set_blocking($this->sock, true);
         }
 
         if ($this->keepalive) {
             $this->enable_keepalive();
         }
+        $this->heartbeat = $this->initial_heartbeat;
     }
 
     /**
-     * @param int $len
-     * @throws \PhpAmqpLib\Exception\AMQPIOException
-     * @throws \PhpAmqpLib\Exception\AMQPDataReadException
-     * @return string
+     * @inheritdoc
      */
     public function read($len)
     {
         $this->check_heartbeat();
 
-        list($timeout_sec, $timeout_uSec) = MiscHelper::splitSecondsMicroseconds($this->read_write_timeout);
+        list($timeout_sec, $timeout_uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
 
         $read_start = microtime(true);
         $read = 0;
@@ -194,15 +187,12 @@ class StreamIO extends AbstractIO
 
             if ($buffer === '') {
                 $read_now = microtime(true);
-                $t_read = round($read_now - $read_start);
-                if ($t_read > $this->read_write_timeout) {
+                $t_read = $read_now - $read_start;
+                if ($t_read > $this->read_timeout) {
                     throw new AMQPTimeoutException('Too many read attempts detected in StreamIO');
                 }
                 $this->select($timeout_sec, $timeout_uSec);
-                if ($this->canDispatchPcntlSignal) {
-                    pcntl_signal_dispatch();
-                }
-                $this->check_heartbeat();
+
                 continue;
             }
 
@@ -228,22 +218,20 @@ class StreamIO extends AbstractIO
     }
 
     /**
-     * @param string $data
-     * @return mixed|void
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
-     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @inheritdoc
      */
     public function write($data)
     {
         $written = 0;
         $len = mb_strlen($data, 'ASCII');
+        $write_start = microtime(true);
 
         while ($written < $len) {
-
             if (!is_resource($this->sock)) {
                 throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
+            $result = false;
             $this->set_error_handler();
             // OpenSSL's C library function SSL_write() can balk on buffers > 8192
             // bytes in length, so we're limiting the write size here. On both TLS
@@ -253,28 +241,47 @@ class StreamIO extends AbstractIO
             // September 2002:
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
-                $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
+                $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                $result = fwrite($this->sock, $buffer);
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
-                throw new AMQPRuntimeException($e->getMessage(), $e->getCode(), $e);
+                $code = $this->last_error['errno'];
+                switch ($code) {
+                    case 8: // constant is missing for this error type
+                        $this->close();
+                        throw new AMQPConnectionClosedException('Broken pipe or closed connection', $code, $e);
+                    case SOCKET_ETIMEDOUT:
+                        $this->close();
+                        throw new AMQPConnectionClosedException('Connection timed out', $code, $e);
+                    default:
+                        throw new AMQPRuntimeException($e->getMessage(), $code, $e);
+                }
             }
 
-            if ($buffer === false) {
+            if ($result === false) {
                 throw new AMQPRuntimeException('Error sending data');
             }
 
-            if ($buffer === 0 && feof($this->sock)) {
-                throw new AMQPConnectionClosedException('Broken pipe or closed connection');
-            }
-
             if ($this->timed_out()) {
-                throw new AMQPTimeoutException('Error sending data. Socket connection timed out');
+                throw AMQPTimeoutException::writeTimeout($this->write_timeout);
             }
 
-            $written += $buffer;
+            $now = microtime(true);
+            if ($result > 0) {
+                $this->last_write = $write_start = $now;
+                $written += $result;
+            } else {
+                if (feof($this->sock)) {
+                    $this->close();
+                    throw new AMQPConnectionClosedException('Broken pipe or closed connection');
+                }
+                if (($now - $write_start) > $this->write_timeout) {
+                    throw AMQPTimeoutException::writeTimeout($this->write_timeout);
+                }
+                // check stream and prevent from high CPU usage
+                $this->select_write();
+            }
         }
-
-        $this->last_write = microtime(true);
     }
 
     /**
@@ -300,6 +307,7 @@ class StreamIO extends AbstractIO
 
     public function close()
     {
+        $this->disableHeartbeat();
         if (is_resource($this->sock)) {
             fclose($this->sock);
         }
@@ -326,6 +334,17 @@ class StreamIO extends AbstractIO
         $except = null;
 
         return stream_select($read, $write, $except, $sec, $usec);
+    }
+
+    /**
+     * @return int|bool
+     */
+    protected function select_write()
+    {
+        $read = $except = null;
+        $write = array($this->sock);
+
+        return stream_select($read, $write, $except, 0, 100000);
     }
 
     /**

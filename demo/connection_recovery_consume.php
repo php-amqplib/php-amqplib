@@ -1,7 +1,9 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 const WAIT_BEFORE_RECONNECT_uS = 1000000;
 
@@ -55,8 +57,8 @@ while(true){
         register_shutdown_function('shutdown', $connection);
         // Your application code goes here.
         do_something_with_connection($connection);
-    } catch(AMQPIOException $e) {
-        echo "AMQP IO exception " . PHP_EOL;
+    } catch(AMQPRuntimeException $e) {
+        echo $e->getMessage() . PHP_EOL;
         cleanup_connection($connection);
         usleep(WAIT_BEFORE_RECONNECT_uS);
     } catch(\RuntimeException $e) {
