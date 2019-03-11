@@ -54,6 +54,9 @@ class StreamIO extends AbstractIO
     /** @var bool */
     private $canDispatchPcntlSignal;
 
+    /** @var bool */
+    private $error_handler_set;
+
     /**
      * @param string $host
      * @param int $port
@@ -143,11 +146,11 @@ class StreamIO extends AbstractIO
             );
             $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
-            restore_error_handler();
+            $this->restore_error_handler();
             throw $e;
         }
 
-        restore_error_handler();
+        $this->restore_error_handler();
 
         if (false === $this->sock) {
             throw new AMQPRuntimeException(
@@ -227,7 +230,7 @@ class StreamIO extends AbstractIO
                 $buffer = fread($this->sock, ($len - $read));
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
-                restore_error_handler();
+                $this->restore_error_handler();
                 throw $e;
             }
 
@@ -297,10 +300,10 @@ class StreamIO extends AbstractIO
                 $buffer = fwrite($this->sock, mb_substr($data, $written, 8192, 'ASCII'), 8192);
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
-                restore_error_handler();
+                $this->restore_error_handler();
                 throw new AMQPRuntimeException($e->getMessage());
             }
-            restore_error_handler();
+            $this->restore_error_handler();
 
             if ($buffer === false) {
                 throw new AMQPRuntimeException('Error sending data');
@@ -355,8 +358,24 @@ class StreamIO extends AbstractIO
      */
     protected function set_error_handler()
     {
+        if ($this->error_handler_set) {
+            return;
+        }
+
+        $this->error_handler_set = true;
+
         $this->last_error = null;
         set_error_handler(array($this, 'error_handler'));
+    }
+
+    protected function restore_error_handler()
+    {
+        if (!$this->error_handler_set) {
+            return;
+        }
+
+        $this->error_handler_set = false;
+        restore_error_handler();
     }
 
     /**
@@ -369,7 +388,7 @@ class StreamIO extends AbstractIO
         }
 
         // no error was caught
-        restore_error_handler();
+        $this->restore_error_handler();
     }
 
     /**
@@ -461,10 +480,10 @@ class StreamIO extends AbstractIO
             $result = stream_select($read, $write, $except, $sec, $usec);
             $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
-            restore_error_handler();
+            $this->restore_error_handler();
             throw $e;
         }
-        restore_error_handler();
+        $this->restore_error_handler();
 
         return $result;
     }
