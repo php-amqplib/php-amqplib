@@ -7,7 +7,7 @@ use PhpAmqpLib\Wire\AMQPTable;
 
 class HeadersExchangeTest extends ChannelTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->exchange->name = 'amq.headers';

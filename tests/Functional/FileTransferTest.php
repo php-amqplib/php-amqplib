@@ -19,7 +19,7 @@ class FileTransferTest extends TestCase
 
     protected $messageBody;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
@@ -28,7 +28,7 @@ class FileTransferTest extends TestCase
         $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);

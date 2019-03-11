@@ -26,7 +26,7 @@ class Bug256Test extends AbstractConnectionTest
 
     protected $channel2;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->connection = $this->conection_create('socket');
         $this->channel = $this->connection->channel();
@@ -40,7 +40,7 @@ class Bug256Test extends AbstractConnectionTest
         $this->channel2->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);

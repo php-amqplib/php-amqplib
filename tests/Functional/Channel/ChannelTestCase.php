@@ -24,7 +24,7 @@ abstract class ChannelTestCase extends TestCase
     /** @var object */
     protected $message;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->connection = new AMQPSocketConnection(HOST, PORT, USER, PASS, VHOST);
 
@@ -44,7 +44,7 @@ abstract class ChannelTestCase extends TestCase
         ];
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->channel->close();
         $this->channel = null;

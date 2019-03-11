@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class AMQPReaderTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
     }
@@ -21,7 +21,7 @@ class AMQPReaderTest extends TestCase
         $r->setValue(null, $proto);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 

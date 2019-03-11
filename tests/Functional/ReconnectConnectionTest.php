@@ -21,7 +21,7 @@ class ReconnectConnectionTest extends TestCase
 
     protected $msgBody = 'foo bar baz äëïöü';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchange);

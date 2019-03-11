@@ -9,7 +9,7 @@ class Protocol091Test extends TestCase
 {
     protected $protocol091;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->protocol091 = new Protocol091();
     }

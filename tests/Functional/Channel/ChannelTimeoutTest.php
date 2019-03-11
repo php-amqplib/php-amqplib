@@ -28,7 +28,7 @@ class ChannelTimeoutTest extends TestCase
     /** @var AMQPChannel $channel */
     private $channel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -83,7 +83,7 @@ class ChannelTimeoutTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->channel->close();

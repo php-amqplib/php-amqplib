@@ -12,13 +12,13 @@ class AMQPWriterTest extends TestCase
 {
     protected $writer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $this->writer = new AMQPWriter();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->setProtoVersion(AMQPArray::PROTOCOL_RBT);
         $this->writer = null;
