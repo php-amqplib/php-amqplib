@@ -117,17 +117,6 @@ abstract class AbstractIO
     abstract public function connect();
 
     /**
-     * Reconnects the socket
-     * @return void
-     * @throws \PhpAmqpLib\Exception\AMQPIOException
-     */
-    public function reconnect()
-    {
-        $this->close();
-        $this->connect();
-    }
-
-    /**
      * @return resource
      */
     abstract public function getSocket();
