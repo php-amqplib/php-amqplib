@@ -67,18 +67,17 @@ class StreamIO extends AbstractIO
         $this->initial_heartbeat = $heartbeat;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
-        if (is_null($this->context)) {
-            // tcp_nodelay was added in 7.1.0
-            if (PHP_VERSION_ID >= 70100) {
-                $this->context = stream_context_create(array(
-                    "socket" => array(
-                        "tcp_nodelay" => true
-                    )
-                ));
-            } else {
-                $this->context = stream_context_create();
-            }
-        } else {
+        if (!is_resource($this->context) || get_resource_type($this->context) !== 'stream-context') {
+            $this->context = stream_context_create();
+        }
+
+        // tcp_nodelay was added in 7.1.0
+        if (PHP_VERSION_ID >= 70100) {
+            stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
+        }
+
+        $options = stream_context_get_options($this->context);
+        if (!empty($options['ssl'])) {
             $this->protocol = 'ssl';
         }
     }
@@ -110,7 +109,7 @@ class StreamIO extends AbstractIO
             );
             $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
-            throw $e;
+            throw new AMQPIOException($e->getMessage());
         }
 
         if (false === $this->sock) {
@@ -363,6 +362,10 @@ class StreamIO extends AbstractIO
      */
     protected function enable_keepalive()
     {
+        if ($this->protocol === 'ssl') {
+            throw new AMQPIOException('Can not enable keepalive: ssl connection does not support keepalive (#70939)');
+        }
+
         if (!function_exists('socket_import_stream')) {
             throw new AMQPIOException('Can not enable keepalive: function socket_import_stream does not exist');
         }
