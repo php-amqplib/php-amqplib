@@ -37,7 +37,8 @@ class AMQPStreamConnection extends AbstractConnection
         $context = null,
         $keepalive = false,
         $heartbeat = 60,
-        $channel_rpc_timeout = 0.0
+        $channel_rpc_timeout = 0.0,
+        $ssl_protocol = null
     ) {
         if ($channel_rpc_timeout > $read_write_timeout) {
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read-write timeout');
@@ -50,7 +51,8 @@ class AMQPStreamConnection extends AbstractConnection
             $read_write_timeout,
             $context,
             $keepalive,
-            $heartbeat
+            $heartbeat,
+            $ssl_protocol
         );
 
         parent::__construct(

@@ -44,7 +44,8 @@ class StreamIO extends AbstractIO
         $read_write_timeout = 130.0,
         $context = null,
         $keepalive = false,
-        $heartbeat = 60
+        $heartbeat = 60,
+        $ssl_protocol = null
     ) {
         if ($heartbeat !== 0 && ($read_write_timeout <= ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be greater than 2x the heartbeat');
@@ -78,7 +79,11 @@ class StreamIO extends AbstractIO
 
         $options = stream_context_get_options($this->context);
         if (!empty($options['ssl'])) {
-            $this->protocol = 'ssl';
+            if (isset($ssl_protocol)) {
+                $this->protocol = $ssl_protocol;
+            } else {
+                $this->protocol = 'ssl';
+            }
         }
     }
 
@@ -364,6 +369,10 @@ class StreamIO extends AbstractIO
     {
         if ($this->protocol === 'ssl') {
             throw new AMQPIOException('Can not enable keepalive: ssl connection does not support keepalive (#70939)');
+        }
+
+        if ($this->protocol === 'tls') {
+            throw new AMQPIOException('Can not enable keepalive: tls connection does not support keepalive (#70939)');
         }
 
         if (!function_exists('socket_import_stream')) {
