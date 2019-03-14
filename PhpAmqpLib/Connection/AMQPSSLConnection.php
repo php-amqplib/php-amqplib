@@ -19,7 +19,8 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $password,
         $vhost = '/',
         $ssl_options = array(),
-        $options = array()
+        $options = array(),
+        $ssl_protocol = 'ssl'
     ) {
         if (!isset($ssl_options['verify_peer'])) {
             $ssl_options['verify_peer'] = true;
@@ -39,7 +40,9 @@ class AMQPSSLConnection extends AMQPStreamConnection
             isset($options['read_write_timeout']) ? $options['read_write_timeout'] : 130,
             $ssl_context,
             isset($options['keepalive']) ? $options['keepalive'] : false,
-            isset($options['heartbeat']) ? $options['heartbeat'] : 60
+            isset($options['heartbeat']) ? $options['heartbeat'] : 60,
+            isset($options['channel_rpc_timeout']) ? $options['channel_rpc_timeout'] : 0.0,
+            $ssl_protocol
         );
     }
 
