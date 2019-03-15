@@ -311,7 +311,7 @@ class AbstractConnection extends AbstractChannel
     {
         try {
             return $this->getIO()->select($sec, $usec);
-        } catch (AMQPHeartbeatMissedException $e) {
+        } catch (AMQPConnectionClosedException $e) {
             $this->do_close();
             throw $e;
         } catch (AMQPRuntimeException $e) {
