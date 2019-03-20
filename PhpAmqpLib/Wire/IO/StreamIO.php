@@ -19,15 +19,6 @@ class StreamIO extends AbstractIO
     /** @var resource */
     private $sock;
 
-    /** @var string */
-    private static $SOCKET_STRERROR_EAGAIN;
-
-    /** @var string */
-    private static $SOCKET_STRERROR_EWOULDBLOCK;
-
-    /** @var string */
-    private static $SOCKET_STRERROR_EINTR;
-
     /**
      * @param string $host
      * @param int $port
@@ -50,11 +41,6 @@ class StreamIO extends AbstractIO
         if ($heartbeat !== 0 && ($read_write_timeout <= ($heartbeat * 2))) {
             throw new \InvalidArgumentException('read_write_timeout must be greater than 2x the heartbeat');
         }
-
-        // SOCKET_EAGAIN is not defined in Windows
-        self::$SOCKET_STRERROR_EAGAIN = socket_strerror(defined('SOCKET_EAGAIN') ? SOCKET_EAGAIN : SOCKET_EWOULDBLOCK);
-        self::$SOCKET_STRERROR_EWOULDBLOCK = socket_strerror(SOCKET_EWOULDBLOCK);
-        self::$SOCKET_STRERROR_EINTR = socket_strerror(SOCKET_EINTR);
 
         $this->protocol = 'tcp';
         $this->host = $host;
@@ -174,6 +160,7 @@ class StreamIO extends AbstractIO
 
         while ($read < $len) {
             if (!is_resource($this->sock) || feof($this->sock)) {
+                $this->close();
                 throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
@@ -251,12 +238,16 @@ class StreamIO extends AbstractIO
             } catch (\ErrorException $e) {
                 $code = $this->last_error['errno'];
                 switch ($code) {
-                    case 8: // constant is missing for this error type
-                        $this->close();
-                        throw new AMQPConnectionClosedException('Broken pipe or closed connection', $code, $e);
+                    case SOCKET_EPIPE:
+                    case SOCKET_ENETDOWN:
+                    case SOCKET_ENETUNREACH:
+                    case SOCKET_ENETRESET:
+                    case SOCKET_ECONNABORTED:
+                    case SOCKET_ECONNRESET:
+                    case SOCKET_ECONNREFUSED:
                     case SOCKET_ETIMEDOUT:
                         $this->close();
-                        throw new AMQPConnectionClosedException('Connection timed out', $code, $e);
+                        throw new AMQPConnectionClosedException(socket_strerror($code), $code, $e);
                     default:
                         throw new AMQPRuntimeException($e->getMessage(), $code, $e);
                 }
@@ -293,20 +284,17 @@ class StreamIO extends AbstractIO
      */
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
-        // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-        if (strpos($errstr, self::$SOCKET_STRERROR_EAGAIN) !== false
-            || strpos($errstr, self::$SOCKET_STRERROR_EWOULDBLOCK) !== false) {
-             // it's allowed to retry
-            return;
+        $code = $this->extract_error_code($errstr);
+        switch ($code) {
+            // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
+            case SOCKET_EAGAIN:
+            case SOCKET_EWOULDBLOCK:
+            // stream_select warning that it has been interrupted by a signal - EINTR
+            case SOCKET_EINTR:
+                return;
         }
 
-        // stream_select warning that it has been interrupted by a signal - EINTR
-        if (strpos($errstr, self::$SOCKET_STRERROR_EINTR) !== false) {
-             // it's allowed while processing signals
-            return;
-        }
-
-        parent::error_handler($errno, $errstr, $errfile, $errline, $errcontext);
+        parent::error_handler($code > 0 ? $code : $errno, $errstr, $errfile, $errline, $errcontext);
     }
 
     public function close()
@@ -385,5 +373,25 @@ class StreamIO extends AbstractIO
 
         $socket = socket_import_stream($this->sock);
         socket_set_option($socket, SOL_SOCKET, SO_KEEPALIVE, 1);
+    }
+
+    /**
+     * @param string $message
+     * @return int
+     */
+    protected function extract_error_code($message)
+    {
+        if (0 === strpos($message, 'stream_select():')) {
+            $pattern = '/\s+\[(\d+)\]:\s+/';
+        } else {
+            $pattern = '/\s+errno=(\d+)\s+/';
+        }
+        $matches = array();
+        $result = preg_match($pattern, $message, $matches);
+        if ($result > 0) {
+            return (int)$matches[1];
+        }
+
+        return 0;
     }
 }

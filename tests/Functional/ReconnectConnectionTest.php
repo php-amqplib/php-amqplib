@@ -27,9 +27,11 @@ class ReconnectConnectionTest extends TestCase
             $this->channel->exchange_delete($this->exchange);
             $this->channel->queue_delete($this->queue);
             $this->channel->close();
+            $this->channel = null;
         }
         if ($this->connection) {
             $this->connection->close();
+            $this->connection = null;
         }
     }
 

@@ -40,6 +40,8 @@ abstract class ChannelTestCase extends TestCase
     public function tearDown()
     {
         $this->channel->close();
+        $this->channel = null;
         $this->connection->close();
+        $this->connection = null;
     }
 }

@@ -87,6 +87,8 @@ class ChannelTimeoutTest extends TestCase
     {
         parent::tearDown();
         $this->channel->close();
+        $this->channel = null;
         $this->connection->close();
+        $this->connection = null;
     }
 }

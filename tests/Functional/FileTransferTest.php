@@ -33,9 +33,11 @@ class FileTransferTest extends TestCase
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);
             $this->channel->close();
+            $this->channel = null;
         }
         if ($this->connection) {
             $this->connection->close();
+            $this->connection = null;
         }
     }
 

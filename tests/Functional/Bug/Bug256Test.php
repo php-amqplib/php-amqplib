@@ -45,15 +45,19 @@ class Bug256Test extends AbstractConnectionTest
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);
             $this->channel->close();
+            $this->channel = null;
         }
         if ($this->connection) {
             $this->connection->close();
+            $this->connection = null;
         }
         if ($this->channel2) {
             $this->channel2->close();
+            $this->channel2 = null;
         }
         if ($this->connection2) {
             $this->connection2->close();
+            $this->connection2 = null;
         }
     }
 
