@@ -57,6 +57,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
 
         $this->assertInstanceOf('Exception', $exception);
         $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPConnectionClosedException', $exception);
+        $this->assertEquals(0, $exception->getCode());
         $this->assertChannelClosed($channel);
         $this->assertConnectionClosed($connection);
     }
@@ -105,6 +106,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
 
         $this->assertInstanceOf('Exception', $exception);
         $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPConnectionClosedException', $exception);
+        $this->assertEquals(SOCKET_EPIPE, $exception->getCode());
         $this->assertChannelClosed($channel);
         $this->assertConnectionClosed($connection);
     }

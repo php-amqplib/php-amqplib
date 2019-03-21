@@ -175,8 +175,8 @@ class SocketIO extends AbstractIO
                     case SOCKET_ENETRESET:
                     case SOCKET_ECONNABORTED:
                     case SOCKET_ECONNRESET:
-                    case SOCKET_ETIMEDOUT:
                     case SOCKET_ECONNREFUSED:
+                    case SOCKET_ETIMEDOUT:
                         $this->close();
                         throw new AMQPConnectionClosedException(socket_strerror($code), $code, $e);
                     default:

@@ -22,13 +22,19 @@ class Bug49Test extends TestCase
         $this->channel2 = $this->connection->channel();
     }
 
-    public function tearDown()
+    protected function tearDown()
     {
+        if ($this->channel) {
+            $this->channel->close();
+            $this->channel = null;
+        }
         if ($this->channel2) {
             $this->channel2->close();
+            $this->channel2 = null;
         }
         if ($this->connection) {
             $this->connection->close();
+            $this->connection = null;
         }
     }
 

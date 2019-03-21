@@ -41,9 +41,15 @@ class Bug40Test extends TestCase
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);
             $this->channel->close();
+            $this->channel = null;
+        }
+        if ($this->channel2) {
+            $this->channel2->close();
+            $this->channel2 = null;
         }
         if ($this->connection) {
             $this->connection->close();
+            $this->connection = null;
         }
     }
 

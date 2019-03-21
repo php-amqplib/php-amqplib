@@ -21,6 +21,12 @@ class Bug458Test extends TestCase
         $this->addSignalHandlers();
     }
 
+    protected function tearDown()
+    {
+        $this->channel->close();
+        $this->channel = null;
+    }
+
     /**
      * This test will be skipped in Windows, because pcntl extension is not available there
      *
