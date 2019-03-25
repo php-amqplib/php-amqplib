@@ -28,25 +28,26 @@ class SocketIOTest extends TestCase
         @$socket->connect();
     }
 
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage read_timeout must be greater than 2x the heartbeat
-     */
-    public function read_timeout_must_be_greater_than_2x_the_heartbeat()
-    {
-        new SocketIO('localhost', 5512, 1);
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage send_timeout must be greater than 2x the heartbeat
-     */
-    public function send_timeout_must_be_greater_than_2x_the_heartbeat()
-    {
-        new SocketIO('localhost', '5512', 30, true, 20, 10);
-    }
+    // TODO FUTURE re-enable test
+    // php-amqplib/php-amqplib#648, php-amqplib/php-amqplib#666
+    // /**
+    //  * @test
+    //  * @expectedException \InvalidArgumentException
+    //  * @expectedExceptionMessage read_timeout must be greater than 2x the heartbeat
+    //  */
+    // public function read_timeout_must_be_greater_than_2x_the_heartbeat()
+    // {
+    //     new SocketIO('localhost', 5512, 1);
+    // }
+    // /**
+    //  * @test
+    //  * @expectedException \InvalidArgumentException
+    //  * @expectedExceptionMessage send_timeout must be greater than 2x the heartbeat
+    //  */
+    // public function send_timeout_must_be_greater_than_2x_the_heartbeat()
+    // {
+    //     new SocketIO('localhost', '5512', 30, true, 20, 10);
+    // }
 
     /**
      * @test

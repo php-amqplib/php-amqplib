@@ -38,8 +38,10 @@ class StreamIO extends AbstractIO
         $heartbeat = 60,
         $ssl_protocol = null
     ) {
-        if ($heartbeat !== 0 && ($read_write_timeout <= ($heartbeat * 2))) {
-            throw new \InvalidArgumentException('read_write_timeout must be greater than 2x the heartbeat');
+        // TODO FUTURE change comparison to <=
+        // php-amqplib/php-amqplib#648, php-amqplib/php-amqplib#666
+        if ($heartbeat !== 0 && ($read_write_timeout < ($heartbeat * 2))) {
+            throw new \InvalidArgumentException('read_write_timeout must be at least 2x the heartbeat');
         }
 
         $this->protocol = 'tcp';

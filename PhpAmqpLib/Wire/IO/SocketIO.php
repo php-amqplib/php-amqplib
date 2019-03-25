@@ -31,12 +31,16 @@ class SocketIO extends AbstractIO
         $this->keepalive = $keepalive;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
+        /*
+            TODO FUTURE enable this check
+            php-amqplib/php-amqplib#648, php-amqplib/php-amqplib#666
         if ($this->heartbeat !== 0 && ($this->read_timeout <= ($this->heartbeat * 2))) {
             throw new \InvalidArgumentException('read_timeout must be greater than 2x the heartbeat');
         }
         if ($this->heartbeat !== 0 && ($this->write_timeout <= ($this->heartbeat * 2))) {
             throw new \InvalidArgumentException('send_timeout must be greater than 2x the heartbeat');
         }
+         */
     }
 
     /**
