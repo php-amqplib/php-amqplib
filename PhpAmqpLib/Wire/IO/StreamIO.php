@@ -73,6 +73,10 @@ class StreamIO extends AbstractIO
                 $this->protocol = 'ssl';
             }
         }
+
+        if (!defined('SOCKET_EAGAIN')) {
+            define('SOCKET_EAGAIN', SOCKET_EWOULDBLOCK);
+        }
     }
 
     /**
