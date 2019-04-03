@@ -153,7 +153,7 @@ class Consumer
         );
 
         echo 'Enter wait.' . PHP_EOL;
-        while (count($this->channel->callbacks)) {
+        while ($this->channel->is_consuming()) {
             $this->channel->wait();
         }
         echo 'Exit wait.' . PHP_EOL;
