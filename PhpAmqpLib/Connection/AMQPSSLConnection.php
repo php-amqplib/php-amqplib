@@ -22,7 +22,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $options = array(),
         $ssl_protocol = 'ssl'
     ) {
-        if (!isset($ssl_options['verify_peer'])) {
+        if (!empty($ssl_options) && !isset($ssl_options['verify_peer'])) {
             $ssl_options['verify_peer'] = true;
         }
         $ssl_context = $this->create_ssl_context($ssl_options);
