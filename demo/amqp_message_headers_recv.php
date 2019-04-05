@@ -34,7 +34,7 @@ $callback = function (AMQPMessage $message) {
 };
 
 $channel->basic_consume($queueName, '', false, true, true, false, $callback);
-while (count($channel->callbacks)) {
+while ($channel->is_consuming()) {
     $channel->wait();
     echo '*' . PHP_EOL;
 }

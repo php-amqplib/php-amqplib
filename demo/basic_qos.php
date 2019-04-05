@@ -19,7 +19,7 @@ function process_message($message)
 
 $channel->basic_consume('qos_queue', '', false, false, false, false, 'process_message');
 
-while (count($channel->callbacks)) {
+while ($channel->is_consuming()) {
     // After 10 seconds there will be a timeout exception.
     $channel->wait(null, false, 10);
 }

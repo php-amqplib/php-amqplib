@@ -59,6 +59,6 @@ function shutdown($ch, $conn)
 
 register_shutdown_function('shutdown', $ch, $conn);
 
-while (count($ch->callbacks)) {
+while ($ch->is_consuming()) {
     $ch->wait();
 }

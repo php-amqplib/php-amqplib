@@ -11,20 +11,23 @@ use PhpAmqpLib\Wire\AMQPWriter;
 
 class AMQPChannel extends AbstractChannel
 {
-    /** @var array */
+    /**
+     * @var callable[]
+     * @internal Use is_consuming() to check if there is active callbacks
+     */
     public $callbacks = array();
 
     /** @var bool Whether or not the channel has been "opened" */
     protected $is_open = false;
 
     /** @var int */
-    protected $default_ticket;
+    protected $default_ticket = 0;
 
     /** @var bool */
-    protected $active;
+    protected $active = true;
 
     /** @var array */
-    protected $alerts;
+    protected $alerts = array();
 
     /** @var bool */
     protected $auto_decode;
@@ -69,14 +72,14 @@ class AMQPChannel extends AbstractChannel
      * @see basic_publish()
      * @see publish_batch()
      */
-    private $publish_cache;
+    private $publish_cache = array();
 
     /**
      * Maximal size of $publish_cache
      *
      * @var int
      */
-    private $publish_cache_max_size;
+    private $publish_cache_max_size = 100;
 
     /**
      * Maximum time to wait for operations on this channel, in seconds.
@@ -99,18 +102,9 @@ class AMQPChannel extends AbstractChannel
 
         parent::__construct($connection, $channel_id);
 
-        $this->publish_cache = array();
-        $this->publish_cache_max_size = 100;
-
         $this->debug->debug_msg('using channel_id: ' . $channel_id);
 
-        $this->default_ticket = 0;
-        $this->is_open = false;
-        $this->active = true; // Flow control
-        $this->alerts = array();
-        $this->callbacks = array();
         $this->auto_decode = $auto_decode;
-
         $this->channel_rpc_timeout = $channel_rpc_timeout;
 
         try {
@@ -947,6 +941,14 @@ class AMQPChannel extends AbstractChannel
         unset($this->callbacks[$consumerTag]);
 
         return $consumerTag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function is_consuming()
+    {
+        return !empty($this->callbacks);
     }
 
     /**

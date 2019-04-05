@@ -17,11 +17,14 @@ use PhpAmqpLib\Wire\IO\AbstractIO;
 
 class AbstractConnection extends AbstractChannel
 {
-    /** @var array */
+    /**
+     * @var array
+     * @internal
+     */
     public static $LIBRARY_PROPERTIES = array(
         'product' => array('S', 'AMQPLib'),
         'platform' => array('S', 'PHP'),
-        'version' => array('S', '2.8'),
+        'version' => array('S', '2.9'),
         'information' => array('S', ''),
         'copyright' => array('S', ''),
         'capabilities' => array(
@@ -37,7 +40,10 @@ class AbstractConnection extends AbstractChannel
         )
     );
 
-    /** @var AMQPChannel[] */
+    /**
+     * @var AMQPChannel[]
+     * @internal
+     */
     public $channels = array();
 
     /** @var int */
@@ -122,10 +128,10 @@ class AbstractConnection extends AbstractChannel
      * @var array
      * @see prepare_content()
      */
-    private $prepare_content_cache;
+    private $prepare_content_cache = array();
 
     /** @var int Maximal size of $prepare_content_cache */
-    private $prepare_content_cache_max_size;
+    private $prepare_content_cache_max_size = 100;
 
     /**
      * Maximum time to wait for channel operations, in seconds
@@ -189,9 +195,6 @@ class AbstractConnection extends AbstractChannel
             $this->login_response = null;
         }
 
-        $this->prepare_content_cache = array();
-        $this->prepare_content_cache_max_size = 100;
-
         // Lazy Connection waits on connecting
         if ($this->connectOnConstruct()) {
             $this->connect();
@@ -210,13 +213,13 @@ class AbstractConnection extends AbstractChannel
                 $this->setIsConnected(true);
 
                 // Connect the socket
-                $this->getIO()->connect();
+                $this->io->connect();
 
                 $this->channels = array();
                 // The connection object itself is treated as channel 0
                 parent::__construct($this, 0);
 
-                $this->input = new AMQPReader(null, $this->getIO());
+                $this->input = new AMQPReader(null, $this->io);
 
                 $this->write($this->amqp_protocol_header);
                 $this->wait(array($this->waitHelper->get_wait('connection.start')),false,$this->connection_timeout);
@@ -238,7 +241,7 @@ class AbstractConnection extends AbstractChannel
                 $host = $this->x_open($this->vhost, '', $this->insist);
                 if (!$host) {
                     //Reconnected
-                    $this->getIO()->reenableHeartbeat();
+                    $this->io->reenableHeartbeat();
                     return null; // we weren't redirected
                 }
 
@@ -268,7 +271,7 @@ class AbstractConnection extends AbstractChannel
         // Try to close the AMQP connection
         $this->safeClose();
         // Reconnect the socket/stream then AMQP
-        $this->getIO()->close();
+        $this->io->close();
         $this->setIsConnected(false); // getIO can initiate the connection setting via LazyConnection, set it here to be sure
         $this->connect();
     }
@@ -310,7 +313,7 @@ class AbstractConnection extends AbstractChannel
     public function select($sec, $usec = 0)
     {
         try {
-            return $this->getIO()->select($sec, $usec);
+            return $this->io->select($sec, $usec);
         } catch (AMQPConnectionClosedException $e) {
             $this->do_close();
             throw $e;
@@ -345,8 +348,8 @@ class AbstractConnection extends AbstractChannel
     {
         $this->debug && $this->debug->debug_msg('closing socket');
 
-        if (!is_null($this->getIO())) {
-            $this->getIO()->close();
+        if ($this->io) {
+            $this->io->close();
         }
     }
 
@@ -358,7 +361,7 @@ class AbstractConnection extends AbstractChannel
         $this->debug->debug_hexdump($data);
 
         try {
-            $this->getIO()->write($data);
+            $this->io->write($data);
         } catch (AMQPConnectionClosedException $e) {
             $this->do_close();
             throw $e;
@@ -894,7 +897,8 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @return AbstractIO
+     * @return resource
+     * @deprecated No direct access to communication socket should be available.
      */
     public function getSocket()
     {
@@ -903,6 +907,7 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * @return \PhpAmqpLib\Wire\IO\AbstractIO
+     * @deprecated
      */
     public function getIO()
     {

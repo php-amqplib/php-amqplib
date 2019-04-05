@@ -24,6 +24,10 @@ abstract class AbstractChannel
     const PROTOCOL_080 = '0.8';
     const PROTOCOL_091 = '0.9.1';
 
+    /**
+     * @var string
+     * @deprecated
+     */
     public static $PROTOCOL_CONSTANTS_CLASS;
 
     /** @var array */
