@@ -680,26 +680,34 @@ class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
-        $this->setIsConnected(false);
-    
+        $result = null;
         $this->io->disableHeartbeat();
         if (empty($this->protocolWriter) || !$this->isConnected()) {
-            return null;
+            return $result;
         }
 
-        $this->closeChannels();
+        try {
+            $this->closeChannels();
+            list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
+                $reply_code,
+                $reply_text,
+                $method_sig[0],
+                $method_sig[1]
+            );
+            $this->send_method_frame(array($class_id, $method_id), $args);
+            $result = $this->wait(
+                array($this->waitHelper->get_wait('connection.close_ok')),
+                false,
+                $this->connection_timeout
+            );
+        } catch (\Exception $exception) {
+            $this->do_close();
+            throw $exception;
+        }
 
-        list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
-            $reply_code,
-            $reply_text,
-            $method_sig[0],
-            $method_sig[1]
-        );
-        $this->send_method_frame(array($class_id, $method_id), $args);
-        
-        return $this->wait(array(
-            $this->waitHelper->get_wait('connection.close_ok')
-        ),false,$this->connection_timeout);
+        $this->setIsConnected(false);
+
+        return $result;
     }
 
     /**
