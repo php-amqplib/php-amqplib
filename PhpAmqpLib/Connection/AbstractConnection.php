@@ -677,6 +677,8 @@ class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
+        $this->setIsConnected(false);
+    
         $this->io->disableHeartbeat();
         if (empty($this->protocolWriter) || !$this->isConnected()) {
             return null;
@@ -691,9 +693,7 @@ class AbstractConnection extends AbstractChannel
             $method_sig[1]
         );
         $this->send_method_frame(array($class_id, $method_id), $args);
-
-        $this->setIsConnected(false);
-
+        
         return $this->wait(array(
             $this->waitHelper->get_wait('connection.close_ok')
         ),false,$this->connection_timeout);
