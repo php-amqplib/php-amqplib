@@ -11,6 +11,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param string $vhost
      * @param array $ssl_options
      * @param array $options
+     * @param string $ssl_protocol
      */
     public function __construct(
         $host,
@@ -22,10 +23,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $options = array(),
         $ssl_protocol = 'ssl'
     ) {
-        if (!isset($ssl_options['verify_peer'])) {
-            $ssl_options['verify_peer'] = true;
-        }
-        $ssl_context = $this->create_ssl_context($ssl_options);
+        $ssl_context = empty($ssl_options) ? null : $this->create_ssl_context($ssl_options);
         parent::__construct(
             $host,
             $port,
