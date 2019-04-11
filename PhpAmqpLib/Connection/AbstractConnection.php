@@ -600,8 +600,14 @@ class AbstractConnection extends AbstractChannel
         $_timeout = $timeout;
         while (true) {
             $now = time();
+            $wait_frame_timeout = $_timeout;
+            // in case heartbeats are activated prevents waiting more than 2 times the heartbeat frame
+            // otherwise we would never detect a missed server heartbeat
+            if($this->heartbeat && ($wait_frame_timeout === 0 || $wait_frame_timeout > $this->heartbeat * 2)) {
+                $wait_frame_timeout = $this->heartbeat * 2 + 1;
+            }
             try {
-                list($frame_type, $frame_channel, $payload) = $this->wait_frame($_timeout);
+                list($frame_type, $frame_channel, $payload) = $this->wait_frame($wait_frame_timeout);
             } catch (AMQPTimeoutException $e) {
                 if ( $this->heartbeat && microtime(true) - ($this->heartbeat*2) > $this->last_frame ) {
                     $this->debug->debug_msg("missed server heartbeat (at threshold * 2)");
