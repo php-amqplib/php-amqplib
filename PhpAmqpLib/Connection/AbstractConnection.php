@@ -603,7 +603,7 @@ class AbstractConnection extends AbstractChannel
             $wait_frame_timeout = $_timeout;
             // in case heartbeats are activated prevents waiting more than 2 times the heartbeat frame
             // otherwise we would never detect a missed server heartbeat
-            if($this->heartbeat && ($wait_frame_timeout === 0 || $wait_frame_timeout > $this->heartbeat * 2)) {
+            if($this->heartbeat && !is_null($timeout) && ((double) $wait_frame_timeout === 0.0 || $wait_frame_timeout > $this->heartbeat * 2)) {
                 $wait_frame_timeout = $this->heartbeat * 2 + 1;
             }
             try {

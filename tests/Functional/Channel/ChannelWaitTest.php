@@ -14,8 +14,9 @@ class ChannelWaitTest extends TestCase
      * @small
      * @dataProvider provide_channels
      * @param callable $factory
+     * @param int $heartBeat
      */
-    public function should_wait_until_signal_by_default($factory)
+    public function should_wait_until_signal_by_default($factory, $heartBeat)
     {
         $this->deferSignal(0.5);
         /** @var AMQPChannel $channel */
@@ -23,7 +24,15 @@ class ChannelWaitTest extends TestCase
         try {
             $channel->wait();
         } catch (\Exception $exception) {
-            $this->fail($exception->getMessage());
+            if ($heartBeat > 0) {
+                $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPTimeoutException', $exception);
+                $this->assertEquals(sprintf(
+                    'The connection timed out after %s sec while awaiting incoming data',
+                    $heartBeat * 2 + 1
+                ), $exception->getMessage());
+            } else {
+                $this->fail($exception->getMessage());
+            }
         }
 
         $this->closeChannel($channel);
@@ -68,10 +77,10 @@ class ChannelWaitTest extends TestCase
         }
 
         return [
-            [$this->channelFactory(true, 0.1, 0)],
-            [$this->channelFactory(false, 0.1, 0)],
-            [$this->channelFactory(true, 3, 1)],
-            [$this->channelFactory(false, 3, 1)],
+            ['channel' => $this->channelFactory(true, 0.1, 0), 'heartBeat' => 0],
+            ['channel' => $this->channelFactory(false, 0.1, 0), 'heartBeat' => 0],
+            ['channel' => $this->channelFactory(true, 3, 1), 'heartBeat' => 1],
+            ['channel' => $this->channelFactory(false, 3, 1), 'heartBeat' => 1],
         ];
     }
 

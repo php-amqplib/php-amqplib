@@ -47,4 +47,44 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
         $this->assertTrue($channel->is_open());
         $this->assertTrue($connection->isConnected());
     }
+
+    /**
+     * Use mocked write functions to simulate completely blocked connections.
+     * @test
+     * @small
+     * @group connection
+     * @testWith ["stream"]
+     *           ["socket"]
+     * @covers \PhpAmqpLib\Wire\IO\StreamIO::write()
+     * @covers \PhpAmqpLib\Wire\IO\SocketIO::write()
+     * @param string $type
+     */
+    public function must_throw_exception_on_missed_heart_beat($type)
+    {
+        self::$blocked = false;
+        $connection = $this->conection_create($type, $host = HOST, $port = PORT, [
+            'heartbeat' => 1,
+            'timeout' => 2
+        ]);
+        $channel = $connection->channel();
+        $this->assertTrue($channel->is_open());
+        $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
+
+        self::$blocked = true;
+
+        $exception = null;
+        try {
+            $channel->wait();
+        } catch (\Exception $exception) {
+        }
+
+        self::$blocked = false;
+
+        $this->assertInstanceOf('Exception', $exception);
+        $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPHeartbeatMissedException', $exception);
+        $this->assertEquals('Missed server heartbeat', $exception->getMessage());
+
+        $this->assertFalse($channel->is_open());
+        $this->assertFalse($connection->isConnected());
+    }
 }
