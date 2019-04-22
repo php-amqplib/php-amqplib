@@ -80,6 +80,6 @@ function shutdown($channel, $connection)
 register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while ($ch->is_consuming()) {
+while ($channel ->is_consuming()) {
     $channel->wait();
 }
