@@ -2,6 +2,10 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
+## 2.9.2 - 2019-04-24
+
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/9?closed=1)
+
 ## 2.9.1 - 2019-03-26
 
 [GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/8?closed=1)
