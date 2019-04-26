@@ -75,7 +75,7 @@ class StreamIO extends AbstractIO
         }
 
         if (!defined('SOCKET_EAGAIN')) {
-            define('SOCKET_EAGAIN', SOCKET_EWOULDBLOCK);
+            define('SOCKET_EAGAIN', 'SOCKET_EWOULDBLOCK');
         }
     }
 
