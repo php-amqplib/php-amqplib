@@ -353,7 +353,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $internal
      * @param bool $nowait
      * @param array $arguments
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -407,7 +407,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $exchange
      * @param bool $if_unused
      * @param bool $nowait
-     * @param null $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -453,7 +453,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $routing_key
      * @param bool $nowait
      * @param array $arguments
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -503,7 +503,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $routing_key
      * @param bool $nowait
      * @param array $arguments
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
@@ -550,7 +550,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $routing_key
      * @param bool $nowait
      * @param array $arguments
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -600,7 +600,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $exchange
      * @param string $routing_key
      * @param array $arguments
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
@@ -646,7 +646,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $auto_delete
      * @param bool $nowait
      * @param array $arguments
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -706,7 +706,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $if_unused
      * @param bool $if_empty
      * @param bool $nowait
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -749,7 +749,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param string $queue
      * @param bool $nowait
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
      */
@@ -1046,7 +1046,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param string $queue
      * @param bool $no_ack
-     * @param int $ticket
+     * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
@@ -1146,7 +1146,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $routing_key
      * @param bool $mandatory
      * @param bool $immediate
-     * @param int $ticket
+     * @param int|null $ticket
      */
     public function basic_publish(
         $msg,
@@ -1186,7 +1186,7 @@ class AMQPChannel extends AbstractChannel
      * @param string $routing_key
      * @param bool $mandatory
      * @param bool $immediate
-     * @param int $ticket
+     * @param int|null $ticket
      */
     public function batch_basic_publish(
         $msg,
@@ -1502,7 +1502,7 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
-     * @param int $ticket
+     * @param int|null $ticket
      * @return int
      */
     protected function getTicket($ticket)
