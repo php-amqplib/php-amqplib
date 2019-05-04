@@ -44,6 +44,24 @@ class AMQPMessageTest extends TestCase
         $this->assertEquals($message->getContentEncoding(), 'shortstr');
     }
 
+    /**
+     * @test
+     */
+    public function get_delivery_tag()
+    {
+        $message = new AMQPMessage('');
+
+        $message->delivery_info['delivery_tag'] = "10";
+        $this->assertEquals(10, $message->getDeliveryTag());
+
+        $message->delivery_info['delivery_tag'] = 1231;
+        $this->assertEquals(1231, $message->getDeliveryTag());
+
+        unset($message->delivery_info['delivery_tag']);
+        $this->setExpectedException('\PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException');
+        $message->getDeliveryTag();
+    }
+
     public function propertiesData()
     {
         return [
