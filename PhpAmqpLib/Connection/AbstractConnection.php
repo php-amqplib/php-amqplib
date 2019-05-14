@@ -1032,13 +1032,13 @@ class AbstractConnection extends AbstractChannel
 
     public static function create_connection($hosts, $options = array()){
         $latest_exception = null;
-        for($i = 0; $i < count($hosts); $i++) {
-            AbstractConnection::validate_host($hosts[$i]);
-            $host = $hosts[$i]['host'];
-            $port = $hosts[$i]['port'];
-            $user = $hosts[$i]['user'];
-            $password = $hosts[$i]['password'];
-            $vhost = isset($hosts[$i]['vhost']) ? $hosts[$i]['vhost'] : "/";
+        foreach ($hosts as $hostdef) {
+            AbstractConnection::validate_host($hostdef);
+            $host = $hostdef['host'];
+            $port = $hostdef['port'];
+            $user = $hostdef['user'];
+            $password = $hostdef['password'];
+            $vhost = isset($hostdef['vhost']) ? $hostdef['vhost'] : "/";
             try {
                 $conn = static::try_create_connection($host, $port, $user, $password, $vhost, $options);
                 return $conn;
