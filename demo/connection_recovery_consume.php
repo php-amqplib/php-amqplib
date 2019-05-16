@@ -78,7 +78,7 @@ function do_something_with_connection($connection) {
     $channel = $connection->channel();
     $channel->queue_declare($queue, false, true, false, false);
     $channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
-    while (count($channel->callbacks)) {
+    while ($channel->is_consuming()) {
         $channel->wait();
     }
 }
