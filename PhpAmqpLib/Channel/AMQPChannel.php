@@ -645,7 +645,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $exclusive
      * @param bool $auto_delete
      * @param bool $nowait
-     * @param array $arguments
+     * @param array|\PhpAmqpLib\Wire\AMQPTable $arguments
      * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed|null
