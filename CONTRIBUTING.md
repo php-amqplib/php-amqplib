@@ -24,8 +24,14 @@ We accept contributions via Pull Requests on [Github](https://github.com/php-amq
 
 ## Running Tests
 
+To successfully run the tests you need to first have a stock RabbitMQ broker running locally. Then, run tests like this:
+
 ``` bash
-$ phpunit
+$ vendor/bin/phpunit
+```
+or
+``` bash
+$ make test
 ```
 
 
