@@ -6,9 +6,11 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
+use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
@@ -920,6 +922,19 @@ class AbstractConnection extends AbstractChannel
     public function getIO()
     {
         return $this->io;
+    }
+
+    /**
+     * Check connection heartbeat if enabled.
+     * @throws AMQPHeartbeatMissedException If too much time passed since last connection activity.
+     * @throws AMQPConnectionClosedException If connection was closed due to network issues or timeouts.
+     * @throws AMQPSocketException If connection was already closed.
+     * @throws AMQPTimeoutException If heartbeat write takes too much time.
+     * @throws AMQPIOException If other connection problems occurred.
+     */
+    public function checkHeartBeat()
+    {
+        $this->io->check_heartbeat();
     }
 
     /**
