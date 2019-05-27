@@ -30,7 +30,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "ext-bcmath": "*",
+        "phpseclib/bcmath_compat": ">=1.0.1",
         "ext-sockets": "*"
     },
     "require-dev": {
