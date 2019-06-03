@@ -2,6 +2,7 @@
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
+use PhpAmqpLib\Exception\AMQPChannelClosedException;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
@@ -1156,6 +1157,9 @@ class AMQPChannel extends AbstractChannel
         $immediate = false,
         $ticket = null
     ) {
+        if ($this->connection === null) {
+            throw new AMQPChannelClosedException('Channel connection is closed.');
+        }
         $pkt = new AMQPWriter();
         $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 

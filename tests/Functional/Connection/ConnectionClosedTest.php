@@ -104,11 +104,18 @@ class ConnectionClosedTest extends AbstractConnectionTest
         } catch (\Exception $exception) {
         }
 
-        $this->assertInstanceOf('Exception', $exception);
         $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPConnectionClosedException', $exception);
         $this->assertEquals(SOCKET_EPIPE, $exception->getCode());
         $this->assertChannelClosed($channel);
         $this->assertConnectionClosed($connection);
+
+        // 2nd publish call must return exception instantly cause connection is already closed
+        $exception = null;
+        try {
+            $channel->basic_publish($message, $exchange_name, $queue_name);
+        } catch (\Exception $exception) {
+        }
+        $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPChannelClosedException', $exception);
     }
 
     /**
