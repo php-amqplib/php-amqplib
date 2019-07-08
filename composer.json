@@ -29,13 +29,13 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.6",
         "ext-bcmath": "*",
         "ext-sockets": "*"
     },
     "require-dev": {
         "ext-curl": "*",
-        "phpunit/phpunit": "^4.8",
+        "phpunit/phpunit": "^4.8|^5.7",
         "squizlabs/php_codesniffer": "^2.5",
         "phpdocumentor/phpdocumentor": "^2.9",
         "nategood/httpful": "^0.2.20"
@@ -54,7 +54,7 @@
     "license": "LGPL-2.1-or-later",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.8-dev"
+            "dev-master": "2.10-dev"
         }
     }
 }
