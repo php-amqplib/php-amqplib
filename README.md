@@ -253,7 +253,7 @@ multiple times.
 This was a simplest example, in a real-life application you might want to
 control retr count and maybe gracefully degrade wait time to reconnection.
 
-You can find a more excessive example in #444
+You can find a more excessive example in [#444](https://github.com/php-amqplib/php-amqplib/issues/444)
 
 
 ## UNIX Signals ##
