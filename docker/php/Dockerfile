@@ -1,4 +1,4 @@
-FROM php:5.4-cli
+FROM php:5.6-cli
 
 RUN apt update && \
     apt -qy install git unzip zlib1g-dev && \
