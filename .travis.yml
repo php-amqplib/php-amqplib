@@ -17,6 +17,11 @@ matrix:
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
+
 cache:
   directories:
     - $HOME/.composer
