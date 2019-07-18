@@ -605,7 +605,7 @@ class AbstractConnection extends AbstractChannel
             try {
                 list($frame_type, $frame_channel, $payload) = $this->wait_frame($_timeout);
             } catch (AMQPTimeoutException $e) {
-                if ( $this->heartbeat && microtime(true) - ($this->heartbeat*2) > $this->last_frame ) {
+                if ( $this->heartbeat && $this->last_frame !== null && microtime(true) - ($this->heartbeat*2) > $this->last_frame ) {
                     $this->debug->debug_msg("missed server heartbeat (at threshold * 2)");
                     $this->setIsConnected(false);
                     throw new AMQPHeartbeatMissedException("Missed server heartbeat");
