@@ -224,6 +224,8 @@ class AbstractConnection extends AbstractChannel
                 $this->input = new AMQPReader(null, $this->io);
 
                 $this->write($this->amqp_protocol_header);
+                // assume frame was sent successfully, used in $this->wait_channel()
+                $this->last_frame = microtime(true);
                 $this->wait(array($this->waitHelper->get_wait('connection.start')),false,$this->connection_timeout);
                 $this->x_start_ok(
                     $this->getLibraryProperties(),
@@ -601,11 +603,11 @@ class AbstractConnection extends AbstractChannel
         // Keeping the original timeout unchanged.
         $_timeout = $timeout;
         while (true) {
-            $now = time();
+            $start = microtime(true);
             try {
                 list($frame_type, $frame_channel, $payload) = $this->wait_frame($_timeout);
             } catch (AMQPTimeoutException $e) {
-                if ( $this->heartbeat && microtime(true) - ($this->heartbeat*2) > $this->last_frame ) {
+                if ($this->heartbeat && $this->last_frame && microtime(true) - ($this->heartbeat * 2) > $this->last_frame) {
                     $this->debug->debug_msg("missed server heartbeat (at threshold * 2)");
                     $this->setIsConnected(false);
                     throw new AMQPHeartbeatMissedException("Missed server heartbeat");
@@ -620,7 +622,7 @@ class AbstractConnection extends AbstractChannel
                 // skip heartbeat frames and reduce the timeout by the time passed
                 $this->debug->debug_msg("received server heartbeat");
                 if($_timeout > 0) {
-                    $_timeout -= time() - $now;
+                    $_timeout -= $this->last_frame - $start;
                     if($_timeout <= 0) {
                         // If timeout has been reached, throw the exception without calling wait_frame
                         throw new AMQPTimeoutException("Timeout waiting on channel");
@@ -628,26 +630,25 @@ class AbstractConnection extends AbstractChannel
                 }
                 continue;
 
-            } else {
+            }
 
-                if ($frame_channel == $channel_id) {
-                    return array($frame_type, $payload);
-                }
+            if ($frame_channel == $channel_id) {
+                return array($frame_type, $payload);
+            }
 
-                // Not the channel we were looking for.  Queue this frame
-                //for later, when the other channel is looking for frames.
-                // Make sure the channel still exists, it could have been
-                // closed by a previous Exception.
-                if (isset($this->channels[$frame_channel])) {
-                    array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
-                }
+            // Not the channel we were looking for.  Queue this frame
+            //for later, when the other channel is looking for frames.
+            // Make sure the channel still exists, it could have been
+            // closed by a previous Exception.
+            if (isset($this->channels[$frame_channel])) {
+                array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
+            }
 
-                // If we just queued up a method for channel 0 (the Connection
-                // itself) it's probably a close method in reaction to some
-                // error, so deal with it right away.
-                if (($frame_type == 1) && ($frame_channel == 0)) {
-                    $this->wait();
-                }
+            // If we just queued up a method for channel 0 (the Connection
+            // itself) it's probably a close method in reaction to some
+            // error, so deal with it right away.
+            if ($frame_type == 1 && $frame_channel == 0) {
+                $this->wait();
             }
         }
     }
