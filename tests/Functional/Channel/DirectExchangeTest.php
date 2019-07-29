@@ -69,7 +69,7 @@ class DirectExchangeTest extends ChannelTestCase
             $this->assertEquals($this->message->properties['content_type'], $msg->get('content_type'));
             $this->assertEquals($this->message->properties['correlation_id'], $msg->get('correlation_id'));
             $this->assertEquals($this->message->properties['reply_to'], $msg->get('reply_to'));
-            $this->setExpectedException('OutOfBoundsException');
+            $this->expectException('OutOfBoundsException');
             $msg->get('no_property');
         };
 
