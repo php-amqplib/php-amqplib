@@ -5,6 +5,7 @@ namespace PhpAmqpLib\Tests\Functional\Channel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
 class ChannelWaitTest extends TestCase
@@ -59,6 +60,31 @@ class ChannelWaitTest extends TestCase
         $this->assertLessThan(0.1, $took);
 
         $this->closeChannel($channel);
+    }
+
+    /**
+     * @test
+     * @small
+     *
+     */
+    public function should_call_handler_on_ack()
+    {
+        $receivedAck = false;
+        $handler = function ($message) use (&$receivedAck) {
+            $this->assertFalse($receivedAck);
+            $this->assertInstanceOf(AMQPMessage::class, $message);
+            $receivedAck = true;
+        };
+
+        $factory = $this->channelFactory();
+        /** @var AMQPChannel $channel */
+        $channel = $factory();
+        $channel->set_ack_handler($handler);
+        $channel->confirm_select();
+        $channel->basic_publish(new AMQPMessage('test'), 'basic_get_test');
+        $channel->wait_for_pending_acks(1);
+
+        $this->assertTrue($receivedAck);
     }
 
     public function provide_channels()

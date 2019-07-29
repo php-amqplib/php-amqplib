@@ -1430,7 +1430,9 @@ class AMQPChannel extends AbstractChannel
      * Waits for pending acks and nacks from the server.
      * If there are no pending acks, the method returns immediately
      *
-     * @param int $timeout Waits until $timeout value is reached
+     * @param int|float $timeout Waits until $timeout value is reached
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function wait_for_pending_acks($timeout = 0)
     {
@@ -1438,20 +1440,19 @@ class AMQPChannel extends AbstractChannel
             $this->waitHelper->get_wait('basic.ack'),
             $this->waitHelper->get_wait('basic.nack'),
         );
-
-        while (count($this->published_messages) !== 0) {
-            if ($timeout > 0) {
-                $this->wait($functions, true, $timeout);
-            } else {
-                $this->wait($functions);
-            }
+        $timeout = max(0, $timeout);
+        while (!empty($this->published_messages)) {
+            $this->wait($functions, false, $timeout);
         }
     }
 
     /**
-     * Waits for pending acks, nacks and returns from the server. If there are no pending acks, the method returns immediately.
+     * Waits for pending acks, nacks and returns from the server.
+     * If there are no pending acks, the method returns immediately.
      *
-     * @param int $timeout If set to value > 0 the method will wait at most $timeout seconds for pending acks.
+     * @param int|float $timeout If set to value > 0 the method will wait at most $timeout seconds for pending acks.
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function wait_for_pending_acks_returns($timeout = 0)
     {
@@ -1461,12 +1462,9 @@ class AMQPChannel extends AbstractChannel
             $this->waitHelper->get_wait('basic.return'),
         );
 
-        while (count($this->published_messages) !== 0) {
-            if ($timeout > 0) {
-                $this->wait($functions, true, $timeout);
-            } else {
-                $this->wait($functions);
-            }
+        $timeout = max(0, $timeout);
+        while (!empty($this->published_messages)) {
+            $this->wait($functions, false, $timeout);
         }
     }
 
