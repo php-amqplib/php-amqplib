@@ -22,7 +22,7 @@ class DirectExchangeTest extends ChannelTestCase
     {
         $this->connection->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'direct', false, true, false);
+        $this->channel->exchange_declare($this->exchange->name, 'direct', false, false, false);
     }
 
     /**
@@ -33,7 +33,7 @@ class DirectExchangeTest extends ChannelTestCase
     {
         $this->channel->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'direct', false, true, false);
+        $this->channel->exchange_declare($this->exchange->name, 'direct', false, false, false);
     }
 
     /**
