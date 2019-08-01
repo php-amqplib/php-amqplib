@@ -7,6 +7,7 @@ use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
+use PhpAmqpLib\Helper\SocketConstants;
 
 class StreamIO extends AbstractIO
 {
@@ -72,10 +73,6 @@ class StreamIO extends AbstractIO
             } else {
                 $this->protocol = 'ssl';
             }
-        }
-
-        if (!defined('SOCKET_EAGAIN')) {
-            define('SOCKET_EAGAIN', SOCKET_EWOULDBLOCK);
         }
     }
 
@@ -243,15 +240,16 @@ class StreamIO extends AbstractIO
                 $this->cleanup_error_handler();
             } catch (\ErrorException $e) {
                 $code = $this->last_error['errno'];
+                $constants = SocketConstants::getInstance();
                 switch ($code) {
-                    case SOCKET_EPIPE:
-                    case SOCKET_ENETDOWN:
-                    case SOCKET_ENETUNREACH:
-                    case SOCKET_ENETRESET:
-                    case SOCKET_ECONNABORTED:
-                    case SOCKET_ECONNRESET:
-                    case SOCKET_ECONNREFUSED:
-                    case SOCKET_ETIMEDOUT:
+                    case $constants->SOCKET_EPIPE:
+                    case $constants->SOCKET_ENETDOWN:
+                    case $constants->SOCKET_ENETUNREACH:
+                    case $constants->SOCKET_ENETRESET:
+                    case $constants->SOCKET_ECONNABORTED:
+                    case $constants->SOCKET_ECONNRESET:
+                    case $constants->SOCKET_ECONNREFUSED:
+                    case $constants->SOCKET_ETIMEDOUT:
                         $this->close();
                         throw new AMQPConnectionClosedException(socket_strerror($code), $code, $e);
                     default:
@@ -291,12 +289,13 @@ class StreamIO extends AbstractIO
     public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         $code = $this->extract_error_code($errstr);
+        $constants = SocketConstants::getInstance();
         switch ($code) {
             // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
-            case SOCKET_EAGAIN:
-            case SOCKET_EWOULDBLOCK:
+            case $constants->SOCKET_EAGAIN:
+            case $constants->SOCKET_EWOULDBLOCK:
             // stream_select warning that it has been interrupted by a signal - EINTR
-            case SOCKET_EINTR:
+            case $constants->SOCKET_EINTR:
                 return;
         }
 
