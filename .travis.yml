@@ -8,14 +8,15 @@ matrix:
     - php: 7.2
     - php: 7.3
     - php: 7.4snapshot
-    - php: nightly
   allow_failures:
-    - php: nightly
     - php: 7.4snapshot
 
 # This triggers builds to run on the new TravisCI infrastructure.
 # See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: false
+
+services:
+  - docker
 
 addons:
   apt:
@@ -26,6 +27,15 @@ cache:
   directories:
     - $HOME/.composer
     - vendor
+
+before_install:
+  - docker pull shopify/toxiproxy
+  - docker run -d --rm --net=host -p 8474:8474 -p 5673:5673 shopify/toxiproxy
+  - docker ps -a
+
+env:
+  global:
+    - TOXIPROXY_HOST=localhost TOXIPROXY_AMQP_PORT=5673
 
 before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
