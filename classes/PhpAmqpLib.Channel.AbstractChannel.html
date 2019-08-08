@@ -155,6 +155,12 @@
         </a>
     </li>
 
+                                                                                                        <li class="method public">
+        <a href="#method_hasPendingMethods" title="hasPendingMethods :: ">
+            <span class="description"></span><pre>hasPendingMethods</pre>
+        </a>
+    </li>
+
                                                                                                                                                                 <li class="method public">
         <a href="#method_next_frame" title="next_frame :: ">
             <span class="description"></span><pre>next_frame</pre>
@@ -208,7 +214,7 @@
                                 <span class="description"></span><pre>extract_args</pre>
                             </a>
                         </li>
-                                                                                                                                                                                                                                <li class="method protected">
+                                                                                                                                                                                                                                                                    <li class="method protected">
                             <a href="#method_maybe_wait_for_content" title="maybe_wait_for_content :: ">
                                 <span class="description"></span><pre>maybe_wait_for_content</pre>
                             </a>
@@ -262,7 +268,7 @@
         </li>
         <li class="nav-header private">» Private
             <ul>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </ul>
         </li>
         <li class="nav-header">
             <i class="icon-custom icon-constant"></i> Constants
@@ -669,6 +675,35 @@
                             </div>
 
                         </div>
+                                            <a id="method_hasPendingMethods"></a>
+                        <div class="element clickable method public  method_hasPendingMethods" data-toggle="collapse" data-target=".method_hasPendingMethods .collapse">
+                            <h2>hasPendingMethods</h2>
+                            <pre>hasPendingMethods() : boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_maybe_wait_for_content"></a>
                         <div class="element clickable method protected  method_maybe_wait_for_content" data-toggle="collapse" data-target=".method_maybe_wait_for_content .collapse">
                             <h2>maybe_wait_for_content</h2>
@@ -699,7 +734,7 @@
                                             <a id="method_next_frame"></a>
                         <div class="element clickable method public  method_next_frame" data-toggle="collapse" data-target=".method_next_frame .collapse">
                             <h2>next_frame</h2>
-                            <pre>next_frame(integer $timeout) : array|mixed</pre>
+                            <pre>next_frame(integer|float|null $timeout) : array|mixed</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -714,7 +749,7 @@
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -903,7 +938,7 @@
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -1025,7 +1060,7 @@
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -1066,7 +1101,7 @@
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -1086,7 +1121,7 @@
                                             <a id="method_wait"></a>
                         <div class="element clickable method public  method_wait" data-toggle="collapse" data-target=".method_wait .collapse">
                             <h2>Wait for some expected AMQP methods and dispatch to them.</h2>
-                            <pre>wait(array $allowed_methods = null, boolean $non_blocking = false, integer $timeout) : mixed</pre>
+                            <pre>wait(array $allowed_methods = null, boolean $non_blocking = false, integer|float|null $timeout) : mixed</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -1105,6 +1140,10 @@ method.</p></div>
                                                         <dd></dd>
                                                                                                             <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
                                                         <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\ErrorException</dt>
+                                                        <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
                                             </tr>
@@ -1121,7 +1160,7 @@ method.</p></div>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -1215,9 +1254,9 @@ method.</p></div>
                                             
                                                                 <h3><i class="icon-custom icon-property"></i> Properties</h3>
                                                     <a id="property_PROTOCOL_CONSTANTS_CLASS"> </a>
-                            <div class="element clickable property  public property_PROTOCOL_CONSTANTS_CLASS" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
+                            <div class="element clickable property deprecated public property_PROTOCOL_CONSTANTS_CLASS" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
                                 <h2>PROTOCOL_CONSTANTS_CLASS</h2>
-                                <pre>PROTOCOL_CONSTANTS_CLASS : </pre>
+                                <pre>PROTOCOL_CONSTANTS_CLASS : string</pre>
                                 <div class="labels">
                                                                         <span class="label">static</span>                                </div>
                                 <div class="row collapse">
@@ -1227,15 +1266,24 @@ method.</p></div>
                                         <table class="table">
                                                                                             <tr>
                                                     <th>
-                                                        
+                                                        var
                                                     </th>
                                                     <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                            <tr>
+                                                    <th>
+                                                        deprecated
+                                                    </th>
+                                                    <td>
+                                                                                                                    
                                                                                                             </td>
                                                 </tr>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code></code>
+                                            <code>string</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -1649,7 +1697,7 @@ method.</p></div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 18 Jan 2018 00:22:33 +0000.<br/>
+            generated on Thu, 08 Aug 2019 16:34:16 +0000.<br/>
     </footer>
     </body>
 </html>

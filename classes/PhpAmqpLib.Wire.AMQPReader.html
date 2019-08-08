@@ -513,7 +513,7 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                             <a id="method_getTimeout"></a>
                         <div class="element clickable method public  method_getTimeout" data-toggle="collapse" data-target=".method_getTimeout .collapse">
                             <h2>getTimeout</h2>
-                            <pre>getTimeout() : integer</pre>
+                            <pre>getTimeout() : integer|float</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -534,7 +534,7 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
 
                                     
                                                                             <h3>Response</h3>
-                                        <code>integer</code><p></p>
+                                        <code>integer|float</code><p></p>
                                                                     </div>
                             </div>
 
@@ -558,7 +558,9 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                                     <dl>
                                                                                                             <dt>\RuntimeException</dt>
                                                         <dd></dd>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPDataReadException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPNoDataException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -1141,7 +1143,7 @@ seconds since the Unix epoch in 1-second resolution.</h2>
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPDataReadException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -1202,7 +1204,7 @@ or a timeout.</p></div>
                                             <a id="method_setTimeout"></a>
                         <div class="element clickable method public  method_setTimeout" data-toggle="collapse" data-target=".method_setTimeout .collapse">
                             <h2>Sets the timeout (second)</h2>
-                            <pre>setTimeout(integer $timeout) </pre>
+                            <pre>setTimeout(integer|float|null $timeout) </pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -1224,7 +1226,7 @@ or a timeout.</p></div>
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -1292,9 +1294,11 @@ or a timeout.</p></div>
                                                 <td>
                                                     <dl>
                                                                                                             <dt>\PhpAmqpLib\Exception\AMQPIOWaitException</dt>
-                                                        <dd></dd>
+                                                        <dd><p>on network errors</p></dd>
                                                                                                             <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
-                                                        <dd></dd>
+                                                        <dd><p>when timeout is set and no data received</p></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPNoDataException</dt>
+                                                        <dd><p>when no data is ready to read from IO</p></dd>
                                                                                                                                                             </dl>
                                                 </td>
                                             </tr>
@@ -1631,7 +1635,7 @@ or a timeout.</p></div>
                                                     <a id="property_timeout"> </a>
                             <div class="element clickable property  protected property_timeout" data-toggle="collapse" data-target=".property_timeout .collapse">
                                 <h2>timeout</h2>
-                                <pre>timeout : integer</pre>
+                                <pre>timeout : integer|float|null</pre>
                                 <div class="labels">
                                                                                                         </div>
                                 <div class="row collapse">
@@ -1650,7 +1654,7 @@ or a timeout.</p></div>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code>integer</code>
+                                            <code>integer|float|null</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -1752,7 +1756,7 @@ or a timeout.</p></div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 18 Jan 2018 00:22:33 +0000.<br/>
+            generated on Thu, 08 Aug 2019 16:34:16 +0000.<br/>
     </footer>
     </body>
 </html>

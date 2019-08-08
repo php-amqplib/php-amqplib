@@ -271,7 +271,25 @@ Beware that only non-transactional channels may be put into confirm mode and vic
         </a>
     </li>
 
-                                                                                                                                                                                                                                                                                <li class="method public inherited">
+                                                                                                                                                                <li class="method public inherited">
+        <a href="#method_hasPendingMethods" title="hasPendingMethods :: ">
+            <span class="description"></span><pre>hasPendingMethods</pre>
+        </a>
+    </li>
+
+                                                                                                                                                                <li class="method public">
+        <a href="#method_is_consuming" title="is_consuming :: ">
+            <span class="description"></span><pre>is_consuming</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_is_open" title="is_open :: ">
+            <span class="description"></span><pre>is_open</pre>
+        </a>
+    </li>
+
+                                                                                                                                                                <li class="method public inherited">
         <a href="#method_next_frame" title="next_frame :: ">
             <span class="description"></span><pre>next_frame</pre>
         </a>
@@ -557,12 +575,12 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                 <span class="description"></span><pre>getTicket</pre>
                             </a>
                         </li>
-                                                                                <li class="method protected">
+                                                                                                                    <li class="method protected">
                             <a href="#method_internal_ack_handler" title="internal_ack_handler :: Handles the deletion of messages from this-&gt;publishedMessages and dispatches them to the $handler">
                                 <span class="description">Handles the deletion of messages from this-&gt;publishedMessages and dispatches them to the $handler</span><pre>internal_ack_handler</pre>
                             </a>
                         </li>
-                                                                                <li class="method protected inherited">
+                                                                                                                                                        <li class="method protected inherited">
                             <a href="#method_maybe_wait_for_content" title="maybe_wait_for_content :: ">
                                 <span class="description"></span><pre>maybe_wait_for_content</pre>
                             </a>
@@ -666,7 +684,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
         </li>
         <li class="nav-header private">» Private
             <ul>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li class="method private">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <li class="method private">
                             <a href="#method_pre_publish" title="pre_publish :: ">
                                 <span class="description"></span><pre>pre_publish</pre>
                             </a>
@@ -775,7 +793,16 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -926,7 +953,16 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1029,7 +1065,16 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1141,7 +1186,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                             <a id="method_basic_get"></a>
                         <div class="element clickable method public  method_basic_get" data-toggle="collapse" data-target=".method_basic_get .collapse">
                             <h2>Direct access to a queue if no message was available in the queue, return null</h2>
-                            <pre>basic_get(string $queue = &#039;&#039;, boolean $no_ack = false, integer $ticket = null) : mixed</pre>
+                            <pre>basic_get(string $queue = &#039;&#039;, boolean $no_ack = false, integer|null $ticket = null) : mixed</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -1151,7 +1196,16 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1164,7 +1218,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -1320,7 +1374,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                             <a id="method_basic_publish"></a>
                         <div class="element clickable method public  method_basic_publish" data-toggle="collapse" data-target=".method_basic_publish .collapse">
                             <h2>Publishes a message</h2>
-                            <pre>basic_publish(\PhpAmqpLib\Message\AMQPMessage $msg, string $exchange = &#039;&#039;, string $routing_key = &#039;&#039;, boolean $mandatory = false, boolean $immediate = false, integer $ticket = null) </pre>
+                            <pre>basic_publish(\PhpAmqpLib\Message\AMQPMessage $msg, string $exchange = &#039;&#039;, string $routing_key = &#039;&#039;, boolean $mandatory = false, boolean $immediate = false, integer|null $ticket = null) </pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -1362,7 +1416,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -1382,7 +1436,16 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1449,7 +1512,16 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1565,7 +1637,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                             <a id="method_batch_basic_publish"></a>
                         <div class="element clickable method public  method_batch_basic_publish" data-toggle="collapse" data-target=".method_batch_basic_publish .collapse">
                             <h2>batch_basic_publish</h2>
-                            <pre>batch_basic_publish(\PhpAmqpLib\Message\AMQPMessage $msg, string $exchange = &#039;&#039;, string $routing_key = &#039;&#039;, boolean $mandatory = false, boolean $immediate = false, integer $ticket = null) </pre>
+                            <pre>batch_basic_publish(\PhpAmqpLib\Message\AMQPMessage $msg, string $exchange = &#039;&#039;, string $routing_key = &#039;&#039;, boolean $mandatory = false, boolean $immediate = false, integer|null $ticket = null) </pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -1607,7 +1679,7 @@ Alias of AMQPChannel::do_close()</span><pre>channel_close_ok</pre>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -1857,7 +1929,16 @@ Alias of AMQPChannel::do_close()</h2>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1893,7 +1974,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2114,7 +2204,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_exchange_bind"></a>
                         <div class="element clickable method public  method_exchange_bind" data-toggle="collapse" data-target=".method_exchange_bind .collapse">
                             <h2>Binds dest exchange to source exchange</h2>
-                            <pre>exchange_bind(string $destination, string $source, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = null, integer $ticket = null) : mixed|null</pre>
+                            <pre>exchange_bind(string $destination, string $source, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = array(), integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -2124,7 +2214,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2149,7 +2248,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2193,7 +2292,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_exchange_declare"></a>
                         <div class="element clickable method public  method_exchange_declare" data-toggle="collapse" data-target=".method_exchange_declare .collapse">
                             <h2>Declares exchange</h2>
-                            <pre>exchange_declare(string $exchange, string $type, boolean $passive = false, boolean $durable = false, boolean $auto_delete = true, boolean $internal = false, boolean $nowait = false, array $arguments = null, integer $ticket = null) : mixed|null</pre>
+                            <pre>exchange_declare(string $exchange, string $type, boolean $passive = false, boolean $durable = false, boolean $auto_delete = true, boolean $internal = false, boolean $nowait = false, array $arguments = array(), integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -2203,7 +2302,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2240,7 +2348,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2284,7 +2392,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_exchange_delete"></a>
                         <div class="element clickable method public  method_exchange_delete" data-toggle="collapse" data-target=".method_exchange_delete .collapse">
                             <h2>Deletes an exchange</h2>
-                            <pre>exchange_delete(string $exchange, boolean $if_unused = false, boolean $nowait = false, null $ticket = null) : mixed|null</pre>
+                            <pre>exchange_delete(string $exchange, boolean $if_unused = false, boolean $nowait = false, integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -2294,7 +2402,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2311,7 +2428,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>null</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2355,7 +2472,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_exchange_unbind"></a>
                         <div class="element clickable method public  method_exchange_unbind" data-toggle="collapse" data-target=".method_exchange_unbind .collapse">
                             <h2>Unbinds dest exchange from source exchange</h2>
-                            <pre>exchange_unbind(string $destination, string $source, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = null, integer $ticket = null) : mixed</pre>
+                            <pre>exchange_unbind(string $destination, string $source, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = array(), integer|null $ticket = null) : mixed</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -2365,7 +2482,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2390,7 +2516,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2471,7 +2597,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2698,7 +2833,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_getTicket"></a>
                         <div class="element clickable method protected  method_getTicket" data-toggle="collapse" data-target=".method_getTicket .collapse">
                             <h2>getTicket</h2>
-                            <pre>getTicket(integer $ticket) : integer</pre>
+                            <pre>getTicket(integer|null $ticket) : integer</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -2713,11 +2848,40 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
                                         <code>integer</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_hasPendingMethods"></a>
+                        <div class="element clickable method public  method_hasPendingMethods inherited" data-toggle="collapse" data-target=".method_hasPendingMethods .collapse">
+                            <h2>hasPendingMethods</h2>
+                            <pre>hasPendingMethods() : boolean</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
                                                                     </div>
                             </div>
 
@@ -2762,6 +2926,64 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                             </div>
 
                         </div>
+                                            <a id="method_is_consuming"></a>
+                        <div class="element clickable method public  method_is_consuming" data-toggle="collapse" data-target=".method_is_consuming .collapse">
+                            <h2>is_consuming</h2>
+                            <pre>is_consuming() : boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_is_open"></a>
+                        <div class="element clickable method public  method_is_open" data-toggle="collapse" data-target=".method_is_open .collapse">
+                            <h2>is_open</h2>
+                            <pre>is_open() : boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_maybe_wait_for_content"></a>
                         <div class="element clickable method protected  method_maybe_wait_for_content inherited" data-toggle="collapse" data-target=".method_maybe_wait_for_content .collapse">
                             <h2>maybe_wait_for_content</h2>
@@ -2792,7 +3014,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_next_frame"></a>
                         <div class="element clickable method public  method_next_frame inherited" data-toggle="collapse" data-target=".method_next_frame .collapse">
                             <h2>next_frame</h2>
-                            <pre>next_frame(integer $timeout) : array|mixed</pre>
+                            <pre>next_frame(integer|float|null $timeout) : array|mixed</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -2807,7 +3029,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2951,7 +3173,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_queue_bind"></a>
                         <div class="element clickable method public  method_queue_bind" data-toggle="collapse" data-target=".method_queue_bind .collapse">
                             <h2>Binds queue to an exchange</h2>
-                            <pre>queue_bind(string $queue, string $exchange, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = null, integer $ticket = null) : mixed|null</pre>
+                            <pre>queue_bind(string $queue, string $exchange, string $routing_key = &#039;&#039;, boolean $nowait = false, array $arguments = array(), integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -2961,7 +3183,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -2986,7 +3217,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -3030,7 +3261,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_queue_declare"></a>
                         <div class="element clickable method public  method_queue_declare" data-toggle="collapse" data-target=".method_queue_declare .collapse">
                             <h2>Declares queue, creates if needed</h2>
-                            <pre>queue_declare(string $queue = &#039;&#039;, boolean $passive = false, boolean $durable = false, boolean $exclusive = false, boolean $auto_delete = true, boolean $nowait = false, array $arguments = null, integer $ticket = null) : mixed|null</pre>
+                            <pre>queue_declare(string $queue = &#039;&#039;, boolean $passive = false, boolean $durable = false, boolean $exclusive = false, boolean $auto_delete = true, boolean $nowait = false, array|\PhpAmqpLib\Wire\AMQPTable $arguments = array(), integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -3040,7 +3271,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -3069,11 +3309,11 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$arguments</h4>
-                                                <code>array</code><p></p>
+                                                <code>array|<a href="../classes/PhpAmqpLib.Wire.AMQPTable.html">\PhpAmqpLib\Wire\AMQPTable</a></code><p></p>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -3112,7 +3352,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_queue_delete"></a>
                         <div class="element clickable method public  method_queue_delete" data-toggle="collapse" data-target=".method_queue_delete .collapse">
                             <h2>Deletes a queue</h2>
-                            <pre>queue_delete(string $queue = &#039;&#039;, boolean $if_unused = false, boolean $if_empty = false, boolean $nowait = false, integer $ticket = null) : mixed|null</pre>
+                            <pre>queue_delete(string $queue = &#039;&#039;, boolean $if_unused = false, boolean $if_empty = false, boolean $nowait = false, integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -3122,7 +3362,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -3143,7 +3392,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -3182,7 +3431,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_queue_purge"></a>
                         <div class="element clickable method public  method_queue_purge" data-toggle="collapse" data-target=".method_queue_purge .collapse">
                             <h2>Purges a queue</h2>
-                            <pre>queue_purge(string $queue = &#039;&#039;, boolean $nowait = false, integer $ticket = null) : mixed|null</pre>
+                            <pre>queue_purge(string $queue = &#039;&#039;, boolean $nowait = false, integer|null $ticket = null) : mixed|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -3192,7 +3441,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -3205,7 +3463,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -3244,7 +3502,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_queue_unbind"></a>
                         <div class="element clickable method public  method_queue_unbind" data-toggle="collapse" data-target=".method_queue_unbind .collapse">
                             <h2>Unbind queue from an exchange</h2>
-                            <pre>queue_unbind(string $queue, string $exchange, string $routing_key = &#039;&#039;, array $arguments = null, integer $ticket = null) : mixed</pre>
+                            <pre>queue_unbind(string $queue, string $exchange, string $routing_key = &#039;&#039;, array $arguments = array(), integer|null $ticket = null) : mixed</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -3254,7 +3512,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -3275,7 +3542,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$ticket</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -3553,7 +3820,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -3614,7 +3890,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -3675,7 +3960,16 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -3740,7 +4034,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -3862,7 +4156,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -3903,7 +4197,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -3923,7 +4217,7 @@ Beware that only non-transactional channels may be put into confirm mode and vic
                                             <a id="method_wait"></a>
                         <div class="element clickable method public  method_wait inherited" data-toggle="collapse" data-target=".method_wait .collapse">
                             <h2>Wait for some expected AMQP methods and dispatch to them.</h2>
-                            <pre>wait(array $allowed_methods = null, boolean $non_blocking = false, integer $timeout) : mixed</pre>
+                            <pre>wait(array $allowed_methods = null, boolean $non_blocking = false, integer|float|null $timeout) : mixed</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -3942,6 +4236,10 @@ method.</p></div>
                                                         <dd></dd>
                                                                                                             <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
                                                         <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\ErrorException</dt>
+                                                        <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
                                             </tr>
@@ -3958,7 +4256,7 @@ method.</p></div>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -4114,7 +4412,16 @@ method.</p></div>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>if the specified operation timeout was exceeded</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -4174,32 +4481,6 @@ method.</p></div>
                             </div>
                                             
                                                                 <h3><i class="icon-custom icon-property"></i> Properties</h3>
-                                                    <a id="property_callbacks"> </a>
-                            <div class="element clickable property  public property_callbacks" data-toggle="collapse" data-target=".property_callbacks .collapse">
-                                <h2>callbacks</h2>
-                                <pre>callbacks : array</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>array</code>
-                                                                            </div>
-                                </div>
-                            </div>
                                                     <a id="property_is_open"> </a>
                             <div class="element clickable property  protected property_is_open" data-toggle="collapse" data-target=".property_is_open .collapse">
                                 <h2>Whether or not the channel has been &quot;opened&quot;</h2>
@@ -4553,10 +4834,36 @@ until they get ack&#039;ed or nack&#039;ed</h2>
                                                                             </div>
                                 </div>
                             </div>
+                                                    <a id="property_channel_rpc_timeout"> </a>
+                            <div class="element clickable property  private property_channel_rpc_timeout" data-toggle="collapse" data-target=".property_channel_rpc_timeout .collapse">
+                                <h2>Maximum time to wait for operations on this channel, in seconds.</h2>
+                                <pre>channel_rpc_timeout : float</pre>
+                                <div class="labels">
+                                                                                                        </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
                                                     <a id="property_PROTOCOL_CONSTANTS_CLASS"> </a>
-                            <div class="element clickable property  public property_PROTOCOL_CONSTANTS_CLASS inherited" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
+                            <div class="element clickable property deprecated public property_PROTOCOL_CONSTANTS_CLASS inherited" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
                                 <h2>PROTOCOL_CONSTANTS_CLASS</h2>
-                                <pre>PROTOCOL_CONSTANTS_CLASS : </pre>
+                                <pre>PROTOCOL_CONSTANTS_CLASS : string</pre>
                                 <div class="labels">
                                     <span class="label">inherited</span>                                    <span class="label">static</span>                                </div>
                                 <div class="row collapse">
@@ -4566,15 +4873,24 @@ until they get ack&#039;ed or nack&#039;ed</h2>
                                         <table class="table">
                                                                                             <tr>
                                                     <th>
-                                                        
+                                                        var
                                                     </th>
                                                     <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                            <tr>
+                                                    <th>
+                                                        deprecated
+                                                    </th>
+                                                    <td>
+                                                                                                                    
                                                                                                             </td>
                                                 </tr>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code></code>
+                                            <code>string</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -4962,7 +5278,7 @@ until they get ack&#039;ed or nack&#039;ed</h2>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 18 Jan 2018 00:22:33 +0000.<br/>
+            generated on Thu, 08 Aug 2019 16:34:16 +0000.<br/>
     </footer>
     </body>
 </html>

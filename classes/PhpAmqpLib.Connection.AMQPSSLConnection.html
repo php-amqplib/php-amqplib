@@ -146,6 +146,12 @@ create that object if it doesn&#039;t already exist.</span><pre>channel</pre>
     </li>
 
                                                                                                         <li class="method public inherited">
+        <a href="#method_checkHeartBeat" title="checkHeartBeat :: Check connection heartbeat if enabled.">
+            <span class="description">Check connection heartbeat if enabled.</span><pre>checkHeartBeat</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
         <a href="#method_close" title="close :: Requests a connection close">
             <span class="description">Requests a connection close</span><pre>close</pre>
         </a>
@@ -154,6 +160,12 @@ create that object if it doesn&#039;t already exist.</span><pre>channel</pre>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <li class="method public inherited">
         <a href="#method_connectOnConstruct" title="connectOnConstruct :: Should the connection be attempted during construction?">
             <span class="description">Should the connection be attempted during construction?</span><pre>connectOnConstruct</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_create_connection" title="create_connection :: ">
+            <span class="description"></span><pre>create_connection</pre>
         </a>
     </li>
 
@@ -181,7 +193,19 @@ create that object if it doesn&#039;t already exist.</span><pre>channel</pre>
         </a>
     </li>
 
-                                                                                                                                                                <li class="method public inherited">
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getIO" title="getIO :: ">
+            <span class="description"></span><pre>getIO</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_getLibraryProperties" title="getLibraryProperties :: Get the library properties for populating the client protocol information">
+            <span class="description">Get the library properties for populating the client protocol information</span><pre>getLibraryProperties</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
         <a href="#method_getMethodQueue" title="getMethodQueue :: ">
             <span class="description"></span><pre>getMethodQueue</pre>
         </a>
@@ -202,6 +226,12 @@ create that object if it doesn&#039;t already exist.</span><pre>channel</pre>
                                                                                                         <li class="method public inherited">
         <a href="#method_getSocket" title="getSocket :: ">
             <span class="description"></span><pre>getSocket</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public inherited">
+        <a href="#method_hasPendingMethods" title="hasPendingMethods :: ">
+            <span class="description"></span><pre>hasPendingMethods</pre>
         </a>
     </li>
 
@@ -268,6 +298,12 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
     </li>
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <li class="method public inherited">
+        <a href="#method_validate_host" title="validate_host :: ">
+            <span class="description"></span><pre>validate_host</pre>
+        </a>
+    </li>
+
+                                                                                                                                                                <li class="method public inherited">
         <a href="#method_wait" title="wait :: Wait for some expected AMQP methods and dispatch to them.">
             <span class="description">Wait for some expected AMQP methods and dispatch to them.</span><pre>wait</pre>
         </a>
@@ -294,7 +330,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                 <span class="description"></span><pre>build_method_signature</pre>
                             </a>
                         </li>
-                                                                                                                                                        <li class="method protected inherited">
+                                                                                                                                                                                            <li class="method protected inherited">
                             <a href="#method_close_input" title="close_input :: ">
                                 <span class="description"></span><pre>close_input</pre>
                             </a>
@@ -359,7 +395,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                 <span class="description">Handles connection unblocked notifications</span><pre>connection_unblocked</pre>
                             </a>
                         </li>
-                                                                                                                                                        <li class="method protected inherited">
+                                                                                                                                                                                            <li class="method protected inherited">
                             <a href="#method_createMessage" title="createMessage :: ">
                                 <span class="description"></span><pre>createMessage</pre>
                             </a>
@@ -384,12 +420,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                 <span class="description"></span><pre>extract_args</pre>
                             </a>
                         </li>
-                                                                                                                                                                                            <li class="method protected inherited">
-                            <a href="#method_getIO" title="getIO :: ">
-                                <span class="description"></span><pre>getIO</pre>
-                            </a>
-                        </li>
-                                                                                                                                                                                                                                                                    <li class="method protected inherited">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li class="method protected inherited">
                             <a href="#method_maybe_wait_for_content" title="maybe_wait_for_content :: ">
                                 <span class="description"></span><pre>maybe_wait_for_content</pre>
                             </a>
@@ -435,6 +466,11 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                             </a>
                         </li>
                                                                                 <li class="method protected inherited">
+                            <a href="#method_try_create_connection" title="try_create_connection :: ">
+                                <span class="description"></span><pre>try_create_connection</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected inherited">
                             <a href="#method_validate_body_frame" title="validate_body_frame :: ">
                                 <span class="description"></span><pre>validate_body_frame</pre>
                             </a>
@@ -454,7 +490,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                 <span class="description"></span><pre>validate_header_frame</pre>
                             </a>
                         </li>
-                                                                                <li class="method protected inherited">
+                                                                                                                    <li class="method protected inherited">
                             <a href="#method_validate_method_frame" title="validate_method_frame :: ">
                                 <span class="description"></span><pre>validate_method_frame</pre>
                             </a>
@@ -498,12 +534,12 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
         </li>
         <li class="nav-header private">» Private
             <ul>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <li class="method private">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <li class="method private">
                             <a href="#method_create_ssl_context" title="create_ssl_context :: ">
                                 <span class="description"></span><pre>create_ssl_context</pre>
                             </a>
                         </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </ul>
         </li>
         <li class="nav-header">
             <i class="icon-custom icon-constant"></i> Constants
@@ -713,6 +749,57 @@ create that object if it doesn&#039;t already exist.</h2>
                                                                             
                                                                             <h3>Response</h3>
                                         <code><a href="../classes/PhpAmqpLib.Channel.AMQPChannel.html">\PhpAmqpLib\Channel\AMQPChannel</a></code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_checkHeartBeat"></a>
+                        <div class="element clickable method public  method_checkHeartBeat inherited" data-toggle="collapse" data-target=".method_checkHeartBeat .collapse">
+                            <h2>Check connection heartbeat if enabled.</h2>
+                            <pre>checkHeartBeat() </pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPHeartbeatMissedException</dt>
+                                                        <dd><p>If too much time passed since last connection activity.</p></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPConnectionClosedException</dt>
+                                                        <dd><p>If connection was closed due to network issues or timeouts.</p></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPSocketException</dt>
+                                                        <dd><p>If connection was already closed.</p></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd><p>If heartbeat write takes too much time.</p></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPIOException</dt>
+                                                        <dd><p>If other connection problems occurred.</p></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
+
+                                    
                                                                     </div>
                             </div>
 
@@ -1209,6 +1296,49 @@ create that object if it doesn&#039;t already exist.</h2>
                             </div>
 
                         </div>
+                                            <a id="method_create_connection"></a>
+                        <div class="element clickable method public  method_create_connection inherited" data-toggle="collapse" data-target=".method_create_connection .collapse">
+                            <h2>create_connection</h2>
+                            <pre>create_connection( $hosts,  $options = array()) </pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$hosts</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$options</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_create_ssl_context"></a>
                         <div class="element clickable method private  method_create_ssl_context" data-toggle="collapse" data-target=".method_create_ssl_context .collapse">
                             <h2>create_ssl_context</h2>
@@ -1532,9 +1662,47 @@ create that object if it doesn&#039;t already exist.</h2>
 
                         </div>
                                             <a id="method_getIO"></a>
-                        <div class="element clickable method protected  method_getIO inherited" data-toggle="collapse" data-target=".method_getIO .collapse">
+                        <div class="element clickable method public deprecated method_getIO inherited" data-toggle="collapse" data-target=".method_getIO .collapse">
                             <h2>getIO</h2>
                             <pre>getIO() : \PhpAmqpLib\Wire\IO\AbstractIO</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    deprecated
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code><a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">\PhpAmqpLib\Wire\IO\AbstractIO</a></code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getLibraryProperties"></a>
+                        <div class="element clickable method public  method_getLibraryProperties inherited" data-toggle="collapse" data-target=".method_getLibraryProperties .collapse">
+                            <h2>Get the library properties for populating the client protocol information</h2>
+                            <pre>getLibraryProperties() : array</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -1555,7 +1723,7 @@ create that object if it doesn&#039;t already exist.</h2>
 
                                     
                                                                             <h3>Response</h3>
-                                        <code><a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">\PhpAmqpLib\Wire\IO\AbstractIO</a></code><p></p>
+                                        <code>array</code><p></p>
                                                                     </div>
                             </div>
 
@@ -1657,9 +1825,47 @@ create that object if it doesn&#039;t already exist.</h2>
 
                         </div>
                                             <a id="method_getSocket"></a>
-                        <div class="element clickable method public  method_getSocket inherited" data-toggle="collapse" data-target=".method_getSocket .collapse">
+                        <div class="element clickable method public deprecated method_getSocket inherited" data-toggle="collapse" data-target=".method_getSocket .collapse">
                             <h2>getSocket</h2>
-                            <pre>getSocket() : \PhpAmqpLib\Wire\IO\SocketIO</pre>
+                            <pre>getSocket() : resource</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    deprecated
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        <p>No direct access to communication socket should be available.</p>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>resource</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_hasPendingMethods"></a>
+                        <div class="element clickable method public  method_hasPendingMethods inherited" data-toggle="collapse" data-target=".method_hasPendingMethods .collapse">
+                            <h2>hasPendingMethods</h2>
+                            <pre>hasPendingMethods() : boolean</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -1680,7 +1886,7 @@ create that object if it doesn&#039;t already exist.</h2>
 
                                     
                                                                             <h3>Response</h3>
-                                        <code><a href="../classes/PhpAmqpLib.Wire.IO.SocketIO.html">\PhpAmqpLib\Wire\IO\SocketIO</a></code><p></p>
+                                        <code>boolean</code><p></p>
                                                                     </div>
                             </div>
 
@@ -1744,7 +1950,7 @@ create that object if it doesn&#039;t already exist.</h2>
                                             <a id="method_next_frame"></a>
                         <div class="element clickable method public  method_next_frame inherited" data-toggle="collapse" data-target=".method_next_frame .collapse">
                             <h2>next_frame</h2>
-                            <pre>next_frame(integer $timeout) : array|mixed</pre>
+                            <pre>next_frame(integer|float|null $timeout) : array|mixed</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -1759,7 +1965,7 @@ create that object if it doesn&#039;t already exist.</h2>
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2342,6 +2548,65 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                             </div>
 
                         </div>
+                                            <a id="method_try_create_connection"></a>
+                        <div class="element clickable method protected  method_try_create_connection inherited" data-toggle="collapse" data-target=".method_try_create_connection .collapse">
+                            <h2>try_create_connection</h2>
+                            <pre>try_create_connection( $host,  $port,  $user,  $password,  $vhost,  $options) </pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$host</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$port</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$user</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$password</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$vhost</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$options</h4>
+                                                <code></code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_validate_body_frame"></a>
                         <div class="element clickable method protected  method_validate_body_frame inherited" data-toggle="collapse" data-target=".method_validate_body_frame .collapse">
                             <h2>validate_body_frame</h2>
@@ -2366,7 +2631,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -2488,7 +2753,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -2499,6 +2764,45 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                                                                     <div class="subelement argument">
                                                 <h4>$frame_type</h4>
                                                 <code>integer</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_validate_host"></a>
+                        <div class="element clickable method public  method_validate_host inherited" data-toggle="collapse" data-target=".method_validate_host .collapse">
+                            <h2>validate_host</h2>
+                            <pre>validate_host( $host) </pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$host</h4>
+                                                <code></code><p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -2529,7 +2833,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                                 <th>Throws</th>
                                                 <td>
                                                     <dl>
-                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPInvalidFrameException</dt>
                                                         <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
@@ -2549,7 +2853,7 @@ it&#039;s useful after the fork when you don&#039;t want to close parent process
                                             <a id="method_wait"></a>
                         <div class="element clickable method public  method_wait inherited" data-toggle="collapse" data-target=".method_wait .collapse">
                             <h2>Wait for some expected AMQP methods and dispatch to them.</h2>
-                            <pre>wait(array $allowed_methods = null, boolean $non_blocking = false, integer $timeout) : mixed</pre>
+                            <pre>wait(array $allowed_methods = null, boolean $non_blocking = false, integer|float|null $timeout) : mixed</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -2568,6 +2872,10 @@ method.</p></div>
                                                         <dd></dd>
                                                                                                             <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
                                                         <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\ErrorException</dt>
+                                                        <dd></dd>
                                                                                                                                                             </dl>
                                                 </td>
                                             </tr>
@@ -2584,7 +2892,7 @@ method.</p></div>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2596,7 +2904,7 @@ method.</p></div>
                                             <a id="method_wait_channel"></a>
                         <div class="element clickable method protected  method_wait_channel inherited" data-toggle="collapse" data-target=".method_wait_channel .collapse">
                             <h2>Waits for a frame from the server destined for a particular channel.</h2>
-                            <pre>wait_channel(string $channel_id, integer $timeout) : array</pre>
+                            <pre>wait_channel(string $channel_id, integer|float|null $timeout) : array</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -2615,7 +2923,7 @@ method.</p></div>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2665,7 +2973,7 @@ method.</p></div>
                                             <a id="method_wait_frame"></a>
                         <div class="element clickable method protected  method_wait_frame inherited" data-toggle="collapse" data-target=".method_wait_frame .collapse">
                             <h2>Waits for a frame from the server</h2>
-                            <pre>wait_frame(integer $timeout) : array</pre>
+                            <pre>wait_frame(integer|float|null $timeout) : array</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -2693,7 +3001,7 @@ method.</p></div>
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|float|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -2705,7 +3013,7 @@ method.</p></div>
                                             <a id="method_write"></a>
                         <div class="element clickable method public  method_write inherited" data-toggle="collapse" data-target=".method_write .collapse">
                             <h2>write</h2>
-                            <pre>write( $data) </pre>
+                            <pre>write(string $data) </pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -2727,7 +3035,7 @@ method.</p></div>
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$data</h4>
-                                                <code></code><p></p>
+                                                <code>string</code><p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -2965,58 +3273,6 @@ method.</p></div>
                             </div>
                                             
                                                                 <h3><i class="icon-custom icon-property"></i> Properties</h3>
-                                                    <a id="property_LIBRARY_PROPERTIES"> </a>
-                            <div class="element clickable property  public property_LIBRARY_PROPERTIES inherited" data-toggle="collapse" data-target=".property_LIBRARY_PROPERTIES .collapse">
-                                <h2>LIBRARY_PROPERTIES</h2>
-                                <pre>LIBRARY_PROPERTIES : array</pre>
-                                <div class="labels">
-                                    <span class="label">inherited</span>                                    <span class="label">static</span>                                </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>array</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_channels"> </a>
-                            <div class="element clickable property  public property_channels inherited" data-toggle="collapse" data-target=".property_channels .collapse">
-                                <h2>channels</h2>
-                                <pre>channels : array&lt;mixed,\PhpAmqpLib\Channel\AMQPChannel&gt;</pre>
-                                <div class="labels">
-                                    <span class="label">inherited</span>                                                                    </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>array&lt;mixed,<a href="../classes/PhpAmqpLib.Channel.AMQPChannel.html">\PhpAmqpLib\Channel\AMQPChannel</a>&gt;</code>
-                                                                            </div>
-                                </div>
-                            </div>
                                                     <a id="property_version_major"> </a>
                             <div class="element clickable property  protected property_version_major inherited" data-toggle="collapse" data-target=".property_version_major .collapse">
                                 <h2>version_major</h2>
@@ -3381,10 +3637,10 @@ method.</p></div>
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_sock"> </a>
-                            <div class="element clickable property  protected property_sock inherited" data-toggle="collapse" data-target=".property_sock .collapse">
-                                <h2>sock</h2>
-                                <pre>sock : \PhpAmqpLib\Wire\IO\SocketIO</pre>
+                                                    <a id="property_last_frame"> </a>
+                            <div class="element clickable property  protected property_last_frame inherited" data-toggle="collapse" data-target=".property_last_frame .collapse">
+                                <h2>last_frame</h2>
+                                <pre>last_frame : float</pre>
                                 <div class="labels">
                                     <span class="label">inherited</span>                                                                    </div>
                                 <div class="row collapse">
@@ -3403,7 +3659,7 @@ method.</p></div>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code><a href="../classes/PhpAmqpLib.Wire.IO.SocketIO.html">\PhpAmqpLib\Wire\IO\SocketIO</a></code>
+                                            <code>float</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -3727,10 +3983,36 @@ method.</p></div>
                                                                             </div>
                                 </div>
                             </div>
+                                                    <a id="property_channel_rpc_timeout"> </a>
+                            <div class="element clickable property  private property_channel_rpc_timeout inherited" data-toggle="collapse" data-target=".property_channel_rpc_timeout .collapse">
+                                <h2>Maximum time to wait for channel operations, in seconds</h2>
+                                <pre>channel_rpc_timeout : float</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
                                                     <a id="property_PROTOCOL_CONSTANTS_CLASS"> </a>
-                            <div class="element clickable property  public property_PROTOCOL_CONSTANTS_CLASS inherited" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
+                            <div class="element clickable property deprecated public property_PROTOCOL_CONSTANTS_CLASS inherited" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
                                 <h2>PROTOCOL_CONSTANTS_CLASS</h2>
-                                <pre>PROTOCOL_CONSTANTS_CLASS : </pre>
+                                <pre>PROTOCOL_CONSTANTS_CLASS : string</pre>
                                 <div class="labels">
                                     <span class="label">inherited</span>                                    <span class="label">static</span>                                </div>
                                 <div class="row collapse">
@@ -3740,15 +4022,24 @@ method.</p></div>
                                         <table class="table">
                                                                                             <tr>
                                                     <th>
-                                                        
+                                                        var
                                                     </th>
                                                     <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                            <tr>
+                                                    <th>
+                                                        deprecated
+                                                    </th>
+                                                    <td>
+                                                                                                                    
                                                                                                             </td>
                                                 </tr>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code></code>
+                                            <code>string</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -4162,7 +4453,7 @@ method.</p></div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 18 Jan 2018 00:22:33 +0000.<br/>
+            generated on Thu, 08 Aug 2019 16:34:16 +0000.<br/>
     </footer>
     </body>
 </html>

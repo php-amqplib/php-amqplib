@@ -125,6 +125,12 @@
         </a>
     </li>
 
+                                                                                                        <li class="method public inherited">
+        <a href="#method_check_heartbeat" title="check_heartbeat :: Heartbeat logic: check connection health here">
+            <span class="description">Heartbeat logic: check connection health here</span><pre>check_heartbeat</pre>
+        </a>
+    </li>
+
                                                                                                                                                                 <li class="method public inherited">
         <a href="#method_close" title="close :: ">
             <span class="description"></span><pre>close</pre>
@@ -132,30 +138,24 @@
     </li>
 
                                                                                                         <li class="method public inherited">
-        <a href="#method_connect" title="connect :: ">
-            <span class="description"></span><pre>connect</pre>
+        <a href="#method_connect" title="connect :: Set ups the connection.">
+            <span class="description">Set ups the connection.</span><pre>connect</pre>
         </a>
     </li>
 
-                                                                                                        <li class="method public">
+                                                                                                        <li class="method public inherited">
         <a href="#method_disableHeartbeat" title="disableHeartbeat :: ">
             <span class="description"></span><pre>disableHeartbeat</pre>
         </a>
     </li>
 
-                                                                                                                                                                <li class="method public">
-        <a href="#method_error_handler" title="error_handler :: Internal error handler to deal with stream and socket errors that need to be ignored">
-            <span class="description">Internal error handler to deal with stream and socket errors that need to be ignored</span><pre>error_handler</pre>
+                                                                                                                                                                                                                        <li class="method public inherited">
+        <a href="#method_error_handler" title="error_handler :: Internal error handler to deal with stream and socket errors.">
+            <span class="description">Internal error handler to deal with stream and socket errors.</span><pre>error_handler</pre>
         </a>
     </li>
 
-                                                                                                        <li class="method public">
-        <a href="#method_get_socket" title="get_socket :: ">
-            <span class="description"></span><pre>get_socket</pre>
-        </a>
-    </li>
-
-                                                                                                        <li class="method public inherited">
+                                                                                                                                                                <li class="method public inherited">
         <a href="#method_getSocket" title="getSocket :: ">
             <span class="description"></span><pre>getSocket</pre>
         </a>
@@ -168,12 +168,6 @@
     </li>
 
                                                                                                         <li class="method public inherited">
-        <a href="#method_reconnect" title="reconnect :: ">
-            <span class="description"></span><pre>reconnect</pre>
-        </a>
-    </li>
-
-                                                                                                        <li class="method public">
         <a href="#method_reenableHeartbeat" title="reenableHeartbeat :: ">
             <span class="description"></span><pre>reenableHeartbeat</pre>
         </a>
@@ -185,7 +179,7 @@
         </a>
     </li>
 
-                                                                                                                                                                <li class="method public inherited">
+                                                                                                                                                                                                                                                                                <li class="method public inherited">
         <a href="#method_write" title="write :: ">
             <span class="description"></span><pre>write</pre>
         </a>
@@ -195,22 +189,47 @@
         </li>
         <li class="nav-header protected">» Protected
             <ul>
-                                                                                                                <li class="method protected">
-                            <a href="#method_check_heartbeat" title="check_heartbeat :: Heartbeat logic: check connection health here">
-                                <span class="description">Heartbeat logic: check connection health here</span><pre>check_heartbeat</pre>
+                                                                                                                                                    <li class="method protected inherited">
+                            <a href="#method_cleanup_error_handler" title="cleanup_error_handler :: throws an ErrorException if an error was handled">
+                                <span class="description">throws an ErrorException if an error was handled</span><pre>cleanup_error_handler</pre>
                             </a>
                         </li>
-                                                                                                                                                                                            <li class="method protected">
+                                                                                                                                                                                            <li class="method protected inherited">
+                            <a href="#method_do_select" title="do_select :: ">
+                                <span class="description"></span><pre>do_select</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected">
                             <a href="#method_enable_keepalive" title="enable_keepalive :: ">
                                 <span class="description"></span><pre>enable_keepalive</pre>
                             </a>
                         </li>
-                                                                                                                                                                                                                                                                                                                                                                                <li class="method protected">
+                                                                                                                    <li class="method protected">
+                            <a href="#method_extract_error_code" title="extract_error_code :: ">
+                                <span class="description"></span><pre>extract_error_code</pre>
+                            </a>
+                        </li>
+                                                                                                                    <li class="method protected inherited">
+                            <a href="#method_isPcntlSignalEnabled" title="isPcntlSignalEnabled :: ">
+                                <span class="description"></span><pre>isPcntlSignalEnabled</pre>
+                            </a>
+                        </li>
+                                                                                                                                                                                            <li class="method protected">
+                            <a href="#method_select_write" title="select_write :: ">
+                                <span class="description"></span><pre>select_write</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected inherited">
+                            <a href="#method_set_error_handler" title="set_error_handler :: Begin tracking errors and set the error handler">
+                                <span class="description">Begin tracking errors and set the error handler</span><pre>set_error_handler</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected">
                             <a href="#method_timed_out" title="timed_out :: ">
                                 <span class="description"></span><pre>timed_out</pre>
                             </a>
                         </li>
-                                                                                                                    <li class="method protected">
+                                                                                                                    <li class="method protected inherited">
                             <a href="#method_write_heartbeat" title="write_heartbeat :: Sends a heartbeat message">
                                 <span class="description">Sends a heartbeat message</span><pre>write_heartbeat</pre>
                             </a>
@@ -219,16 +238,16 @@
         </li>
         <li class="nav-header private">» Private
             <ul>
-                                                                                                                                                                                                                                                                                                                                                                                                                <li class="method private">
-                            <a href="#method_isPcntlSignalEnabled" title="isPcntlSignalEnabled :: ">
-                                <span class="description"></span><pre>isPcntlSignalEnabled</pre>
-                            </a>
-                        </li>
-                                                                                                                                                                                                                                                                                                            </ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </ul>
         </li>
         <li class="nav-header">
             <i class="icon-custom icon-constant"></i> Constants
             <ul>
+                                <li class="constant ">
+                    <a href="#constant_BUFFER_SIZE" title="BUFFER_SIZE :: ">
+                        <span class="description"></span><pre>BUFFER_SIZE</pre>
+                    </a>
+                </li>
                             </ul>
         </li>
     </ul>
@@ -263,7 +282,7 @@
                                                                 <a id="method___construct"></a>
                         <div class="element clickable method public  method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
                             <h2>__construct</h2>
-                            <pre>__construct(string $host, integer $port, float $connection_timeout, float $read_write_timeout, null $context = null, boolean $keepalive = false, integer $heartbeat) </pre>
+                            <pre>__construct(string $host, integer $port, float $connection_timeout, float $read_write_timeout = 130.0, null $context = null, boolean $keepalive = false, integer $heartbeat = 60,  $ssl_protocol = null) </pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -311,17 +330,57 @@
                                                 <h4>$heartbeat</h4>
                                                 <code>integer</code><p></p>
                                             </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$ssl_protocol</h4>
+                                                <code></code><p></p>
+                                            </div>
                                                                             
                                                                     </div>
                             </div>
 
                         </div>
                                             <a id="method_check_heartbeat"></a>
-                        <div class="element clickable method protected  method_check_heartbeat" data-toggle="collapse" data-target=".method_check_heartbeat .collapse">
+                        <div class="element clickable method public  method_check_heartbeat inherited" data-toggle="collapse" data-target=".method_check_heartbeat .collapse">
                             <h2>Heartbeat logic: check connection health here</h2>
-                            <pre>check_heartbeat() </pre>
+                            <pre>check_heartbeat() : void</pre>
                             <div class="labels">
-                                                                                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_cleanup_error_handler"></a>
+                        <div class="element clickable method protected  method_cleanup_error_handler inherited" data-toggle="collapse" data-target=".method_cleanup_error_handler .collapse">
+                            <h2>throws an ErrorException if an error was handled</h2>
+                            <pre>cleanup_error_handler() </pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -343,7 +402,16 @@
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\ErrorException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                     
                                                                     </div>
@@ -353,7 +421,7 @@
                                             <a id="method_close"></a>
                         <div class="element clickable method public  method_close inherited" data-toggle="collapse" data-target=".method_close .collapse">
                             <h2>close</h2>
-                            <pre>close() : mixed</pre>
+                            <pre>close() : void</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
 
@@ -373,16 +441,14 @@
                                                                                                                     </table>
 
                                     
-                                                                            <h3>Response</h3>
-                                        <code>mixed</code><p></p>
                                                                     </div>
                             </div>
 
                         </div>
                                             <a id="method_connect"></a>
                         <div class="element clickable method public  method_connect inherited" data-toggle="collapse" data-target=".method_connect .collapse">
-                            <h2>connect</h2>
-                            <pre>connect() : mixed</pre>
+                            <h2>Set ups the connection.</h2>
+                            <pre>connect() : void</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
 
@@ -399,21 +465,30 @@
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPIOException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                     
-                                                                            <h3>Response</h3>
-                                        <code>mixed</code><p></p>
                                                                     </div>
                             </div>
 
                         </div>
                                             <a id="method_disableHeartbeat"></a>
-                        <div class="element clickable method public  method_disableHeartbeat" data-toggle="collapse" data-target=".method_disableHeartbeat .collapse">
+                        <div class="element clickable method public  method_disableHeartbeat inherited" data-toggle="collapse" data-target=".method_disableHeartbeat .collapse">
                             <h2>disableHeartbeat</h2>
                             <pre>disableHeartbeat() : $this</pre>
                             <div class="labels">
-                                                                                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -433,6 +508,37 @@
                                     
                                                                             <h3>Response</h3>
                                         <code>$this</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_do_select"></a>
+                        <div class="element clickable method protected  method_do_select inherited" data-toggle="collapse" data-target=".method_do_select .collapse">
+                            <h2>do_select</h2>
+                            <pre>do_select(integer|null $sec, integer|null $usec) : integer|boolean</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$sec</h4>
+                                                <code>integer|null</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$usec</h4>
+                                                <code>integer|null</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>integer|boolean</code><p></p>
                                                                     </div>
                             </div>
 
@@ -481,11 +587,11 @@
 
                         </div>
                                             <a id="method_error_handler"></a>
-                        <div class="element clickable method public  method_error_handler" data-toggle="collapse" data-target=".method_error_handler .collapse">
-                            <h2>Internal error handler to deal with stream and socket errors that need to be ignored</h2>
-                            <pre>error_handler(integer $errno, string $errstr, string $errfile, integer $errline, array $errcontext = null) : null</pre>
+                        <div class="element clickable method public  method_error_handler inherited" data-toggle="collapse" data-target=".method_error_handler .collapse">
+                            <h2>Internal error handler to deal with stream and socket errors.</h2>
+                            <pre>error_handler(integer $errno, string $errstr, string $errfile, integer $errline, array $errcontext = null) : void</pre>
                             <div class="labels">
-                                                                                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -493,16 +599,7 @@
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                            <tr>
-                                                <th>Throws</th>
-                                                <td>
-                                                    <dl>
-                                                                                                            <dt>\ErrorException</dt>
-                                                        <dd></dd>
-                                                                                                                                                            </dl>
-                                                </td>
-                                            </tr>
-                                                                            </table>
+                                                                                                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -526,18 +623,43 @@
                                                 <code>array</code><p></p>
                                             </div>
                                                                             
-                                                                            <h3>Response</h3>
-                                        <code>null</code><p></p>
                                                                     </div>
                             </div>
 
                         </div>
-                                            <a id="method_get_socket"></a>
-                        <div class="element clickable method public  method_get_socket" data-toggle="collapse" data-target=".method_get_socket .collapse">
-                            <h2>get_socket</h2>
-                            <pre>get_socket() : resource</pre>
+                                            <a id="method_extract_error_code"></a>
+                        <div class="element clickable method protected  method_extract_error_code" data-toggle="collapse" data-target=".method_extract_error_code .collapse">
+                            <h2>extract_error_code</h2>
+                            <pre>extract_error_code(string $message) : integer</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$message</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>integer</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getSocket"></a>
+                        <div class="element clickable method public  method_getSocket inherited" data-toggle="collapse" data-target=".method_getSocket .collapse">
+                            <h2>getSocket</h2>
+                            <pre>getSocket() : resource</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
 
                             
                             <div class="row collapse">
@@ -561,41 +683,12 @@
                             </div>
 
                         </div>
-                                            <a id="method_getSocket"></a>
-                        <div class="element clickable method public  method_getSocket inherited" data-toggle="collapse" data-target=".method_getSocket .collapse">
-                            <h2>getSocket</h2>
-                            <pre>getSocket() : mixed</pre>
-                            <div class="labels">
-                                <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                    
-                                                                            <h3>Response</h3>
-                                        <code>mixed</code><p></p>
-                                                                    </div>
-                            </div>
-
-                        </div>
                                             <a id="method_isPcntlSignalEnabled"></a>
-                        <div class="element clickable method private  method_isPcntlSignalEnabled" data-toggle="collapse" data-target=".method_isPcntlSignalEnabled .collapse">
+                        <div class="element clickable method protected  method_isPcntlSignalEnabled inherited" data-toggle="collapse" data-target=".method_isPcntlSignalEnabled .collapse">
                             <h2>isPcntlSignalEnabled</h2>
                             <pre>isPcntlSignalEnabled() : boolean</pre>
                             <div class="labels">
-                                                                                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -622,7 +715,7 @@
                                             <a id="method_read"></a>
                         <div class="element clickable method public  method_read inherited" data-toggle="collapse" data-target=".method_read .collapse">
                             <h2>read</h2>
-                            <pre>read(integer $n) : mixed</pre>
+                            <pre>read(integer $len) : string</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
 
@@ -632,55 +725,43 @@
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPIOException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPSocketException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPConnectionClosedException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
-                                                <h4>$n</h4>
+                                                <h4>$len</h4>
                                                 <code>integer</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
-                                        <code>mixed</code><p></p>
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_reconnect"></a>
-                        <div class="element clickable method public  method_reconnect inherited" data-toggle="collapse" data-target=".method_reconnect .collapse">
-                            <h2>reconnect</h2>
-                            <pre>reconnect() : mixed</pre>
-                            <div class="labels">
-                                <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                    
-                                                                            <h3>Response</h3>
-                                        <code>mixed</code><p></p>
+                                        <code>string</code><p></p>
                                                                     </div>
                             </div>
 
                         </div>
                                             <a id="method_reenableHeartbeat"></a>
-                        <div class="element clickable method public  method_reenableHeartbeat" data-toggle="collapse" data-target=".method_reenableHeartbeat .collapse">
+                        <div class="element clickable method public  method_reenableHeartbeat inherited" data-toggle="collapse" data-target=".method_reenableHeartbeat .collapse">
                             <h2>reenableHeartbeat</h2>
                             <pre>reenableHeartbeat() : $this</pre>
                             <div class="labels">
-                                                                                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -707,9 +788,9 @@
                                             <a id="method_select"></a>
                         <div class="element clickable method public  method_select inherited" data-toggle="collapse" data-target=".method_select .collapse">
                             <h2>select</h2>
-                            <pre>select(integer $sec, integer $usec) : mixed</pre>
+                            <pre>select(integer|null $sec, integer|null $usec) : integer</pre>
                             <div class="labels">
-                                <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -717,20 +798,94 @@
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPIOException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$sec</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                                     <div class="subelement argument">
                                                 <h4>$usec</h4>
-                                                <code>integer</code><p></p>
+                                                <code>integer|null</code><p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
-                                        <code>mixed</code><p></p>
+                                        <code>integer</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_select_write"></a>
+                        <div class="element clickable method protected  method_select_write" data-toggle="collapse" data-target=".method_select_write .collapse">
+                            <h2>select_write</h2>
+                            <pre>select_write() : integer|boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>integer|boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_set_error_handler"></a>
+                        <div class="element clickable method protected  method_set_error_handler inherited" data-toggle="collapse" data-target=".method_set_error_handler .collapse">
+                            <h2>Begin tracking errors and set the error handler</h2>
+                            <pre>set_error_handler() </pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
                                                                     </div>
                             </div>
 
@@ -767,7 +922,7 @@
                                             <a id="method_write"></a>
                         <div class="element clickable method public  method_write inherited" data-toggle="collapse" data-target=".method_write .collapse">
                             <h2>write</h2>
-                            <pre>write(string $data) : mixed</pre>
+                            <pre>write(string $data) </pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                <span class="label">abstract</span>                                                            </div>
 
@@ -777,7 +932,29 @@
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPIOException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPSocketException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPConnectionClosedException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -785,18 +962,16 @@
                                                 <code>string</code><p></p>
                                             </div>
                                                                             
-                                                                            <h3>Response</h3>
-                                        <code>mixed</code><p></p>
                                                                     </div>
                             </div>
 
                         </div>
                                             <a id="method_write_heartbeat"></a>
-                        <div class="element clickable method protected  method_write_heartbeat" data-toggle="collapse" data-target=".method_write_heartbeat .collapse">
+                        <div class="element clickable method protected  method_write_heartbeat inherited" data-toggle="collapse" data-target=".method_write_heartbeat .collapse">
                             <h2>Sends a heartbeat message</h2>
                             <pre>write_heartbeat() </pre>
                             <div class="labels">
-                                                                                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -826,7 +1001,29 @@
 
                         </div>
                     
-                    
+                                            <h3><i class="icon-custom icon-constant"></i> Constants</h3>
+                                                    <a id="constant_BUFFER_SIZE"> </a>
+                            <div class="element clickable constant  constant_BUFFER_SIZE inherited" data-toggle="collapse" data-target=".constant_BUFFER_SIZE .collapse">
+                                <h2>BUFFER_SIZE</h2>
+                                <pre>BUFFER_SIZE</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        
+                                                    </th>
+                                                    <td>
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                                            
                                                                 <h3><i class="icon-custom icon-property"></i> Properties</h3>
                                                     <a id="property_protocol"> </a>
                             <div class="element clickable property  protected property_protocol" data-toggle="collapse" data-target=".property_protocol .collapse">
@@ -851,110 +1048,6 @@
 
                                                                                     <h3>Type(s)</h3>
                                             <code>string</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_host"> </a>
-                            <div class="element clickable property  protected property_host" data-toggle="collapse" data-target=".property_host .collapse">
-                                <h2>host</h2>
-                                <pre>host : string</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>string</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_port"> </a>
-                            <div class="element clickable property  protected property_port" data-toggle="collapse" data-target=".property_port .collapse">
-                                <h2>port</h2>
-                                <pre>port : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_connection_timeout"> </a>
-                            <div class="element clickable property  protected property_connection_timeout" data-toggle="collapse" data-target=".property_connection_timeout .collapse">
-                                <h2>connection_timeout</h2>
-                                <pre>connection_timeout : float</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>float</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_read_write_timeout"> </a>
-                            <div class="element clickable property  protected property_read_write_timeout" data-toggle="collapse" data-target=".property_read_write_timeout .collapse">
-                                <h2>read_write_timeout</h2>
-                                <pre>read_write_timeout : float</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>float</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -984,162 +1077,6 @@
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_keepalive"> </a>
-                            <div class="element clickable property  protected property_keepalive" data-toggle="collapse" data-target=".property_keepalive .collapse">
-                                <h2>keepalive</h2>
-                                <pre>keepalive : boolean</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>boolean</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_heartbeat"> </a>
-                            <div class="element clickable property  protected property_heartbeat" data-toggle="collapse" data-target=".property_heartbeat .collapse">
-                                <h2>heartbeat</h2>
-                                <pre>heartbeat : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_last_read"> </a>
-                            <div class="element clickable property  protected property_last_read" data-toggle="collapse" data-target=".property_last_read .collapse">
-                                <h2>last_read</h2>
-                                <pre>last_read : float</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>float</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_last_write"> </a>
-                            <div class="element clickable property  protected property_last_write" data-toggle="collapse" data-target=".property_last_write .collapse">
-                                <h2>last_write</h2>
-                                <pre>last_write : float</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>float</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_last_error"> </a>
-                            <div class="element clickable property  protected property_last_error" data-toggle="collapse" data-target=".property_last_error .collapse">
-                                <h2>last_error</h2>
-                                <pre>last_error : array</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>array</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_initial_heartbeat"> </a>
-                            <div class="element clickable property  private property_initial_heartbeat" data-toggle="collapse" data-target=".property_initial_heartbeat .collapse">
-                                <h2>initial_heartbeat</h2>
-                                <pre>initial_heartbeat : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
                                                     <a id="property_sock"> </a>
                             <div class="element clickable property  private property_sock" data-toggle="collapse" data-target=".property_sock .collapse">
                                 <h2>sock</h2>
@@ -1166,12 +1103,194 @@
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_canSelectNull"> </a>
-                            <div class="element clickable property  private property_canSelectNull" data-toggle="collapse" data-target=".property_canSelectNull .collapse">
-                                <h2>canSelectNull</h2>
-                                <pre>canSelectNull : boolean</pre>
+                                                    <a id="property_host"> </a>
+                            <div class="element clickable property  protected property_host inherited" data-toggle="collapse" data-target=".property_host .collapse">
+                                <h2>host</h2>
+                                <pre>host : string</pre>
                                 <div class="labels">
-                                                                                                        </div>
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>string</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_port"> </a>
+                            <div class="element clickable property  protected property_port inherited" data-toggle="collapse" data-target=".property_port .collapse">
+                                <h2>port</h2>
+                                <pre>port : integer</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>integer</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_connection_timeout"> </a>
+                            <div class="element clickable property  protected property_connection_timeout inherited" data-toggle="collapse" data-target=".property_connection_timeout .collapse">
+                                <h2>connection_timeout</h2>
+                                <pre>connection_timeout : integer|float</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>integer|float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_read_timeout"> </a>
+                            <div class="element clickable property  protected property_read_timeout inherited" data-toggle="collapse" data-target=".property_read_timeout .collapse">
+                                <h2>read_timeout</h2>
+                                <pre>read_timeout : integer|float</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>integer|float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_write_timeout"> </a>
+                            <div class="element clickable property  protected property_write_timeout inherited" data-toggle="collapse" data-target=".property_write_timeout .collapse">
+                                <h2>write_timeout</h2>
+                                <pre>write_timeout : integer|float</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>integer|float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_heartbeat"> </a>
+                            <div class="element clickable property  protected property_heartbeat inherited" data-toggle="collapse" data-target=".property_heartbeat .collapse">
+                                <h2>heartbeat</h2>
+                                <pre>heartbeat : integer</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>integer</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_initial_heartbeat"> </a>
+                            <div class="element clickable property  protected property_initial_heartbeat inherited" data-toggle="collapse" data-target=".property_initial_heartbeat .collapse">
+                                <h2>initial_heartbeat</h2>
+                                <pre>initial_heartbeat : integer</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>integer</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_keepalive"> </a>
+                            <div class="element clickable property  protected property_keepalive inherited" data-toggle="collapse" data-target=".property_keepalive .collapse">
+                                <h2>keepalive</h2>
+                                <pre>keepalive : boolean</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
                                 <div class="row collapse">
                                     <div class="detail-description">
                                         <div class="long_description"></div>
@@ -1192,12 +1311,90 @@
                                                                             </div>
                                 </div>
                             </div>
+                                                    <a id="property_last_read"> </a>
+                            <div class="element clickable property  protected property_last_read inherited" data-toggle="collapse" data-target=".property_last_read .collapse">
+                                <h2>last_read</h2>
+                                <pre>last_read : float</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_last_write"> </a>
+                            <div class="element clickable property  protected property_last_write inherited" data-toggle="collapse" data-target=".property_last_write .collapse">
+                                <h2>last_write</h2>
+                                <pre>last_write : float</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>float</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_last_error"> </a>
+                            <div class="element clickable property  protected property_last_error inherited" data-toggle="collapse" data-target=".property_last_error .collapse">
+                                <h2>last_error</h2>
+                                <pre>last_error : array|null</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>array|null</code>
+                                                                            </div>
+                                </div>
+                            </div>
                                                     <a id="property_canDispatchPcntlSignal"> </a>
-                            <div class="element clickable property  private property_canDispatchPcntlSignal" data-toggle="collapse" data-target=".property_canDispatchPcntlSignal .collapse">
+                            <div class="element clickable property  protected property_canDispatchPcntlSignal inherited" data-toggle="collapse" data-target=".property_canDispatchPcntlSignal .collapse">
                                 <h2>canDispatchPcntlSignal</h2>
                                 <pre>canDispatchPcntlSignal : boolean</pre>
                                 <div class="labels">
-                                                                                                        </div>
+                                    <span class="label">inherited</span>                                                                    </div>
                                 <div class="row collapse">
                                     <div class="detail-description">
                                         <div class="long_description"></div>
@@ -1238,7 +1435,7 @@
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 18 Jan 2018 00:22:33 +0000.<br/>
+            generated on Thu, 08 Aug 2019 16:34:16 +0000.<br/>
     </footer>
     </body>
 </html>
