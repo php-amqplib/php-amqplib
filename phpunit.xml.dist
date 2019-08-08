@@ -11,10 +11,10 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Unit Tests">
-            <directory suffix="Test.php" phpVersion="7.0.0" phpVersionOperator=">=">tests/Unit</directory>
+            <directory suffix="Test.php" phpVersionOperator=">=">tests/Unit</directory>
         </testsuite>
         <testsuite name="Functional Tests">
-            <directory suffix="Test.php" phpVersion="7.0.0" phpVersionOperator=">=">tests/Functional</directory>
+            <directory suffix="Test.php" phpVersionOperator=">=">tests/Functional</directory>
         </testsuite>
     </testsuites>
     <filter>
