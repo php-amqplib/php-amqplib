@@ -58,7 +58,7 @@ class AMQPMessageTest extends TestCase
         $this->assertEquals(1231, $message->getDeliveryTag());
 
         unset($message->delivery_info['delivery_tag']);
-        $this->setExpectedException('\PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException');
+        $this->expectException('\PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException');
         $message->getDeliveryTag();
     }
 
