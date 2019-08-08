@@ -27,6 +27,7 @@ abstract class AbstractConnectionTest extends TestCase
         $keepalive = isset($options['keepalive']) ? $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : 0;
         $timeout = isset($options['timeout']) ? $options['timeout'] : 1;
+        $connectionTimeout = isset($options['connectionTimeout']) ? $options['connectionTimeout'] : $timeout;
 
         switch ($type) {
             case 'stream':
@@ -40,7 +41,7 @@ abstract class AbstractConnectionTest extends TestCase
                     'AMQPLAIN',
                     null,
                     'en_US',
-                    $timeout,
+                    $connectionTimeout,
                     $timeout,
                     null,
                     $keepalive,

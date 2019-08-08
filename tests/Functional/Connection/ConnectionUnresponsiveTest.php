@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Functional\Connection;
 
+use PhpAmqpLib\Exception;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 
@@ -40,11 +41,39 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
 
         self::$blocked = false;
 
-        $this->assertInstanceOf('Exception', $exception);
-        $this->assertInstanceOf('PhpAmqpLib\Exception\AMQPTimeoutException', $exception);
+        $this->assertInstanceOf(\Exception::class, $exception);
+        $this->assertInstanceOf(Exception\AMQPTimeoutException::class, $exception);
         $this->assertEquals(1, $exception->getTimeout());
 
         $this->assertTrue($channel->is_open());
         $this->assertTrue($connection->isConnected());
+    }
+
+    /**
+     * @test
+     * @group connection
+     * @testWith ["stream"]
+     * @covers \PhpAmqpLib\Connection\AbstractConnection::connect()
+     * @param string $type
+     */
+    public function must_throw_timeout_exception_on_missing_connect_response($type)
+    {
+        $proxy = $this->create_proxy();
+        $proxy->mode('timeout', ['timeout' => 0], 'downstream');
+        $connection = null;
+        $exception = null;
+        try {
+            $connection = $this->conection_create(
+                $type,
+                $proxy->getHost(),
+                $proxy->getPort(),
+                array('timeout' => 3, 'connectionTimeout' => .1, 'heartbeat' => 1)
+            );
+        } catch (\Exception $exception) {
+        }
+
+        $this->assertInstanceOf(\Exception::class, $exception);
+        $this->assertInstanceOf(Exception\AMQPTimeoutException::class, $exception);
+        $this->assertNull($connection);
     }
 }
