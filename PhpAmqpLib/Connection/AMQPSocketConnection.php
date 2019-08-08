@@ -32,10 +32,10 @@ class AMQPSocketConnection extends AbstractConnection
         $login_method = 'AMQPLAIN',
         $login_response = null,
         $locale = 'en_US',
-        $read_timeout = 130,
+        $read_timeout = 3,
         $keepalive = false,
-        $write_timeout = 130,
-        $heartbeat = 60,
+        $write_timeout = 3,
+        $heartbeat = 0,
         $channel_rpc_timeout = 0.0
     ) {
         if ($channel_rpc_timeout > $read_timeout) {
@@ -69,13 +69,13 @@ class AMQPSocketConnection extends AbstractConnection
         $locale = isset($options['locale']) ?
                         $options['locale'] : 'en_US';
         $read_timeout = isset($options['read_timeout']) ?
-                              $options['read_timeout'] : 130;
+                              $options['read_timeout'] : 3;
         $keepalive = isset($options['keepalive']) ?
                            $options['keepalive'] : false;
         $write_timeout = isset($options['write_timeout']) ?
-                               $options['write_timeout'] : 130;
+                               $options['write_timeout'] : 3;
         $heartbeat = isset($options['heartbeat']) ?
-                           $options['heartbeat'] : 60;
+                           $options['heartbeat'] : 0;
         return new static($host,
                           $port,
                           $user,
