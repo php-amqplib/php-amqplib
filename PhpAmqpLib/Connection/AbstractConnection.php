@@ -164,7 +164,7 @@ class AbstractConnection extends AbstractChannel
         $login_response = null,
         $locale = 'en_US',
         AbstractIO $io,
-        $heartbeat = 60,
+        $heartbeat = 0,
         $connection_timeout = 0,
         $channel_rpc_timeout = 0.0
     ) {
