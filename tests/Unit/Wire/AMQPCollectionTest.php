@@ -12,7 +12,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function encode_080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
+        $this->setProtoVersion(Wire\Constants080::VERSION);
 
         $a = new Wire\AMQPArray([
             1,
@@ -108,7 +108,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function encode_091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
 
         $a = new Wire\AMQPArray([
             1,
@@ -296,9 +296,9 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_unsupported_data_type_080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
+        $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPArray();
-        
+
         $a->push(12345, Wire\AMQPArray::T_INT_LONGLONG);
     }
 
@@ -308,7 +308,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_unsupported_data_type_091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPArray();
 
         $a->push(12345, 'foo');
@@ -376,7 +376,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function conflicting_field_symbols()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
 
         $a = new Wire\AMQPArray();
         $a->push(576, Wire\AMQPArray::T_INT_SHORT);
@@ -493,7 +493,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function array_round_trip_080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
+        $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPArray($this->getTestDataSrc());
 
         $this->assertEquals(array_values($this->getTestDataCmp080()), $a->getNativeData());
@@ -504,7 +504,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function array_round_trip_091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPArray($this->getTestDataSrc());
 
         $this->assertEquals(array_values($this->getTestDataCmp()), $a->getNativeData());
@@ -526,7 +526,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function table_round_trip_080()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_080);
+        $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPTable($this->getTestDataSrc());
 
         $this->assertEquals($this->getTestDataCmp080(), $a->getNativeData());
@@ -537,7 +537,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function table_round_trip_091()
     {
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPTable($this->getTestDataSrc());
 
         $this->assertEquals($this->getTestDataCmp(), $a->getNativeData());
@@ -597,7 +597,7 @@ class AMQPCollectionTest extends TestCase
             ],
         ];
 
-        $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPTable($d);
 
         foreach ($a as $key => $val) {

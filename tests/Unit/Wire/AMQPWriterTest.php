@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Unit\Wire;
 
+use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPArray;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
@@ -13,7 +14,7 @@ class AMQPWriterTest extends TestCase
 
     public function setUp()
     {
-        $this->setProtoVersion(AMQPArray::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
         $this->writer = new AMQPWriter();
     }
 

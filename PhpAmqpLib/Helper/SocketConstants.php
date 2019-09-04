@@ -3,17 +3,17 @@
 namespace PhpAmqpLib\Helper;
 
 /**
-  * @property-read int SOCKET_EPIPE
- * @property-read int SOCKET_ENETDOWN
- * @property-read int SOCKET_ENETUNREACH
- * @property-read int SOCKET_ENETRESET
- * @property-read int SOCKET_ECONNABORTED
- * @property-read int SOCKET_ECONNRESET
- * @property-read int SOCKET_ECONNREFUSED
- * @property-read int SOCKET_ETIMEDOUT
- * @property-read int SOCKET_EWOULDBLOCK
- * @property-read int SOCKET_EINTR
- * @property-read int SOCKET_EAGAIN
+ * @property-read int $SOCKET_EPIPE
+ * @property-read int $SOCKET_ENETDOWN
+ * @property-read int $SOCKET_ENETUNREACH
+ * @property-read int $SOCKET_ENETRESET
+ * @property-read int $SOCKET_ECONNABORTED
+ * @property-read int $SOCKET_ECONNRESET
+ * @property-read int $SOCKET_ECONNREFUSED
+ * @property-read int $SOCKET_ETIMEDOUT
+ * @property-read int $SOCKET_EWOULDBLOCK
+ * @property-read int $SOCKET_EINTR
+ * @property-read int $SOCKET_EAGAIN
  */
 final class SocketConstants
 {
