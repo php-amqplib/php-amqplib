@@ -12,6 +12,7 @@ use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
+use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
@@ -223,7 +224,7 @@ class AbstractConnection extends AbstractChannel
 
                 $this->input = new AMQPReader(null, $this->io);
 
-                $this->write($this->amqp_protocol_header);
+                $this->write($this->constants->getHeader());
                 // assume frame was sent successfully, used in $this->wait_channel()
                 $this->last_frame = microtime(true);
                 $this->wait(array($this->waitHelper->get_wait('connection.start')),false,$this->connection_timeout);
@@ -553,8 +554,7 @@ class AbstractConnection extends AbstractChannel
             );
 
             $frame_type = $this->wait_frame_reader->read_octet();
-            $class = self::$PROTOCOL_CONSTANTS_CLASS;
-            if (!array_key_exists($frame_type, $class::$FRAME_TYPES)) {
+            if (!$this->constants->isFrameType($frame_type)) {
                 throw new AMQPInvalidFrameException('Invalid frame type ' . $frame_type);
             }
             $channel = $this->wait_frame_reader->read_short();
@@ -768,7 +768,7 @@ class AbstractConnection extends AbstractChannel
             $this->waitHelper->get_wait('connection.open_ok')
         );
 
-        if ($this->protocolVersion == '0.8') {
+        if ($this->protocolVersion === Wire\Constants080::VERSION) {
             $wait[] = $this->waitHelper->get_wait('connection.redirect');
         }
 

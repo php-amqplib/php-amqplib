@@ -4,17 +4,15 @@
 
 namespace PhpAmqpLib\Wire;
 
-class Constants080
+final class Constants080 extends Constants
 {
-    /**
-     * @var string
-     */
-    public static $AMQP_PROTOCOL_HEADER = "AMQP\x01\x01\x08\x00";
+    const VERSION = '8.0';
+    const AMQP_HEADER = "AMQP\x01\x01\x08\x00";
 
     /**
      * @var array
      */
-    public static $FRAME_TYPES = array(
+    protected static $FRAME_TYPES = array(
         1 => 'FRAME-METHOD',
         2 => 'FRAME-HEADER',
         3 => 'FRAME-BODY',
@@ -31,7 +29,7 @@ class Constants080
     /**
      * @var array
      */
-    public static $CONTENT_METHODS = array(
+    protected static $CONTENT_METHODS = array(
         0 => '60,40',
         1 => '60,50',
         2 => '60,60',
@@ -49,7 +47,7 @@ class Constants080
     /**
      * @var array
      */
-    public static $CLOSE_METHODS = array(
+    protected static $CLOSE_METHODS = array(
         0 => '10,60',
         1 => '20,40',
     );

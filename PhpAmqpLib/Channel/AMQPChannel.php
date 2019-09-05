@@ -7,6 +7,7 @@ use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Message\AMQPMessage;
+use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 
@@ -987,7 +988,7 @@ class AMQPChannel extends AbstractChannel
             $no_ack,
             $exclusive,
             $nowait,
-            $this->protocolVersion == '0.9.1' ? $arguments : null
+            $this->protocolVersion === Wire\Constants091::VERSION ? $arguments : null
         );
 
         $this->send_method_frame(array($class_id, $method_id), $args);

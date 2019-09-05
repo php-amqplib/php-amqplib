@@ -17,16 +17,6 @@ class MiscHelper
     }
 
     /**
-     * @param string $bytes
-     */
-    public static function saveBytes($bytes)
-    {
-        $fh = fopen('/tmp/bytes', 'wb');
-        fwrite($fh, $bytes);
-        fclose($fh);
-    }
-
-    /**
      * Gets a number (either int or float) and returns an array containing its integer part as first element and its
      * decimal part mutliplied by 10^6. Useful for some PHP stream functions that need seconds and microseconds as
      * different arguments

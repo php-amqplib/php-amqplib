@@ -2,10 +2,8 @@
 
 namespace PhpAmqpLib\Tests\Unit\Wire;
 
-use PhpAmqpLib\Wire\AMQPArray;
-use PhpAmqpLib\Wire\AMQPTable;
+use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
-use PhpAmqpLib\Wire\AMQPWriter;
 use PHPUnit\Framework\TestCase;
 
 class AMQPReaderTest extends TestCase
@@ -13,7 +11,7 @@ class AMQPReaderTest extends TestCase
 
     public function setUp()
     {
-        $this->setProtoVersion(AMQPArray::PROTOCOL_091);
+        $this->setProtoVersion(Wire\Constants091::VERSION);
     }
 
     protected function setProtoVersion($proto)

@@ -1,32 +1,37 @@
 <?php
 namespace PhpAmqpLib\Helper;
 
+use PhpAmqpLib\Wire\Constants;
+
 class DebugHelper
 {
     /**
      * @var bool
      */
     protected $debug;
-    
+
     /**
      * @var resource
      */
     protected $debug_output;
-    
-    /**
-     * @var string
-     */
-    protected $PROTOCOL_CONSTANTS_CLASS;
 
     /**
-     * @param string $PROTOCOL_CONSTANTS_CLASS
+     * @var Constants
      */
-    public function __construct($PROTOCOL_CONSTANTS_CLASS) {
-        if(!defined('STDOUT')) define('STDOUT', fopen('php://stdout', 'w'));
+    protected $constants;
+
+    /**
+     * @param Constants $constants
+     */
+    public function __construct(Constants $constants)
+    {
+        if(!defined('STDOUT')) {
+            define('STDOUT', fopen('php://stdout', 'w'));
+        }
 
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
         $this->debug_output = defined('AMQP_DEBUG_OUTPUT') ? AMQP_DEBUG_OUTPUT : STDOUT;
-        $this->PROTOCOL_CONSTANTS_CLASS = $PROTOCOL_CONSTANTS_CLASS;
+        $this->constants = $constants;
     }
 
     /**
@@ -63,12 +68,10 @@ class DebugHelper
      */
     public function debug_method_signature($msg, $method_sig) {
         if ($this->debug) {
-            $protocolClass = $this->PROTOCOL_CONSTANTS_CLASS;
-            $this->debug_msg(sprintf(
-                $msg . ': %s',
-                MiscHelper::methodSig($method_sig),
-                $protocolClass::$GLOBAL_METHOD_NAMES[MiscHelper::methodSig($method_sig)]
-            ));
+            $constants = $this->constants;
+            $methods = $constants::$GLOBAL_METHOD_NAMES;
+            $key = MiscHelper::methodSig($method_sig);
+            $this->debug_msg(sprintf($msg . ': %s', $key, $methods[$key]));
         }
     }
 

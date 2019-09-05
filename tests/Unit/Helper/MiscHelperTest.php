@@ -33,16 +33,6 @@ class MiscHelperTest extends TestCase
         $this->assertEquals('test', MiscHelper::methodSig('test'));
     }
 
-    /**
-     * @test
-     */
-    public function save_bytes()
-    {
-        MiscHelper::saveBytes('bytes');
-
-        $this->assertStringEqualsFile('/tmp/bytes', 'bytes');
-    }
-
     public function splitSecondsMicrosecondsData()
     {
         return [
