@@ -2,19 +2,26 @@
 
 namespace PhpAmqpLib\Tests\Functional\Channel;
 
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PHPUnit\Framework\TestCase;
 
 abstract class ChannelTestCase extends TestCase
 {
+    /** @var AbstractConnection */
     protected $connection;
 
+    /** @var AMQPChannel */
     protected $channel;
 
+    /** @var object */
     protected $exchange;
 
+    /** @var object */
     protected $queue;
 
+    /** @var object */
     protected $message;
 
     public function setUp()
