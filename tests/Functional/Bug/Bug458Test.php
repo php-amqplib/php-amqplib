@@ -9,7 +9,7 @@ class Bug458Test extends TestCase
 {
     private $channel;
 
-    public function setUp()
+    protected function setUp()
     {
         if (!extension_loaded('pcntl')) {
             $this->markTestSkipped('pcntl extension is not available');
@@ -23,7 +23,9 @@ class Bug458Test extends TestCase
 
     protected function tearDown()
     {
-        $this->channel->close();
+        if ($this->channel && $this->channel->is_open()) {
+            $this->channel->close();
+        }
         $this->channel = null;
     }
 
