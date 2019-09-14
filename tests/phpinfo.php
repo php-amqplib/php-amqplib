@@ -5,7 +5,7 @@ phpinfo(INFO_GENERAL);
 echo PHP_EOL;
 
 echo '# Extensions', PHP_EOL;
-print_r(array_intersect(get_loaded_extensions(), ['sockets', 'bcmath']));
+print_r(array_intersect(get_loaded_extensions(), ['sockets']));
 echo PHP_EOL;
 
 echo '# Constants', PHP_EOL;
