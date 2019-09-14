@@ -2,6 +2,7 @@
 namespace PhpAmqpLib\Message;
 
 use PhpAmqpLib\Wire\GenericContent;
+use phpseclib\Math\BigInteger;
 
 /**
  * A Message for use with the Channnel.basic_* methods.

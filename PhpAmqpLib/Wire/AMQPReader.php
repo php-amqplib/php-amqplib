@@ -9,6 +9,7 @@ use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
+use phpseclib\Math\BigInteger;
 
 /**
  * This class can read from a string or from a stream
@@ -309,19 +310,8 @@ class AMQPReader extends AbstractClient
     {
         $this->bitcount = $this->bits = 0;
 
-        list(, $hi, $lo) = unpack('N2', $this->rawread(8));
-        $msb = self::getLongMSB($hi);
-
-        if (empty($this->is64bits)) {
-            if ($msb) {
-                $hi = sprintf('%u', $hi);
-            }
-            if (self::getLongMSB($lo)) {
-                $lo = sprintf('%u', $lo);
-            }
-        }
-
-        return bcadd($this->is64bits && !$msb ? $hi << 32 : bcmul($hi, '4294967296', 0), $lo, 0);
+        $var = new BigInteger($this->rawread(8), 256);
+        return $var->toString();
     }
 
     /**
@@ -331,13 +321,8 @@ class AMQPReader extends AbstractClient
     {
         $this->bitcount = $this->bits = 0;
 
-        list(, $hi, $lo) = unpack('N2', $this->rawread(8));
-
-        if ($this->is64bits) {
-            return bcadd($hi << 32, $lo, 0);
-        } else {
-            return bcadd(bcmul($hi, '4294967296', 0), self::getLongMSB($lo) ? sprintf('%u', $lo) : $lo, 0);
-        }
+        $var = new BigInteger($this->rawread(8), -256);
+        return $var->toString();
     }
 
     /**

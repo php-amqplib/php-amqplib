@@ -296,11 +296,11 @@ abstract class AbstractChannel
             ->load_properties($propertyReader)
             ->setBodySize($contentReader->read_longlong());
 
-        while (bccomp($message->getBodySize(), $bodyReceivedBytes, 0) == 1) {
+        while ($message->getBodySize() > $bodyReceivedBytes) {
             list($frame_type, $payload) = $this->next_frame();
 
             $this->validate_body_frame($frame_type);
-            $bodyReceivedBytes = bcadd($bodyReceivedBytes, mb_strlen($payload, 'ASCII'), 0);
+            $bodyReceivedBytes+= mb_strlen($payload, 'ASCII');
 
             if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize ) {
                 $message->setIsTruncated(true);

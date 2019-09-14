@@ -3,6 +3,7 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use phpseclib\Math\BigInteger;
 
 class AMQPWriter extends AbstractClient
 {
@@ -32,7 +33,7 @@ class AMQPWriter extends AbstractClient
      * Beware that floats out of PHP_INT_MAX range will be represented in scientific (exponential) notation when casted to string
      *
      * @param int|string $x Value to pack
-     * @param int $bytes Must be multiply of 2
+     * @param int $bytes Must be multiple of 2
      * @return string
      */
     private static function packBigEndian($x, $bytes)
@@ -41,39 +42,13 @@ class AMQPWriter extends AbstractClient
             throw new AMQPInvalidArgumentException(sprintf('Expected bytes count must be multiply of 2, %s given', $bytes));
         }
 
-        $ox = $x; //purely for dbg purposes (overflow exception)
-        $isNeg = false;
-
-        if (is_int($x)) {
-            if ($x < 0) {
-                $isNeg = true;
-                $x = abs($x);
-            }
-        } elseif (is_string($x)) {
-            if (!is_numeric($x)) {
-                throw new AMQPInvalidArgumentException(sprintf('Unknown numeric string format: %s', $x));
-            }
-            $x = preg_replace('/^-/', '', $x, 1, $isNeg);
-        } else {
+        if (!is_int($x) && (!is_string($x) || !$is_numeric($x))) {
             throw new AMQPInvalidArgumentException('Only integer and numeric string values are supported');
         }
 
-        if ($isNeg) {
-            $x = bcadd($x, -1, 0);
-        } //in negative domain starting point is -1, not 0
-
-        $res = array();
-        for ($b = 0; $b < $bytes; $b += 2) {
-            $chnk = (int) bcmod($x, 65536);
-            $x = bcdiv($x, 65536, 0);
-            $res[] = pack('n', $isNeg ? ~$chnk : $chnk);
-        }
-
-        if ($x || ($isNeg && ($chnk & 0x8000))) {
-            throw new AMQPOutOfBoundsException(sprintf('Overflow detected while attempting to pack %s into %s bytes', $ox, $bytes));
-        }
-
-        return implode(array_reverse($res));
+        $x = new BigInteger($x);
+        $x->setPrecision($bytes << 3);
+        return $x->toBytes(-256);
     }
 
     private function flushbits()
@@ -265,28 +240,14 @@ class AMQPWriter extends AbstractClient
      */
     public function write_longlong($n)
     {
-        if ($n < 0) {
+        $n = new BigInteger($n);
+
+        if ($n->compare(new BigInteger(0)) < 0 || $n->compare(new BigInteger('FFFFFFFFFFFFFFFF', 16)) > 0) {
             throw new AMQPInvalidArgumentException('Longlong out of range: ' . $n);
         }
 
-        // if PHP_INT_MAX is big enough for that
-        // direct $n<=PHP_INT_MAX check is unreliable on 64bit (values close to max) due to limited float precision
-        if (bcadd($n, -PHP_INT_MAX, 0) <= 0) {
-            // trick explained in http://www.php.net/manual/fr/function.pack.php#109328
-            if ($this->is64bits) {
-                list($hi, $lo) = $this->splitIntoQuads($n);
-            } else {
-                $hi = 0;
-                $lo = $n;
-            } //on 32bits hi quad is 0 a priori
-            $this->out .= pack('NN', $hi, $lo);
-        } else {
-            try {
-                $this->out .= self::packBigEndian($n, 8);
-            } catch (AMQPOutOfBoundsException $ex) {
-                throw new AMQPInvalidArgumentException('Longlong out of range: ' . $n, 0, $ex);
-            }
-        }
+        $n->setPrecision(64);
+        $this->out .= $n->toBytes();
 
         return $this;
     }
@@ -297,40 +258,17 @@ class AMQPWriter extends AbstractClient
      */
     public function write_signed_longlong($n)
     {
-        if ((bcadd($n, PHP_INT_MAX, 0) >= -1) && (bcadd($n, -PHP_INT_MAX, 0) <= 0)) {
-            if ($this->is64bits) {
-                list($hi, $lo) = $this->splitIntoQuads($n);
-            } else {
-                $hi = $n < 0 ? -1 : 0;
-                $lo = $n;
-            } //0xffffffff for negatives
-            $this->out .= pack('NN', $hi, $lo);
-        } elseif ($this->is64bits) {
+        $n = new BigInteger($n);
+
+        if ($n->compare(new BigInteger('-8000000000000000', 16)) < 0 || $n->compare(new BigInteger('7FFFFFFFFFFFFFFF', 16)) > 0) {
             throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n);
-        } else {
-            if (bcadd($n, '-9223372036854775807', 0) > 0) {
-                throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n);
-            }
-            try {
-                //will catch only negative overflow, as values >9223372036854775807 are valid for 8bytes range (unsigned)
-                $this->out .= self::packBigEndian($n, 8);
-            } catch (AMQPOutOfBoundsException $ex) {
-                throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n, 0, $ex);
-            }
         }
 
+
+        $n->setPrecision(64);
+        $this->out .= substr($n->toBytes(true), -8);
+
         return $this;
-    }
-
-    /**
-     * @param int|string $n
-     * @return integer[]
-     */
-    private function splitIntoQuads($n)
-    {
-        $n = (int) $n;
-
-        return array($n >> 32, $n & 0x00000000ffffffff);
     }
 
     /**
