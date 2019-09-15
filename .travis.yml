@@ -6,6 +6,9 @@ matrix:
     - php: 7.0
     - php: 7.1
     - php: 7.2
+    - php: 7.2
+      env:
+        - BCMATH="off"
     - php: 7.3
     - php: 7.4snapshot
   allow_failures:
@@ -39,6 +42,14 @@ env:
 
 before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
+  - if [[ $BCMATH == "off" ]]; then
+        export PHP_BUILD_CONFIGURE_OPTS="--disable-bcmath";
+        git clone git://github.com/php-build/php-build.git $HOME/.phpenv/plugins/php-build;
+        travis_wait phpenv install --force `php -r "echo PHP_VERSION;"`;
+        phpenv rehash;
+        phpenv global `php -r "echo PHP_VERSION;"`;
+    fi
+  - php -i | grep bcmath
 
 script:
   - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
