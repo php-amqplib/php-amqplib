@@ -69,6 +69,16 @@ class AMQPLazyConnection extends AMQPStreamConnection
      */
     protected function connect()
     {
+        if ($this->isConnected()) {
+            return;
+        }
+
+        // only when using AbstractConnection::create_connection for cluster support, allow multiple hosts
+        if (!self::$hosts)
+        {
+            return parent::connect();
+        }
+
         $latest_exception = null;
         foreach (self::$hosts as $hostdef) {
             try {
