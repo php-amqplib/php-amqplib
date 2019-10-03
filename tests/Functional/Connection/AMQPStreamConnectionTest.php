@@ -13,14 +13,14 @@ class AMQPStreamConnectionTest extends AbstractConnectionTest
         $connection = AMQPStreamConnection::create_connection([
             [
                 'host' => HOST,
-                'port' => '5671',
+                'port' => '5671', // / nothing here, node down...
                 'vhost' => VHOST,
                 'user' => USER,
                 'password' => PASS,
             ],
             [
                 'host' => HOST,
-                'port' => '5672',
+                'port' => PORT,
                 'vhost' => VHOST,
                 'user' => USER,
                 'password' => PASS,

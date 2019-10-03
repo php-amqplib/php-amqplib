@@ -50,7 +50,7 @@ class AMQPLazyConnection extends AMQPStreamConnection
         return false;
     }
 
-    /** keep track of the original host configuration */
+    /** keep track of the original hosts configuration */
     private static $hosts = [];
     private static $options = [];
     public static function create_connection($hosts, $options = array())
