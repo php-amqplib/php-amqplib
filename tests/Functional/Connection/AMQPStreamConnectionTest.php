@@ -4,6 +4,7 @@ namespace PhpAmqpLib\Tests\Functional\Connection;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Channel\AMQPChannel;
 
 class AMQPStreamConnectionTest extends AbstractConnectionTest
 {
