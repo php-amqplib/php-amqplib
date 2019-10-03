@@ -37,7 +37,6 @@
         "ext-curl": "*",
         "phpunit/phpunit": "^5.7|^6.5|^7.0",
         "squizlabs/php_codesniffer": "^2.5",
-        "phpdocumentor/phpdocumentor": "dev-master",
         "nategood/httpful": "^0.2.20"
     },
     "autoload": {
