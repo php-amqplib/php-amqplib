@@ -2,8 +2,8 @@
 
 namespace PhpAmqpLib\Tests\Functional\Connection;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 
 class AMQPLazyConnectionTest extends AbstractConnectionTest
@@ -27,10 +27,9 @@ class AMQPLazyConnectionTest extends AbstractConnectionTest
                 'password' => PASS,
             ],
         ]);
+        assert($connection instanceof AMQPLazyConnection);
 
         $channel = $connection->channel();
-        $this->queue_bind($channel, $exchange_name = 'test_exchange', $queue_name);
-        $message = new AMQPMessage('', ['content_type' => 'application/json']);
-        $channel->basic_publish($message, $exchange_name, $queue_name);
+        $this->assertInstanceOf(AMQPChannel::class, $channel);
     }
 }

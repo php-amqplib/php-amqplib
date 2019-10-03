@@ -3,7 +3,6 @@
 namespace PhpAmqpLib\Tests\Functional\Connection;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 
 class AMQPStreamConnectionTest extends AbstractConnectionTest
@@ -29,8 +28,6 @@ class AMQPStreamConnectionTest extends AbstractConnectionTest
         ]);
 
         $channel = $connection->channel();
-        $this->queue_bind($channel, $exchange_name = 'test_exchange', $queue_name);
-        $message = new AMQPMessage('', ['content_type' => 'application/json']);
-        $channel->basic_publish($message, $exchange_name, $queue_name);
+        $this->assertInstanceOf(AMQPChannel::class, $channel);
     }
 }
