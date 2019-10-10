@@ -123,7 +123,7 @@ you can start a connection with an array of hosts. To do that you should use
 the `create_connection` static method.
 
 For example:
-```
+```php
 $connection = AMQPStreamConnection::create_connection([
     ['host' => HOST1, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST2, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
@@ -166,7 +166,7 @@ You could send it every 50 messages, or every hundred. That's up to you.
 
 Another way to speed up your message publishing is by reusing the `AMQPMessage` message instances. You can create your new message like this:
 
-```
+```php
 $properties = array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT);
 $msg = new AMQPMessage($body, $properties);
 $ch->basic_publish($msg, $exchange);
@@ -204,7 +204,7 @@ using exception handling mechanism.
 
 Exceptions which might be thrown in case of connection errors:
 
-```
+```php
 PhpAmqpLib\Exception\AMQPConnectionClosedException
 PhpAmqpLib\Exception\AMQPIOException
 \RuntimeException
@@ -217,7 +217,7 @@ before reconnecting.
 
 For example, if you want to set up a recovering connection:
 
-```
+```php
 $connection = null;
 $channel = null;
 while(true){
