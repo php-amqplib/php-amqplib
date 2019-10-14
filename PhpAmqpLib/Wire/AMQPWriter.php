@@ -25,32 +25,6 @@ class AMQPWriter extends AbstractClient
         $this->bitcount = 0;
     }
 
-    /**
-     * Packs integer into raw byte string in big-endian order
-     * Supports positive and negative ints represented as PHP int or string (except scientific notation)
-     *
-     * Floats has some precision issues and so intentionally not supported.
-     * Beware that floats out of PHP_INT_MAX range will be represented in scientific (exponential) notation when casted to string
-     *
-     * @param int|string $x Value to pack
-     * @param int $bytes Must be multiple of 2
-     * @return string
-     */
-    private static function packBigEndian($x, $bytes)
-    {
-        if (($bytes <= 0) || ($bytes % 2)) {
-            throw new AMQPInvalidArgumentException(sprintf('Expected bytes count must be multiply of 2, %s given', $bytes));
-        }
-
-        if (!is_int($x) && (!is_string($x) || !is_numeric($x))) {
-            throw new AMQPInvalidArgumentException('Only integer and numeric string values are supported');
-        }
-
-        $x = new BigInteger($x);
-        $x->setPrecision($bytes << 3);
-        return $x->toBytes(-256);
-    }
-
     private function flushbits()
     {
         if (!empty($this->bits)) {
