@@ -300,7 +300,7 @@ abstract class AbstractChannel
             list($frame_type, $payload) = $this->next_frame();
 
             $this->validate_body_frame($frame_type);
-            $bodyReceivedBytes+= mb_strlen($payload, 'ASCII');
+            $bodyReceivedBytes += mb_strlen($payload, 'ASCII');
 
             if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize ) {
                 $message->setIsTruncated(true);
