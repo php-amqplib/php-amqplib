@@ -10,7 +10,6 @@ use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
-use phpseclib\Math\BigInteger;
 
 class AMQPChannel extends AbstractChannel
 {
@@ -58,7 +57,7 @@ class AMQPChannel extends AbstractChannel
      */
     private $published_messages = array();
 
-    /** @var \phpseclib\Math\BigInteger */
+    /** @var int */
     private $next_delivery_tag;
 
     /** @var callable */
@@ -105,7 +104,7 @@ class AMQPChannel extends AbstractChannel
 
         parent::__construct($connection, $channel_id);
 
-        $this->next_delivery_tag = new BigInteger();
+        $this->next_delivery_tag = 0;
 
         $this->debug->debug_msg('using channel_id: ' . $channel_id);
 
@@ -869,7 +868,7 @@ class AMQPChannel extends AbstractChannel
      */
     protected function get_keys_less_or_equal(array $messages, $value)
     {
-        $value = new BigInteger($value);
+        $value = (int) $value;
         $keys = array_reduce(
             array_keys($messages),
 
@@ -877,8 +876,7 @@ class AMQPChannel extends AbstractChannel
              * @param string $key
              */
             function ($keys, $key) use ($value) {
-                $temp = new BigInteger($key);
-                if ($temp->compare($value) <= 0) {
+                if ($key <= $value) {
                     $keys[] = $key;
                 }
 
@@ -1184,9 +1182,9 @@ class AMQPChannel extends AbstractChannel
             throw $e;
         }
 
-        if ($this->next_delivery_tag->compare(new BigInteger()) > 0) {
+        if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag->toString()] = $msg;
-            $this->next_delivery_tag = $this->next_delivery_tag->add(new BigInteger(1));
+            $this->next_delivery_tag++;
         }
     }
 
@@ -1244,9 +1242,9 @@ class AMQPChannel extends AbstractChannel
                 $pkt
             );
 
-            if ($this->next_delivery_tag->compare(new BigInteger()) > 0) {
-                $this->published_messages[$this->next_delivery_tag->toString()] = $msg;
-                $this->next_delivery_tag = $this->next_delivery_tag->add(new BigInteger(1));
+            if ($this->next_delivery_tag > 0) {
+                $this->published_messages[$this->next_delivery_tag] = $msg;
+                $this->next_delivery_tag++;
             }
         }
 
@@ -1419,7 +1417,7 @@ class AMQPChannel extends AbstractChannel
         $this->wait(array(
             $this->waitHelper->get_wait('confirm.select_ok')
         ), false, $this->channel_rpc_timeout);
-        $this->next_delivery_tag = new BigInteger(1);
+        $this->next_delivery_tag = 1;
     }
 
     /**
