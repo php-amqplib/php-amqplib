@@ -17,7 +17,7 @@ services:
     entrypoint: ['tail', '-f', '/dev/null']
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3-management
     ports:
       - "5672:5672"
 

@@ -23,7 +23,7 @@ class TopicExchangeTest extends ChannelTestCase
     {
         $this->connection->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'topic', false, true, false);
+        $this->channel->exchange_declare($this->exchange->name, 'topic');
     }
 
     /**
@@ -34,7 +34,7 @@ class TopicExchangeTest extends ChannelTestCase
     {
         $this->channel->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'topic', false, true, false);
+        $this->channel->exchange_declare($this->exchange->name, 'topic');
     }
 
     /**
@@ -42,7 +42,7 @@ class TopicExchangeTest extends ChannelTestCase
      */
     public function publish_with_confirm()
     {
-        $this->channel->exchange_declare($this->exchange->name, 'topic', false);
+        $this->channel->exchange_declare($this->exchange->name, 'topic');
 
         $deliveryTags = [];
 

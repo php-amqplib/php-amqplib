@@ -13,7 +13,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param string $vhost
      * @param bool $insist
      * @param string $login_method
-     * @param null $login_response
+     * @param null $login_response @deprecated
      * @param string $locale
      * @param float $connection_timeout
      * @param float $read_write_timeout
