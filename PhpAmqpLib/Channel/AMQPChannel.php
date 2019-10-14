@@ -1183,7 +1183,7 @@ class AMQPChannel extends AbstractChannel
         }
 
         if ($this->next_delivery_tag > 0) {
-            $this->published_messages[$this->next_delivery_tag->toString()] = $msg;
+            $this->published_messages[$this->next_delivery_tag] = $msg;
             $this->next_delivery_tag++;
         }
     }
