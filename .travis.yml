@@ -38,15 +38,13 @@ before_install:
 
 env:
   global:
-    - TOXIPROXY_HOST=127.0.0.1 TOXIPROXY_AMQP_PORT=5673
+    - TOXIPROXY_HOST=localhost TOXIPROXY_AMQP_PORT=5673
+
+before_script:
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
-  - if [[ $BCMATH == "off" ]]; then
-        docker pull terrafrost/amqplib;
-        docker run -v "`pwd`:/opt/src" -w "/opt/src" --net=host -e TOXIPROXY_HOST -e TOXIPROXY_AMQP_PORT terrafrost/amqplib ./vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover;
-    else
-        vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover;
-    fi
+  - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
