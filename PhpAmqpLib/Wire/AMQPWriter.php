@@ -42,7 +42,7 @@ class AMQPWriter extends AbstractClient
             throw new AMQPInvalidArgumentException(sprintf('Expected bytes count must be multiply of 2, %s given', $bytes));
         }
 
-        if (!is_int($x) && (!is_string($x) || !$is_numeric($x))) {
+        if (!is_int($x) && (!is_string($x) || !is_numeric($x))) {
             throw new AMQPInvalidArgumentException('Only integer and numeric string values are supported');
         }
 
