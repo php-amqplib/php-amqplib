@@ -8,7 +8,6 @@ use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
 use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPNoDataException;
-use PhpAmqpLib\Exception\AMQPProtocolConnectionException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
@@ -386,6 +385,8 @@ class AbstractConnection extends AbstractChannel
 
     protected function do_close()
     {
+        $this->frame_queue = [];
+        $this->method_queue = [];
         $this->setIsConnected(false);
         $this->close_input();
         $this->close_socket();
@@ -723,18 +724,19 @@ class AbstractConnection extends AbstractChannel
 
     /**
      * @param AMQPReader $reader
-     * @throws \PhpAmqpLib\Exception\AMQPProtocolConnectionException
+     * @throws AMQPConnectionClosedException
      */
     protected function connection_close(AMQPReader $reader)
     {
-        $reply_code = $reader->read_short();
-        $reply_text = $reader->read_shortstr();
-        $class_id = $reader->read_short();
-        $method_id = $reader->read_short();
+        $code = (int)$reader->read_short();
+        $reason = $reader->read_shortstr();
+        $class = $reader->read_short();
+        $method = $reader->read_short();
+        $reason .= sprintf('(%s, %s)', $class, $method);
 
         $this->x_close_ok();
 
-        throw new AMQPProtocolConnectionException($reply_code, $reply_text, array($class_id, $method_id));
+        throw new AMQPConnectionClosedException($code, $reason);
     }
 
     /**
