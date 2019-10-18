@@ -32,14 +32,20 @@ abstract class AbstractChannel
      */
     const PROTOCOL_091 = Wire\Constants091::VERSION;
 
-    /** @var array */
-    protected $frame_queue;
+    /**
+     * Lower level queue for frames
+     * @var array
+     */
+    protected $frame_queue = array();
 
-    /** @var array */
-    protected $method_queue;
+    /**
+     * Higher level queue for methods
+     * @var array
+     */
+    protected $method_queue = array();
 
     /** @var bool */
-    protected $auto_decode;
+    protected $auto_decode = false;
 
     /** @var Wire\Constants */
     protected $constants;
@@ -87,9 +93,6 @@ abstract class AbstractChannel
         $this->connection = $connection;
         $this->channel_id = $channel_id;
         $connection->channels[$channel_id] = $this;
-        $this->frame_queue = array(); // Lower level queue for frames
-        $this->method_queue = array(); // Higher level queue for methods
-        $this->auto_decode = false;
 
         $this->msg_property_reader = new AMQPReader(null);
         $this->wait_content_reader = new AMQPReader(null);
