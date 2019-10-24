@@ -35,4 +35,27 @@ class AMQPReaderTest extends TestCase
         $parsed = $reader->read_table();
         $this->assertEquals($expected, $parsed);
     }
+
+    public function test32bitSignedIntegerOverflow()
+    {
+        $data = hex2bin('0000000080000000');
+        $reader = new AMQPReader($data);
+        $parsed = $reader->read_signed_longlong();
+        if (PHP_INT_SIZE === 8) {
+            $this->assertInternalType('integer', $parsed);
+            $this->assertEquals(0x80000000, $parsed);
+        } else {
+            $this->assertInternalType('string', $parsed);
+            $this->assertEquals('2147483648', $parsed);
+        }
+    }
+
+    public function test64bitUnsignedIntegerOverflow()
+    {
+        $data = hex2bin(str_repeat('f', 16));
+        $reader = new AMQPReader($data);
+        $parsed = $reader->read_longlong();
+        $this->assertInternalType('string', $parsed);
+        $this->assertEquals('18446744073709551615', $parsed);
+    }
 }

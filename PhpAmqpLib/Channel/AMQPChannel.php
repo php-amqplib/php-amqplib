@@ -866,6 +866,7 @@ class AMQPChannel extends AbstractChannel
      */
     protected function get_keys_less_or_equal(array $messages, $value)
     {
+        $value = (int) $value;
         $keys = array_reduce(
             array_keys($messages),
 
@@ -873,7 +874,7 @@ class AMQPChannel extends AbstractChannel
              * @param string $key
              */
             function ($keys, $key) use ($value) {
-                if (bccomp($key, $value, 0) <= 0) {
+                if ($key <= $value) {
                     $keys[] = $key;
                 }
 
@@ -1181,7 +1182,7 @@ class AMQPChannel extends AbstractChannel
 
         if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag] = $msg;
-            $this->next_delivery_tag = bcadd($this->next_delivery_tag, '1', 0);
+            $this->next_delivery_tag++;
         }
     }
 
@@ -1241,7 +1242,7 @@ class AMQPChannel extends AbstractChannel
 
             if ($this->next_delivery_tag > 0) {
                 $this->published_messages[$this->next_delivery_tag] = $msg;
-                $this->next_delivery_tag = bcadd($this->next_delivery_tag, '1', 0);
+                $this->next_delivery_tag++;
             }
         }
 

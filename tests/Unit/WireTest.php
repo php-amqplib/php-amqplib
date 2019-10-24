@@ -495,11 +495,15 @@ class WireTest extends TestCase
 
     public function longWrData()
     {
-        $max = PHP_INT_SIZE == 8 ? 4294967295 : PHP_INT_MAX;
+        $max = PHP_INT_SIZE === 8 ? 4294967295 : PHP_INT_MAX;
 
         return [
             [0],
             [1],
+            [2],
+            [2147483646],
+            [2147483647],
+            [2147483648],
             [$max - 1],
             [$max],
             ['0'],
@@ -519,6 +523,11 @@ class WireTest extends TestCase
         return [
             [-2147483648],
             [-2147483647],
+            [-2],
+            [-1],
+            [0],
+            [1],
+            [2],
             [2147483646],
             [2147483647],
             ['-2147483648'],
@@ -540,6 +549,7 @@ class WireTest extends TestCase
         return [
             [0],
             [1],
+            [2],
             [PHP_INT_MAX - 1],
             [PHP_INT_MAX],
             ['0'],
@@ -562,11 +572,10 @@ class WireTest extends TestCase
 
     public function signedLonglongWrData()
     {
+        $min = defined('PHP_INT_MIN') ? PHP_INT_MIN : ~PHP_INT_MAX;
         return [
-            [-PHP_INT_MAX - 1],
-            [-PHP_INT_MAX],
-            [PHP_INT_MAX - 1],
-            [PHP_INT_MAX],
+            [$min],
+            [$min + 1],
             ['-9223372036854775808'],
             ['-9223372036854775807'],
             ['-9223372036854775806'],
@@ -578,18 +587,26 @@ class WireTest extends TestCase
             ['-2147483647'],
             ['-2'],
             ['-1'],
+            [-1],
             ['0'],
+            [0],
             ['1'],
+            [1],
             ['2'],
             ['2147483646'],
+            [2147483646],
             ['2147483647'],
+            [2147483647], // 32-bit PHP_INT_MAX
             ['2147483648'],
+            [2147483648], // float on 32-bit systems
             ['4294967294'],
             ['4294967295'],
             ['4294967296'],
             ['9223372036854775805'],
             ['9223372036854775806'],
             ['9223372036854775807'],
+            [PHP_INT_MAX - 1],
+            [PHP_INT_MAX],
         ];
     }
 
@@ -632,6 +649,10 @@ class WireTest extends TestCase
             $readValue = $reader->{$read_method}();
         }
 
-        $this->assertEquals($value, $readValue);
+        $this->assertEquals(
+            $value,
+            $readValue,
+            'Written: ' . bin2hex($writer->getvalue()) . ', read: ' . bin2hex($readValue)
+        );
     }
 }
