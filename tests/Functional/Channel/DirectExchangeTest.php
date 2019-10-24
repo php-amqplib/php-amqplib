@@ -5,6 +5,9 @@ namespace PhpAmqpLib\Tests\Functional;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\Channel\ChannelTestCase;
 
+/**
+ * @group connection
+ */
 class DirectExchangeTest extends ChannelTestCase
 {
     public function setUp()

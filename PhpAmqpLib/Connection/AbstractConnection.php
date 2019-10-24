@@ -736,7 +736,7 @@ class AbstractConnection extends AbstractChannel
 
         $this->x_close_ok();
 
-        throw new AMQPConnectionClosedException($code, $reason);
+        throw new AMQPConnectionClosedException($reason, $code);
     }
 
     /**

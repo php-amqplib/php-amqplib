@@ -7,6 +7,9 @@ use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class FileTransferTest extends TestCase
 {
     protected $exchangeName = 'test_exchange';

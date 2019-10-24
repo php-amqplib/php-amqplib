@@ -5,6 +5,9 @@ namespace PhpAmqpLib\Tests\Functional\Channel;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPTable;
 
+/**
+ * @group connection
+ */
 class HeadersExchangeTest extends ChannelTestCase
 {
     public function setUp()

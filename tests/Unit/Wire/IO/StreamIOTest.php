@@ -5,6 +5,9 @@ namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 use PhpAmqpLib\Wire\IO\StreamIO;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class StreamIOTest extends TestCase
 {
     /**
@@ -29,10 +32,11 @@ class StreamIOTest extends TestCase
     /**
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPIOWaitException
+     * @requires OS Linux
      */
     public function select_must_throw_io_exception()
     {
-        $property = new \ReflectionProperty('PhpAmqpLib\Wire\IO\StreamIO', 'sock');
+        $property = new \ReflectionProperty(StreamIO::class, 'sock');
         $property->setAccessible(true);
 
         $resource = fopen('php://temp', 'r');

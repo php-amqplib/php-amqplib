@@ -6,13 +6,15 @@ use PhpAmqpLib\Exception;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 
+/**
+ * @group connection
+ */
 class ConnectionUnresponsiveTest extends AbstractConnectionTest
 {
     /**
      * Use mocked write functions to simulate completely blocked connections.
      * @test
      * @small
-     * @group connection
      * @testWith ["stream"]
      *           ["socket"]
      * @covers \PhpAmqpLib\Wire\IO\StreamIO::write()
@@ -51,8 +53,8 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
 
     /**
      * @test
-     * @group connection
      * @testWith ["stream"]
+     * @group proxy
      * @covers \PhpAmqpLib\Connection\AbstractConnection::connect()
      * @param string $type
      */

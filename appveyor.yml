@@ -1,0 +1,54 @@
+build: false
+platform:
+  - x64
+  - x86
+
+image: Visual Studio 2017
+
+## Build matrix for lowest and highest possible targets
+environment:
+  matrix:
+  - dependencies: lowest
+    PHP_VERSION: 5.6
+  - dependencies: lowest
+    PHP_VERSION: 7.0
+  - dependencies: current
+    PHP_VERSION: 7.1
+  - dependencies: current
+    PHP_VERSION: 7.2
+  - dependencies: highest
+    PHP_VERSION: 7.3
+  COMPOSER_CACHE: "%USERPROFILE%\\composer"
+  RABBITMQ_VERSION: 3.7.17
+  ERLANG_VERSION: 10.4
+
+## Cache CI dependencies
+cache:
+    - '%COMPOSER_CACHE% -> composer.json'
+    - "%USERPROFILE%\\packages"
+
+## Set up environment variables
+init:
+    - SET ANSICON=121x90 (121x90)
+
+## Install PHP and composer, and run the appropriate composer command
+install:
+    - choco config set cacheLocation "%USERPROFILE%\\packages"
+    - ps: Invoke-WebRequest "https://raw.githubusercontent.com/ChadSikorra/ps-install-php/master/Install-PHP.ps1" -OutFile "Install-PHP.ps1"
+    - ps: .\Install-PHP.ps1 -Version $Env:PHP_VERSION -Highest -Arch $Env:PLATFORM -Extensions mbstring,intl,openssl,curl,sockets
+    - cinst composer -i -y
+    - refreshenv
+    - cd %APPVEYOR_BUILD_FOLDER%
+    - SET COMPOSER_NO_INTERACTION=1
+    - SET COMPOSER_CACHE_DIR=%COMPOSER_CACHE%
+    - IF %dependencies%==lowest composer update --prefer-lowest --no-progress
+    - IF %dependencies%==current composer update --prefer-stable --no-progress
+    - IF %dependencies%==highest composer update --no-progress --prefer-dist
+    - ps: Invoke-WebRequest "https://raw.githubusercontent.com/ramunasd/appveyor-rabbitmq/v1.2/install.ps1" -OutFile "install-rabbitmq.ps1"
+    - ps: .\install-rabbitmq.ps1
+
+## Run the actual test
+test_script:
+    - cd %APPVEYOR_BUILD_FOLDER%
+    - php tests/phpinfo.php
+    - vendor/bin/phpunit --exclude-group proxy,signals

@@ -6,6 +6,9 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\Channel\ChannelTestCase;
 
+/**
+ * @group connection
+ */
 class TopicExchangeTest extends ChannelTestCase
 {
     public function setUp()
