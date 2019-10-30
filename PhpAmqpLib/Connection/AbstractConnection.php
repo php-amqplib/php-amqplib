@@ -576,7 +576,9 @@ class AbstractConnection extends AbstractChannel
             $ch = $this->wait_frame_reader->read_octet();
 
         } catch (AMQPTimeoutException $e) {
-            $this->input->setTimeout($currentTimeout);
+            if ($this->input) {
+                $this->input->setTimeout($currentTimeout);
+            }
             throw $e;
         } catch (AMQPNoDataException $e) {
             if ($this->input) {
