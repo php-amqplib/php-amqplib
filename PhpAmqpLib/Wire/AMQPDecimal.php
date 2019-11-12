@@ -2,6 +2,7 @@
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use phpseclib\Math\BigInteger;
 
 /**
  * AMQP protocol decimal value.
@@ -42,7 +43,10 @@ class AMQPDecimal
      */
     public function asBCvalue()
     {
-        return bcdiv($this->n, bcpow(10, $this->e));
+        $n = new BigInteger($this->n);
+        $e = new BigInteger('1' . str_repeat('0', $this->e));
+        list($q) = $n->divide($e);
+        return $q->toString();
     }
 
     /**

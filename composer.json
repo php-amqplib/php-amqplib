@@ -29,9 +29,10 @@
         }
     ],
     "require": {
-        "php": ">=5.6",
-        "ext-bcmath": "*",
-        "ext-sockets": "*"
+        "php": ">=5.6.3",
+        "ext-sockets": "*",
+        "ext-mbstring": "*",
+        "phpseclib/phpseclib": "^2.0.0"
     },
     "require-dev": {
         "ext-curl": "*",
@@ -53,7 +54,7 @@
     "license": "LGPL-2.1-or-later",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.10-dev"
+            "dev-master": "2.11-dev"
         }
     }
 }
