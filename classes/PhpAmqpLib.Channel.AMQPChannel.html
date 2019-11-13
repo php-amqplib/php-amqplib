@@ -392,8 +392,8 @@ Beware that only non-transactional channels may be put into confirm mode and vic
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_wait_for_pending_acks_returns" title="wait_for_pending_acks_returns :: Waits for pending acks, nacks and returns from the server. If there are no pending acks, the method returns immediately.">
-            <span class="description">Waits for pending acks, nacks and returns from the server. If there are no pending acks, the method returns immediately.</span><pre>wait_for_pending_acks_returns</pre>
+        <a href="#method_wait_for_pending_acks_returns" title="wait_for_pending_acks_returns :: Waits for pending acks, nacks and returns from the server.">
+            <span class="description">Waits for pending acks, nacks and returns from the server.</span><pre>wait_for_pending_acks_returns</pre>
         </a>
     </li>
 
@@ -4306,7 +4306,7 @@ method.</p></div>
                                             <a id="method_wait_for_pending_acks"></a>
                         <div class="element clickable method public  method_wait_for_pending_acks" data-toggle="collapse" data-target=".method_wait_for_pending_acks .collapse">
                             <h2>Waits for pending acks and nacks from the server.</h2>
-                            <pre>wait_for_pending_acks(integer $timeout) </pre>
+                            <pre>wait_for_pending_acks(integer|float $timeout) </pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -4323,12 +4323,23 @@ method.</p></div>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p><p>Waits until $timeout value is reached</p></p>
+                                                <code>integer|float</code><p><p>Waits until $timeout value is reached</p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -4337,15 +4348,15 @@ method.</p></div>
                         </div>
                                             <a id="method_wait_for_pending_acks_returns"></a>
                         <div class="element clickable method public  method_wait_for_pending_acks_returns" data-toggle="collapse" data-target=".method_wait_for_pending_acks_returns .collapse">
-                            <h2>Waits for pending acks, nacks and returns from the server. If there are no pending acks, the method returns immediately.</h2>
-                            <pre>wait_for_pending_acks_returns(integer $timeout) </pre>
+                            <h2>Waits for pending acks, nacks and returns from the server.</h2>
+                            <pre>wait_for_pending_acks_returns(integer|float $timeout) </pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
                             
                             <div class="row collapse">
                                 <div class="detail-description">
-                                    <div class="long_description"></div>
+                                    <div class="long_description"><p>If there are no pending acks, the method returns immediately.</p></div>
 
                                     <table class="table">
                                                                                     <tr>
@@ -4355,12 +4366,23 @@ method.</p></div>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                                                            <tr>
+                                                <th>Throws</th>
+                                                <td>
+                                                    <dl>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPTimeoutException</dt>
+                                                        <dd></dd>
+                                                                                                            <dt>\PhpAmqpLib\Exception\AMQPRuntimeException</dt>
+                                                        <dd></dd>
+                                                                                                                                                            </dl>
+                                                </td>
+                                            </tr>
+                                                                            </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
                                                 <h4>$timeout</h4>
-                                                <code>integer</code><p><p>If set to value &gt; 0 the method will wait at most $timeout seconds for pending acks.</p></p>
+                                                <code>integer|float</code><p><p>If set to value &gt; 0 the method will wait at most $timeout seconds for pending acks.</p></p>
                                             </div>
                                                                             
                                                                     </div>
@@ -4438,7 +4460,7 @@ method.</p></div>
                     
                                             <h3><i class="icon-custom icon-constant"></i> Constants</h3>
                                                     <a id="constant_PROTOCOL_080"> </a>
-                            <div class="element clickable constant  constant_PROTOCOL_080 inherited" data-toggle="collapse" data-target=".constant_PROTOCOL_080 .collapse">
+                            <div class="element clickable constant deprecated constant_PROTOCOL_080 inherited" data-toggle="collapse" data-target=".constant_PROTOCOL_080 .collapse">
                                 <h2>PROTOCOL_080</h2>
                                 <pre>PROTOCOL_080</pre>
                                 <div class="labels">
@@ -4447,6 +4469,14 @@ method.</p></div>
                                     <div class="detail-description">
                                         <div class="long_description"></div>
                                         <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        deprecated
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
                                                                                             <tr>
                                                     <th>
                                                         
@@ -4459,7 +4489,7 @@ method.</p></div>
                                 </div>
                             </div>
                                                     <a id="constant_PROTOCOL_091"> </a>
-                            <div class="element clickable constant  constant_PROTOCOL_091 inherited" data-toggle="collapse" data-target=".constant_PROTOCOL_091 .collapse">
+                            <div class="element clickable constant deprecated constant_PROTOCOL_091 inherited" data-toggle="collapse" data-target=".constant_PROTOCOL_091 .collapse">
                                 <h2>PROTOCOL_091</h2>
                                 <pre>PROTOCOL_091</pre>
                                 <div class="labels">
@@ -4468,6 +4498,14 @@ method.</p></div>
                                     <div class="detail-description">
                                         <div class="long_description"></div>
                                         <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        deprecated
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
                                                                                             <tr>
                                                     <th>
                                                         
@@ -4860,40 +4898,6 @@ until they get ack&#039;ed or nack&#039;ed</h2>
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_PROTOCOL_CONSTANTS_CLASS"> </a>
-                            <div class="element clickable property deprecated public property_PROTOCOL_CONSTANTS_CLASS inherited" data-toggle="collapse" data-target=".property_PROTOCOL_CONSTANTS_CLASS .collapse">
-                                <h2>PROTOCOL_CONSTANTS_CLASS</h2>
-                                <pre>PROTOCOL_CONSTANTS_CLASS : string</pre>
-                                <div class="labels">
-                                    <span class="label">inherited</span>                                    <span class="label">static</span>                                </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                            <tr>
-                                                    <th>
-                                                        deprecated
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>string</code>
-                                                                            </div>
-                                </div>
-                            </div>
                                                     <a id="property_frame_queue"> </a>
                             <div class="element clickable property  protected property_frame_queue inherited" data-toggle="collapse" data-target=".property_frame_queue .collapse">
                                 <h2>frame_queue</h2>
@@ -4946,10 +4950,10 @@ until they get ack&#039;ed or nack&#039;ed</h2>
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_amqp_protocol_header"> </a>
-                            <div class="element clickable property  protected property_amqp_protocol_header inherited" data-toggle="collapse" data-target=".property_amqp_protocol_header .collapse">
-                                <h2>amqp_protocol_header</h2>
-                                <pre>amqp_protocol_header : string</pre>
+                                                    <a id="property_constants"> </a>
+                            <div class="element clickable property  protected property_constants inherited" data-toggle="collapse" data-target=".property_constants .collapse">
+                                <h2>constants</h2>
+                                <pre>constants : \PhpAmqpLib\Wire\Constants</pre>
                                 <div class="labels">
                                     <span class="label">inherited</span>                                                                    </div>
                                 <div class="row collapse">
@@ -4968,7 +4972,7 @@ until they get ack&#039;ed or nack&#039;ed</h2>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code>string</code>
+                                            <code><a href="../classes/PhpAmqpLib.Wire.Constants.html">\PhpAmqpLib\Wire\Constants</a></code>
                                                                             </div>
                                 </div>
                             </div>
@@ -5278,7 +5282,7 @@ until they get ack&#039;ed or nack&#039;ed</h2>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 08 Aug 2019 16:34:16 +0000.<br/>
+            generated on Wed, 13 Nov 2019 22:34:21 +0000.<br/>
     </footer>
     </body>
 </html>

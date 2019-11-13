@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta charset="utf-8"/>
-    <title>    php-amqplib &raquo; \PhpAmqpLib\Helper\DebugHelper
+    <title>    php-amqplib &raquo; \PhpAmqpLib\Wire\Constants
 </title>
     <meta name="author" content=""/>
     <meta name="description" content=""/>
@@ -120,65 +120,58 @@
             <i class="icon-custom icon-method"></i> Methods
             <ul>
                                                                                                     <li class="method public">
-        <a href="#method___construct" title="__construct :: ">
-            <span class="description"></span><pre>__construct</pre>
+        <a href="#method_getFrameType" title="getFrameType :: ">
+            <span class="description"></span><pre>getFrameType</pre>
         </a>
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_debug_allowed_methods" title="debug_allowed_methods :: ">
-            <span class="description"></span><pre>debug_allowed_methods</pre>
+        <a href="#method_getHeader" title="getHeader :: ">
+            <span class="description"></span><pre>getHeader</pre>
         </a>
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_debug_connection_start" title="debug_connection_start :: ">
-            <span class="description"></span><pre>debug_connection_start</pre>
+        <a href="#method_isCloseMethod" title="isCloseMethod :: ">
+            <span class="description"></span><pre>isCloseMethod</pre>
         </a>
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_debug_hexdump" title="debug_hexdump :: ">
-            <span class="description"></span><pre>debug_hexdump</pre>
+        <a href="#method_isContentMethod" title="isContentMethod :: ">
+            <span class="description"></span><pre>isContentMethod</pre>
         </a>
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_debug_method_signature" title="debug_method_signature :: ">
-            <span class="description"></span><pre>debug_method_signature</pre>
+        <a href="#method_isFrameType" title="isFrameType :: ">
+            <span class="description"></span><pre>isFrameType</pre>
         </a>
     </li>
 
-                                                                                                        <li class="method public">
-        <a href="#method_debug_method_signature1" title="debug_method_signature1 :: ">
-            <span class="description"></span><pre>debug_method_signature1</pre>
-        </a>
-    </li>
-
-                                                                                                        <li class="method public">
-        <a href="#method_debug_msg" title="debug_msg :: ">
-            <span class="description"></span><pre>debug_msg</pre>
-        </a>
-    </li>
-
-                                                                                                        </ul>
+                                                </ul>
         </li>
         <li class="nav-header protected">» Protected
             <ul>
-                                                                                                                                                                                                                                                                                                                                        <li class="method protected">
-                            <a href="#method_print_msg" title="print_msg :: ">
-                                <span class="description"></span><pre>print_msg</pre>
-                            </a>
-                        </li>
-                                                </ul>
+                                                                                                                                                                                                                                </ul>
         </li>
         <li class="nav-header private">» Private
             <ul>
-                                                                                                                                                                                                                                                                                                                                            </ul>
+                                                                                                                                                                                                                                </ul>
         </li>
         <li class="nav-header">
             <i class="icon-custom icon-constant"></i> Constants
             <ul>
+                                <li class="constant ">
+                    <a href="#constant_AMQP_HEADER" title="AMQP_HEADER :: ">
+                        <span class="description"></span><pre>AMQP_HEADER</pre>
+                    </a>
+                </li>
+                                <li class="constant ">
+                    <a href="#constant_VERSION" title="VERSION :: ">
+                        <span class="description"></span><pre>VERSION</pre>
+                    </a>
+                </li>
                             </ul>
         </li>
     </ul>
@@ -188,7 +181,7 @@
 
         <div class="span8">
             <div class="element class">
-                <h1>DebugHelper</h1>
+                <h1>Constants</h1>
                 <small style="display: block; text-align: right">
                                                         </small>
                 <p class="short_description"></p>
@@ -206,13 +199,13 @@
                                                                                 <p>PhpAmqpLib</p>
                                     </td>
                                 </tr>
-                                                                                                                                                                                </table>
+                                                                                                                                                                                                                                                                                                                                            </table>
 
                     <h3><i class="icon-custom icon-method"></i> Methods</h3>
-                                                                <a id="method___construct"></a>
-                        <div class="element clickable method public  method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-                            <h2>__construct</h2>
-                            <pre>__construct(\PhpAmqpLib\Wire\Constants $constants) </pre>
+                                                                <a id="method_getFrameType"></a>
+                        <div class="element clickable method public  method_getFrameType" data-toggle="collapse" data-target=".method_getFrameType .collapse">
+                            <h2>getFrameType</h2>
+                            <pre>getFrameType(integer $type) : string</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -222,278 +215,182 @@
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
                                                                                                                     </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
-                                                <h4>$constants</h4>
-                                                <code><a href="../classes/PhpAmqpLib.Wire.Constants.html">\PhpAmqpLib\Wire\Constants</a></code><p></p>
-                                            </div>
-                                                                            
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_debug_allowed_methods"></a>
-                        <div class="element clickable method public  method_debug_allowed_methods" data-toggle="collapse" data-target=".method_debug_allowed_methods .collapse">
-                            <h2>debug_allowed_methods</h2>
-                            <pre>debug_allowed_methods(array $allowed_methods) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$allowed_methods</h4>
-                                                <code>array</code><p></p>
-                                            </div>
-                                                                            
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_debug_connection_start"></a>
-                        <div class="element clickable method public  method_debug_connection_start" data-toggle="collapse" data-target=".method_debug_connection_start .collapse">
-                            <h2>debug_connection_start</h2>
-                            <pre>debug_connection_start(integer $version_major, integer $version_minor, array $server_properties, array $mechanisms, array $locales) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$version_major</h4>
+                                                <h4>$type</h4>
                                                 <code>integer</code><p></p>
                                             </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getHeader"></a>
+                        <div class="element clickable method public  method_getHeader" data-toggle="collapse" data-target=".method_getHeader .collapse">
+                            <h2>getHeader</h2>
+                            <pre>getHeader() : string</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_isCloseMethod"></a>
+                        <div class="element clickable method public  method_isCloseMethod" data-toggle="collapse" data-target=".method_isCloseMethod .collapse">
+                            <h2>isCloseMethod</h2>
+                            <pre>isCloseMethod(string $method) : boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
-                                                <h4>$version_minor</h4>
+                                                <h4>$method</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_isContentMethod"></a>
+                        <div class="element clickable method public  method_isContentMethod" data-toggle="collapse" data-target=".method_isContentMethod .collapse">
+                            <h2>isContentMethod</h2>
+                            <pre>isContentMethod(string $method) : boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$method</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_isFrameType"></a>
+                        <div class="element clickable method public  method_isFrameType" data-toggle="collapse" data-target=".method_isFrameType .collapse">
+                            <h2>isFrameType</h2>
+                            <pre>isFrameType(integer $type) : boolean</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$type</h4>
                                                 <code>integer</code><p></p>
                                             </div>
-                                                                                    <div class="subelement argument">
-                                                <h4>$server_properties</h4>
-                                                <code>array</code><p></p>
-                                            </div>
-                                                                                    <div class="subelement argument">
-                                                <h4>$mechanisms</h4>
-                                                <code>array</code><p></p>
-                                            </div>
-                                                                                    <div class="subelement argument">
-                                                <h4>$locales</h4>
-                                                <code>array</code><p></p>
-                                            </div>
                                                                             
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_debug_hexdump"></a>
-                        <div class="element clickable method public  method_debug_hexdump" data-toggle="collapse" data-target=".method_debug_hexdump .collapse">
-                            <h2>debug_hexdump</h2>
-                            <pre>debug_hexdump(string $data) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$data</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_debug_method_signature"></a>
-                        <div class="element clickable method public  method_debug_method_signature" data-toggle="collapse" data-target=".method_debug_method_signature .collapse">
-                            <h2>debug_method_signature</h2>
-                            <pre>debug_method_signature(string $msg, string $method_sig) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$msg</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                                    <div class="subelement argument">
-                                                <h4>$method_sig</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_debug_method_signature1"></a>
-                        <div class="element clickable method public  method_debug_method_signature1" data-toggle="collapse" data-target=".method_debug_method_signature1 .collapse">
-                            <h2>debug_method_signature1</h2>
-                            <pre>debug_method_signature1(string $method_sig) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$method_sig</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_debug_msg"></a>
-                        <div class="element clickable method public  method_debug_msg" data-toggle="collapse" data-target=".method_debug_msg .collapse">
-                            <h2>debug_msg</h2>
-                            <pre>debug_msg(string $msg) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$msg</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_print_msg"></a>
-                        <div class="element clickable method protected  method_print_msg" data-toggle="collapse" data-target=".method_print_msg .collapse">
-                            <h2>print_msg</h2>
-                            <pre>print_msg(string $s) </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$s</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
                                                                     </div>
                             </div>
 
                         </div>
                     
-                    
+                                            <h3><i class="icon-custom icon-constant"></i> Constants</h3>
+                                                    <a id="constant_VERSION"> </a>
+                            <div class="element clickable constant  constant_VERSION" data-toggle="collapse" data-target=".constant_VERSION .collapse">
+                                <h2>VERSION</h2>
+                                <pre>VERSION</pre>
+                                <div class="labels">
+                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        
+                                                    </th>
+                                                    <td>
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                                                    <a id="constant_AMQP_HEADER"> </a>
+                            <div class="element clickable constant  constant_AMQP_HEADER" data-toggle="collapse" data-target=".constant_AMQP_HEADER .collapse">
+                                <h2>AMQP_HEADER</h2>
+                                <pre>AMQP_HEADER</pre>
+                                <div class="labels">
+                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        
+                                                    </th>
+                                                    <td>
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                                            
                                                                 <h3><i class="icon-custom icon-property"></i> Properties</h3>
-                                                    <a id="property_debug"> </a>
-                            <div class="element clickable property  protected property_debug" data-toggle="collapse" data-target=".property_debug .collapse">
-                                <h2>debug</h2>
-                                <pre>debug : boolean</pre>
+                                                    <a id="property_FRAME_TYPES"> </a>
+                            <div class="element clickable property  protected property_FRAME_TYPES" data-toggle="collapse" data-target=".property_FRAME_TYPES .collapse">
+                                <h2>string&gt;</h2>
+                                <pre>FRAME_TYPES : \PhpAmqpLib\Wire\array&lt;int,</pre>
                                 <div class="labels">
-                                                                                                        </div>
+                                                                        <span class="label">static</span>                                </div>
                                 <div class="row collapse">
                                     <div class="detail-description">
                                         <div class="long_description"></div>
@@ -504,22 +401,22 @@
                                                         var
                                                     </th>
                                                     <td>
-                                                                                                                    
+                                                                                                                    <p>string&gt;</p>
                                                                                                             </td>
                                                 </tr>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code>boolean</code>
+                                            <code>\PhpAmqpLib\Wire\array<int,</code>
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_debug_output"> </a>
-                            <div class="element clickable property  protected property_debug_output" data-toggle="collapse" data-target=".property_debug_output .collapse">
-                                <h2>debug_output</h2>
-                                <pre>debug_output : resource</pre>
+                                                    <a id="property_CONTENT_METHODS"> </a>
+                            <div class="element clickable property  protected property_CONTENT_METHODS" data-toggle="collapse" data-target=".property_CONTENT_METHODS .collapse">
+                                <h2>string&gt;</h2>
+                                <pre>CONTENT_METHODS : \PhpAmqpLib\Wire\array&lt;int,</pre>
                                 <div class="labels">
-                                                                                                        </div>
+                                                                        <span class="label">static</span>                                </div>
                                 <div class="row collapse">
                                     <div class="detail-description">
                                         <div class="long_description"></div>
@@ -530,22 +427,22 @@
                                                         var
                                                     </th>
                                                     <td>
-                                                                                                                    
+                                                                                                                    <p>string&gt;</p>
                                                                                                             </td>
                                                 </tr>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code>resource</code>
+                                            <code>\PhpAmqpLib\Wire\array<int,</code>
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_constants"> </a>
-                            <div class="element clickable property  protected property_constants" data-toggle="collapse" data-target=".property_constants .collapse">
-                                <h2>constants</h2>
-                                <pre>constants : \PhpAmqpLib\Wire\Constants</pre>
+                                                    <a id="property_CLOSE_METHODS"> </a>
+                            <div class="element clickable property  protected property_CLOSE_METHODS" data-toggle="collapse" data-target=".property_CLOSE_METHODS .collapse">
+                                <h2>string&gt;</h2>
+                                <pre>CLOSE_METHODS : \PhpAmqpLib\Wire\array&lt;int,</pre>
                                 <div class="labels">
-                                                                                                        </div>
+                                                                        <span class="label">static</span>                                </div>
                                 <div class="row collapse">
                                     <div class="detail-description">
                                         <div class="long_description"></div>
@@ -556,26 +453,52 @@
                                                         var
                                                     </th>
                                                     <td>
-                                                                                                                    
+                                                                                                                    <p>string&gt;</p>
                                                                                                             </td>
                                                 </tr>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code><a href="../classes/PhpAmqpLib.Wire.Constants.html">\PhpAmqpLib\Wire\Constants</a></code>
+                                            <code>\PhpAmqpLib\Wire\array<int,</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_GLOBAL_METHOD_NAMES"> </a>
+                            <div class="element clickable property  public property_GLOBAL_METHOD_NAMES" data-toggle="collapse" data-target=".property_GLOBAL_METHOD_NAMES .collapse">
+                                <h2>string&gt;</h2>
+                                <pre>GLOBAL_METHOD_NAMES : \PhpAmqpLib\Wire\array&lt;string,</pre>
+                                <div class="labels">
+                                                                        <span class="label">static</span>                                </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    <p>string&gt;</p>
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>\PhpAmqpLib\Wire\array<string,</code>
                                                                             </div>
                                 </div>
                             </div>
                                                             </div>
             </div>
-            <a id="\PhpAmqpLib\Helper\DebugHelper"></a>
+            <a id="\PhpAmqpLib\Wire\Constants"></a>
             <ul class="breadcrumb">
                 <li><a href="../index.html"><i class="icon-custom icon-class"></i></a></li>
                     
     
-    <li><span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Helper.html">Helper</a></li>
+    <li><span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Wire.html">Wire</a></li>
 
-                <li class="active"><span class="divider">\</span><a href="../classes/PhpAmqpLib.Helper.DebugHelper.html">DebugHelper</a></li>
+                <li class="active"><span class="divider">\</span><a href="../classes/PhpAmqpLib.Wire.Constants.html">Constants</a></li>
             </ul>
         </div>
     </div>
