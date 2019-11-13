@@ -98,6 +98,10 @@ $ php amqp_consumer_non_blocking.php
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
+## API Documentation ##
+
+http://php-amqplib.github.io/php-amqplib/
+
 ## Tutorials ##
 
 To not repeat ourselves, if you want to learn more about this library,
