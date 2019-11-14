@@ -2,8 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Functional\Bug;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
@@ -14,9 +13,9 @@ class Bug40Test extends TestCase
 {
     protected $exchangeName = 'test_exchange';
 
-    protected $queueName1 = null;
+    protected $queueName1;
 
-    protected $queueName2 = null;
+    protected $queueName2;
 
     protected $queue1Messages = 0;
 
@@ -28,7 +27,7 @@ class Bug40Test extends TestCase
 
     public function setUp()
     {
-        $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
         $this->channel2 = $this->connection->channel();
 
@@ -76,17 +75,16 @@ class Bug40Test extends TestCase
             [$this, 'processMessage1']
         );
 
-        while (count($this->channel->callbacks)) {
+        while ($this->channel->is_consuming()) {
             $this->channel->wait();
         }
     }
 
     public function processMessage1($msg)
     {
-        $delivery_info = $msg->delivery_info;
         $this->queue1Messages++;
 
-        if ($this->queue1Messages < 2) {
+        if ($this->queue1Messages === 1) {
             $this->channel2->basic_consume(
                 $this->queueName2,
                 '',
@@ -98,11 +96,12 @@ class Bug40Test extends TestCase
             );
         }
 
-        while (count($this->channel2->callbacks)) {
+        while ($this->channel2->is_consuming()) {
             $this->channel2->wait();
         }
 
-        if ($this->queue1Messages == 2) {
+        if ($this->queue1Messages === 2) {
+            $delivery_info = $msg->delivery_info;
             $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
         }
     }
@@ -111,5 +110,6 @@ class Bug40Test extends TestCase
     {
         $delivery_info = $msg->delivery_info;
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
+        $this->assertLessThan(2, $this->queue1Messages);
     }
 }

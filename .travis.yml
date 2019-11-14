@@ -7,13 +7,14 @@ matrix:
     - php: 7.1
     - php: 7.2
     - php: 7.3
+      env: COVERAGE=true
     - php: 7.4snapshot
+  fast_finish: true
   allow_failures:
     - php: 7.4snapshot
 
-# This triggers builds to run on the new TravisCI infrastructure.
-# See: http://docs.travis-ci.com/user/workers/container-based-infrastructure/
-sudo: false
+git:
+    depth: 1
 
 services:
   - docker
@@ -32,6 +33,7 @@ before_install:
   - docker pull shopify/toxiproxy
   - docker run -d --rm --net=host -p 8474:8474 -p 5673:5673 shopify/toxiproxy
   - docker ps -a
+  - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
 
 env:
   global:
@@ -41,11 +43,10 @@ before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
 
 script:
-  - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
+  - vendor/bin/phpunit -d zend.enable_gc=0 --exclude-group management --coverage-text --coverage-clover=coverage.clover
 
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-
-services:
-  rabbitmq
+after_success: >
+    if [[ $COVERAGE = true ]]; then
+        wget https://scrutinizer-ci.com/ocular.phar
+        php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+    fi
