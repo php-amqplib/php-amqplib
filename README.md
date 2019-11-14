@@ -3,7 +3,6 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE)
 [![Build Status][ico-travis]][link-travis]
-[![Build status](https://ci.appveyor.com/api/projects/status/github/php-amqplib/php-amqplib?svg=true)](https://ci.appveyor.com/api/projects/status/php-amqplib/php-amqplib)
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
