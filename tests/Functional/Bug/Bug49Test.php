@@ -7,6 +7,9 @@ use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Exception\AMQPProtocolException;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class Bug49Test extends TestCase
 {
     protected $connection;

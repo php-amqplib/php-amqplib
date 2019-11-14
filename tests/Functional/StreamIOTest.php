@@ -5,6 +5,9 @@ namespace PhpAmqpLib\Tests\Functional;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class StreamIOTest extends TestCase
 {
     /** @var array|null */

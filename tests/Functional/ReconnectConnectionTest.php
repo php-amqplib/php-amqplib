@@ -9,6 +9,9 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class ReconnectConnectionTest extends TestCase
 {
     protected $connection = null;

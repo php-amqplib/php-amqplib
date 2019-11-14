@@ -1,18 +1,18 @@
 <?php
-namespace PhpAmqpLib\Tests\Unit\Channel;
+namespace PhpAmqpLib\Tests\Functional\Channel;
 
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
+use PhpAmqpLib\Wire\IO\StreamIO;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class ChannelTimeoutTest extends TestCase
 {
-
-    /** @var float $channel_rpc_timeout */
-    private $channel_rpc_timeout;
-
     /** @var int $channel_rpc_timeout */
     private $channel_rpc_timeout_seconds;
 
@@ -30,19 +30,17 @@ class ChannelTimeoutTest extends TestCase
 
     protected function setUp()
     {
-        parent::setUp();
-
-        $this->channel_rpc_timeout = 3.5;
+        $channel_rpc_timeout = 3.5;
 
         list( $this->channel_rpc_timeout_seconds, $this->channel_rpc_timeout_microseconds ) =
-            MiscHelper::splitSecondsMicroseconds( $this->channel_rpc_timeout );
+            MiscHelper::splitSecondsMicroseconds( $channel_rpc_timeout );
 
-        $this->io = $this->getMockBuilder('\PhpAmqpLib\Wire\IO\StreamIO')
+        $this->io = $this->getMockBuilder(StreamIO::class)
             ->setConstructorArgs(array(HOST, PORT, 3, 3, null, false, 0))
             ->setMethods(array('select'))
             ->getMock();
-        $this->connection = $this->getMockBuilder('\PhpAmqpLib\Connection\AbstractConnection')
-            ->setConstructorArgs(array(USER, PASS, '/', false, 'AMQPLAIN', null, 'en_US', $this->io, 0, 0, $this->channel_rpc_timeout))
+        $this->connection = $this->getMockBuilder(AbstractConnection::class)
+            ->setConstructorArgs(array(USER, PASS, '/', false, 'AMQPLAIN', null, 'en_US', $this->io, 0, 0, $channel_rpc_timeout))
             ->setMethods(array())
             ->getMockForAbstractClass();
 
@@ -85,10 +83,13 @@ class ChannelTimeoutTest extends TestCase
 
     protected function tearDown()
     {
-        parent::tearDown();
-        $this->channel->close();
+        if ($this->channel) {
+            $this->channel->close();
+        }
         $this->channel = null;
-        $this->connection->close();
+        if ($this->connection) {
+            $this->connection->close();
+        }
         $this->connection = null;
     }
 }

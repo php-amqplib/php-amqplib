@@ -5,6 +5,9 @@ namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 use PhpAmqpLib\Wire\IO\SocketIO;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class SocketIOTest extends TestCase
 {
     /**

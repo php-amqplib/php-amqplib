@@ -7,6 +7,9 @@ use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 abstract class ChannelTestCase extends TestCase
 {
     /** @var AbstractConnection */
@@ -46,9 +49,13 @@ abstract class ChannelTestCase extends TestCase
 
     public function tearDown()
     {
-        $this->channel->close();
-        $this->channel = null;
-        $this->connection->close();
-        $this->connection = null;
+        if ($this->channel) {
+            $this->channel->close();
+            $this->channel = null;
+        }
+        if ($this->connection) {
+            $this->connection->close();
+            $this->connection = null;
+        }
     }
 }

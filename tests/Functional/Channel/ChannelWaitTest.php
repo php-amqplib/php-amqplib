@@ -8,11 +8,15 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ */
 class ChannelWaitTest extends TestCase
 {
     /**
      * @test
      * @small
+     * @group signals
      * @dataProvider provide_channels
      * @param callable $factory
      */

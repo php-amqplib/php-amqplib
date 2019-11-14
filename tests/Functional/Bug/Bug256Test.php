@@ -8,6 +8,9 @@ use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 use PhpAmqpLib\Wire\AMQPTable;
 
+/**
+ * @group connection
+ */
 class Bug256Test extends AbstractConnectionTest
 {
     protected $exchangeName = 'test_exchange';

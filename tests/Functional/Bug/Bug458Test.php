@@ -5,6 +5,10 @@ namespace PhpAmqpLib\Tests\Functional\Bug;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group connection
+ * @group signals
+ */
 class Bug458Test extends TestCase
 {
     private $channel;

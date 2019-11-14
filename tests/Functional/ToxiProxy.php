@@ -18,6 +18,9 @@ class ToxiProxy
     /** @var int */
     private $listen;
 
+    /** @var bool */
+    private $isOpen = false;
+
     /**
      * @param string $name
      * @param string $host
@@ -32,7 +35,9 @@ class ToxiProxy
 
     public function __destruct()
     {
-        $this->close();
+        if ($this->isOpen) {
+            $this->close();
+        }
     }
 
     /**
@@ -56,6 +61,7 @@ class ToxiProxy
             throw new \RuntimeException('Cannot create Toxiproxy connection');
         }
         $this->listen = $listen;
+        $this->isOpen = true;
     }
 
     /**

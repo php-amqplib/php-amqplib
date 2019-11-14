@@ -5,8 +5,11 @@ phpinfo(INFO_GENERAL);
 echo PHP_EOL;
 
 echo '# Extensions', PHP_EOL;
-print_r(array_intersect(get_loaded_extensions(), ['sockets', 'bcmath']));
+print_r(array_intersect(get_loaded_extensions(), ['sockets', 'bcmath', 'mbstring', 'pcntl']));
 echo PHP_EOL;
+
+echo 'PHP_INT_SIZE=', PHP_INT_SIZE, PHP_EOL;
+echo 'PHP_INT_MAX=', PHP_INT_MAX, PHP_EOL;
 
 echo '# Constants', PHP_EOL;
 $constants = get_defined_constants(true);
