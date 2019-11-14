@@ -1,3 +1,4 @@
+## https://ci.appveyor.com/project/ramunasd/php-amqplib
 build: false
 platform:
   - x64
