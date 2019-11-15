@@ -31,6 +31,7 @@ class StreamIOTest extends TestCase
 
     /**
      * @test
+     * @group linux
      * @expectedException \PhpAmqpLib\Exception\AMQPIOWaitException
      * @requires OS Linux
      */

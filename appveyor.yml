@@ -52,4 +52,4 @@ install:
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
     - php tests/phpinfo.php
-    - vendor/bin/phpunit --exclude-group proxy,signals
+    - vendor/bin/phpunit --exclude-group proxy,signals,linux

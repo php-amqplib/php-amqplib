@@ -2,8 +2,8 @@
 
 namespace PhpAmqpLib\Tests\Functional\Bug;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPProtocolException;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +20,7 @@ class Bug49Test extends TestCase
 
     public function setUp()
     {
-        $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
         $this->channel2 = $this->connection->channel();
     }
@@ -47,15 +47,13 @@ class Bug49Test extends TestCase
     public function declaration()
     {
         try {
-            $this->channel->queue_declare('pretty.queue', true, true);
+            $this->channel->queue_declare($queue = 'pretty.queue', true, true);
             $this->fail('Should have raised an exception');
-
-        } catch (AMQPProtocolException $e) {
-            if ($e->getCode() == 404) {
-                $this->channel2->queue_declare('pretty.queue', false, true, true, true);
-            } else {
-                $this->fail('Should have raised a 404 Error');
-            }
+        } catch (AMQPProtocolException $exception) {
+            $this->assertInstanceOf(AMQPProtocolChannelException::class, $exception);
+            $this->assertEquals(404, $exception->getCode());
         }
+        $this->channel2->queue_declare($queue, false, true, true, true);
+        $this->channel2->queue_delete($queue, false, false, true);
     }
 }

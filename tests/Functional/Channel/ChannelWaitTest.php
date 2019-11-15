@@ -25,13 +25,15 @@ class ChannelWaitTest extends TestCase
         $this->deferSignal(0.5);
         /** @var AMQPChannel $channel */
         $channel = $factory();
+        $result = false;
         try {
-            $channel->wait();
+            $result = $channel->wait();
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
         }
 
         $this->closeChannel($channel);
+        $this->assertNull($result);
     }
 
     /**

@@ -15,8 +15,8 @@ class ConnectionAuthTest extends AbstractConnectionTest
     /**
      * @test
      * @group connection
+     * @group management
      * @covers \PhpAmqpLib\Connection\AbstractConnection::__construct()
-     *
      */
     public function plain_auth_passwordless_must_fail()
     {

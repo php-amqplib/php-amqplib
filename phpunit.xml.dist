@@ -27,6 +27,9 @@
             </exclude>
         </whitelist>
     </filter>
+    <php>
+        <ini name="error_reporting" value="E_ALL"/>
+    </php>
     <logging>
         <log type="junit" target="build/report.junit.xml"/>
         <log type="coverage-html" target="build/coverage"/>
