@@ -40,6 +40,9 @@
         "squizlabs/php_codesniffer": "^2.5",
         "nategood/httpful": "^0.2.20"
     },
+    "conflict": {
+        "php": "7.4.0 - 7.4.1"
+    },
     "autoload": {
         "psr-4": {
             "PhpAmqpLib\\": "PhpAmqpLib/"
