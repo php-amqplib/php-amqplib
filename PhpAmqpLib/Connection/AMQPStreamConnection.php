@@ -21,6 +21,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param bool $keepalive
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
+     * @param string|null $ssl_protocol
      */
     public function __construct(
         $host,

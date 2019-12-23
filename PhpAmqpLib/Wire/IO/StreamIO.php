@@ -28,6 +28,7 @@ class StreamIO extends AbstractIO
      * @param null $context
      * @param bool $keepalive
      * @param int $heartbeat
+     * @param string|null $ssl_protocol
      */
     public function __construct(
         $host,
