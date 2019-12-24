@@ -42,6 +42,8 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 
 * [enqueue/amqp-lib](https://github.com/php-enqueue/amqp-lib) is a [amqp interop](https://github.com/queue-interop/queue-interop#amqp-interop) compatible wrapper.
 
+* [AMQProxy](https://github.com/cloudamqp/amqproxy) is a proxy library with connection and channel pooling/reusing. This allows for lower connection and channel churn when using php-amqplib, leading to less CPU usage of RabbitMQ. 
+
 ## Setup ##
 
 Ensure you have [composer](http://getcomposer.org) installed, then run the following command:
