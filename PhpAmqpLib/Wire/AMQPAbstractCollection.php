@@ -135,10 +135,8 @@ abstract class AMQPAbstractCollection implements \Iterator
             switch ($type) {
                 case self::T_ARRAY:
                     throw new Exception\AMQPInvalidArgumentException('Arrays must be passed as AMQPArray instance');
-                    break;
                 case self::T_TABLE:
                     throw new Exception\AMQPInvalidArgumentException('Tables must be passed as AMQPTable instance');
-                    break;
                 case self::T_DECIMAL:
                     if (!($val instanceof AMQPDecimal)) {
                         throw new Exception\AMQPInvalidArgumentException('Decimal values must be instance of AMQPDecimal');

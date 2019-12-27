@@ -14,10 +14,10 @@ class StreamIO extends AbstractIO
     /** @var string */
     protected $protocol;
 
-    /** @var resource */
+    /** @var null|resource */
     protected $context;
 
-    /** @var resource */
+    /** @var null|resource */
     private $sock;
 
     /**
@@ -120,7 +120,7 @@ class StreamIO extends AbstractIO
             );
         }
 
-        if (false === stream_socket_get_name($this->sock, true)) {
+        if (!stream_socket_get_name($this->sock, true)) {
             throw new AMQPIOException(
                 sprintf(
                     'Connection refused: %s ',
@@ -312,8 +312,8 @@ class StreamIO extends AbstractIO
             fclose($this->sock);
         }
         $this->sock = null;
-        $this->last_read = null;
-        $this->last_write = null;
+        $this->last_read = 0;
+        $this->last_write = 0;
     }
 
     /**

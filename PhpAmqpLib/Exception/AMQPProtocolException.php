@@ -10,7 +10,7 @@ class AMQPProtocolException extends \Exception implements AMQPExceptionInterface
     /** @var int */
     public $amqp_reply_text;
 
-    /** @var \Exception */
+    /** @var int[] */
     public $amqp_method_sig;
 
     /** @var array */

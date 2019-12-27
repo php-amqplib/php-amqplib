@@ -18,7 +18,7 @@ abstract class GenericContent
     /** @var array Properties content */
     private $properties = array();
 
-    /** @var string Compiled properties */
+    /** @var null|string Compiled properties */
     private $serialized_properties;
 
     /**
@@ -102,7 +102,7 @@ abstract class GenericContent
                 $name
             ));
         }
-        
+
         if (isset($this->properties[$name]) && $this->properties[$name] !== $value || !isset($this->properties[$name])) {
             $this->serialized_properties = null;
         }
