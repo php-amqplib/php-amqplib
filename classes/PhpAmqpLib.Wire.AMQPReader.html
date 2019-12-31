@@ -44,7 +44,9 @@
                             <ul class="dropdown-menu">
                                                                     <li><a>Namespaces</a></li>
                                                                         <li><a href="../namespaces/PhpAmqpLib.html">PhpAmqpLib</a></li>
-                                                                                                                                </ul>
+                                                                                                    
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                            </ul>
                         </li>
                         <li class="dropdown" id="charts-menu">
                             <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
@@ -131,13 +133,13 @@
         </a>
     </li>
 
-                                                                                                                                                                                                                        <li class="method public">
+                                                                                                                                                                                                                                                                                                                                                                                                <li class="method public">
         <a href="#method_getTimeout" title="getTimeout :: ">
             <span class="description"></span><pre>getTimeout</pre>
         </a>
     </li>
 
-                                                                                                                                                                <li class="method public">
+                                                                                                                                                                                                                        <li class="method public">
         <a href="#method_read" title="read :: ">
             <span class="description"></span><pre>read</pre>
         </a>
@@ -170,8 +172,8 @@ so we return it as a string</span><pre>read_long</pre>
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_read_longlong" title="read_longlong :: Even on 64 bit systems PHP integers are singed.">
-            <span class="description">Even on 64 bit systems PHP integers are singed.</span><pre>read_longlong</pre>
+        <a href="#method_read_longlong" title="read_longlong :: Even on 64 bit systems PHP integers are signed.">
+            <span class="description">Even on 64 bit systems PHP integers are signed.</span><pre>read_longlong</pre>
         </a>
     </li>
 
@@ -257,7 +259,7 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
         </a>
     </li>
 
-                                                                                                        <li class="method public">
+                                                                                                                                                                <li class="method public">
         <a href="#method_reuse" title="reuse :: Resets the object from the injected param">
             <span class="description">Resets the object from the injected param</span><pre>reuse</pre>
         </a>
@@ -274,16 +276,41 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
         <li class="nav-header protected">» Protected
             <ul>
                                                                                                                                                     <li class="method protected inherited">
+                            <a href="#method_convertByteOrder" title="convertByteOrder :: ">
+                                <span class="description"></span><pre>convertByteOrder</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected inherited">
                             <a href="#method_correctEndianness" title="correctEndianness :: Converts byte-string between native and network byte order, in both directions">
                                 <span class="description">Converts byte-string between native and network byte order, in both directions</span><pre>correctEndianness</pre>
                             </a>
                         </li>
-                                                                                                                                                        <li class="method protected">
+                                                                                <li class="method protected inherited">
+                            <a href="#method_getBigInteger" title="getBigInteger :: ">
+                                <span class="description"></span><pre>getBigInteger</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected inherited">
+                            <a href="#method_getLongMSB" title="getLongMSB :: ">
+                                <span class="description"></span><pre>getLongMSB</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected inherited">
+                            <a href="#method_getMSB" title="getMSB :: ">
+                                <span class="description"></span><pre>getMSB</pre>
+                            </a>
+                        </li>
+                                                                                                                    <li class="method protected inherited">
+                            <a href="#method_isLittleEndian" title="isLittleEndian :: ">
+                                <span class="description"></span><pre>isLittleEndian</pre>
+                            </a>
+                        </li>
+                                                                                <li class="method protected">
                             <a href="#method_rawread" title="rawread :: ">
                                 <span class="description"></span><pre>rawread</pre>
                             </a>
                         </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <li class="method protected">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <li class="method protected">
                             <a href="#method_tell" title="tell :: ">
                                 <span class="description"></span><pre>tell</pre>
                             </a>
@@ -297,17 +324,17 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
         </li>
         <li class="nav-header private">» Private
             <ul>
-                                                                                                                                                                                        <li class="method private">
-                            <a href="#method_getLongMSB" title="getLongMSB :: ">
-                                <span class="description"></span><pre>getLongMSB</pre>
-                            </a>
-                        </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <li class="method private">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <li class="method private">
                             <a href="#method_read_signed_long" title="read_signed_long :: ">
                                 <span class="description"></span><pre>read_signed_long</pre>
                             </a>
                         </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            </ul>
+                                                                                                                                                                                                                                                                                                                                            <li class="method private">
+                            <a href="#method_resetCounters" title="resetCounters :: ">
+                                <span class="description"></span><pre>resetCounters</pre>
+                            </a>
+                        </li>
+                                                                                                                                                                                                </ul>
         </li>
         <li class="nav-header">
             <i class="icon-custom icon-constant"></i> Constants
@@ -415,7 +442,11 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                     </div>
@@ -449,17 +480,21 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                     </div>
                             </div>
 
                         </div>
-                                            <a id="method_correctEndianness"></a>
-                        <div class="element clickable method protected  method_correctEndianness inherited" data-toggle="collapse" data-target=".method_correctEndianness .collapse">
-                            <h2>Converts byte-string between native and network byte order, in both directions</h2>
-                            <pre>correctEndianness(string $byteStr) : string</pre>
+                                            <a id="method_convertByteOrder"></a>
+                        <div class="element clickable method protected  method_convertByteOrder inherited" data-toggle="collapse" data-target=".method_convertByteOrder .collapse">
+                            <h2>convertByteOrder</h2>
+                            <pre>convertByteOrder(string $bytes) : string</pre>
                             <div class="labels">
                                 <span class="label">inherited</span>                                                                                                                                                            </div>
 
@@ -469,11 +504,15 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
-                                                <h4>$byteStr</h4>
+                                                <h4>$bytes</h4>
                                                 <code>string</code><p></p>
                                             </div>
                                                                             
@@ -483,12 +522,12 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                             </div>
 
                         </div>
-                                            <a id="method_getLongMSB"></a>
-                        <div class="element clickable method private  method_getLongMSB" data-toggle="collapse" data-target=".method_getLongMSB .collapse">
-                            <h2>getLongMSB</h2>
-                            <pre>getLongMSB(integer $longInt) : boolean</pre>
+                                            <a id="method_correctEndianness"></a>
+                        <div class="element clickable method protected  method_correctEndianness inherited" data-toggle="collapse" data-target=".method_correctEndianness .collapse">
+                            <h2>Converts byte-string between native and network byte order, in both directions</h2>
+                            <pre>correctEndianness(string $bytes) : string</pre>
                             <div class="labels">
-                                                                <span class="label">static</span>                                                                                                                            </div>
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
 
                             
                             <div class="row collapse">
@@ -496,7 +535,77 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$bytes</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>string</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getBigInteger"></a>
+                        <div class="element clickable method protected  method_getBigInteger inherited" data-toggle="collapse" data-target=".method_getBigInteger .collapse">
+                            <h2>getBigInteger</h2>
+                            <pre>getBigInteger(string $value, integer $base = 10) : \phpseclib\Math\BigInteger</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$value</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$base</h4>
+                                                <code>integer</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\phpseclib\Math\BigInteger</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getLongMSB"></a>
+                        <div class="element clickable method protected  method_getLongMSB inherited" data-toggle="collapse" data-target=".method_getLongMSB .collapse">
+                            <h2>getLongMSB</h2>
+                            <pre>getLongMSB(integer $longInt) : boolean</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -510,10 +619,41 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                             </div>
 
                         </div>
+                                            <a id="method_getMSB"></a>
+                        <div class="element clickable method protected  method_getMSB inherited" data-toggle="collapse" data-target=".method_getMSB .collapse">
+                            <h2>getMSB</h2>
+                            <pre>getMSB(string $bytes) : boolean</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$bytes</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_getTimeout"></a>
                         <div class="element clickable method public  method_getTimeout" data-toggle="collapse" data-target=".method_getTimeout .collapse">
                             <h2>getTimeout</h2>
-                            <pre>getTimeout() : integer|float</pre>
+                            <pre>getTimeout() : integer|float|null</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -530,11 +670,48 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
-                                        <code>integer|float</code><p></p>
+                                        <code>integer|float|null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_isLittleEndian"></a>
+                        <div class="element clickable method protected  method_isLittleEndian inherited" data-toggle="collapse" data-target=".method_isLittleEndian .collapse">
+                            <h2>isLittleEndian</h2>
+                            <pre>isLittleEndian() : boolean</pre>
+                            <div class="labels">
+                                <span class="label">inherited</span>                                <span class="label">static</span>                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>boolean</code><p></p>
                                                                     </div>
                             </div>
 
@@ -592,7 +769,11 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -619,7 +800,11 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -653,7 +838,11 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -682,7 +871,11 @@ seconds since the Unix epoch in 1-second resolution.</span><pre>read_timestamp</
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -712,7 +905,11 @@ so we return it as a string</h2>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -723,16 +920,15 @@ so we return it as a string</h2>
                         </div>
                                             <a id="method_read_longlong"></a>
                         <div class="element clickable method public  method_read_longlong" data-toggle="collapse" data-target=".method_read_longlong .collapse">
-                            <h2>Even on 64 bit systems PHP integers are singed.</h2>
-                            <pre>read_longlong() : string</pre>
+                            <h2>Even on 64 bit systems PHP integers are signed.</h2>
+                            <pre>read_longlong() : integer|string</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
                             
                             <div class="row collapse">
                                 <div class="detail-description">
-                                    <div class="long_description"><p>Since we need an unsigned value here we return it
-as a string.</p></div>
+                                    <div class="long_description"><p>Since we need an unsigned value here we return it as a string.</p></div>
 
                                     <table class="table">
                                                                                     <tr>
@@ -742,11 +938,15 @@ as a string.</p></div>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
-                                        <code>string</code><p></p>
+                                        <code>integer|string</code><p></p>
                                                                     </div>
                             </div>
 
@@ -780,7 +980,11 @@ a plain PHP string.</h2>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                     </div>
@@ -807,7 +1011,11 @@ a plain PHP string.</h2>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -847,7 +1055,11 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                     </div>
@@ -874,7 +1086,11 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -911,7 +1127,11 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                     </div>
@@ -938,7 +1158,11 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -950,7 +1174,7 @@ value in 0..2^32 range.</p>
                                             <a id="method_read_signed_longlong"></a>
                         <div class="element clickable method public  method_read_signed_longlong" data-toggle="collapse" data-target=".method_read_signed_longlong .collapse">
                             <h2>read_signed_longlong</h2>
-                            <pre>read_signed_longlong() : string</pre>
+                            <pre>read_signed_longlong() : integer|string</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
 
@@ -967,11 +1191,15 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
-                                        <code>string</code><p></p>
+                                        <code>integer|string</code><p></p>
                                                                     </div>
                             </div>
 
@@ -996,7 +1224,11 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -1025,7 +1257,11 @@ value in 0..2^32 range.</p>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -1048,7 +1284,11 @@ values are (type,value) tuples.</h2>
                                     <div class="long_description"></div>
 
                                     <table class="table">
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1082,7 +1322,11 @@ values are (type,value) tuples.</h2>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -1119,7 +1363,11 @@ seconds since the Unix epoch in 1-second resolution.</h2>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                     </div>
@@ -1166,6 +1414,44 @@ seconds since the Unix epoch in 1-second resolution.</h2>
                             </div>
 
                         </div>
+                                            <a id="method_resetCounters"></a>
+                        <div class="element clickable method private  method_resetCounters" data-toggle="collapse" data-target=".method_resetCounters .collapse">
+                            <h2>resetCounters</h2>
+                            <pre>resetCounters() </pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
+
+                                    
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_reuse"></a>
                         <div class="element clickable method public  method_reuse" data-toggle="collapse" data-target=".method_reuse .collapse">
                             <h2>Resets the object from the injected param</h2>
@@ -1189,7 +1475,11 @@ or a timeout.</p></div>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1221,7 +1511,11 @@ or a timeout.</p></div>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                                                             <h3>Arguments</h3>
                                                                                     <div class="subelement argument">
@@ -1253,7 +1547,11 @@ or a timeout.</p></div>
                                                 <td>
                                                                                                     </td>
                                             </tr>
-                                                                                                                    </table>
+                                                                                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+                                    </table>
 
                                     
                                                                             <h3>Response</h3>
@@ -1606,32 +1904,6 @@ or a timeout.</p></div>
                                                                             </div>
                                 </div>
                             </div>
-                                                    <a id="property_is64bits"> </a>
-                            <div class="element clickable property  protected property_is64bits inherited" data-toggle="collapse" data-target=".property_is64bits .collapse">
-                                <h2>is64bits</h2>
-                                <pre>is64bits : boolean</pre>
-                                <div class="labels">
-                                    <span class="label">inherited</span>                                                                    </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>boolean</code>
-                                                                            </div>
-                                </div>
-                            </div>
                                                     <a id="property_timeout"> </a>
                             <div class="element clickable property  protected property_timeout" data-toggle="collapse" data-target=".property_timeout .collapse">
                                 <h2>timeout</h2>
@@ -1687,7 +1959,7 @@ or a timeout.</p></div>
                                                     <a id="property_io"> </a>
                             <div class="element clickable property  protected property_io" data-toggle="collapse" data-target=".property_io .collapse">
                                 <h2>io</h2>
-                                <pre>io : \PhpAmqpLib\Wire\IO\AbstractIO</pre>
+                                <pre>io : null|\PhpAmqpLib\Wire\IO\AbstractIO</pre>
                                 <div class="labels">
                                                                                                         </div>
                                 <div class="row collapse">
@@ -1706,7 +1978,59 @@ or a timeout.</p></div>
                                                                                     </table>
 
                                                                                     <h3>Type(s)</h3>
-                                            <code><a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">\PhpAmqpLib\Wire\IO\AbstractIO</a></code>
+                                            <code>null|<a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">\PhpAmqpLib\Wire\IO\AbstractIO</a></code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_is64bits"> </a>
+                            <div class="element clickable property  protected property_is64bits inherited" data-toggle="collapse" data-target=".property_is64bits .collapse">
+                                <h2>is64bits</h2>
+                                <pre>is64bits : boolean</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                                                    </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>boolean</code>
+                                                                            </div>
+                                </div>
+                            </div>
+                                                    <a id="property_bigIntegers"> </a>
+                            <div class="element clickable property  protected property_bigIntegers inherited" data-toggle="collapse" data-target=".property_bigIntegers .collapse">
+                                <h2>bigIntegers</h2>
+                                <pre>bigIntegers : array&lt;mixed,\phpseclib\Math\BigInteger[]&gt;</pre>
+                                <div class="labels">
+                                    <span class="label">inherited</span>                                    <span class="label">static</span>                                </div>
+                                <div class="row collapse">
+                                    <div class="detail-description">
+                                        <div class="long_description"></div>
+
+                                        <table class="table">
+                                                                                            <tr>
+                                                    <th>
+                                                        var
+                                                    </th>
+                                                    <td>
+                                                                                                                    
+                                                                                                            </td>
+                                                </tr>
+                                                                                    </table>
+
+                                                                                    <h3>Type(s)</h3>
+                                            <code>array&lt;mixed,\phpseclib\Math\BigInteger[]&gt;</code>
                                                                             </div>
                                 </div>
                             </div>
@@ -1715,7 +2039,7 @@ or a timeout.</p></div>
                                 <h2>isLittleEndian</h2>
                                 <pre>isLittleEndian : boolean</pre>
                                 <div class="labels">
-                                    <span class="label">inherited</span>                                                                    </div>
+                                    <span class="label">inherited</span>                                    <span class="label">static</span>                                </div>
                                 <div class="row collapse">
                                     <div class="detail-description">
                                         <div class="long_description"></div>
@@ -1756,7 +2080,7 @@ or a timeout.</p></div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Wed, 13 Nov 2019 22:34:21 +0000.<br/>
+            generated on Tue, 31 Dec 2019 20:39:40 +0000.<br/>
     </footer>
     </body>
 </html>
