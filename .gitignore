@@ -3,4 +3,5 @@ composer.lock
 phpunit.xml
 build/
 docs/
+tools/
 phpDocumentor.phar
