@@ -3,774 +3,1021 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta charset="utf-8"/>
-    <title>    php-amqplib &raquo; \PhpAmqpLib\Helper\SocketConstants
-</title>
+    <title>php-amqplib</title>
     <meta name="author" content=""/>
     <meta name="description" content=""/>
 
-            <link href="../css/template.css" rel="stylesheet" media="all"/>
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
     
-            <!--[if lt IE 9]>
-        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
-        <![endif]-->
-        <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
-        <script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
-        <script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script>
-        <script src="../js/bootstrap.js" type="text/javascript"></script>
-        <script src="../js/template.js" type="text/javascript"></script>
-        <script src="../js/prettify/prettify.min.js" type="text/javascript"></script>
-    
-            <link rel="shortcut icon" href="../img/favicon.ico"/>
-        <link rel="apple-touch-icon" href="../img/apple-touch-icon.png"/>
-        <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png"/>
-        <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png"/>
-    </head>
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
 <body>
 
-        <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span> <span class="icon-bar"></span>
-                    <span class="icon-bar"></span> </a>
-                <a class="brand" href="../index.html">php-amqplib</a>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">php-amqplib</a>
 
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        <li class="dropdown">
-                            <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
-                                API Documentation <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                                                    <li><a>Namespaces</a></li>
-                                                                        <li><a href="../namespaces/PhpAmqpLib.html">PhpAmqpLib</a></li>
-                                                                                                    
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-                            </ul>
-                        </li>
-                        <li class="dropdown" id="charts-menu">
-                            <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
-                                Charts <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="../graph_class.html">
-                                        <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown" id="reports-menu">
-                            <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
-                                Reports <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="../errors.html">
-                                        <i class="icon-list-alt"></i>&#160;Errors
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../markers.html">
-                                        <i class="icon-list-alt"></i>&#160;Markers
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../deprecated.html">
-                                        <i class="icon-list-alt"></i>&#160;Deprecated
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">626</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">15</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1617103406"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1617103406" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1671046756"></a>
+                                <a href="../namespaces/PhpAmqpLib.html" style="margin-left: 30px; padding-left: 0">PhpAmqpLib</a>
+            </div>
+            <div id="namespace-1671046756" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-87849888"></a>
+                                <a href="../namespaces/PhpAmqpLib.Channel.html" style="margin-left: 30px; padding-left: 0">Channel</a>
+            </div>
+            <div id="namespace-87849888" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Channel.AbstractChannel.html">AbstractChannel</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Channel.AMQPChannel.html">AMQPChannel</a></li>
+                                            </ul>
                 </div>
             </div>
         </div>
-        <div class="go_to_top">
-            <a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>
-        </div>
     </div>
-    
-    <div id="___" class="container">
-        <noscript>
-            <div class="alert alert-warning">
-                Javascript is disabled; several features are only available if Javascript is enabled.
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-168702372"></a>
+                                <a href="../namespaces/PhpAmqpLib.Connection.html" style="margin-left: 30px; padding-left: 0">Connection</a>
             </div>
-        </noscript>
+            <div id="namespace-168702372" class="accordion-body collapse ">
+                <div class="accordion-inner">
 
-        
-            <style>
-        .deprecated h2 {
-            text-decoration: line-through;
-        }
-    </style>
-    <div class="row">
-        <div class="span4">
-                    <div class="btn-group view pull-right" data-toggle="buttons-radio">
-        <button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button>
-        <button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
-    </div>
-    <div class="btn-group visibility" data-toggle="buttons-checkbox">
-        <button class="btn public active" title="Show public elements">Public</button>
-        <button class="btn protected" title="Show protected elements">Protected</button>
-        <button class="btn private" title="Show private elements">Private</button>
-        <button class="btn inherited active" title="Show inherited elements">Inherited</button>
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AbstractConnection.html">AbstractConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPConnection.html">AMQPConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPLazyConnection.html">AMQPLazyConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPLazySocketConnection.html">AMQPLazySocketConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPSocketConnection.html">AMQPSocketConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPSSLConnection.html">AMQPSSLConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPStreamConnection.html">AMQPStreamConnection</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-        <ul class="side-nav nav nav-list">
-        <li class="nav-header">
-            <i class="icon-custom icon-method"></i> Methods
-            <ul>
-                                                                                                    <li class="method public">
-        <a href="#method___construct" title="__construct :: ">
-            <span class="description"></span><pre>__construct</pre>
-        </a>
-    </li>
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-693845054"></a>
+                                <a href="../namespaces/PhpAmqpLib.Exception.html" style="margin-left: 30px; padding-left: 0">Exception</a>
+            </div>
+            <div id="namespace-693845054" class="accordion-body collapse ">
+                <div class="accordion-inner">
 
-                                                                                                        <li class="method public">
-        <a href="#method___get" title="__get :: ">
-            <span class="description"></span><pre>__get</pre>
-        </a>
-    </li>
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PhpAmqpLib.Exception.AMQPExceptionInterface.html">AMQPExceptionInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPBasicCancelException.html">AMQPBasicCancelException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPChannelClosedException.html">AMQPChannelClosedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPChannelException.html">AMQPChannelException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPConnectionClosedException.html">AMQPConnectionClosedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPConnectionException.html">AMQPConnectionException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPDataReadException.html">AMQPDataReadException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPEmptyDeliveryTagException.html">AMQPEmptyDeliveryTagException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPException.html">AMQPException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPHeartbeatMissedException.html">AMQPHeartbeatMissedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPInvalidArgumentException.html">AMQPInvalidArgumentException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPInvalidFrameException.html">AMQPInvalidFrameException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPIOException.html">AMQPIOException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPIOWaitException.html">AMQPIOWaitException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPLogicException.html">AMQPLogicException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPNoDataException.html">AMQPNoDataException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPNotImplementedException.html">AMQPNotImplementedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPOutOfBoundsException.html">AMQPOutOfBoundsException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPOutOfRangeException.html">AMQPOutOfRangeException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPProtocolChannelException.html">AMQPProtocolChannelException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPProtocolConnectionException.html">AMQPProtocolConnectionException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPProtocolException.html">AMQPProtocolException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPRuntimeException.html">AMQPRuntimeException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPSocketException.html">AMQPSocketException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPTimeoutException.html">AMQPTimeoutException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                                                                                        <li class="method public">
-        <a href="#method___isset" title="__isset :: ">
-            <span class="description"></span><pre>__isset</pre>
-        </a>
-    </li>
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-102312439"></a>
+                                <a href="../namespaces/PhpAmqpLib.Exchange.html" style="margin-left: 30px; padding-left: 0">Exchange</a>
+            </div>
+            <div id="namespace-102312439" class="accordion-body collapse ">
+                <div class="accordion-inner">
 
-                                                                                                        <li class="method public">
-        <a href="#method_getInstance" title="getInstance :: ">
-            <span class="description"></span><pre>getInstance</pre>
-        </a>
-    </li>
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exchange.AMQPExchangeType.html">AMQPExchangeType</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                                                </ul>
-        </li>
-        <li class="nav-header protected">» Protected
-            <ul>
-                                                                                                                                                                                            </ul>
-        </li>
-        <li class="nav-header private">» Private
-            <ul>
-                                                                                                                                                                                            </ul>
-        </li>
-        <li class="nav-header">
-            <i class="icon-custom icon-constant"></i> Constants
-            <ul>
-                            </ul>
-        </li>
-    </ul>
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1168003896"></a>
+                                <a href="../namespaces/PhpAmqpLib.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-1168003896" class="accordion-body collapse ">
+                <div class="accordion-inner">
 
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-122668558"></a>
+                                <a href="../namespaces/PhpAmqpLib.Helper.Protocol.html" style="margin-left: 30px; padding-left: 0">Protocol</a>
+            </div>
+            <div id="namespace-122668558" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.MethodMap080.html">MethodMap080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.MethodMap091.html">MethodMap091</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Protocol080.html">Protocol080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Protocol091.html">Protocol091</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Wait080.html">Wait080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Wait091.html">Wait091</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.DebugHelper.html">DebugHelper</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.MiscHelper.html">MiscHelper</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.SocketConstants.html">SocketConstants</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-507852012"></a>
+                                <a href="../namespaces/PhpAmqpLib.Message.html" style="margin-left: 30px; padding-left: 0">Message</a>
+            </div>
+            <div id="namespace-507852012" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Message.AMQPMessage.html">AMQPMessage</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-966273759"></a>
+                                <a href="../namespaces/PhpAmqpLib.Wire.html" style="margin-left: 30px; padding-left: 0">Wire</a>
+            </div>
+            <div id="namespace-966273759" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-429915405"></a>
+                                <a href="../namespaces/PhpAmqpLib.Wire.IO.html" style="margin-left: 30px; padding-left: 0">IO</a>
+            </div>
+            <div id="namespace-429915405" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">AbstractIO</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.IO.SocketIO.html">SocketIO</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.IO.StreamIO.html">StreamIO</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AbstractClient.html">AbstractClient</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPAbstractCollection.html">AMQPAbstractCollection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPArray.html">AMQPArray</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPDecimal.html">AMQPDecimal</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">AMQPReader</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPTable.html">AMQPTable</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPWriter.html">AMQPWriter</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.Constants.html">Constants</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.Constants080.html">Constants080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.Constants091.html">Constants091</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.GenericContent.html">GenericContent</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
         </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/PhpAmqpLib.Helper.html">\PhpAmqpLib\Helper</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
 
-        <div class="span8">
-            <div class="element class">
-                <h1>SocketConstants</h1>
-                <small style="display: block; text-align: right">
-                                                        </small>
-                <p class="short_description"></p>
-                <div class="details">
-                    <div class="long_description">
+                    <h1><small>\PhpAmqpLib\Helper</small>SocketConstants</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#method___get" class="">__get()</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#method___isset" class="">__isset()</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#method_getInstance" class="">getInstance()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_EPIPE" class="">$SOCKET_EPIPE</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ENETDOWN" class="">$SOCKET_ENETDOWN</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ENETUNREACH" class="">$SOCKET_ENETUNREACH</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ENETRESET" class="">$SOCKET_ENETRESET</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ECONNABORTED" class="">$SOCKET_ECONNABORTED</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ECONNRESET" class="">$SOCKET_ECONNRESET</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ECONNREFUSED" class="">$SOCKET_ECONNREFUSED</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_ETIMEDOUT" class="">$SOCKET_ETIMEDOUT</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_EWOULDBLOCK" class="">$SOCKET_EWOULDBLOCK</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_EINTR" class="">$SOCKET_EINTR</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_SOCKET_EAGAIN" class="">$SOCKET_EAGAIN</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <em>No protected methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No protected properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_constants" class="">$constants</a><br />
+                                                                    <a href="../classes/PhpAmqpLib.Helper.SocketConstants.html#property_instance" class="">$instance</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                                                <span class="label label-info">final</span>
+                    
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/Helper.SocketConstants.html"><div class="path-wrapper">Helper/SocketConstants.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">PhpAmqpLib</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                    <div class="namespace-wrapper">\PhpAmqpLib\Helper\SocketConstants</div>
+                            </dd>
+
                         
-                    </div>
-                    <table class="table table-bordered">
-                                                                                    <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                            <tr>
-                                    <th>
-                                        property-read
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                
-                                    </td>
-                                </tr>
-                                                                                                                <tr>
-                                    <th>
-                                        package
-                                                                            </th>
-                                    <td>
-                                                                                    
-                                                                                <p>PhpAmqpLib</p>
-                                    </td>
-                                </tr>
-                                                                                                                                                                                </table>
-
-                    <h3><i class="icon-custom icon-method"></i> Methods</h3>
-                                                                <a id="method___construct"></a>
-                        <div class="element clickable method public  method___construct" data-toggle="collapse" data-target=".method___construct .collapse">
-                            <h2>__construct</h2>
-                            <pre>__construct() </pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-                                    </table>
-
-                                    
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method___get"></a>
-                        <div class="element clickable method public  method___get" data-toggle="collapse" data-target=".method___get .collapse">
-                            <h2>__get</h2>
-                            <pre>__get(string $name) : integer</pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$name</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
-                                                                            <h3>Response</h3>
-                                        <code>integer</code><p></p>
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method___isset"></a>
-                        <div class="element clickable method public  method___isset" data-toggle="collapse" data-target=".method___isset .collapse">
-                            <h2>__isset</h2>
-                            <pre>__isset(string $name) : boolean</pre>
-                            <div class="labels">
-                                                                                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-                                    </table>
-
-                                                                            <h3>Arguments</h3>
-                                                                                    <div class="subelement argument">
-                                                <h4>$name</h4>
-                                                <code>string</code><p></p>
-                                            </div>
-                                                                            
-                                                                            <h3>Response</h3>
-                                        <code>boolean</code><p></p>
-                                                                    </div>
-                            </div>
-
-                        </div>
-                                            <a id="method_getInstance"></a>
-                        <div class="element clickable method public  method_getInstance" data-toggle="collapse" data-target=".method_getInstance .collapse">
-                            <h2>getInstance</h2>
-                            <pre>getInstance() : self</pre>
-                            <div class="labels">
-                                                                <span class="label">static</span>                                                                                                                            </div>
-
-                            
-                            <div class="row collapse">
-                                <div class="detail-description">
-                                    <div class="long_description"></div>
-
-                                    <table class="table">
-                                                                                    <tr>
-                                                <th>
-                                                    
-                                                </th>
-                                                <td>
-                                                                                                    </td>
-                                            </tr>
-                                                                                
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-                                    </table>
-
-                                    
-                                                                            <h3>Response</h3>
-                                        <code>self</code><p></p>
-                                                                    </div>
-                            </div>
-
-                        </div>
-                    
-                    
-                                                                <h3><i class="icon-custom icon-property"></i> Properties</h3>
-                                                    <a id="property_constants"> </a>
-                            <div class="element clickable property  private property_constants" data-toggle="collapse" data-target=".property_constants .collapse">
-                                <h2>constants</h2>
-                                <pre>constants : array&lt;mixed,integer&gt;</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>array&lt;mixed,integer&gt;</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_instance"> </a>
-                            <div class="element clickable property  private property_instance" data-toggle="collapse" data-target=".property_instance .collapse">
-                                <h2>instance</h2>
-                                <pre>instance : self</pre>
-                                <div class="labels">
-                                                                        <span class="label">static</span>                                </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        var
-                                                    </th>
-                                                    <td>
-                                                                                                                    
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>self</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_EPIPE"> </a>
-                            <div class="element clickable property  public property_SOCKET_EPIPE" data-toggle="collapse" data-target=".property_SOCKET_EPIPE .collapse">
-                                <h2>SOCKET_EPIPE</h2>
-                                <pre>SOCKET_EPIPE : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ENETDOWN"> </a>
-                            <div class="element clickable property  public property_SOCKET_ENETDOWN" data-toggle="collapse" data-target=".property_SOCKET_ENETDOWN .collapse">
-                                <h2>SOCKET_ENETDOWN</h2>
-                                <pre>SOCKET_ENETDOWN : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ENETUNREACH"> </a>
-                            <div class="element clickable property  public property_SOCKET_ENETUNREACH" data-toggle="collapse" data-target=".property_SOCKET_ENETUNREACH .collapse">
-                                <h2>SOCKET_ENETUNREACH</h2>
-                                <pre>SOCKET_ENETUNREACH : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ENETRESET"> </a>
-                            <div class="element clickable property  public property_SOCKET_ENETRESET" data-toggle="collapse" data-target=".property_SOCKET_ENETRESET .collapse">
-                                <h2>SOCKET_ENETRESET</h2>
-                                <pre>SOCKET_ENETRESET : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ECONNABORTED"> </a>
-                            <div class="element clickable property  public property_SOCKET_ECONNABORTED" data-toggle="collapse" data-target=".property_SOCKET_ECONNABORTED .collapse">
-                                <h2>SOCKET_ECONNABORTED</h2>
-                                <pre>SOCKET_ECONNABORTED : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ECONNRESET"> </a>
-                            <div class="element clickable property  public property_SOCKET_ECONNRESET" data-toggle="collapse" data-target=".property_SOCKET_ECONNRESET .collapse">
-                                <h2>SOCKET_ECONNRESET</h2>
-                                <pre>SOCKET_ECONNRESET : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ECONNREFUSED"> </a>
-                            <div class="element clickable property  public property_SOCKET_ECONNREFUSED" data-toggle="collapse" data-target=".property_SOCKET_ECONNREFUSED .collapse">
-                                <h2>SOCKET_ECONNREFUSED</h2>
-                                <pre>SOCKET_ECONNREFUSED : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_ETIMEDOUT"> </a>
-                            <div class="element clickable property  public property_SOCKET_ETIMEDOUT" data-toggle="collapse" data-target=".property_SOCKET_ETIMEDOUT .collapse">
-                                <h2>SOCKET_ETIMEDOUT</h2>
-                                <pre>SOCKET_ETIMEDOUT : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_EWOULDBLOCK"> </a>
-                            <div class="element clickable property  public property_SOCKET_EWOULDBLOCK" data-toggle="collapse" data-target=".property_SOCKET_EWOULDBLOCK .collapse">
-                                <h2>SOCKET_EWOULDBLOCK</h2>
-                                <pre>SOCKET_EWOULDBLOCK : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_EINTR"> </a>
-                            <div class="element clickable property  public property_SOCKET_EINTR" data-toggle="collapse" data-target=".property_SOCKET_EINTR .collapse">
-                                <h2>SOCKET_EINTR</h2>
-                                <pre>SOCKET_EINTR : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                    <a id="property_SOCKET_EAGAIN"> </a>
-                            <div class="element clickable property  public property_SOCKET_EAGAIN" data-toggle="collapse" data-target=".property_SOCKET_EAGAIN .collapse">
-                                <h2>SOCKET_EAGAIN</h2>
-                                <pre>SOCKET_EAGAIN : integer</pre>
-                                <div class="labels">
-                                                                                                        </div>
-                                <div class="row collapse">
-                                    <div class="detail-description">
-                                        <div class="long_description"></div>
-
-                                        <table class="table">
-                                                                                            <tr>
-                                                    <th>
-                                                        
-                                                    </th>
-                                                    <td>
-                                                                                                            </td>
-                                                </tr>
-                                                                                    </table>
-
-                                                                                    <h3>Type(s)</h3>
-                                            <code>integer</code>
-                                                                            </div>
-                                </div>
-                            </div>
-                                                            </div>
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
             </div>
-            <a id="\PhpAmqpLib\Helper\SocketConstants"></a>
-            <ul class="breadcrumb">
-                <li><a href="../index.html"><i class="icon-custom icon-class"></i></a></li>
-                    
-    
-    <li><span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Helper.html">Helper</a></li>
 
-                <li class="active"><span class="divider">\</span><a href="../classes/PhpAmqpLib.Helper.SocketConstants.html">SocketConstants</a></li>
-            </ul>
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_EPIPE" name="property_SOCKET_EPIPE" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_EPIPE</h3>
+                <pre class="signature">$SOCKET_EPIPE : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ENETDOWN" name="property_SOCKET_ENETDOWN" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ENETDOWN</h3>
+                <pre class="signature">$SOCKET_ENETDOWN : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ENETUNREACH" name="property_SOCKET_ENETUNREACH" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ENETUNREACH</h3>
+                <pre class="signature">$SOCKET_ENETUNREACH : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ENETRESET" name="property_SOCKET_ENETRESET" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ENETRESET</h3>
+                <pre class="signature">$SOCKET_ENETRESET : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ECONNABORTED" name="property_SOCKET_ECONNABORTED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ECONNABORTED</h3>
+                <pre class="signature">$SOCKET_ECONNABORTED : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ECONNRESET" name="property_SOCKET_ECONNRESET" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ECONNRESET</h3>
+                <pre class="signature">$SOCKET_ECONNRESET : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ECONNREFUSED" name="property_SOCKET_ECONNREFUSED" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ECONNREFUSED</h3>
+                <pre class="signature">$SOCKET_ECONNREFUSED : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_ETIMEDOUT" name="property_SOCKET_ETIMEDOUT" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_ETIMEDOUT</h3>
+                <pre class="signature">$SOCKET_ETIMEDOUT : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_EWOULDBLOCK" name="property_SOCKET_EWOULDBLOCK" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_EWOULDBLOCK</h3>
+                <pre class="signature">$SOCKET_EWOULDBLOCK : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_EINTR" name="property_SOCKET_EINTR" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_EINTR</h3>
+                <pre class="signature">$SOCKET_EINTR : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_SOCKET_EAGAIN" name="property_SOCKET_EAGAIN" class="anchor"></a>
+            <article class="property">
+                <h3 class="public ">$SOCKET_EAGAIN</h3>
+                <pre class="signature">$SOCKET_EAGAIN : integer</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                integer
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_constants" name="property_constants" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$constants</h3>
+                <pre class="signature">$constants : array&lt;mixed,integer&gt;</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                array&lt;mixed,integer&gt;
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_instance" name="property_instance" class="anchor"></a>
+            <article class="property">
+                <h3 class="private ">$instance</h3>
+                <pre class="signature">$instance : self</pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                self
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___get" name="method___get" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__get()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__get(string  <span class="argument">$name</span>) : integer</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+                                    <h4>Returns</h4>
+                    integer
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___isset" name="method___isset" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__isset()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__isset(string  <span class="argument">$name</span>) : boolean</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$name </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+                                    <h4>Returns</h4>
+                    boolean
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getInstance" name="method_getInstance" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getInstance()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getInstance() : self</pre>
+                <p><em></em></p>
+                
+
+                
+                
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
+
+                                    <h4>Returns</h4>
+                    self
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">SocketConstants.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/Helper/SocketConstants.php.txt" class="language-php line-numbers"></pre>
         </div>
     </div>
 
-    </div>
-
-        <footer class="span12">
-            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
-            <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Tue, 31 Dec 2019 20:39:40 +0000.<br/>
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 2nd, 2020 at 21:31.
+                </section>
+            </section>
+        </section>
     </footer>
-    </body>
+</div>
+
+</body>
 </html>

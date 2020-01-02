@@ -3,323 +3,474 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta charset="utf-8"/>
-    <title>     &raquo; \PhpAmqpLib\Wire
-</title>
+    <title>php-amqplib</title>
     <meta name="author" content=""/>
     <meta name="description" content=""/>
 
-            <link href="../css/template.css" rel="stylesheet" media="all"/>
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
     
-            <!--[if lt IE 9]>
-        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
-        <![endif]-->
-        <script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script>
-        <script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script>
-        <script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script>
-        <script src="../js/bootstrap.js" type="text/javascript"></script>
-        <script src="../js/template.js" type="text/javascript"></script>
-        <script src="../js/prettify/prettify.min.js" type="text/javascript"></script>
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
     
-            <link rel="shortcut icon" href="../img/favicon.ico"/>
-        <link rel="apple-touch-icon" href="../img/apple-touch-icon.png"/>
-        <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png"/>
-        <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png"/>
-    </head>
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
 <body>
 
-        <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span> <span class="icon-bar"></span>
-                    <span class="icon-bar"></span> </a>
-                <a class="brand" href="../index.html">php-amqplib</a>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">php-amqplib</a>
 
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        <li class="dropdown">
-                            <a href="#api" class="dropdown-toggle" data-toggle="dropdown">
-                                API Documentation <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                                                    <li><a>Namespaces</a></li>
-                                                                        <li><a href="../namespaces/PhpAmqpLib.html">PhpAmqpLib</a></li>
-                                                                                                    
-Warning: count(): Parameter must be an array or an object that implements Countable in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Extension/Core.php on line 1293
-                            </ul>
-                        </li>
-                        <li class="dropdown" id="charts-menu">
-                            <a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
-                                Charts <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="../graph_class.html">
-                                        <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="dropdown" id="reports-menu">
-                            <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
-                                Reports <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="../errors.html">
-                                        <i class="icon-list-alt"></i>&#160;Errors
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../markers.html">
-                                        <i class="icon-list-alt"></i>&#160;Markers
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="../deprecated.html">
-                                        <i class="icon-list-alt"></i>&#160;Deprecated
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">626</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">15</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-716525894"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-716525894" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-733213619"></a>
+                                <a href="../namespaces/PhpAmqpLib.html" style="margin-left: 30px; padding-left: 0">PhpAmqpLib</a>
+            </div>
+            <div id="namespace-733213619" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-89909507"></a>
+                                <a href="../namespaces/PhpAmqpLib.Channel.html" style="margin-left: 30px; padding-left: 0">Channel</a>
+            </div>
+            <div id="namespace-89909507" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Channel.AbstractChannel.html">AbstractChannel</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Channel.AMQPChannel.html">AMQPChannel</a></li>
+                                            </ul>
                 </div>
             </div>
         </div>
-        <div class="go_to_top">
-            <a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>
-        </div>
     </div>
-    
-    <div id="___" class="container">
-        <noscript>
-            <div class="alert alert-warning">
-                Javascript is disabled; several features are only available if Javascript is enabled.
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-404557327"></a>
+                                <a href="../namespaces/PhpAmqpLib.Connection.html" style="margin-left: 30px; padding-left: 0">Connection</a>
             </div>
-        </noscript>
+            <div id="namespace-404557327" class="accordion-body collapse ">
+                <div class="accordion-inner">
 
-        
-            
-    <div class="row">
-
-        <div class="span4">
-            <div class="btn-group view pull-right" data-toggle="buttons-radio">
-                <button class="btn details" title="Show descriptions and method names">
-                    <i class="icon-list"></i></button><button class="btn simple" title="Show only method names">
-                    <i class="icon-align-justify"></i>
-                </button>
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AbstractConnection.html">AbstractConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPConnection.html">AMQPConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPLazyConnection.html">AMQPLazyConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPLazySocketConnection.html">AMQPLazySocketConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPSocketConnection.html">AMQPSocketConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPSSLConnection.html">AMQPSSLConnection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Connection.AMQPStreamConnection.html">AMQPStreamConnection</a></li>
+                                            </ul>
+                </div>
             </div>
-            <ul class="side-nav nav nav-list">
-                <li class="nav-header">
-                    <i class="icon-map-marker"></i> Namespaces
-                </li>
-                <a href="../namespaces/PhpAmqpLib.Wire.html" title="Wire">
-                    <i class="icon-th"></i> Wire
-                </a>
-                <ul class="nav nav-list nav-namespaces">
-                        
-        <li>
-        <a href="../namespaces/PhpAmqpLib.Wire.IO.html" title="IO">
-            <i class="icon-th"></i> IO
-        </a>
-        <ul class="nav nav-list nav-namespaces">
-                
-    
-        </ul>
-    </li>
-    
-                </ul>
-            </ul>
-        </div>
-
-        <div class="span8 namespace-contents">
-                
-    
-        <ul class="breadcrumb">
-            <li><a href="../index.html"><i class="icon-th"></i></a></li>
-                
-                
-    
-    <li>
-        <span class="divider">\</span><a href="../namespaces/PhpAmqpLib.html">PhpAmqpLib</a>
-    </li>
-
-    
-    <li>
-        <span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Wire.html">Wire</a>
-    </li>
-
-        </ul>
-
-        
-        
-                    <div class="namespace-indent">
-                <h3><i class="icon-custom icon-class"></i> Classes, interfaces and traits</h3>
-                
-                
-                                        <div id="class_AbstractClient" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AbstractClient .collapse">
-        <h1>AbstractClient<a href="../classes/PhpAmqpLib.Wire.AbstractClient.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AbstractClient.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_AMQPAbstractCollection" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AMQPAbstractCollection .collapse">
-        <h1>AMQPAbstractCollection<a href="../classes/PhpAmqpLib.Wire.AMQPAbstractCollection.html">¶</a></h1>
-        <p class="short_description">Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()</p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AMQPAbstractCollection.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_AMQPArray" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AMQPArray .collapse">
-        <h1>AMQPArray<a href="../classes/PhpAmqpLib.Wire.AMQPArray.html">¶</a></h1>
-        <p class="short_description">Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()</p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AMQPArray.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_AMQPDecimal" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AMQPDecimal .collapse">
-        <h1>AMQPDecimal<a href="../classes/PhpAmqpLib.Wire.AMQPDecimal.html">¶</a></h1>
-        <p class="short_description">AMQP protocol decimal value.</p>
-        <div class="details collapse">
-                            <p>Values are represented as (n,e) pairs. The actual value
-is n * 10^(-e).</p>
-<p>From 0.8 spec: Decimal values are
-not intended to support floating point values, but rather
-business values such as currency rates and amounts. The
-'decimals' octet is not signed.</p>
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AMQPDecimal.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_AMQPReader" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AMQPReader .collapse">
-        <h1>AMQPReader<a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">¶</a></h1>
-        <p class="short_description">This class can read from a string or from a stream</p>
-        <div class="details collapse">
-                            <p>TODO : split this class: AMQPStreamReader and a AMQPBufferReader</p>
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AMQPReader.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_AMQPTable" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AMQPTable .collapse">
-        <h1>AMQPTable<a href="../classes/PhpAmqpLib.Wire.AMQPTable.html">¶</a></h1>
-        <p class="short_description">Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()</p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AMQPTable.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_AMQPWriter" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AMQPWriter .collapse">
-        <h1>AMQPWriter<a href="../classes/PhpAmqpLib.Wire.AMQPWriter.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.AMQPWriter.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_Constants" class="element ajax clickable class" data-toggle="collapse" data-target="#class_Constants .collapse">
-        <h1>Constants<a href="../classes/PhpAmqpLib.Wire.Constants.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.Constants.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_Constants080" class="element ajax clickable class" data-toggle="collapse" data-target="#class_Constants080 .collapse">
-        <h1>Constants080<a href="../classes/PhpAmqpLib.Wire.Constants080.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.Constants080.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_Constants091" class="element ajax clickable class" data-toggle="collapse" data-target="#class_Constants091 .collapse">
-        <h1>Constants091<a href="../classes/PhpAmqpLib.Wire.Constants091.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.Constants091.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_GenericContent" class="element ajax clickable class" data-toggle="collapse" data-target="#class_GenericContent .collapse">
-        <h1>GenericContent<a href="../classes/PhpAmqpLib.Wire.GenericContent.html">¶</a></h1>
-        <p class="short_description">Abstract base class for AMQP content.  Subclasses should override
-the propertyDefinitions attribute.</p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.GenericContent.html" class="more">« More »</a>    </div>
-
-                            </div>
-            
-                
-    
-        <ul class="breadcrumb">
-            <li><a href="../index.html"><i class="icon-th"></i></a></li>
-                
-                
-                
-    
-    <li>
-        <span class="divider">\</span><a href="../namespaces/PhpAmqpLib.html">PhpAmqpLib</a>
-    </li>
-
-    
-    <li>
-        <span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Wire.html">Wire</a>
-    </li>
-
-    
-    <li>
-        <span class="divider">\</span><a href="../namespaces/PhpAmqpLib.Wire.IO.html">IO</a>
-    </li>
-
-        </ul>
-
-        
-        
-                    <div class="namespace-indent">
-                <h3><i class="icon-custom icon-class"></i> Classes, interfaces and traits</h3>
-                
-                
-                                        <div id="class_AbstractIO" class="element ajax clickable class" data-toggle="collapse" data-target="#class_AbstractIO .collapse">
-        <h1>AbstractIO<a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_SocketIO" class="element ajax clickable class" data-toggle="collapse" data-target="#class_SocketIO .collapse">
-        <h1>SocketIO<a href="../classes/PhpAmqpLib.Wire.IO.SocketIO.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.IO.SocketIO.html" class="more">« More »</a>    </div>
-
-                                        <div id="class_StreamIO" class="element ajax clickable class" data-toggle="collapse" data-target="#class_StreamIO .collapse">
-        <h1>StreamIO<a href="../classes/PhpAmqpLib.Wire.IO.StreamIO.html">¶</a></h1>
-        <p class="short_description"></p>
-        <div class="details collapse">
-                            
-                    </div>
-        <a href="../classes/PhpAmqpLib.Wire.IO.StreamIO.html" class="more">« More »</a>    </div>
-
-                            </div>
-            
-    
-    
         </div>
     </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1578226513"></a>
+                                <a href="../namespaces/PhpAmqpLib.Exception.html" style="margin-left: 30px; padding-left: 0">Exception</a>
+            </div>
+            <div id="namespace-1578226513" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                    <li class="interface"><a href="../classes/PhpAmqpLib.Exception.AMQPExceptionInterface.html">AMQPExceptionInterface</a></li>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPBasicCancelException.html">AMQPBasicCancelException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPChannelClosedException.html">AMQPChannelClosedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPChannelException.html">AMQPChannelException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPConnectionClosedException.html">AMQPConnectionClosedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPConnectionException.html">AMQPConnectionException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPDataReadException.html">AMQPDataReadException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPEmptyDeliveryTagException.html">AMQPEmptyDeliveryTagException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPException.html">AMQPException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPHeartbeatMissedException.html">AMQPHeartbeatMissedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPInvalidArgumentException.html">AMQPInvalidArgumentException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPInvalidFrameException.html">AMQPInvalidFrameException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPIOException.html">AMQPIOException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPIOWaitException.html">AMQPIOWaitException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPLogicException.html">AMQPLogicException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPNoDataException.html">AMQPNoDataException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPNotImplementedException.html">AMQPNotImplementedException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPOutOfBoundsException.html">AMQPOutOfBoundsException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPOutOfRangeException.html">AMQPOutOfRangeException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPProtocolChannelException.html">AMQPProtocolChannelException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPProtocolConnectionException.html">AMQPProtocolConnectionException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPProtocolException.html">AMQPProtocolException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPRuntimeException.html">AMQPRuntimeException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPSocketException.html">AMQPSocketException</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exception.AMQPTimeoutException.html">AMQPTimeoutException</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
-        <footer class="span12">
-            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
-            <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
-            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Tue, 31 Dec 2019 20:39:39 +0000.<br/>
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-14824598"></a>
+                                <a href="../namespaces/PhpAmqpLib.Exchange.html" style="margin-left: 30px; padding-left: 0">Exchange</a>
+            </div>
+            <div id="namespace-14824598" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Exchange.AMQPExchangeType.html">AMQPExchangeType</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1437303736"></a>
+                                <a href="../namespaces/PhpAmqpLib.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
+            </div>
+            <div id="namespace-1437303736" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-966311799"></a>
+                                <a href="../namespaces/PhpAmqpLib.Helper.Protocol.html" style="margin-left: 30px; padding-left: 0">Protocol</a>
+            </div>
+            <div id="namespace-966311799" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.MethodMap080.html">MethodMap080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.MethodMap091.html">MethodMap091</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Protocol080.html">Protocol080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Protocol091.html">Protocol091</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Wait080.html">Wait080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.Protocol.Wait091.html">Wait091</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.DebugHelper.html">DebugHelper</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.MiscHelper.html">MiscHelper</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Helper.SocketConstants.html">SocketConstants</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-221036082"></a>
+                                <a href="../namespaces/PhpAmqpLib.Message.html" style="margin-left: 30px; padding-left: 0">Message</a>
+            </div>
+            <div id="namespace-221036082" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Message.AMQPMessage.html">AMQPMessage</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-125072194"></a>
+                                <a href="../namespaces/PhpAmqpLib.Wire.html" style="margin-left: 30px; padding-left: 0">Wire</a>
+            </div>
+            <div id="namespace-125072194" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-543335909"></a>
+                                <a href="../namespaces/PhpAmqpLib.Wire.IO.html" style="margin-left: 30px; padding-left: 0">IO</a>
+            </div>
+            <div id="namespace-543335909" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.IO.AbstractIO.html">AbstractIO</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.IO.SocketIO.html">SocketIO</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.IO.StreamIO.html">StreamIO</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AbstractClient.html">AbstractClient</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPAbstractCollection.html">AMQPAbstractCollection</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPArray.html">AMQPArray</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPDecimal.html">AMQPDecimal</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">AMQPReader</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPTable.html">AMQPTable</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.AMQPWriter.html">AMQPWriter</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.Constants.html">Constants</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.Constants080.html">Constants080</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.Constants091.html">Constants091</a></li>
+                                                    <li class="class"><a href="../classes/PhpAmqpLib.Wire.GenericContent.html">GenericContent</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content namespace">
+                    <nav>
+                                                <a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a>
+                                            </nav>
+                    <h1><small>\PhpAmqpLib</small>Wire</h1>
+
+                                        <h2>Namespaces</h2>
+                    <table class="table table-hover">
+                                                    <tr>
+                                <td><a href="../namespaces/PhpAmqpLib.Wire.IO.html">IO</a></td>
+                            </tr>
+                                            </table>
+                    
+                    
+                    
+                                        <h2>Classes</h2>
+                    <table class="table table-hover">
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AbstractClient.html">AbstractClient</a></td>
+                            <td><em></em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AMQPAbstractCollection.html">AMQPAbstractCollection</a></td>
+                            <td><em>Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()</em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AMQPArray.html">AMQPArray</a></td>
+                            <td><em>Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()</em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AMQPDecimal.html">AMQPDecimal</a></td>
+                            <td><em>AMQP protocol decimal value.</em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AMQPReader.html">AMQPReader</a></td>
+                            <td><em>This class can read from a string or from a stream</em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AMQPTable.html">AMQPTable</a></td>
+                            <td><em>Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()</em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.AMQPWriter.html">AMQPWriter</a></td>
+                            <td><em></em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.Constants.html">Constants</a></td>
+                            <td><em></em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.Constants080.html">Constants080</a></td>
+                            <td><em></em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.Constants091.html">Constants091</a></td>
+                            <td><em></em></td>
+                        </tr>
+                                            <tr>
+                            <td><a href="../classes/PhpAmqpLib.Wire.GenericContent.html">GenericContent</a></td>
+                            <td><em>Abstract base class for AMQP content.  Subclasses should override
+the propertyDefinitions attribute.</em></td>
+                        </tr>
+                                        </table>
+                                    </div>
+
+                <aside class="span4 detailsbar">
+                    <dl>
+                        <dt>Namespace hierarchy</dt>
+                        <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                                                                                                                            
+                                    <div class="namespace-wrapper"><a href="../namespaces/default.html">\</a></div>
+                                                            
+                                    <div class="namespace-wrapper"><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></div>
+                                                                                        <div class="namespace-wrapper">\PhpAmqpLib\Wire</div>
+                        </dd>
+                    </dl>
+                </aside>
+            </div>
+
+            
+            
+        </div>
+    </section>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 2nd, 2020 at 21:31.
+                </section>
+            </section>
+        </section>
     </footer>
-    </body>
+</div>
+
+</body>
 </html>

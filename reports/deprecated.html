@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>     &raquo; Deprecated elements
+</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">php-amqplib</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">626</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">15</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <div class="row-fluid">
+
+        <div class="span2 sidebar">
+            <ul class="side-nav nav nav-list">
+                <li class="nav-header">Navigation</li>
+                                                            <li><a href="#Connection/AbstractConnection.php"><i class="icon-file"></i> Connection/AbstractConnection.php</a></li>
+                                                                                                                                                                                                                    <li><a href="#Connection/AMQPConnection.php"><i class="icon-file"></i> Connection/AMQPConnection.php</a></li>
+                                                                                                    <li><a href="#Connection/AMQPLazySocketConnection.php"><i class="icon-file"></i> Connection/AMQPLazySocketConnection.php</a></li>
+                                                                                                    <li><a href="#Connection/AMQPLazyConnection.php"><i class="icon-file"></i> Connection/AMQPLazyConnection.php</a></li>
+                                                                                                    <li><a href="#Exception/AMQPConnectionException.php"><i class="icon-file"></i> Exception/AMQPConnectionException.php</a></li>
+                                                                                                    <li><a href="#Exception/AMQPException.php"><i class="icon-file"></i> Exception/AMQPException.php</a></li>
+                                                                                                    <li><a href="#Exception/AMQPProtocolConnectionException.php"><i class="icon-file"></i> Exception/AMQPProtocolConnectionException.php</a></li>
+                                                                                                    <li><a href="#Exception/AMQPChannelException.php"><i class="icon-file"></i> Exception/AMQPChannelException.php</a></li>
+                                                                                                    <li><a href="#Wire/AMQPWriter.php"><i class="icon-file"></i> Wire/AMQPWriter.php</a></li>
+                                                                                                    <li><a href="#Wire/AMQPAbstractCollection.php"><i class="icon-file"></i> Wire/AMQPAbstractCollection.php</a></li>
+                                                                                                                                                            <li><a href="#Channel/AbstractChannel.php"><i class="icon-file"></i> Channel/AbstractChannel.php</a></li>
+                                                                                                                            </ul>
+        </div>
+
+        <div class="span10 offset2">
+            <ul class="breadcrumb">
+                <li><a href="../"><i class="icon-remove-sign"></i></a><span class="divider">\</span></li>
+                <li>Deprecated elements</li>
+            </ul>
+
+            <div id="marker-accordion">
+                                                                            <a name="Connection/AbstractConnection.php" id="Connection/AbstractConnection.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Connection/AbstractConnection.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Connection\AbstractConnection::getSocket()</td>
+                                    <td>926</td>
+                                    <td>No direct access to communication socket should be available.</td>
+                                </tr>
+                                                                                                                                                <tr>
+                                    <td>\PhpAmqpLib\Connection\AbstractConnection::getIO()</td>
+                                    <td>935</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                                <tr>
+                                    <td>\PhpAmqpLib\Connection\AbstractConnection::login_response</td>
+                                    <td>88</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Connection/AMQPConnection.php" id="Connection/AMQPConnection.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Connection/AMQPConnection.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Connection\AMQPConnection</td>
+                                    <td>11</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Connection/AMQPLazySocketConnection.php" id="Connection/AMQPLazySocketConnection.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Connection/AMQPLazySocketConnection.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Connection\AMQPLazySocketConnection::getSocket()</td>
+                                    <td>15</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Connection/AMQPLazyConnection.php" id="Connection/AMQPLazyConnection.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Connection/AMQPLazyConnection.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Connection\AMQPLazyConnection::getSocket()</td>
+                                    <td>11</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Exception/AMQPConnectionException.php" id="Exception/AMQPConnectionException.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Exception/AMQPConnectionException.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Exception\AMQPConnectionException</td>
+                                    <td>7</td>
+                                    <td>use AMQPProtocolConnectionException instead</td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Exception/AMQPException.php" id="Exception/AMQPException.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Exception/AMQPException.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Exception\AMQPException</td>
+                                    <td>7</td>
+                                    <td>use AMQPProtocolException instead</td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Exception/AMQPProtocolConnectionException.php" id="Exception/AMQPProtocolConnectionException.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Exception/AMQPProtocolConnectionException.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Exception\AMQPProtocolConnectionException</td>
+                                    <td>7</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Exception/AMQPChannelException.php" id="Exception/AMQPChannelException.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Exception/AMQPChannelException.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Exception\AMQPChannelException</td>
+                                    <td>7</td>
+                                    <td>use AMQPProtocolChannelException instead</td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Wire/AMQPWriter.php" id="Wire/AMQPWriter.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Wire/AMQPWriter.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Wire\AMQPWriter::write_bit()</td>
+                                    <td>65</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Wire/AMQPAbstractCollection.php" id="Wire/AMQPAbstractCollection.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Wire/AMQPAbstractCollection.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Wire\AMQPAbstractCollection::PROTOCOL_080</td>
+                                    <td>16</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                                <tr>
+                                    <td>\PhpAmqpLib\Wire\AMQPAbstractCollection::PROTOCOL_091</td>
+                                    <td>18</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                </table>
+                    </div>
+                                        <a name="Channel/AbstractChannel.php" id="Channel/AbstractChannel.php"></a>
+                    <h3>
+                        <i class="icon-file"></i>
+                        Channel/AbstractChannel.php
+                        <small style="float: right;padding-right: 10px;">1</small>
+                    </h3>
+                    <div>
+                        <table class="table markers table-bordered">
+                            <tr>
+                                <th>Element</th>
+                                <th>Line</th>
+                                <th>Description</th>
+                            </tr>
+                                                                                <tr>
+                                    <td>\PhpAmqpLib\Channel\AbstractChannel::PROTOCOL_080</td>
+                                    <td>28</td>
+                                    <td></td>
+                                </tr>
+                                                                                                                                                <tr>
+                                    <td>\PhpAmqpLib\Channel\AbstractChannel::PROTOCOL_091</td>
+                                    <td>33</td>
+                                    <td></td>
+                                </tr>
+                                                                                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on January 2nd, 2020 at 21:31.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
