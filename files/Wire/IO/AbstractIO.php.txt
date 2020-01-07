@@ -1,3 +1,5 @@
+
+Deprecated: array_key_exists(): Using array_key_exists() on objects is deprecated. Use isset() or property_exists() instead in phar:///home/lbakken/development/php-amqplib/php-amqplib/phpDocumentor.phar/vendor/twig/twig/lib/Twig/Template.php on line 527
 <?php
 
 namespace PhpAmqpLib\Wire\IO;
