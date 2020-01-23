@@ -89,7 +89,7 @@ abstract class AbstractIO
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
         }
 
-        if ($this->canDispatchPcntlSignal) {
+        if ($this->canDispatchPcntlSignal && PHP_VERSION_ID >= 70100 && !pcntl_async_signals()) {
             pcntl_signal_dispatch();
         }
 
