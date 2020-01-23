@@ -1040,7 +1040,9 @@ class AMQPChannel extends AbstractChannel
         );
 
         if (isset($this->callbacks[$consumer_tag])) {
-            call_user_func($this->callbacks[$consumer_tag], $message);
+            $this->connection->executeWithAsyncHeartbeat(function () use ($consumer_tag, $message) {
+                call_user_func($this->callbacks[$consumer_tag], $message);
+            });
         }
     }
 

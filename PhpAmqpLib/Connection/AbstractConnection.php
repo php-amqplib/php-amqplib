@@ -938,6 +938,21 @@ class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * Execute callback with async heartbeats
+     *
+     * @param callable $callback
+     * @return mixed
+     */
+    public function executeWithAsyncHeartbeat(callable $callback)
+    {
+        $this->io->enableAsyncHeartbeat();
+        $result = $callback();
+        $this->io->disableAsyncHeartbeat();
+
+        return $result;
+    }
+
+    /**
      * Check connection heartbeat if enabled.
      * @throws AMQPHeartbeatMissedException If too much time passed since last connection activity.
      * @throws AMQPConnectionClosedException If connection was closed due to network issues or timeouts.
