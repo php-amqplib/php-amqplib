@@ -11,6 +11,7 @@ use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
+use PhpAmqpLib\Helper\Assert;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
@@ -145,6 +146,12 @@ abstract class AbstractConnection extends AbstractChannel
     private $channel_rpc_timeout;
 
     /**
+     * If connection is blocked due to the broker running low on resources.
+     * @var bool
+     */
+    protected $blocked = false;
+
+    /**
      * @param string $user
      * @param string $password
      * @param string $vhost
@@ -215,6 +222,7 @@ abstract class AbstractConnection extends AbstractChannel
      */
     protected function connect()
     {
+        $this->blocked = false;
         try {
             // Loop until we connect
             while (!$this->isConnected()) {
@@ -950,6 +958,7 @@ abstract class AbstractConnection extends AbstractChannel
      */
     protected function connection_blocked(AMQPReader $args)
     {
+        $this->blocked = true;
         // Call the block handler and pass in the reason
         $this->dispatch_to_handler($this->connection_block_handler, array($args->read_shortstr()));
     }
@@ -959,17 +968,20 @@ abstract class AbstractConnection extends AbstractChannel
      */
     protected function connection_unblocked()
     {
+        $this->blocked = false;
         // No args to an unblock event
-        $this->dispatch_to_handler($this->connection_unblock_handler, array());
+        $this->dispatch_to_handler($this->connection_unblock_handler);
     }
 
     /**
      * Sets a handler which is called whenever a connection.block is sent from the server
      *
      * @param callable $callback
+     * @throws \InvalidArgumentException if $callback is not callable
      */
     public function set_connection_block_handler($callback)
     {
+        Assert::isCallable($callback);
         $this->connection_block_handler = $callback;
     }
 
@@ -977,9 +989,11 @@ abstract class AbstractConnection extends AbstractChannel
      * Sets a handler which is called whenever a connection.block is sent from the server
      *
      * @param callable $callback
+     * @throws \InvalidArgumentException if $callback is not callable
      */
     public function set_connection_unblock_handler($callback)
     {
+        Assert::isCallable($callback);
         $this->connection_unblock_handler = $callback;
     }
 
@@ -991,6 +1005,16 @@ abstract class AbstractConnection extends AbstractChannel
     public function isConnected()
     {
         return $this->is_connected;
+    }
+
+    /**
+     * Get the connection blocked state.
+     * @return bool
+     * @since v2.12.0
+     */
+    public function isBlocked()
+    {
+        return $this->blocked;
     }
 
     /**

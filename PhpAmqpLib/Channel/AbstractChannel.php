@@ -71,7 +71,7 @@ abstract class AbstractChannel
     /** @var MethodMap080|MethodMap091 */
     protected $methodMap;
 
-    /** @var null|string */
+    /** @var int */
     protected $channel_id;
 
     /** @var AMQPReader */
@@ -85,7 +85,7 @@ abstract class AbstractChannel
 
     /**
      * @param AbstractConnection $connection
-     * @param string $channel_id
+     * @param int $channel_id
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
     public function __construct(AbstractConnection $connection, $channel_id)
@@ -525,7 +525,7 @@ abstract class AbstractChannel
      * @param callable $handler
      * @param array $arguments
      */
-    protected function dispatch_to_handler($handler, array $arguments)
+    protected function dispatch_to_handler($handler, array $arguments = [])
     {
         if (is_callable($handler)) {
             call_user_func_array($handler, $arguments);
