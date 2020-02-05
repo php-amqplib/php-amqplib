@@ -10,7 +10,7 @@ use PhpAmqpLib\Helper\SocketConstants;
 
 class SocketIO extends AbstractIO
 {
-    /** @var resource */
+    /** @var null|resource */
     private $sock;
 
     /**
@@ -223,8 +223,8 @@ class SocketIO extends AbstractIO
             socket_close($this->sock);
         }
         $this->sock = null;
-        $this->last_read = null;
-        $this->last_write = null;
+        $this->last_read = 0;
+        $this->last_write = 0;
     }
 
     /**

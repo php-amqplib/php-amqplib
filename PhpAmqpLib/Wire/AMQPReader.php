@@ -208,7 +208,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function read_octet()
     {
@@ -219,7 +219,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function read_signed_octet()
     {
@@ -230,7 +230,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function read_short()
     {
@@ -241,7 +241,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function read_signed_short()
     {
@@ -261,6 +261,7 @@ class AMQPReader extends AbstractClient
      * -2^31...+2^31 range.
      *
      * Use with caution!
+     * @return int|string
      */
     public function read_php_int()
     {
@@ -277,7 +278,7 @@ class AMQPReader extends AbstractClient
      * PHP does not have unsigned 32 bit int,
      * so we return it as a string
      *
-     * @return string
+     * @return int|string
      */
     public function read_long()
     {
@@ -291,7 +292,7 @@ class AMQPReader extends AbstractClient
     }
 
     /**
-     * @return integer
+     * @return int
      */
     private function read_signed_long()
     {
@@ -363,6 +364,7 @@ class AMQPReader extends AbstractClient
     /**
      * Read a utf-8 encoded string that's stored in up to
      * 255 bytes.  Return it decoded as a PHP unicode object.
+     * @return string
      */
     public function read_shortstr()
     {
@@ -376,6 +378,7 @@ class AMQPReader extends AbstractClient
      * Read a string that's up to 2**32 bytes, the encoding
      * isn't specified in the AMQP spec, so just return it as
      * a plain PHP string.
+     * @return string
      */
     public function read_longstr()
     {
@@ -392,6 +395,7 @@ class AMQPReader extends AbstractClient
     /**
      * Read and AMQP timestamp, which is a 64-bit integer representing
      * seconds since the Unix epoch in 1-second resolution.
+     * @return int|string
      */
     public function read_timestamp()
     {
@@ -488,6 +492,7 @@ class AMQPReader extends AbstractClient
                 $val = $this->read_signed_octet();
                 break;
             case AMQPAbstractCollection::T_INT_SHORTSHORT_U:
+            case AMQPAbstractCollection::T_BOOL:
                 $val = $this->read_octet();
                 break;
             case AMQPAbstractCollection::T_INT_SHORT:
@@ -516,13 +521,11 @@ class AMQPReader extends AbstractClient
             case AMQPAbstractCollection::T_TIMESTAMP:
                 $val = $this->read_timestamp();
                 break;
-            case AMQPAbstractCollection::T_BOOL:
-                $val = $this->read_octet();
-                break;
             case AMQPAbstractCollection::T_STRING_SHORT:
                 $val = $this->read_shortstr();
                 break;
             case AMQPAbstractCollection::T_STRING_LONG:
+            case AMQPAbstractCollection::T_BYTES:
                 $val = $this->read_longstr();
                 break;
             case AMQPAbstractCollection::T_ARRAY:
@@ -534,9 +537,6 @@ class AMQPReader extends AbstractClient
             case AMQPAbstractCollection::T_VOID:
                 $val = null;
                 break;
-            case AMQPAbstractCollection::T_BYTES:
-                $val = $this->read_longstr();
-                break;
             default:
                 throw new AMQPInvalidArgumentException(sprintf(
                     'Unsupported type "%s"',
@@ -544,7 +544,7 @@ class AMQPReader extends AbstractClient
                 ));
         }
 
-        return isset($val) ? $val : null;
+        return $val;
     }
 
     /**

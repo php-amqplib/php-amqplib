@@ -53,7 +53,7 @@ abstract class AbstractChannel
     /** @var \PhpAmqpLib\Helper\DebugHelper */
     protected $debug;
 
-    /** @var \PhpAmqpLib\Connection\AbstractConnection */
+    /** @var null|AbstractConnection */
     protected $connection;
 
     /** @var string */
@@ -62,16 +62,16 @@ abstract class AbstractChannel
     /** @var int */
     protected $maxBodySize;
 
-    /** @var \PhpAmqpLib\Helper\Protocol\Protocol080|\PhpAmqpLib\Helper\Protocol\Protocol091 */
+    /** @var Protocol080|Protocol091 */
     protected $protocolWriter;
 
-    /** @var \PhpAmqpLib\Helper\Protocol\Wait080|\PhpAmqpLib\Helper\Protocol\Wait091 */
+    /** @var Wait080|Wait091 */
     protected $waitHelper;
 
-    /** @var \PhpAmqpLib\Helper\Protocol\MethodMap080|\PhpAmqpLib\Helper\Protocol\MethodMap091 */
+    /** @var MethodMap080|MethodMap091 */
     protected $methodMap;
 
-    /** @var string */
+    /** @var null|string */
     protected $channel_id;
 
     /** @var AMQPReader */

@@ -34,10 +34,10 @@ abstract class AbstractIO
     /** @var bool */
     protected $keepalive;
 
-    /** @var float */
+    /** @var int|float */
     protected $last_read;
 
-    /** @var float */
+    /** @var int|float */
     protected $last_write;
 
     /** @var array|null */
@@ -129,7 +129,7 @@ abstract class AbstractIO
     public function check_heartbeat()
     {
         // ignore unless heartbeat interval is set
-        if ($this->heartbeat !== 0 && $this->last_read && $this->last_write) {
+        if ($this->heartbeat !== 0 && $this->last_read > 0 && $this->last_write > 0) {
             $t = microtime(true);
             $t_read = round($t - $this->last_read);
             $t_write = round($t - $this->last_write);

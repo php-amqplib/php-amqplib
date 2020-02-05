@@ -107,6 +107,8 @@ class MiscHelper
         }
 
         echo $dump;
+
+        return null;
     }
 
     /**

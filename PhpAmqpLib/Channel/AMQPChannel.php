@@ -214,10 +214,8 @@ class AMQPChannel extends AbstractChannel
     /**
      * Confirm a channel close
      * Alias of AMQPChannel::do_close()
-     *
-     * @param AMQPReader $reader
      */
-    protected function channel_close_ok($reader)
+    protected function channel_close_ok()
     {
         $this->do_close();
     }
@@ -225,7 +223,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Enables/disables flow from peer
      *
-     * @param $active
+     * @param bool $active
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
@@ -285,10 +283,7 @@ class AMQPChannel extends AbstractChannel
         ), false, $this->channel_rpc_timeout);
     }
 
-    /**
-     * @param AMQPReader $reader
-     */
-    protected function channel_open_ok($reader)
+    protected function channel_open_ok()
     {
         $this->is_open = true;
 
@@ -397,9 +392,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms an exchange declaration
-     * @param AMQPReader $reader
      */
-    protected function exchange_declare_ok($reader)
+    protected function exchange_declare_ok()
     {
     }
 
@@ -440,10 +434,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms deletion of an exchange
-     *
-     * @param AMQPReader $reader
      */
-    protected function exchange_delete_ok($reader)
+    protected function exchange_delete_ok()
     {
     }
 
@@ -491,9 +483,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms bind successful
-     * @param AMQPReader $reader
      */
-    protected function exchange_bind_ok($reader)
+    protected function exchange_bind_ok()
     {
     }
 
@@ -537,10 +528,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms unbind successful
-     *
-     * @param AMQPReader $reader
      */
-    protected function exchange_unbind_ok($reader)
+    protected function exchange_unbind_ok()
     {
     }
 
@@ -588,10 +577,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms bind successful
-     *
-     * @param AMQPReader $reader
      */
-    protected function queue_bind_ok($reader)
+    protected function queue_bind_ok()
     {
     }
 
@@ -632,9 +619,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms unbind successful
-     * @param AMQPReader $reader
      */
-    protected function queue_unbind_ok($reader)
+    protected function queue_unbind_ok()
     {
     }
 
@@ -1068,10 +1054,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Indicates no messages available
-     *
-     * @param AMQPReader $reader
      */
-    protected function basic_get_empty($reader)
+    protected function basic_get_empty()
     {
     }
 
@@ -1104,8 +1088,8 @@ class AMQPChannel extends AbstractChannel
     /**
      * @param string $exchange
      * @param string $routing_key
-     * @param $mandatory
-     * @param $immediate
+     * @param bool $mandatory
+     * @param bool $immediate
      * @param int $ticket
      * @return mixed
      */
@@ -1187,7 +1171,7 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
-     * @param AMQPMessage $msg
+     * @param AMQPMessage $message
      * @param string $exchange
      * @param string $routing_key
      * @param bool $mandatory
@@ -1195,14 +1179,21 @@ class AMQPChannel extends AbstractChannel
      * @param int|null $ticket
      */
     public function batch_basic_publish(
-        $msg,
+        $message,
         $exchange = '',
         $routing_key = '',
         $mandatory = false,
         $immediate = false,
         $ticket = null
     ) {
-        $this->batch_messages[] = func_get_args();
+        $this->batch_messages[] = [
+            $message,
+            $exchange,
+            $routing_key,
+            $mandatory,
+            $immediate,
+            $ticket
+        ];
     }
 
     /**
@@ -1213,14 +1204,14 @@ class AMQPChannel extends AbstractChannel
     public function publish_batch()
     {
         if (empty($this->batch_messages)) {
-            return null;
+            return;
         }
 
         /** @var AMQPWriter $pkt */
         $pkt = new AMQPWriter();
 
-        /** @var AMQPMessage $msg */
         foreach ($this->batch_messages as $m) {
+            /** @var AMQPMessage $msg */
             $msg = $m[0];
 
             $exchange = isset($m[1]) ? $m[1] : '';
@@ -1277,9 +1268,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms QoS request
-     * @param AMQPReader $reader
      */
-    protected function basic_qos_ok($reader)
+    protected function basic_qos_ok()
     {
     }
 
@@ -1302,9 +1292,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirm the requested recover
-     * @param AMQPReader $reader
      */
-    protected function basic_recover_ok($reader)
+    protected function basic_recover_ok()
     {
     }
 
@@ -1325,7 +1314,6 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      * @param AMQPMessage $message
-     * @return null
      */
     protected function basic_return($reader, $message)
     {
@@ -1364,9 +1352,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms a successful commit
-     * @param AMQPReader $reader
      */
-    protected function tx_commit_ok($reader)
+    protected function tx_commit_ok()
     {
     }
 
@@ -1387,10 +1374,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms a successful rollback
-     *
-     * @param AMQPReader $reader
      */
-    protected function tx_rollback_ok($reader)
+    protected function tx_rollback_ok()
     {
     }
 
@@ -1400,7 +1385,6 @@ class AMQPChannel extends AbstractChannel
      *
      * @param bool $nowait
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
-     * @return null
      */
     public function confirm_select($nowait = false)
     {
@@ -1420,10 +1404,8 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms a selection
-     *
-     * @param AMQPReader $reader
      */
-    public function confirm_select_ok($reader)
+    public function confirm_select_ok()
     {
     }
 
@@ -1486,23 +1468,9 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Confirms transaction mode
-     * @param AMQPReader $reader
      */
-    protected function tx_select_ok($reader)
+    protected function tx_select_ok()
     {
-    }
-
-    /**
-     * @param array $arguments
-     * @return array
-     */
-    protected function getArguments($arguments)
-    {
-        @trigger_error(sprintf(
-            'Method "%s" is deprecated, please use an array as a default argument instead',
-            __METHOD__
-        ), E_USER_DEPRECATED);
-        return (null === $arguments) ? array() : $arguments;
     }
 
     /**

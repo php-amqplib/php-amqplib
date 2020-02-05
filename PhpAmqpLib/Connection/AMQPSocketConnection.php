@@ -15,7 +15,7 @@ class AMQPSocketConnection extends AbstractConnection
      * @param string $login_method
      * @param null $login_response @deprecated
      * @param string $locale
-     * @param float $read_timeout
+     * @param int|float $read_timeout
      * @param bool $keepalive
      * @param int $write_timeout
      * @param int $heartbeat
