@@ -1049,8 +1049,18 @@ abstract class AbstractConnection extends AbstractChannel
         return self::$LIBRARY_PROPERTIES;
     }
 
+    /**
+     * @param array $hosts
+     * @param array $options
+     *
+     * @return mixed
+     * @throws \Exception
+     */
     public static function create_connection($hosts, $options = array()){
-        $latest_exception = null;
+        if (!is_array($hosts) || count($hosts) < 1) {
+            throw new \InvalidArgumentException('An array of hosts are required when attempting to create a connection');
+        }
+
         foreach ($hosts as $hostdef) {
             AbstractConnection::validate_host($hostdef);
             $host = $hostdef['host'];
