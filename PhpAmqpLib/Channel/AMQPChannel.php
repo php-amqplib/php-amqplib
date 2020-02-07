@@ -1,11 +1,15 @@
 <?php
+
 namespace PhpAmqpLib\Channel;
 
+use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Exception\AMQPChannelClosedException;
+use PhpAmqpLib\Exception\AMQPConnectionBlockedException;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Helper\Assert;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
@@ -42,7 +46,7 @@ class AMQPChannel extends AbstractChannel
      *    param string $routing_key
      *    param AMQPMessage $msg
      *
-     * @var callable
+     * @var null|callable
      */
     protected $basic_return_callback;
 
@@ -60,10 +64,10 @@ class AMQPChannel extends AbstractChannel
     /** @var int */
     private $next_delivery_tag = 0;
 
-    /** @var callable */
+    /** @var null|callable */
     private $ack_handler;
 
-    /** @var callable */
+    /** @var null|callable */
     private $nack_handler;
 
     /**
@@ -87,13 +91,13 @@ class AMQPChannel extends AbstractChannel
      * Maximum time to wait for operations on this channel, in seconds.
      * @var float $channel_rpc_timeout
      */
-    private $channel_rpc_timeout;
+    protected $channel_rpc_timeout;
 
     /**
-     * @param \PhpAmqpLib\Connection\AbstractConnection $connection
-     * @param null $channel_id
+     * @param AbstractConnection $connection
+     * @param int|null $channel_id
      * @param bool $auto_decode
-     * @param int $channel_rpc_timeout
+     * @param int|float $channel_rpc_timeout
      * @throws \Exception
      */
     public function __construct($connection, $channel_id = null, $auto_decode = true, $channel_rpc_timeout = 0)
@@ -1134,6 +1138,9 @@ class AMQPChannel extends AbstractChannel
      * @param bool $mandatory
      * @param bool $immediate
      * @param int|null $ticket
+     * @throws AMQPChannelClosedException
+     * @throws AMQPConnectionClosedException
+     * @throws AMQPConnectionBlockedException
      */
     public function basic_publish(
         $msg,
@@ -1143,9 +1150,7 @@ class AMQPChannel extends AbstractChannel
         $immediate = false,
         $ticket = null
     ) {
-        if ($this->connection === null) {
-            throw new AMQPChannelClosedException('Channel connection is closed.');
-        }
+        $this->checkConnection();
         $pkt = new AMQPWriter();
         $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 
@@ -1200,6 +1205,9 @@ class AMQPChannel extends AbstractChannel
      * Publish batch
      *
      * @return void
+     * @throws AMQPChannelClosedException
+     * @throws AMQPConnectionClosedException
+     * @throws AMQPConnectionBlockedException
      */
     public function publish_batch()
     {
@@ -1237,7 +1245,7 @@ class AMQPChannel extends AbstractChannel
             }
         }
 
-        //call write here
+        $this->checkConnection();
         $this->connection->write($pkt->getvalue());
         $this->batch_messages = array();
     }
@@ -1504,14 +1512,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_return_listener($callback)
     {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Given callback "%s" should be callable. %s type was given.',
-                $callback,
-                gettype($callback)
-            ));
-        }
-
+        Assert::isCallable($callback);
         $this->basic_return_callback = $callback;
     }
 
@@ -1523,14 +1524,7 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_nack_handler($callback)
     {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Given callback "%s" should be callable. %s type was given.',
-                $callback,
-                gettype($callback)
-            ));
-        }
-
+        Assert::isCallable($callback);
         $this->nack_handler = $callback;
     }
 
@@ -1542,14 +1536,22 @@ class AMQPChannel extends AbstractChannel
      */
     public function set_ack_handler($callback)
     {
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Given callback "%s" should be callable. %s type was given.',
-                $callback,
-                gettype($callback)
-            ));
-        }
-
+        Assert::isCallable($callback);
         $this->ack_handler = $callback;
+    }
+
+    /**
+     * @throws AMQPChannelClosedException
+     * @throws AMQPConnectionClosedException
+     * @throws AMQPConnectionBlockedException
+     */
+    private function checkConnection()
+    {
+        if ($this->connection === null || !$this->connection->isConnected()) {
+            throw new AMQPChannelClosedException('Channel connection is closed.');
+        }
+        if ($this->connection->isBlocked()) {
+            throw new AMQPConnectionBlockedException();
+        }
     }
 }
