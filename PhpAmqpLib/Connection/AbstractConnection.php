@@ -12,6 +12,7 @@ use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Exception\AMQPSocketException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\Assert;
+use PhpAmqpLib\Package;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
@@ -25,9 +26,9 @@ abstract class AbstractConnection extends AbstractChannel
      * @internal
      */
     public static $LIBRARY_PROPERTIES = array(
-        'product' => array('S', 'AMQPLib'),
+        'product' => array('S', Package::NAME),
         'platform' => array('S', 'PHP'),
-        'version' => array('S', '2.11.0'),
+        'version' => array('S', Package::VERSION),
         'information' => array('S', ''),
         'copyright' => array('S', ''),
         'capabilities' => array(
