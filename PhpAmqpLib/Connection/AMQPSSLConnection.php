@@ -23,8 +23,8 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $options = array(),
         $ssl_protocol = 'ssl'
     ) {
-        if (!isset($ssl_options['peer_name'])) {
-            $ssl_options['peer_name'] = $host;
+        if (!isset($ssl_options['SNI_enabled'])) {
+            $ssl_options['SNI_enabled'] = true;
         }
         $ssl_context = empty($ssl_options) ? null : $this->create_ssl_context($ssl_options);
         parent::__construct(
