@@ -148,6 +148,20 @@ abstract class AbstractIO
     }
 
     /**
+     * @throws \PhpAmqpLib\Exception\AMQPHeartbeatMissedException
+     */
+    protected function checkBrokerHeartbeat()
+    {
+        if ($this->heartbeat > 0 && $this->last_read > 0) {
+            $now = microtime(true);
+            if (($now - $this->last_read) > $this->heartbeat * 2) {
+                $this->close();
+                throw new AMQPHeartbeatMissedException('Missed server heartbeat');
+            }
+        }
+    }
+
+    /**
      * @return $this
      */
     public function disableHeartbeat()

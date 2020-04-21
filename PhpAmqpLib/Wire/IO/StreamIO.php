@@ -220,13 +220,17 @@ class StreamIO extends AbstractIO
      */
     public function write($data)
     {
+        $this->checkBrokerHeartbeat();
+
         $written = 0;
         $len = mb_strlen($data, 'ASCII');
         $write_start = microtime(true);
 
         while ($written < $len) {
-            if (!is_resource($this->sock)) {
-                throw new AMQPConnectionClosedException('Broken pipe or closed connection');
+            if (!is_resource($this->sock) || feof($this->sock)) {
+                $this->close();
+                $constants = SocketConstants::getInstance();
+                throw new AMQPConnectionClosedException('Broken pipe or closed connection', $constants->SOCKET_EPIPE);
             }
 
             $result = false;
@@ -239,6 +243,8 @@ class StreamIO extends AbstractIO
             // September 2002:
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
+                // check stream and prevent from high CPU usage
+                $this->select_write();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = fwrite($this->sock, $buffer);
                 $this->cleanup_error_handler();
@@ -281,8 +287,6 @@ class StreamIO extends AbstractIO
                 if (($now - $write_start) > $this->write_timeout) {
                     throw AMQPTimeoutException::writeTimeout($this->write_timeout);
                 }
-                // check stream and prevent from high CPU usage
-                $this->select_write();
             }
         }
     }

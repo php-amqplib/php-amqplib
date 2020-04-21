@@ -153,21 +153,24 @@ class SocketIO extends AbstractIO
      */
     public function write($data)
     {
+        // Null sockets are invalid, throw exception
+        if (is_null($this->sock)) {
+            throw new AMQPSocketException(sprintf(
+                'Socket was null! Last SocketError was: %s',
+                socket_strerror(socket_last_error())
+            ));
+        }
+
+        $this->checkBrokerHeartbeat();
+
         $written = 0;
         $len = mb_strlen($data, 'ASCII');
         $write_start = microtime(true);
 
         while ($written < $len) {
-            // Null sockets are invalid, throw exception
-            if (is_null($this->sock)) {
-                throw new AMQPSocketException(sprintf(
-                    'Socket was null! Last SocketError was: %s',
-                    socket_strerror(socket_last_error())
-                ));
-            }
-
             $this->set_error_handler();
             try {
+                $this->select_write();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = socket_write($this->sock, $buffer, self::BUFFER_SIZE);
                 $this->cleanup_error_handler();
@@ -208,7 +211,6 @@ class SocketIO extends AbstractIO
                 if (($now - $write_start) > $this->write_timeout) {
                     throw AMQPTimeoutException::writeTimeout($this->write_timeout);
                 }
-                $this->select_write();
             }
         }
     }
