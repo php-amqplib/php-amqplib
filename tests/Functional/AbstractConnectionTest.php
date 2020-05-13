@@ -81,6 +81,20 @@ abstract class AbstractConnectionTest extends TestCase
     }
 
     /**
+     * @param string $connectionType
+     * @param array $options
+     * @return AMQPChannel
+     */
+    protected function channel_create($connectionType, $options = [])
+    {
+        $connection = $this->conection_create($connectionType, HOST, PORT, $options);
+        $channel = $connection->channel();
+        $this->assertTrue($channel->is_open());
+
+        return $channel;
+    }
+
+    /**
      * @param string $name
      * @return ToxiProxy
      */
