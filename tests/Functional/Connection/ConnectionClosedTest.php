@@ -143,15 +143,11 @@ class ConnectionClosedTest extends AbstractConnectionTest
      */
     public function must_throw_exception_missed_heartbeat($type, $size)
     {
-        /** @var AbstractConnection $connection */
-        $connection = $this->conection_create($type, HOST, PORT, [
+        $channel = $this->channel_create($type, [
             'keepalive' => false,
             'heartbeat' => $heartbeat = 1,
             'timeout' => 3,
         ]);
-
-        $channel = $connection->channel();
-        $this->assertTrue($channel->is_open());
 
         $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
         $message = new AMQPMessage(
@@ -164,7 +160,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
 
         $exception = null;
         try {
-            $channel->basic_publish($message, $exchange_name, $queue_name);
+            $channel->basic_publish($message, $exchange_name);
         } catch (\PHPUnit_Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
@@ -172,7 +168,46 @@ class ConnectionClosedTest extends AbstractConnectionTest
 
         $this->assertInstanceOf(AMQPHeartbeatMissedException::class, $exception);
         $this->assertChannelClosed($channel);
-        $this->assertConnectionClosed($connection);
+    }
+
+    /**
+     * When client constantly publish messages in async manner and broker does not send heartbeats.
+     * @test
+     * @medium
+     * @group connection
+     * @testWith ["stream", 1024]
+     *           ["stream", 32768]
+     *           ["socket", 1024]
+     *           ["socket", 32768]
+     * @covers \PhpAmqpLib\Wire\IO\StreamIO::write()
+     * @covers \PhpAmqpLib\Wire\IO\SocketIO::write()
+     *
+     * @param string $type
+     * @param int $size
+     */
+    public function must_ignore_missing_heartbeat_after_recent_write($type, $size)
+    {
+        $channel = $this->channel_create($type, [
+            'keepalive' => false,
+            'heartbeat' => $heartbeat = 1,
+            'timeout' => 3,
+        ]);
+
+        $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
+        $message = new AMQPMessage(
+            str_repeat('0', $size),
+            ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]
+        );
+
+        $iteration = 0;
+        do {
+            sleep($heartbeat);
+            $channel->basic_publish($message, $exchange_name, $queue_name);
+        } while (++$iteration <= 3);
+
+        $this->assertTrue($channel->is_open());
+        // this performs write and read with additional heartbeat check
+        $channel->close();
     }
 
     /**
