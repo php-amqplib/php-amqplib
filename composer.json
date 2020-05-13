@@ -13,11 +13,6 @@
             "role": "Original Maintainer"
         },
         {
-            "name": "John Kelly",
-            "email": "johnmkelly86@gmail.com",
-            "role": "Maintainer"
-        },
-        {
             "name": "Raúl Araya",
             "email": "nubeiro@gmail.com",
             "role": "Maintainer"
@@ -25,6 +20,11 @@
         {
             "name": "Luke Bakken",
             "email": "luke@bakken.io",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Ramūnas Dronga",
+            "email": "github@ramuno.lt",
             "role": "Maintainer"
         }
     ],
