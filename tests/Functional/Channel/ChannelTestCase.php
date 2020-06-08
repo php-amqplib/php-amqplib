@@ -34,7 +34,7 @@ abstract class ChannelTestCase extends TestCase
         $this->channel = $this->connection->channel();
 
         $this->exchange = (object) [
-            'name' => null,
+            'name' => '',
         ];
 
         $this->queue = (object) [

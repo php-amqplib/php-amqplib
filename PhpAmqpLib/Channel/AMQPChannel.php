@@ -829,7 +829,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Handles the deletion of messages from this->publishedMessages and dispatches them to the $handler
      *
-     * @param string $delivery_tag
+     * @param int|string $delivery_tag
      * @param bool $multiple
      * @param callable $handler
      */
@@ -844,7 +844,7 @@ class AMQPChannel extends AbstractChannel
 
         } else {
             $message = $this->get_and_unset_message($delivery_tag);
-            $message->delivery_info['delivery_tag'] = $delivery_tag;
+            $message->setDeliveryTag($delivery_tag);
             $this->dispatch_to_handler($handler, array($message));
         }
     }
@@ -1020,14 +1020,10 @@ class AMQPChannel extends AbstractChannel
         $exchange = $reader->read_shortstr();
         $routing_key = $reader->read_shortstr();
 
-        $message->delivery_info = array(
-            'channel' => $this,
-            'consumer_tag' => $consumer_tag,
-            'delivery_tag' => $delivery_tag,
-            'redelivered' => $redelivered,
-            'exchange' => $exchange,
-            'routing_key' => $routing_key
-        );
+        $message
+            ->setChannel($this)
+            ->setDeliveryInfo($delivery_tag, $redelivered, $exchange, $routing_key)
+            ->setConsumerTag($consumer_tag);
 
         if (isset($this->callbacks[$consumer_tag])) {
             call_user_func($this->callbacks[$consumer_tag], $message);
@@ -1041,7 +1037,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $no_ack
      * @param int|null $ticket
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
-     * @return mixed
+     * @return AMQPMessage|null
      */
     public function basic_get($queue = '', $no_ack = false, $ticket = null)
     {
@@ -1078,13 +1074,10 @@ class AMQPChannel extends AbstractChannel
         $routing_key = $reader->read_shortstr();
         $message_count = $reader->read_long();
 
-        $message->delivery_info = array(
-            'delivery_tag' => $delivery_tag,
-            'redelivered' => $redelivered,
-            'exchange' => $exchange,
-            'routing_key' => $routing_key,
-            'message_count' => $message_count
-        );
+        $message
+            ->setChannel($this)
+            ->setDeliveryInfo($delivery_tag, $redelivered, $exchange, $routing_key)
+            ->setMessageCount($message_count);
 
         return $message;
     }

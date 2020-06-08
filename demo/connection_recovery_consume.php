@@ -93,11 +93,11 @@ function process_message($message)
     echo $message->body;
     echo "\n--------\n";
 
-    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
+    $message->ack();
 
     // Send a message with the string "quit" to cancel the consumer.
     if ($message->body === 'quit') {
-        $message->delivery_info['channel']->basic_cancel($message->delivery_info['consumer_tag']);
+        $message->getChannel()->basic_cancel($message->getConsumerTag());
     }
 }
 
