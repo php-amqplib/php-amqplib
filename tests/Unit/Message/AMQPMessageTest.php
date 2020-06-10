@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Unit\Message;
 
+use PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire\AMQPReader;
 use PHPUnit\Framework\TestCase;
@@ -47,18 +48,23 @@ class AMQPMessageTest extends TestCase
     /**
      * @test
      */
-    public function get_delivery_tag()
+    public function delivery_tag_immutable()
     {
-        $message = new AMQPMessage('');
-
-        $message->delivery_info['delivery_tag'] = "10";
+        $message = new AMQPMessage();
+        $message->setDeliveryTag('10');
         $this->assertEquals(10, $message->getDeliveryTag());
 
-        $message->delivery_info['delivery_tag'] = 1231;
-        $this->assertEquals(1231, $message->getDeliveryTag());
+        $this->expectException(\LogicException::class);
+        $message->setDeliveryTag(1231);
+    }
 
-        unset($message->delivery_info['delivery_tag']);
-        $this->expectException('\PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException');
+    /**
+     * @test
+     */
+    public function delivery_tag_empty()
+    {
+        $this->expectException(AMQPEmptyDeliveryTagException::class);
+        $message = new AMQPMessage();
         $message->getDeliveryTag();
     }
 
@@ -126,5 +132,31 @@ class AMQPMessageTest extends TestCase
             ['application_headers' => ['x-foo' => ['A', [null]]]],
         ],
         ];
+    }
+
+    public function ack_new_message()
+    {
+        $message = new AMQPMessage();
+
+        $exception = null;
+        try {
+            $message->ack();
+        } catch (\Exception $exception) {
+        }
+        $this->assertInstanceOf(\LogicException::class, $exception);
+
+        $exception = null;
+        try {
+            $message->nack();
+        } catch (\Exception $exception) {
+        }
+        $this->assertInstanceOf(\LogicException::class, $exception);
+
+        $exception = null;
+        try {
+            $message->reject();
+        } catch (\Exception $exception) {
+        }
+        $this->assertInstanceOf(\LogicException::class, $exception);
     }
 }

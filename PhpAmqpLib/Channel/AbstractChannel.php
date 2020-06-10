@@ -287,19 +287,18 @@ abstract class AbstractChannel
     /**
      * @param AMQPReader $propertyReader
      * @param AMQPReader $contentReader
-     * @return \PhpAmqpLib\Message\AMQPMessage
+     * @return AMQPMessage
      */
     protected function createMessage($propertyReader, $contentReader)
     {
-        $bodyChunks = array();
+        $body = '';
         $bodyReceivedBytes = 0;
-
         $message = new AMQPMessage();
         $message
             ->load_properties($propertyReader)
-            ->setBodySize($contentReader->read_longlong());
+            ->setBodySize($bodySize = $contentReader->read_longlong());
 
-        while ($message->getBodySize() > $bodyReceivedBytes) {
+        while ($bodySize > $bodyReceivedBytes) {
             list($frame_type, $payload) = $this->next_frame();
 
             $this->validate_body_frame($frame_type);
@@ -310,10 +309,10 @@ abstract class AbstractChannel
                 continue;
             }
 
-            $bodyChunks[] = $payload;
+            $body .= $payload;
         }
 
-        $message->setBody(implode('', $bodyChunks));
+        $message->setBody($body);
 
         return $message;
     }

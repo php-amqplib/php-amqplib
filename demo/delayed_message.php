@@ -55,7 +55,7 @@ function process_message(AMQPMessage $message)
     $headers = $message->get('application_headers');
     $nativeData = $headers->getNativeData();
     var_dump($nativeData['x-delay']);
-    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
+    $message->ack();
 }
 
 /*
