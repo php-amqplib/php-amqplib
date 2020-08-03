@@ -957,6 +957,7 @@ class AMQPChannel extends AbstractChannel
      * @param int|null $ticket
      * @param array $arguments
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
+     * @throws \InvalidArgumentException
      * @return mixed|string
      */
     public function basic_consume(
@@ -970,6 +971,10 @@ class AMQPChannel extends AbstractChannel
         $ticket = null,
         $arguments = array()
     ) {
+        if (null !== $callback) {
+            Assert::isCallable($callback);
+        }
+
         $ticket = $this->getTicket($ticket);
         list($class_id, $method_id, $args) = $this->protocolWriter->basicConsume(
             $ticket,
