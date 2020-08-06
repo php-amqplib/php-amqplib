@@ -22,6 +22,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
      * @param string|null $ssl_protocol
+     * @param bool $pcntl_heartbeat
      */
     public function __construct(
         $host,
@@ -39,7 +40,8 @@ class AMQPStreamConnection extends AbstractConnection
         $keepalive = false,
         $heartbeat = 0,
         $channel_rpc_timeout = 0.0,
-        $ssl_protocol = null
+        $ssl_protocol = null,
+        $pcntl_heartbeat = false
     ) {
         if ($channel_rpc_timeout > $read_write_timeout) {
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read-write timeout');
@@ -67,7 +69,8 @@ class AMQPStreamConnection extends AbstractConnection
             $io,
             $heartbeat,
             $connection_timeout,
-            $channel_rpc_timeout
+            $channel_rpc_timeout,
+            $pcntl_heartbeat
         );
 
         // save the params for the use of __clone, this will overwrite the parent
@@ -93,6 +96,12 @@ class AMQPStreamConnection extends AbstractConnection
                            $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ?
                            $options['heartbeat'] : 60;
+        $channel_rpc_timeout = isset($options['channel_rpc_timeout']) ?
+                                     $options['channel_rpc_timeout'] : 0.0;
+        $ssl_protocol = isset($options['ssl_protocol']) ?
+                              $options['ssl_protocol'] : null;
+        $pcntl_heartbeat = isset($options['pcntl_heartbeat']) ?
+                                 $options['pcntl_heartbeat'] : false;
         return new static($host,
                           $port,
                           $user,
@@ -106,6 +115,10 @@ class AMQPStreamConnection extends AbstractConnection
                           $read_write_timeout,
                           $context,
                           $keepalive,
-                          $heartbeat);
+                          $heartbeat,
+                          $channel_rpc_timeout,
+                          $ssl_protocol,
+                          $pcntl_heartbeat
+        );
     }
 }

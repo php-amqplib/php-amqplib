@@ -20,6 +20,7 @@ class AMQPSocketConnection extends AbstractConnection
      * @param int $write_timeout
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
+     * @param bool $pcntl_heartbeat
      * @throws \Exception
      */
     public function __construct(
@@ -36,7 +37,8 @@ class AMQPSocketConnection extends AbstractConnection
         $keepalive = false,
         $write_timeout = 3,
         $heartbeat = 0,
-        $channel_rpc_timeout = 0.0
+        $channel_rpc_timeout = 0.0,
+        $pcntl_heartbeat = false
     ) {
         if ($channel_rpc_timeout > $read_timeout) {
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read timeout');
@@ -55,7 +57,8 @@ class AMQPSocketConnection extends AbstractConnection
             $io,
             $heartbeat,
             max($read_timeout, $write_timeout),
-            $channel_rpc_timeout
+            $channel_rpc_timeout,
+            $pcntl_heartbeat
         );
     }
 
@@ -76,6 +79,10 @@ class AMQPSocketConnection extends AbstractConnection
                                $options['write_timeout'] : 3;
         $heartbeat = isset($options['heartbeat']) ?
                            $options['heartbeat'] : 0;
+        $channel_rpc_timeout = isset($options['channel_rpc_timeout']) ?
+                                     $options['channel_rpc_timeout'] : 0.0;
+        $pcntl_heartbeat = isset($options['pcntl_heartbeat']) ?
+                                 $options['pcntl_heartbeat'] : false;
         return new static($host,
                           $port,
                           $user,
@@ -88,6 +95,8 @@ class AMQPSocketConnection extends AbstractConnection
                           $read_timeout,
                           $keepalive,
                           $write_timeout,
-                          $heartbeat);
+                          $heartbeat,
+                          $channel_rpc_timeout,
+                          $pcntl_heartbeat);
     }
 }

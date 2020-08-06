@@ -3,6 +3,8 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\Heartbeat\HeartbeatSenderFactory;
+use PhpAmqpLib\Connection\Heartbeat\HeartbeatSenderInterface;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
@@ -95,6 +97,9 @@ abstract class AbstractConnection extends AbstractChannel
     /** @var int */
     protected $heartbeat;
 
+    /** @var HeartbeatSenderInterface */
+    protected $heartbeat_sender;
+
     /** @var float */
     protected $last_frame;
 
@@ -164,6 +169,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $heartbeat
      * @param int $connection_timeout
      * @param float $channel_rpc_timeout
+     * @param bool $pcntl_heartbeat
      * @throws \Exception
      */
     public function __construct(
@@ -177,7 +183,8 @@ abstract class AbstractConnection extends AbstractChannel
         AbstractIO $io,
         $heartbeat = 0,
         $connection_timeout = 0,
-        $channel_rpc_timeout = 0.0
+        $channel_rpc_timeout = 0.0,
+        $pcntl_heartbeat = false
     ) {
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
@@ -191,6 +198,7 @@ abstract class AbstractConnection extends AbstractChannel
         $this->heartbeat = $heartbeat;
         $this->connection_timeout = $connection_timeout;
         $this->channel_rpc_timeout = $channel_rpc_timeout;
+        $this->heartbeat_sender = HeartbeatSenderFactory::getSender($this, $pcntl_heartbeat);
 
         if ($user && $password) {
             if ($login_method === 'PLAIN') {
@@ -262,6 +270,7 @@ abstract class AbstractConnection extends AbstractChannel
                 if (!$host) {
                     //Reconnected
                     $this->io->reenableHeartbeat();
+                    $this->heartbeat_sender->setHeartbeat($this->heartbeat);
                     return null; // we weren't redirected
                 }
 
@@ -278,6 +287,7 @@ abstract class AbstractConnection extends AbstractChannel
             $this->closeChannels();
             $this->close_input();
             $this->close_socket();
+            $this->heartbeat_sender->shutdown();
             throw $e; // Rethrow exception
         }
     }
@@ -379,6 +389,7 @@ abstract class AbstractConnection extends AbstractChannel
 
         try {
             $this->io->write($data);
+            $this->heartbeat_sender->signalActivity();
         } catch (AMQPConnectionClosedException $e) {
             $this->do_close();
             throw $e;
@@ -395,6 +406,7 @@ abstract class AbstractConnection extends AbstractChannel
         $this->setIsConnected(false);
         $this->close_input();
         $this->close_socket();
+        $this->heartbeat_sender->shutdown();
     }
 
     /**
@@ -700,6 +712,7 @@ abstract class AbstractConnection extends AbstractChannel
     {
         $result = null;
         $this->io->disableHeartbeat();
+        $this->heartbeat_sender->shutdown();
         if (empty($this->protocolWriter) || !$this->isConnected()) {
             return $result;
         }

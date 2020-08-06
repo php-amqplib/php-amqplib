@@ -111,9 +111,10 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 
 ## More Examples ##
 
-- `amqp_ha_consumer.php`: demos the use of mirrored queues
+- `amqp_ha_consumer.php`: demos the use of mirrored queues.
 - `amqp_consumer_exclusive.php` and `amqp_publisher_exclusive.php`: demos fanout exchanges using exclusive queues.
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demos fanout exchanges with named queues.
+- `amqp_consumer_pcntl_heartbeat.php`: demos signal-based heartbeat sender usage.
 - `basic_get.php`: demos obtaining messages from the queues by using the _basic get_ AMQP call.
 
 ## Multiple hosts connections ##
@@ -288,6 +289,25 @@ To disable this feature just define constant `AMQP_WITHOUT_SIGNALS` as `true`
 ```php
 <?php
 define('AMQP_WITHOUT_SIGNALS', true);
+
+... more code
+
+```
+
+
+## Signal-based Heartbeat ##
+
+If you have installed [PCNTL extension](http://www.php.net/manual/en/book.pcntl.php) and are using PHP 7.1 or greater,
+you can use signal-based heartbeat sender by setting `pcntl_heartbeat` option as `true`  in connection creation.
+
+```php
+<?php
+$connection = AMQPStreamConnection::create_connection([
+    ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
+], [
+    'heartbeat' => 4,
+    'pcntl_heartbeat' => true,
+]);
 
 ... more code
 
