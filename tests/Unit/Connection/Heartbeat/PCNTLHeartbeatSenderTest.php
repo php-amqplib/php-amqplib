@@ -7,6 +7,13 @@ use PHPUnit\Framework\TestCase;
 
 class PCNTLHeartbeatSenderTest extends TestCase
 {
+    protected function setUp()
+    {
+        if (!function_exists('pcntl_async_signals')) {
+            $this->markTestSkipped('pcntl_async_signals is required');
+        }
+    }
+
     /**
      * @test
      */

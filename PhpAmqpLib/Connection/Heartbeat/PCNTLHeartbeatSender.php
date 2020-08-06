@@ -42,9 +42,7 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
      */
     private function isSupported()
     {
-        return PHP_VERSION_ID >= 7010
-            && extension_loaded('pcntl')
-            && function_exists('posix_kill')
+        return extension_loaded('pcntl')
             && function_exists('pcntl_async_signals')
             && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }

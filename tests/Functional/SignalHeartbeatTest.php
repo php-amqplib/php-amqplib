@@ -2,8 +2,6 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
@@ -23,8 +21,12 @@ class SignalHeartbeatTest extends TestCase
 
     protected $heartbeatTimeout = 4;
 
-    public function setUp()
+    protected function setUp()
     {
+        if (!function_exists('pcntl_async_signals')) {
+            $this->markTestSkipped('pcntl_async_signals is required');
+        }
+
         $this->connection = AMQPStreamConnection::create_connection(
             [
                 ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]

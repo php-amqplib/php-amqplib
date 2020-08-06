@@ -14,6 +14,10 @@ class HeartbeatSenderFactoryTest extends TestCase
      */
     public function create_pcntl_heartbeat_sender()
     {
+        if (!function_exists('pcntl_async_signals')) {
+            $this->markTestSkipped('pcntl_async_signals is required');
+        }
+
         $connection = $this->createMock(AMQPSocketConnection::class);
         $sender = HeartbeatSenderFactory::getSender($connection, true);
 
