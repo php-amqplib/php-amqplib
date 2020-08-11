@@ -20,11 +20,6 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
     private $shutdown = false;
 
     /**
-     * @var int|null
-     */
-    private $last_activity = null;
-
-    /**
      * @param AbstractConnection $connection
      * @throws AMQPRuntimeException
      */
@@ -45,11 +40,6 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
         return extension_loaded('pcntl')
             && function_exists('pcntl_async_signals')
             && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
-    }
-
-    public function signalActivity()
-    {
-        $this->last_activity = time();
     }
 
     /**
@@ -82,11 +72,11 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
     private function registerListener($interval)
     {
         pcntl_signal(SIGALRM, function () use ($interval) {
-            if ($this->shutdown) {
+            if ($this->shutdown || $this->connection->isWriting()) {
                 return;
             }
 
-            if (time() > ($this->last_activity + $interval)) {
+            if (time() > ($this->connection->getLastActivity() + $interval)) {
                 $this->connection->checkHeartBeat();
             }
 

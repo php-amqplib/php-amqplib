@@ -40,8 +40,6 @@ class AMQPSSLConnection extends AMQPStreamConnection
             isset($options['keepalive']) ? $options['keepalive'] : false,
             isset($options['heartbeat']) ? $options['heartbeat'] : 0,
             isset($options['channel_rpc_timeout']) ? $options['channel_rpc_timeout'] : 0.0,
-            $ssl_protocol,
-            isset($options['pcntl_heartbeat']) ? $options['pcntl_heartbeat'] : false
         );
     }
 

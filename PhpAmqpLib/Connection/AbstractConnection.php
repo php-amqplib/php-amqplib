@@ -3,8 +3,8 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\Heartbeat\HeartbeatSenderFactory;
 use PhpAmqpLib\Connection\Heartbeat\HeartbeatSenderInterface;
+use PhpAmqpLib\Connection\Heartbeat\NullHeartbeatSender;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
@@ -158,6 +158,12 @@ abstract class AbstractConnection extends AbstractChannel
     protected $blocked = false;
 
     /**
+     * If a frame is currently being written
+     * @var bool
+     */
+    protected $writing = false;
+
+    /**
      * @param string $user
      * @param string $password
      * @param string $vhost
@@ -169,7 +175,6 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $heartbeat
      * @param int $connection_timeout
      * @param float $channel_rpc_timeout
-     * @param bool $pcntl_heartbeat
      * @throws \Exception
      */
     public function __construct(
@@ -183,8 +188,7 @@ abstract class AbstractConnection extends AbstractChannel
         AbstractIO $io,
         $heartbeat = 0,
         $connection_timeout = 0,
-        $channel_rpc_timeout = 0.0,
-        $pcntl_heartbeat = false
+        $channel_rpc_timeout = 0.0
     ) {
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
@@ -198,7 +202,7 @@ abstract class AbstractConnection extends AbstractChannel
         $this->heartbeat = $heartbeat;
         $this->connection_timeout = $connection_timeout;
         $this->channel_rpc_timeout = $channel_rpc_timeout;
-        $this->heartbeat_sender = HeartbeatSenderFactory::getSender($this, $pcntl_heartbeat);
+        $this->heartbeat_sender = new NullHeartbeatSender();
 
         if ($user && $password) {
             if ($login_method === 'PLAIN') {
@@ -388,14 +392,16 @@ abstract class AbstractConnection extends AbstractChannel
         $this->debug->debug_hexdump($data);
 
         try {
+            $this->writing = true;
             $this->io->write($data);
-            $this->heartbeat_sender->signalActivity();
         } catch (AMQPConnectionClosedException $e) {
             $this->do_close();
             throw $e;
         } catch (AMQPRuntimeException $e) {
             $this->setIsConnected(false);
             throw $e;
+        } finally {
+            $this->writing = false;
         }
     }
 
@@ -966,6 +972,14 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * @return float|int
+     */
+    public function getLastActivity()
+    {
+        return $this->io->getLastActivity();
+    }
+
+    /**
      * Handles connection blocked notifications
      *
      * @param AMQPReader $args
@@ -1032,6 +1046,15 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * Get the io writing state.
+     * @return bool
+     */
+    public function isWriting()
+    {
+        return $this->writing;
+    }
+
+    /**
      * Set the connection status
      *
      * @param bool $is_connected
@@ -1039,6 +1062,15 @@ abstract class AbstractConnection extends AbstractChannel
     protected function setIsConnected($is_connected)
     {
         $this->is_connected = (bool) $is_connected;
+    }
+
+    /**
+     * @param HeartbeatSenderInterface $sender
+     */
+    public function set_heartbeat_sender($sender)
+    {
+        $this->heartbeat_sender = $sender;
+        $this->heartbeat_sender->setHeartbeat($this->heartbeat);
     }
 
     /**

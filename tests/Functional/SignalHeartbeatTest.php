@@ -3,6 +3,7 @@
 namespace PhpAmqpLib\Tests\Functional;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
@@ -31,11 +32,9 @@ class SignalHeartbeatTest extends TestCase
             [
                 ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
             ],
-            [
-                'heartbeat' => $this->heartbeatTimeout,
-                'pcntl_heartbeat' => true,
-            ]
+            ['heartbeat' => $this->heartbeatTimeout]
         );
+        $this->connection->set_heartbeat_sender(new PCNTLHeartbeatSender($this->connection));
         $this->channel = $this->connection->channel();
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
         list($this->queueName, ,) = $this->channel->queue_declare();

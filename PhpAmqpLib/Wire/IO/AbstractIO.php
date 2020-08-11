@@ -40,6 +40,9 @@ abstract class AbstractIO
     /** @var int|float */
     protected $last_write;
 
+    /** @var int|float */
+    protected $last_heartbeat;
+
     /** @var array|null */
     protected $last_error;
 
@@ -135,7 +138,8 @@ abstract class AbstractIO
 
             // time for client to send a heartbeat
             $now = microtime(true);
-            if (($this->heartbeat / 2) < $now - $this->last_write) {
+            if (($this->heartbeat / 2) < $now - max($this->last_write, $this->last_heartbeat)) {
+                $this->last_heartbeat = microtime(true);
                 $this->write_heartbeat();
             }
         }
@@ -147,13 +151,21 @@ abstract class AbstractIO
     protected function checkBrokerHeartbeat()
     {
         if ($this->heartbeat > 0 && ($this->last_read > 0 || $this->last_write > 0)) {
-            $lastActivity = max($this->last_read, $this->last_write);
+            $lastActivity = $this->getLastActivity();
             $now = microtime(true);
             if (($now - $lastActivity) > $this->heartbeat * 2 + 1) {
                 $this->close();
                 throw new AMQPHeartbeatMissedException('Missed server heartbeat');
             }
         }
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getLastActivity()
+    {
+        return max($this->last_read, $this->last_write);
     }
 
     /**

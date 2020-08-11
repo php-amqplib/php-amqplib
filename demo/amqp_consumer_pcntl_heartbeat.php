@@ -1,51 +1,33 @@
 <?php
 
 include(__DIR__ . '/config.php');
+
+use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
+use PhpAmqpLib\Message\AMQPMessage;
 
 $exchange = 'router';
 $queue = 'msgs';
 $consumerTag = 'consumer';
 
-
+/**
+ * @var AbstractConnection $connection
+ */
 $connection = AMQPStreamConnection::create_connection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
-], [
-    'heartbeat' => 4,
-    'pcntl_heartbeat' => true,
-]);
+], ['heartbeat' => 4]);
+$connection->set_heartbeat_sender(new PCNTLHeartbeatSender($connection));
+
 $channel = $connection->channel();
 
-/*
-    The following code is the same both in the consumer and the producer.
-    In this way we are sure we always have a queue to consume from and an
-        exchange where to publish messages.
-*/
-
-/*
-    name: $queue
-    passive: false
-    durable: true // the queue will survive server restarts
-    exclusive: false // the queue can be accessed in other channels
-    auto_delete: false //the queue won't be deleted once the channel is closed.
-*/
 $channel->queue_declare($queue, false, true, false, false);
-
-/*
-    name: $exchange
-    type: direct
-    passive: false
-    durable: true // the exchange will survive server restarts
-    auto_delete: false //the exchange won't be deleted once the channel is closed.
-*/
-
 $channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
-
 $channel->queue_bind($queue, $exchange);
 
 /**
- * @param \PhpAmqpLib\Message\AMQPMessage $message
+ * @param AMQPMessage $message
  */
 function process_message($message)
 {
@@ -70,21 +52,11 @@ function process_message($message)
     }
 }
 
-/*
-    queue: Queue from where to get the messages
-    consumer_tag: Consumer identifier
-    no_local: Don't receive messages published by this consumer.
-    no_ack: If set to true, automatic acknowledgement mode will be used by this consumer. See https://www.rabbitmq.com/confirms.html for details.
-    exclusive: Request exclusive consumer access, meaning only this consumer can access the queue
-    nowait:
-    callback: A PHP Callback
-*/
-
 $channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $channel
- * @param \PhpAmqpLib\Connection\AbstractConnection $connection
+ * @param AbstractConnection $connection
  */
 function shutdown($channel, $connection)
 {
@@ -94,7 +66,6 @@ function shutdown($channel, $connection)
 
 register_shutdown_function('shutdown', $channel, $connection);
 
-// Loop as long as the channel has callbacks registered
 while ($channel->is_consuming()) {
     $channel->wait();
 }
