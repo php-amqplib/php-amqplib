@@ -132,10 +132,6 @@ class AMQPReader extends AbstractClient
 
         $result = $this->io->select($sec, $usec);
 
-        if ($result === false) {
-            throw new AMQPIOWaitException('A network error occurred while awaiting for incoming data');
-        }
-
         if ($result === 0) {
             if ($timeout > 0) {
                 throw new AMQPTimeoutException(sprintf(
