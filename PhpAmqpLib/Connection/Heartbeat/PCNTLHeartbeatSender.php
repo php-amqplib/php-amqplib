@@ -15,11 +15,6 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
     private $connection;
 
     /**
-     * @var bool
-     */
-    private $shutdown = false;
-
-    /**
      * @param AbstractConnection $connection
      * @throws AMQPRuntimeException
      */
@@ -32,24 +27,32 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
         $this->connection = $connection;
     }
 
+    public function __destruct()
+    {
+        $this->unregister();
+    }
+
     /**
      * @return bool
      */
     private function isSupported()
     {
         return extension_loaded('pcntl')
-            && function_exists('pcntl_async_signals')
-            && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
+               && function_exists('pcntl_async_signals')
+               && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
 
-    /**
-     * @param int $timeout
-     */
-    public function setHeartbeat($timeout)
+    public function register()
     {
-        if ($this->shutdown) {
-            return;
+        if (!$this->connection) {
+            throw new AMQPRuntimeException('Unable to re-register heartbeat sender');
         }
+
+        if (!$this->connection->isConnected()) {
+            throw new AMQPRuntimeException('Unable to register heartbeat sender, connection is not active');
+        }
+
+        $timeout = $this->connection->getHeartbeat();
 
         if ($timeout > 0) {
             $interval = ceil($timeout / 2);
@@ -59,9 +62,9 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
         }
     }
 
-    public function shutdown()
+    public function unregister()
     {
-        $this->shutdown = true;
+        $this->connection = null;
         // restore default signal handler
         pcntl_signal(SIGALRM, SIG_IGN);
     }
@@ -72,7 +75,12 @@ final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
     private function registerListener($interval)
     {
         pcntl_signal(SIGALRM, function () use ($interval) {
-            if ($this->shutdown || $this->connection->isWriting()) {
+            if (!$this->connection || $this->connection->isWriting()) {
+                return;
+            }
+
+            if (!$this->connection->isConnected()) {
+                $this->unregister();
                 return;
             }
 

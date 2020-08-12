@@ -3,8 +3,6 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
-use PhpAmqpLib\Connection\Heartbeat\HeartbeatSenderInterface;
-use PhpAmqpLib\Connection\Heartbeat\NullHeartbeatSender;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
@@ -96,9 +94,6 @@ abstract class AbstractConnection extends AbstractChannel
 
     /** @var int */
     protected $heartbeat;
-
-    /** @var HeartbeatSenderInterface */
-    protected $heartbeat_sender;
 
     /** @var float */
     protected $last_frame;
@@ -202,7 +197,6 @@ abstract class AbstractConnection extends AbstractChannel
         $this->heartbeat = $heartbeat;
         $this->connection_timeout = $connection_timeout;
         $this->channel_rpc_timeout = $channel_rpc_timeout;
-        $this->heartbeat_sender = new NullHeartbeatSender();
 
         if ($user && $password) {
             if ($login_method === 'PLAIN') {
@@ -274,7 +268,6 @@ abstract class AbstractConnection extends AbstractChannel
                 if (!$host) {
                     //Reconnected
                     $this->io->reenableHeartbeat();
-                    $this->heartbeat_sender->setHeartbeat($this->heartbeat);
                     return null; // we weren't redirected
                 }
 
@@ -291,7 +284,6 @@ abstract class AbstractConnection extends AbstractChannel
             $this->closeChannels();
             $this->close_input();
             $this->close_socket();
-            $this->heartbeat_sender->shutdown();
             throw $e; // Rethrow exception
         }
     }
@@ -412,7 +404,6 @@ abstract class AbstractConnection extends AbstractChannel
         $this->setIsConnected(false);
         $this->close_input();
         $this->close_socket();
-        $this->heartbeat_sender->shutdown();
     }
 
     /**
@@ -718,7 +709,6 @@ abstract class AbstractConnection extends AbstractChannel
     {
         $result = null;
         $this->io->disableHeartbeat();
-        $this->heartbeat_sender->shutdown();
         if (empty($this->protocolWriter) || !$this->isConnected()) {
             return $result;
         }
@@ -1065,15 +1055,6 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param HeartbeatSenderInterface $sender
-     */
-    public function set_heartbeat_sender($sender)
-    {
-        $this->heartbeat_sender = $sender;
-        $this->heartbeat_sender->setHeartbeat($this->heartbeat);
-    }
-
-    /**
      * Closes all available channels
      */
     protected function closeChannels()
@@ -1107,6 +1088,14 @@ abstract class AbstractConnection extends AbstractChannel
     public function getServerProperties()
     {
         return $this->server_properties;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeartbeat()
+    {
+        return $this->heartbeat;
     }
 
     /**

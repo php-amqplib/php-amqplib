@@ -298,13 +298,15 @@ define('AMQP_WITHOUT_SIGNALS', true);
 ## Signal-based Heartbeat ##
 
 If you have installed [PCNTL extension](http://www.php.net/manual/en/book.pcntl.php) and are using PHP 7.1 or greater,
-you can use signal-based heartbeat by setting PCNTLHeartbeatSender as the sender.
+you can register a signal-based heartbeat sender.
 
 ```php
 <?php
-$connection->set_heartbeat_sender(new PCNTLHeartbeatSender($connection));
 
-... more code
+$sender = new PCNTLHeartbeatSender($connection);
+$sender->register();
+... code
+$sender->unregister();
 
 ```
 

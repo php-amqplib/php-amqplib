@@ -2,21 +2,25 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
+use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @group connection
+ * @group signals
  */
 class SignalHeartbeatTest extends TestCase
 {
-    protected $exchangeName = 'test_exchange';
+    /**
+     * @var AbstractConnection
+     */
+    protected $connection;
+
+    protected $exchangeName = 'test_pcntl_exchange';
 
     protected $queueName = null;
-
-    protected $connection;
 
     protected $channel;
 
@@ -34,7 +38,6 @@ class SignalHeartbeatTest extends TestCase
             ],
             ['heartbeat' => $this->heartbeatTimeout]
         );
-        $this->connection->set_heartbeat_sender(new PCNTLHeartbeatSender($this->connection));
         $this->channel = $this->connection->channel();
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
         list($this->queueName, ,) = $this->channel->queue_declare();
@@ -56,9 +59,17 @@ class SignalHeartbeatTest extends TestCase
 
     /**
      * @test
+     *
+     * @covers \PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender::isSupported
+     * @covers \PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender::register
+     * @covers \PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender::registerListener
+     * @covers \PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender::unregister
      */
     public function process_message_longer_than_heartbeat_timeout()
     {
+        $sender = new PCNTLHeartbeatSender($this->connection);
+        $sender->register();
+
         $msg = new AMQPMessage($this->heartbeatTimeout, ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]);
 
         $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);

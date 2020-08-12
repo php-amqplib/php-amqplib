@@ -18,7 +18,9 @@ $consumerTag = 'consumer';
 $connection = AMQPStreamConnection::create_connection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
 ], ['heartbeat' => 4]);
-$connection->set_heartbeat_sender(new PCNTLHeartbeatSender($connection));
+
+$sender = new PCNTLHeartbeatSender($connection);
+$sender->register();
 
 $channel = $connection->channel();
 

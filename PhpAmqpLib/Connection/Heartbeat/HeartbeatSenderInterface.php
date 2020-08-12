@@ -3,7 +3,7 @@ namespace PhpAmqpLib\Connection\Heartbeat;
 
 interface HeartbeatSenderInterface
 {
-    public function setHeartbeat($timeout);
+    public function register();
 
-    public function shutdown();
+    public function unregister();
 }
