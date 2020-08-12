@@ -40,9 +40,6 @@ abstract class AbstractIO
     /** @var int|float */
     protected $last_write;
 
-    /** @var int|float */
-    protected $last_heartbeat;
-
     /** @var array|null */
     protected $last_error;
 
@@ -138,8 +135,7 @@ abstract class AbstractIO
 
             // time for client to send a heartbeat
             $now = microtime(true);
-            if (($this->heartbeat / 2) < $now - max($this->last_write, $this->last_heartbeat)) {
-                $this->last_heartbeat = microtime(true);
+            if (($this->heartbeat / 2) < $now - $this->last_write) {
                 $this->write_heartbeat();
             }
         }
