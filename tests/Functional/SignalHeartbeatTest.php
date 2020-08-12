@@ -3,7 +3,7 @@
 namespace PhpAmqpLib\Tests\Functional;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +24,8 @@ class SignalHeartbeatTest extends TestCase
 
     protected $channel;
 
+    protected $sender;
+
     protected $heartbeatTimeout = 4;
 
     protected function setUp()
@@ -32,12 +34,23 @@ class SignalHeartbeatTest extends TestCase
             $this->markTestSkipped('pcntl_async_signals is required');
         }
 
-        $this->connection = AMQPStreamConnection::create_connection(
-            [
-                ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
-            ],
-            ['heartbeat' => $this->heartbeatTimeout]
+
+        $this->connection = new AMQPSocketConnection(
+            HOST,
+            PORT,
+            USER,
+            PASS,
+            VHOST,
+            false,
+            'AMQPLAIN',
+            null,
+            'en_US',
+            3,
+            false,
+            3,
+            $this->heartbeatTimeout
         );
+        $this->sender = new PCNTLHeartbeatSender($this->connection);
         $this->channel = $this->connection->channel();
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
         list($this->queueName, ,) = $this->channel->queue_declare();
@@ -46,6 +59,10 @@ class SignalHeartbeatTest extends TestCase
 
     public function tearDown()
     {
+        if ($this->sender) {
+            $this->sender->unregister();
+            $this->sender = null;
+        }
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);
             $this->channel->close();
@@ -67,8 +84,7 @@ class SignalHeartbeatTest extends TestCase
      */
     public function process_message_longer_than_heartbeat_timeout()
     {
-        $sender = new PCNTLHeartbeatSender($this->connection);
-        $sender->register();
+        $this->sender->register();
 
         $msg = new AMQPMessage($this->heartbeatTimeout, ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]);
 

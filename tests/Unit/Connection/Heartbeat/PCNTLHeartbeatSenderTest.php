@@ -2,7 +2,7 @@
 namespace PhpAmqpLib\Tests\Unit\Connection\Heartbeat;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PHPUnit\Framework\TestCase;
@@ -14,9 +14,8 @@ class PCNTLHeartbeatSenderTest extends TestCase
      */
     protected $connection;
 
-    /**
-     * @var int
-     */
+    protected $sender;
+
     protected $heartbeatTimeout = 4;
 
     protected function setUp()
@@ -25,15 +24,31 @@ class PCNTLHeartbeatSenderTest extends TestCase
             $this->markTestSkipped('pcntl_async_signals is required');
         }
 
-        $this->connection = AMQPStreamConnection::create_connection([
-            ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
-        ], [
-            'heartbeat' => $this->heartbeatTimeout,
-        ]);
+        $this->connection = new AMQPSocketConnection(
+            HOST,
+            PORT,
+            USER,
+            PASS,
+            VHOST,
+            false,
+            'AMQPLAIN',
+            null,
+            'en_US',
+            3,
+            false,
+            3,
+            $this->heartbeatTimeout
+        );
+
+        $this->sender = new PCNTLHeartbeatSender($this->connection);
     }
 
     public function tearDown()
     {
+        if ($this->sender) {
+            $this->sender->unregister();
+            $this->sender = null;
+        }
         if ($this->connection) {
             $this->connection->close();
             $this->connection = null;
@@ -49,8 +64,7 @@ class PCNTLHeartbeatSenderTest extends TestCase
         $this->expectExceptionMessage('Unable to register heartbeat sender, connection is not active');
 
         $this->connection->close();
-        $sender = new PCNTLHeartbeatSender($this->connection);
-        $sender->register();
+        $this->sender->register();
     }
 
     /**
@@ -61,9 +75,8 @@ class PCNTLHeartbeatSenderTest extends TestCase
         $this->expectException(AMQPRuntimeException::class);
         $this->expectExceptionMessage('Unable to re-register heartbeat sender');
 
-        $sender = new PCNTLHeartbeatSender($this->connection);
-        $sender->unregister();
-        $sender->register();
+        $this->sender->unregister();
+        $this->sender->register();
     }
 
     /**
@@ -71,9 +84,8 @@ class PCNTLHeartbeatSenderTest extends TestCase
      */
     public function unregister_should_return_default_signal_handler()
     {
-        $sender = new PCNTLHeartbeatSender($this->connection);
-        $sender->register();
-        $sender->unregister();
+        $this->sender->register();
+        $this->sender->unregister();
 
         $this->assertEquals(SIG_IGN, pcntl_signal_get_handler(SIGALRM));
     }
@@ -83,8 +95,7 @@ class PCNTLHeartbeatSenderTest extends TestCase
      */
     public function heartbeat_should_interrupt_non_blocking_action()
     {
-        $sender = new PCNTLHeartbeatSender($this->connection);
-        $sender->register();
+        $this->sender->register();
 
         $timeLeft = $this->heartbeatTimeout;
         $continuation = 0;
