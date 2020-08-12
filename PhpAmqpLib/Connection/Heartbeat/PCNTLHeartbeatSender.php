@@ -7,7 +7,7 @@ use PhpAmqpLib\Exception\AMQPRuntimeException;
 /**
  * Manages pcntl-based heartbeat sending for a {@link AbstractConnection}.
  */
-final class PCNTLHeartbeatSender implements HeartbeatSenderInterface
+final class PCNTLHeartbeatSender
 {
     /**
      * @var AbstractConnection
