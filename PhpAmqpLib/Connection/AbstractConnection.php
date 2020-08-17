@@ -153,6 +153,12 @@ abstract class AbstractConnection extends AbstractChannel
     protected $blocked = false;
 
     /**
+     * If a frame is currently being written
+     * @var bool
+     */
+    protected $writing = false;
+
+    /**
      * @param string $user
      * @param string $password
      * @param string $vhost
@@ -378,6 +384,7 @@ abstract class AbstractConnection extends AbstractChannel
         $this->debug->debug_hexdump($data);
 
         try {
+            $this->writing = true;
             $this->io->write($data);
         } catch (AMQPConnectionClosedException $e) {
             $this->do_close();
@@ -385,6 +392,8 @@ abstract class AbstractConnection extends AbstractChannel
         } catch (AMQPRuntimeException $e) {
             $this->setIsConnected(false);
             throw $e;
+        } finally {
+            $this->writing = false;
         }
     }
 
@@ -953,6 +962,14 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * @return float|int
+     */
+    public function getLastActivity()
+    {
+        return $this->io->getLastActivity();
+    }
+
+    /**
      * Handles connection blocked notifications
      *
      * @param AMQPReader $args
@@ -1019,6 +1036,15 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * Get the io writing state.
+     * @return bool
+     */
+    public function isWriting()
+    {
+        return $this->writing;
+    }
+
+    /**
      * Set the connection status
      *
      * @param bool $is_connected
@@ -1062,6 +1088,14 @@ abstract class AbstractConnection extends AbstractChannel
     public function getServerProperties()
     {
         return $this->server_properties;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeartbeat()
+    {
+        return $this->heartbeat;
     }
 
     /**
