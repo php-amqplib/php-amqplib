@@ -1,54 +1,46 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Functional;
+namespace PhpAmqpLib\Tests\Functional\Connection\Heartbeat;
 
+use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Message\AMQPMessage;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 
 /**
+ * @group connection
  * @group signals
+ * @requires extension pcntl
+ * @requires PHP 7.1
  */
-class SignalHeartbeatTest extends TestCase
+class SignalHeartbeatTest extends AbstractConnectionTest
 {
-    /**
-     * @var AbstractConnection
-     */
+    /** @var AbstractConnection */
     protected $connection;
 
+    /** @var string */
     protected $exchangeName = 'test_pcntl_exchange';
 
-    protected $queueName = null;
+    /** @var string */
+    protected $queueName;
 
+    /** @var AMQPChannel */
     protected $channel;
 
+    /** @var PCNTLHeartbeatSender */
     protected $sender;
 
+    /** @var int */
     protected $heartbeatTimeout = 4;
 
     protected function setUp()
     {
-        if (!function_exists('pcntl_async_signals')) {
-            $this->markTestSkipped('pcntl_async_signals is required');
-        }
-
-
-        $this->connection = new AMQPSocketConnection(
+        $this->connection = $this->conection_create(
+            'stream',
             HOST,
             PORT,
-            USER,
-            PASS,
-            VHOST,
-            false,
-            'AMQPLAIN',
-            null,
-            'en_US',
-            3,
-            false,
-            3,
-            $this->heartbeatTimeout
+            ['timeout' => 3, 'heartbeat' => $this->heartbeatTimeout]
         );
         $this->sender = new PCNTLHeartbeatSender($this->connection);
         $this->channel = $this->connection->channel();
@@ -61,17 +53,17 @@ class SignalHeartbeatTest extends TestCase
     {
         if ($this->sender) {
             $this->sender->unregister();
-            $this->sender = null;
         }
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);
             $this->channel->close();
-            $this->channel = null;
         }
         if ($this->connection) {
             $this->connection->close();
-            $this->connection = null;
         }
+        $this->sender = null;
+        $this->channel = null;
+        $this->connection = null;
     }
 
     /**
@@ -107,7 +99,7 @@ class SignalHeartbeatTest extends TestCase
 
     public function processMessage($msg)
     {
-        $timeLeft = (int) $msg->body * 3;
+        $timeLeft = (int)$msg->body * 3;
         while ($timeLeft > 0) {
             $timeLeft = sleep($timeLeft);
         }
@@ -116,6 +108,6 @@ class SignalHeartbeatTest extends TestCase
         $delivery_info['channel']->basic_ack($delivery_info['delivery_tag']);
         $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
 
-        $this->assertEquals($this->heartbeatTimeout, (int) $msg->body);
+        self::assertEquals($this->heartbeatTimeout, (int)$msg->body);
     }
 }

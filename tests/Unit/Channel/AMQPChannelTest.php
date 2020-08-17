@@ -39,17 +39,19 @@ class AMQPChannelTest extends TestCase
 
     public function basic_consume_invalid_arguments_provider()
     {
-        yield [
+        return [
             [
-                '',
-                '',
-                false,
-                false,
-                false,
-                false,
-                'non_callable variable',
+                [
+                    '',
+                    '',
+                    false,
+                    false,
+                    false,
+                    false,
+                    'non_callable variable',
+                ],
+                \InvalidArgumentException::class,
             ],
-            \InvalidArgumentException::class,
         ];
     }
 }

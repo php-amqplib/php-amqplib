@@ -1,58 +1,54 @@
 <?php
-namespace PhpAmqpLib\Tests\Unit\Connection\Heartbeat;
+
+namespace PhpAmqpLib\Tests\Functional\Connection\Heartbeat;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
 
-class PCNTLHeartbeatSenderTest extends TestCase
+/**
+ * @group connection
+ * @group signals
+ * @requires extension pcntl
+ * @requires PHP 7.1
+ */
+class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
 {
-    /**
-     * @var AbstractConnection
-     */
+    /** @var AbstractConnection */
     protected $connection;
 
+    /** @var PCNTLHeartbeatSender */
     protected $sender;
 
+    /** @var int */
     protected $heartbeatTimeout = 4;
 
     protected function setUp()
     {
-        if (!function_exists('pcntl_async_signals')) {
-            $this->markTestSkipped('pcntl_async_signals is required');
-        }
-
-        $this->connection = new AMQPSocketConnection(
+        $this->connection = $this->conection_create(
+            'stream',
             HOST,
             PORT,
-            USER,
-            PASS,
-            VHOST,
-            false,
-            'AMQPLAIN',
-            null,
-            'en_US',
-            3,
-            false,
-            3,
-            $this->heartbeatTimeout
+            ['timeout' => 3, 'heartbeat' => $this->heartbeatTimeout]
         );
-
-        $this->sender = new PCNTLHeartbeatSender($this->connection);
+        try {
+            $this->sender = new PCNTLHeartbeatSender($this->connection);
+        } catch (\Exception $exception) {
+            $this->markTestSkipped($exception->getMessage());
+        }
     }
 
     public function tearDown()
     {
         if ($this->sender) {
             $this->sender->unregister();
-            $this->sender = null;
         }
         if ($this->connection) {
             $this->connection->close();
-            $this->connection = null;
         }
+        $this->sender = null;
+        $this->connection = null;
     }
 
     /**
@@ -87,7 +83,7 @@ class PCNTLHeartbeatSenderTest extends TestCase
         $this->sender->register();
         $this->sender->unregister();
 
-        $this->assertEquals(SIG_IGN, pcntl_signal_get_handler(SIGALRM));
+        self::assertEquals(SIG_IGN, pcntl_signal_get_handler(SIGALRM));
     }
 
     /**
