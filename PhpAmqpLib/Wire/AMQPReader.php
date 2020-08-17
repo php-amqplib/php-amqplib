@@ -111,7 +111,6 @@ class AMQPReader extends AbstractClient
      *
      * AMQPTimeoutException can be raised if the timeout is set
      *
-     * @throws \PhpAmqpLib\Exception\AMQPIOWaitException on network errors
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException when timeout is set and no data received
      * @throws \PhpAmqpLib\Exception\AMQPNoDataException when no data is ready to read from IO
      */
@@ -131,10 +130,6 @@ class AMQPReader extends AbstractClient
         }
 
         $result = $this->io->select($sec, $usec);
-
-        if ($result === false) {
-            throw new AMQPIOWaitException('A network error occurred while awaiting for incoming data');
-        }
 
         if ($result === 0) {
             if ($timeout > 0) {
