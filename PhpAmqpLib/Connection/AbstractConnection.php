@@ -795,7 +795,7 @@ abstract class AbstractConnection extends AbstractChannel
             $wait[] = $this->waitHelper->get_wait('connection.redirect');
         }
 
-        return $this->wait($wait);
+        return $this->wait($wait, false, $this->connection_timeout);
     }
 
     /**
