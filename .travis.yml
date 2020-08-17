@@ -12,7 +12,7 @@ matrix:
   fast_finish: true
 
 git:
-    depth: 1
+  depth: 1
 
 services:
   - docker
@@ -25,12 +25,11 @@ addons:
 cache:
   directories:
     - $HOME/.composer
-    - vendor
 
 before_install:
   - docker pull shopify/toxiproxy
-  - docker run -d --rm --net=host -p 8474:8474 -p 5673:5673 shopify/toxiproxy
-  - docker ps -a
+  - docker run --detach --rm --net=host --publish 8474:8474 --publish 5673:5673 shopify/toxiproxy
+  - docker ps --all
   - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
 
 env:
@@ -38,13 +37,13 @@ env:
     - TOXIPROXY_HOST=localhost TOXIPROXY_AMQP_PORT=5673
 
 before_script:
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
+  - travis_retry composer update --no-interaction --prefer-dist
 
 script:
   - vendor/bin/phpunit -d zend.enable_gc=0 --exclude-group management --coverage-text --coverage-clover=coverage.clover
 
 after_success: >
-    if [[ $COVERAGE = true ]]; then
-        wget https://scrutinizer-ci.com/ocular.phar
-        php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-    fi
+  if [[ $COVERAGE = true ]]; then
+    wget https://scrutinizer-ci.com/ocular.phar
+    php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  fi
