@@ -180,7 +180,13 @@ abstract class AbstractIO
     public function reenableHeartbeat()
     {
         $this->heartbeat = $this->initial_heartbeat;
-
+        
+        // check if it is time for client to send a heartbeat
+        $now = microtime(true);
+        if (($this->heartbeat / 2) < $now - $this->last_write) {
+            $this->write_heartbeat();
+        }
+        
         return $this;
     }
 
