@@ -57,7 +57,7 @@
     "license": "LGPL-2.1-or-later",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.11-dev"
+            "dev-master": "2.12-dev"
         }
     }
 }
