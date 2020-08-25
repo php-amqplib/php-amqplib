@@ -188,9 +188,9 @@ class ConnectionClosedTest extends AbstractConnectionTest
     public function must_not_throw_exception_missed_heartbeat_disabled($type, $size)
     {
         $channel = $this->channel_create($type, [
-            'keepalive' => false,
+            'keepalive' => true,
             'heartbeat' => $heartbeat = 1,
-            'timeout' => 3,
+            'timeout' => 10,
         ]);
         $io = $channel->getConnection()->getIO();
 
