@@ -192,7 +192,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
             'heartbeat' => $heartbeat = 1,
             'timeout' => 3,
         ]);
-        $connection = $channel->getConnection();
+        $io = $channel->getConnection()->getIO();
 
         $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
         $message = new AMQPMessage(
@@ -201,13 +201,13 @@ class ConnectionClosedTest extends AbstractConnectionTest
         );
 
         // Disable heartbeat
-        $connection->disableHeartbeat();
+        $io->disableHeartbeat();
 
         // miss heartbeat
         sleep($heartbeat * 2 + 1);
 
         // Reenable heartbeat
-        $connection->reenableHeartbeat();
+        $io->reenableHeartbeat();
 
         $exception = null;
         try {
