@@ -171,6 +171,56 @@ class ConnectionClosedTest extends AbstractConnectionTest
     }
 
     /**
+     * Try to write(publish) to connection after heartbeat was temporarily disabled
+     * @test
+     * @medium
+     * @group connection
+     * @testWith ["stream", 1024]
+     *           ["stream", 32768]
+     *           ["socket", 1024]
+     *           ["socket", 32768]
+     * @covers \PhpAmqpLib\Wire\IO\StreamIO::write()
+     * @covers \PhpAmqpLib\Wire\IO\SocketIO::write()
+     *
+     * @param string $type
+     * @param int $size
+     */
+    public function must_not_throw_exception_missed_heartbeat_disabled($type, $size)
+    {
+        $channel = $this->channel_create($type, [
+            'keepalive' => true,
+            'heartbeat' => $heartbeat = 1,
+            'timeout' => 15,
+        ]);
+        $io = $channel->getConnection()->getIO();
+
+        $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
+        $message = new AMQPMessage(
+            str_repeat('0', $size),
+            ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]
+        );
+
+        // Disable heartbeat
+        $io->disableHeartbeat();
+
+        // miss heartbeat
+        sleep($heartbeat * 2 + 1);
+
+        // Reenable heartbeat
+        $io->reenableHeartbeat();
+
+        $exception = null;
+        try {
+            $channel->basic_publish($message, $exchange_name);
+        } catch (\PHPUnit_Exception $exception) {
+            throw $exception;
+        } catch (\Exception $exception) {
+        }
+
+        $this->assertEquals(null, $exception);
+    }
+
+    /**
      * When client constantly publish messages in async manner and broker does not send heartbeats.
      * @test
      * @medium
