@@ -189,8 +189,8 @@ class ConnectionClosedTest extends AbstractConnectionTest
     {
         $channel = $this->channel_create($type, [
             'keepalive' => true,
-            'heartbeat' => $heartbeat = 1,
-            'timeout' => 10,
+            'heartbeat' => $heartbeat = 15,
+            'timeout' => 60,
         ]);
         $io = $channel->getConnection()->getIO();
 
