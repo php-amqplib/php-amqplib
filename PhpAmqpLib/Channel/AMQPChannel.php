@@ -775,7 +775,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Acknowledges one or more messages
      *
-     * @param string $delivery_tag
+     * @param int $delivery_tag
      * @param bool $multiple
      */
     public function basic_ack($delivery_tag, $multiple = false)

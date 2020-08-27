@@ -1137,6 +1137,8 @@ abstract class AbstractConnection extends AbstractChannel
         throw $latest_exception;
     }
 
+    abstract public static function try_create_connection($host, $port, $user, $password, $vhost, $options);
+
     public static function validate_host($host) {
         if(!isset($host['host'])){
             throw new \InvalidArgumentException("'host' key is required.");
