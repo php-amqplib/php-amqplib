@@ -844,7 +844,6 @@ class AMQPChannel extends AbstractChannel
 
         } else {
             $message = $this->get_and_unset_message($delivery_tag);
-            $message->setDeliveryTag($delivery_tag);
             $this->dispatch_to_handler($handler, array($message));
         }
     }
@@ -1169,6 +1168,7 @@ class AMQPChannel extends AbstractChannel
 
         if ($this->next_delivery_tag > 0) {
             $this->published_messages[$this->next_delivery_tag] = $msg;
+            $msg->setDeliveryInfo($this->next_delivery_tag, false, $exchange, $routing_key);
             $this->next_delivery_tag++;
         }
     }
