@@ -17,18 +17,12 @@ git:
 services:
   - docker
 
-addons:
-  apt:
-    packages:
-      - rabbitmq-server
-
 cache:
   directories:
     - $HOME/.composer
 
 before_install:
-  - docker pull shopify/toxiproxy
-  - docker run --detach --rm --net=host --publish 8474:8474 --publish 5673:5673 shopify/toxiproxy
+  - docker-compose -f docker-compose.yaml -f tests/docker-compose.travis.yaml up -d
   - docker ps --all
   - if [[ $COVERAGE != true ]]; then phpenv config-rm xdebug.ini || true; fi
 
@@ -38,9 +32,10 @@ env:
 
 before_script:
   - travis_retry composer update --no-interaction --prefer-dist
+  - php tests/wait_broker.php
 
 script:
-  - vendor/bin/phpunit -d zend.enable_gc=0 --exclude-group management --coverage-text --coverage-clover=coverage.clover
+  - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
 
 after_success: >
   if [[ $COVERAGE = true ]]; then
