@@ -14,6 +14,7 @@ echo 'PHP_INT_MAX=', PHP_INT_MAX, PHP_EOL;
 echo '# Constants', PHP_EOL;
 $constants = get_defined_constants(true);
 $socketConstant = isset($constants['sockets']) ? $constants['sockets'] : array();
+ksort($socketConstant);
 foreach ($socketConstant as $name => $value) {
     echo sprintf('%-30s', $name), $value, PHP_EOL;
 }
