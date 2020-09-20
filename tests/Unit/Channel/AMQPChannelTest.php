@@ -52,6 +52,18 @@ class AMQPChannelTest extends TestCase
                 ],
                 \InvalidArgumentException::class,
             ],
+            [
+                [
+                    '',
+                    '',
+                    false,
+                    false,
+                    false,
+                    true,
+                    'sleep',
+                ],
+                \InvalidArgumentException::class,
+            ]
         ];
     }
 }
