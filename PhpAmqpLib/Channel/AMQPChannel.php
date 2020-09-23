@@ -944,7 +944,10 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
-     * Starts a queue consumer
+     * Start a queue consumer.
+     * This method asks the server to start a "consumer", which is a transient request for messages from a specific queue.
+     * Consumers last as long as the channel they were declared on, or until the client cancels them.
+     * @link https://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.consume
      *
      * @param string $queue
      * @param string $consumer_tag
@@ -957,7 +960,7 @@ class AMQPChannel extends AbstractChannel
      * @param array $arguments
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @throws \InvalidArgumentException
-     * @return mixed|string
+     * @return string
      */
     public function basic_consume(
         $queue = '',
@@ -972,6 +975,12 @@ class AMQPChannel extends AbstractChannel
     ) {
         if (null !== $callback) {
             Assert::isCallable($callback);
+        }
+        if ($nowait && empty($consumer_tag)) {
+            throw new \InvalidArgumentException('Cannot start consumer without consumer_tag and no-wait=true');
+        }
+        if (!empty($consumer_tag) && array_key_exists($consumer_tag, $this->callbacks)) {
+            throw new \InvalidArgumentException('This consumer tag is already registered.');
         }
 
         $ticket = $this->getTicket($ticket);
