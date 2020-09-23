@@ -2,11 +2,11 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use Httpful\Request;
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
+use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PHPUnit\Framework\TestCase;
@@ -65,6 +65,17 @@ abstract class AbstractConnectionTest extends TestCase
                     $heartbeat
                 );
                 break;
+            case 'ssl':
+                $connection = new AMQPSSLConnection(
+                    $host,
+                    $port,
+                    USER,
+                    PASS,
+                    VHOST,
+                    isset($options['ssl']) ? $options['ssl'] : [],
+                    $options,
+                    isset($options['protocol']) ? $options['protocol'] : 'ssl'
+                );
             default:
         }
 

@@ -4,15 +4,17 @@ include(__DIR__ . '/config.php');
 
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 
-define('CERTS_PATH', '/git/rabbitmqinaction/av_scratchwork/openssl');
+define('CERTS_PATH', realpath(__DIR__ . '/../tests/certs'));
 
 $sslOptions = array(
-    'cafile' => CERTS_PATH . '/rmqca/cacert.pem',
-    'local_cert' => CERTS_PATH . '/phpcert.pem',
-    'verify_peer' => true
+    'cafile' => CERTS_PATH . '/ca_certificate.pem',
+    'local_cert' => CERTS_PATH . '/client_certificate.pem',
+    'local_pk' => CERTS_PATH . '/client_key.pem',
+    'verify_peer' => true,
+    'verify_peer_name' => false,
 );
 
-$connection = new AMQPSSLConnection(HOST, PORT, USER, PASS, VHOST, $sslOptions);
+$connection = new AMQPSSLConnection(HOST, 5671, USER, PASS, VHOST, $sslOptions);
 
 /**
  * @param \PhpAmqpLib\Connection\AbstractConnection $connection
@@ -25,4 +27,5 @@ function shutdown($connection)
 register_shutdown_function('shutdown', $connection);
 
 while (true) {
+    sleep(1);
 }
