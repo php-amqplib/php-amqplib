@@ -27,8 +27,9 @@ do {
 
 $end = microtime(true);
 if ($until < $end) {
-    echo sprintf('Broker wait timeout out after %.1f', $end - $start), PHP_EOL;
+    echo PHP_EOL, sprintf('Broker wait timeout out after %.1f', $end - $start), PHP_EOL;
     if ($exception) {
         echo $exception->getCode(), ':', $exception->getMessage(), PHP_EOL;
     }
+    exit(1);
 }
