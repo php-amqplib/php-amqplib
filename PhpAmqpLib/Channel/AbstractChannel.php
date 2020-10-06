@@ -72,7 +72,7 @@ abstract class AbstractChannel
     /** @var MethodMap080|MethodMap091 */
     protected $methodMap;
 
-    /** @var int */
+    /** @var int|null */
     protected $channel_id;
 
     /** @var AMQPReader */
@@ -92,7 +92,7 @@ abstract class AbstractChannel
     public function __construct(AbstractConnection $connection, $channel_id)
     {
         $this->connection = $connection;
-        $this->channel_id = $channel_id;
+        $this->channel_id = (int)$channel_id;
         $connection->channels[$channel_id] = $this;
 
         $this->msg_property_reader = new AMQPReader(null);
@@ -162,7 +162,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @return AbstractConnection
+     * @return AbstractConnection|null
      */
     public function getConnection()
     {

@@ -8,7 +8,7 @@ class AMQPStreamConnection extends AbstractConnection
 {
     /**
      * @param string $host
-     * @param string $port
+     * @param int $port
      * @param string $user
      * @param string $password
      * @param string $vhost
