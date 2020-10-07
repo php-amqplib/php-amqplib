@@ -1,0 +1,51 @@
+name: PHPUnit tests
+
+on: [push, pull_request]
+
+jobs:
+  run:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        operating-system: [ubuntu-latest]
+        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '7.4']
+    services:
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - 5671:5671
+          - 5672:5672
+          - 15671:15671
+          - 15672:15672
+        volumes:
+          - ${{ github.workspace }}:/src
+        env:
+          RABBITMQ_SSL_CACERTFILE: /src/tests/certs/ca_certificate.pem
+          RABBITMQ_SSL_CERTFILE: /src/tests/certs/server_certificate.pem
+          RABBITMQ_SSL_KEYFILE: /src/tests/certs/server_key.pem
+          RABBITMQ_SSL_VERIFY: verify_peer
+          RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: 0
+    name: PHP ${{ matrix.php }} Test on ${{ matrix.operating-system }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        tools: composer:v1
+        extensions: bcmath, curl, dom, mbstring, pcntl, sockets, xml
+        coverage: none
+    - name: Check PHP info
+      run: php tests/phpinfo.php
+    - name: Start broker service
+      run: docker start ${{ job.services.rabbitmq.id }}
+    - name: Composer install
+      run: composer update --prefer-dist --no-progress --no-suggest
+    - name: Wait for broker service
+      run: php ./tests/wait_broker.php
+    - name: PHPUnit tests
+      run: ./vendor/bin/phpunit --exclude-group proxy
+
