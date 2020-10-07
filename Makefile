@@ -3,7 +3,7 @@ test:
 	./vendor/bin/phpunit
 .PHONY: docs
 docs:
-	wget -qN https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar
+	wget -qN https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.1/phpDocumentor.phar
 	rm -rf ./docs/*
 	php -d error_reporting=0 ./phpDocumentor.phar run -q --force --template=clean --defaultpackagename=PhpAmqpLib --title='php-amqplib' -d ./PhpAmqpLib -t ./docs
 .PHONY: benchmark

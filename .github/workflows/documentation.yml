@@ -1,6 +1,8 @@
 name: Update documentation page
 
-on: [push]
+on:
+  release:
+    types: [published]
 
 jobs:
   run:
@@ -20,12 +22,11 @@ jobs:
         extensions: ctype, dom, iconv, json, libxml, simplexml, zlib
         coverage: none
     - name: Download phpDocumentator
-      run: wget -qN https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar
+      run: wget -qN https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.1/phpDocumentor.phar
     - name: Generate docs
       run: php -d error_reporting=1 ./phpDocumentor.phar run --force --template=clean --defaultpackagename=PhpAmqpLib --title='php-amqplib' -d ./PhpAmqpLib -t ./docs
     - name: Commit changes
       run: |
-        git submodule update --remote --merge
         cd ./docs
         rm -rf ./phpdoc-cache-*
         git config --local user.email "action@github.com"
@@ -39,3 +40,15 @@ jobs:
         directory: ./docs
         branch: gh-pages
         force: true
+    - name: Update submodule reference
+      run: |
+        cd ${{ github.workspace }}
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add ./docs
+        git commit -m "update docs submodule"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
