@@ -9,7 +9,7 @@ use PhpAmqpLib\Wire;
 /**
  * Iterator implemented for transparent integration with AMQPWriter::write_[array|table]()
  */
-abstract class AMQPAbstractCollection implements \Iterator
+abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
 {
     //protocol defines available field types and their corresponding symbols
     /** @deprecated */
@@ -191,6 +191,28 @@ abstract class AMQPAbstractCollection implements \Iterator
         }
 
         return $val;
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->data[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        $value = isset($this->data[$offset]) ? $this->data[$offset] : null;
+
+        return is_array($value) ? $value[1] : $value;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->setValue($value, null, $offset);
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->data[$offset]);
     }
 
     /**
