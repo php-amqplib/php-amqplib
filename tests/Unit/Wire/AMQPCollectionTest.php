@@ -613,6 +613,23 @@ class AMQPCollectionTest extends TestCase
         }
     }
 
+    /**
+     * @test
+     */
+    public function work_with_table_as_array()
+    {
+        $a = new Wire\AMQPTable();
+        $a['test'] = 'value';
+        $a['unset'] = 'value';
+        unset($a['unset']);
+
+        $this->assertInstanceOf(\ArrayAccess::class, $a);
+        $this->assertTrue(isset($a['test']));
+        $this->assertEquals('value', $a['test']);
+        $this->assertArrayNotHasKey('unset', $a);
+        $this->assertNull($a['undefined_key']);
+    }
+
     protected function setProtoVersion($proto)
     {
         $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_protocol');
