@@ -6,10 +6,10 @@ namespace PhpAmqpLib\Exception;
  */
 class AMQPException extends \Exception
 {
-    /** @var string */
+    /** @var int */
     public $amqp_reply_code;
 
-    /** @var int */
+    /** @var string */
     public $amqp_reply_text;
 
     /** @var int[] */
@@ -21,7 +21,7 @@ class AMQPException extends \Exception
     /**
      * @param int $reply_code
      * @param string $reply_text
-     * @param array $method_sig
+     * @param int[] $method_sig
      */
     public function __construct($reply_code, $reply_text, $method_sig)
     {
