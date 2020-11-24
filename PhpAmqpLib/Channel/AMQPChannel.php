@@ -775,7 +775,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Acknowledges one or more messages
      *
-     * @param string $delivery_tag
+     * @param int $delivery_tag
      * @param bool $multiple
      */
     public function basic_ack($delivery_tag, $multiple = false)
@@ -829,7 +829,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Handles the deletion of messages from this->publishedMessages and dispatches them to the $handler
      *
-     * @param int|string $delivery_tag
+     * @param int $delivery_tag
      * @param bool $multiple
      * @param callable $handler
      */
@@ -878,7 +878,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Rejects one or several received messages
      *
-     * @param string $delivery_tag
+     * @param int $delivery_tag
      * @param bool $multiple
      * @param bool $requeue
      */
@@ -1315,7 +1315,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Rejects an incoming message
      *
-     * @param string $delivery_tag
+     * @param int $delivery_tag
      * @param bool $requeue
      */
     public function basic_reject($delivery_tag, $requeue)
