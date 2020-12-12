@@ -10,7 +10,7 @@ jobs:
       max-parallel: 2
       matrix:
         operating-system: [ubuntu-latest]
-        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '7.4']
+        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0']
     services:
       rabbitmq:
         image: rabbitmq:3-management
