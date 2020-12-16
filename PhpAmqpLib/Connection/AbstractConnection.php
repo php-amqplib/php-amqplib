@@ -175,12 +175,12 @@ abstract class AbstractConnection extends AbstractChannel
     public function __construct(
         $user,
         $password,
-        $vhost = '/',
-        $insist = false,
-        $login_method = 'AMQPLAIN',
-        $login_response = null,
-        $locale = 'en_US',
-        AbstractIO $io = null,
+        $vhost,
+        $insist,
+        $login_method,
+        $login_response,
+        $locale,
+        AbstractIO $io,
         $heartbeat = 0,
         $connection_timeout = 0,
         $channel_rpc_timeout = 0.0
