@@ -1,12 +1,13 @@
 {
-    "name": "php-amqplib/php-amqplib",
+    "name": "wecc/php-amqplib",
     "replace": {
+        "php-amqplib/php-amqplib": "self.version",
         "videlalvaro/php-amqplib": "self.version"
     },
     "type": "library",
     "description": "Formerly videlalvaro/php-amqplib.  This library is a pure PHP implementation of the AMQP protocol. It's been tested against RabbitMQ.",
     "keywords": ["rabbitmq", "message", "queue"],
-    "homepage": "https://github.com/php-amqplib/php-amqplib/",
+    "homepage": "https://github.com/wecc/php-amqplib/",
     "authors": [
         {
             "name": "Alvaro Videla",
