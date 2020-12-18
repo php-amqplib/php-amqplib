@@ -1,6 +1,7 @@
 <?php
 namespace PhpAmqpLib\Connection;
 
+use InvalidArgumentException;
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
@@ -180,11 +181,15 @@ abstract class AbstractConnection extends AbstractChannel
         $login_method = 'AMQPLAIN',
         $login_response = null,
         $locale = 'en_US',
-        AbstractIO $io,
+        AbstractIO $io = null,
         $heartbeat = 0,
         $connection_timeout = 0,
         $channel_rpc_timeout = 0.0
     ) {
+        if (is_null($io)) {
+            throw new InvalidArgumentException('Argument $io must be of type ' . AbstractIO::class . ', null given');
+        }
+
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
 
