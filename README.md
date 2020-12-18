@@ -1,3 +1,5 @@
+🚧 **EXPERIMENTAL PHP 8 SUPPORT. NOT READY FOR PRODUCTION.**
+
 # php-amqplib #
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
