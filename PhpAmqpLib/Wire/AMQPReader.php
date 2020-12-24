@@ -10,7 +10,7 @@ use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
-use phpseclib\Math\BigInteger;
+use phpseclib3\Math\BigInteger;
 
 /**
  * This class can read from a string or from a stream

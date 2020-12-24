@@ -3,7 +3,7 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfRangeException;
-use phpseclib\Math\BigInteger;
+use phpseclib3\Math\BigInteger;
 
 class AMQPWriter extends AbstractClient
 {
