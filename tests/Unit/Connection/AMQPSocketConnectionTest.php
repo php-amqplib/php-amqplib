@@ -9,11 +9,12 @@ class AMQPSocketConnectionTest extends TestCase
 {
     /**
      * @test
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage channel RPC timeout must not be greater than I/O read timeout
      */
     public function channel_rpc_timeout_should_be_invalid_if_greater_than_read_write_timeout()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('channel RPC timeout must not be greater than I/O read timeout');
+
         new AMQPSocketConnection(
             HOST,
             PORT,

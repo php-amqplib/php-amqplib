@@ -26,10 +26,11 @@ class SocketIOTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPIOException
      */
     public function connect_with_invalid_credentials()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPIOException::class);
+
         $socket = new SocketIO('invalid_host', 5672);
         @$socket->connect();
     }
@@ -58,10 +59,11 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @depends connect
-     * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function read_when_closed(SocketIO $socketIO)
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPSocketException::class);
+
         $socketIO->close();
 
         $socketIO->read(1);
@@ -70,10 +72,11 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @depends connect
-     * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function write_when_closed(SocketIO $socketIO)
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPSocketException::class);
+
         $socketIO->write('data');
     }
 

@@ -283,19 +283,20 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
     public function encode_unknown_data_type()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfBoundsException::class);
         $a = new Wire\AMQPArray(array(new \stdClass()));
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function push_unsupported_data_type_080()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+
         $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPArray();
 
@@ -304,10 +305,11 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function push_unsupported_data_type_091()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPArray();
 
@@ -316,10 +318,11 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function push_unsupported_data_type_rabbit()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+
         $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
         $a = new Wire\AMQPArray();
 
@@ -419,11 +422,12 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
-     * @expectedExceptionMessage Table key must be non-empty string up to 128 chars in length
      */
     public function set_empty_key()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectExceptionMessage('Table key must be non-empty string up to 128 chars in length');
+
         $t = new Wire\AMQPTable();
 
         $t->set('', 'foo');
@@ -431,11 +435,12 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
-     * @expectedExceptionMessage Table key must be non-empty string up to 128 chars in length
      */
     public function set_long_key()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectExceptionMessage('Table key must be non-empty string up to 128 chars in length');
+
         $t = new Wire\AMQPTable();
 
         $t->set(str_repeat('a', 129), 'bar');
@@ -443,10 +448,11 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function push_mismatched_type()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+
         $a = new Wire\AMQPArray();
 
         $a->push(new Wire\AMQPArray(), Wire\AMQPArray::T_TABLE);
@@ -454,11 +460,12 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
-     * @expectedExceptionMessage Arrays must be passed as AMQPArray instance
      */
     public function push_raw_array_with_type()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectExceptionMessage('Arrays must be passed as AMQPArray instance');
+
         $a = new Wire\AMQPArray();
 
         $a->push(array(), Wire\AMQPArray::T_ARRAY);
@@ -466,11 +473,12 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
-     * @expectedExceptionMessage Tables must be passed as AMQPTable instance
      */
     public function push_raw_table_with_type()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectExceptionMessage('Tables must be passed as AMQPTable instance');
+
         $a = new Wire\AMQPArray();
 
         $a->push(array(), Wire\AMQPArray::T_TABLE);
@@ -478,11 +486,12 @@ class AMQPCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
-     * @expectedExceptionMessage Decimal values must be instance of AMQPDecimal
      */
     public function push_float_with_decimal_type()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectExceptionMessage('Decimal values must be instance of AMQPDecimal');
+
         $a = new Wire\AMQPArray();
 
         $a->push(35.2, Wire\AMQPArray::T_DECIMAL);

@@ -3,9 +3,9 @@
 namespace PhpAmqpLib\Tests\Unit\Helper;
 
 use PhpAmqpLib\Helper\MiscHelper;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
-class MiscHelperTest extends TestCase
+class MiscHelperTest extends TestCaseCompat
 {
     /**
      * @dataProvider splitSecondsMicrosecondsData

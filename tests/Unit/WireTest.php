@@ -30,19 +30,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function octet_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(-1, 'write_octet', 'read_octet');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function octet_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(256, 'write_octet', 'read_octet');
     }
 
@@ -57,47 +57,47 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_octet_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(-129, 'write_signed_octet', 'read_signed_octet');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_octet_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(128, 'write_signed_octet', 'read_signed_octet');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
-     * @expectedExceptionMessage Short out of range: 65536
      */
     public function short_wr()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectExceptionMessage('Short out of range: 65536');
         $this->wr(65536, 'write_short', 'read_short');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function short_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(-1, 'write_short', 'read_short');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function short_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(65536, 'write_short', 'read_short');
     }
 
@@ -112,19 +112,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_short_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(-32769, 'write_signed_short', 'read_signed_short');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_short_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(32768, 'write_signed_short', 'read_signed_short');
     }
 
@@ -139,19 +139,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function long_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(-1, 'write_long', 'read_long');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function long_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('4294967296', 'write_long', 'read_long');
     }
 
@@ -166,19 +166,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_long_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('-2147483649', 'writeSignedLong', 'readSignedLong', true);
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_long_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('2147483648', 'writeSignedLong', 'readSignedLong', true);
     }
 
@@ -193,19 +193,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function longlong_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('-1', 'write_longlong', 'read_longlong');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function longlong_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('18446744073709551616', 'write_longlong', 'read_longlong');
     }
 
@@ -220,19 +220,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_longlong_wr_out_of_range_lower()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('-9223372036854775809', 'write_signed_longlong', 'read_signed_longlong');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function signed_longlong_wr_out_of_range_upper()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr('9223372036854775808', 'write_signed_longlong', 'read_signed_longlong');
     }
 
@@ -247,19 +247,19 @@ class WireTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function shortstr_wr_out_of_range_ASCII()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(str_repeat('z', 256), 'write_shortstr', 'read_shortstr');
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
     public function shortstr_wr_out_of_range_utf_two_byte()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
         $this->wr(str_repeat("\xd0\xaf", 128), 'write_shortstr', 'read_shortstr');
     }
 

@@ -2,17 +2,16 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
 use PhpAmqpLib\Connection\AMQPLazySocketConnection;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
 /**
  * @group connection
  */
-class ReconnectConnectionTest extends TestCase
+class ReconnectConnectionTest extends TestCaseCompat
 {
     protected $connection = null;
 
@@ -24,7 +23,7 @@ class ReconnectConnectionTest extends TestCase
 
     protected $msgBody = 'foo bar baz äëïöü';
 
-    public function tearDown()
+    protected function tearDownCompat()
     {
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchange);

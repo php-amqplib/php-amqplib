@@ -5,12 +5,12 @@ namespace PhpAmqpLib\Tests\Functional\Bug;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPProtocolException;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
 /**
  * @group connection
  */
-class Bug49Test extends TestCase
+class Bug49Test extends TestCaseCompat
 {
     protected $connection;
 
@@ -18,14 +18,14 @@ class Bug49Test extends TestCase
 
     protected $channel2;
 
-    public function setUp()
+    protected function setUpCompat()
     {
         $this->connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
         $this->channel2 = $this->connection->channel();
     }
 
-    protected function tearDown()
+    protected function tearDownCompat()
     {
         if ($this->channel) {
             $this->channel->close();

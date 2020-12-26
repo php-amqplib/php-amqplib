@@ -10,9 +10,9 @@ use PhpAmqpLib\Wire\AMQPTable;
  */
 class HeadersExchangeTest extends ChannelTestCase
 {
-    public function setUp()
+    protected function setUpCompat()
     {
-        parent::setUp();
+        parent::setUpCompat();
         $this->exchange->name = 'amq.headers';
     }
 

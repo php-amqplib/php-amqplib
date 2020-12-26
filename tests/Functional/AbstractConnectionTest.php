@@ -9,9 +9,9 @@ use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
-abstract class AbstractConnectionTest extends TestCase
+abstract class AbstractConnectionTest extends TestCaseCompat
 {
     public static $blocked = false;
 
