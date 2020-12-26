@@ -181,11 +181,15 @@ abstract class AbstractConnection extends AbstractChannel
         $login_method = 'AMQPLAIN',
         $login_response = null,
         $locale = 'en_US',
-        AbstractIO $io,
+        AbstractIO $io = null,
         $heartbeat = 0,
         $connection_timeout = 0,
         $channel_rpc_timeout = 0.0
     ) {
+        if (is_null($io)) {
+            throw new \InvalidArgumentException('"io" can not be null');
+        }
+
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
 
