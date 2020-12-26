@@ -29,6 +29,10 @@ jobs:
             phpseclib: '^3.0'
             composer: 'composer:v2'
             coverage: 'xdebug'
+          - php: '8.0'
+            phpseclib: '^3.0'
+            composer: 'composer:v2'
+            coverage: 'xdebug'
     services:
       rabbitmq:
         image: rabbitmq:3-management
