@@ -62,8 +62,7 @@ class DirectExchangeTest extends ChannelTestCase
 
         $this->channel->basic_publish($msg, $this->exchange->name, $this->queue->name);
 
-        $callback = function ($msg)
-        {
+        $callback = function ($msg) {
             $this->assertEquals($this->message->body, $msg->body);
             $this->assertEquals(getmypid(), $msg->delivery_info['consumer_tag']);
             $this->assertEquals($this->queue->name, $msg->delivery_info['routing_key']);

@@ -101,7 +101,12 @@ class Protocol091Test extends TestCase
     {
         $expected = "\x04/foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->accessRequest(
-            '/foo', false, false, false, false, false
+            '/foo',
+            false,
+            false,
+            false,
+            false,
+            false
         );
 
         $this->assertEquals($expected, $args->getvalue());
@@ -114,9 +119,14 @@ class Protocol091Test extends TestCase
     {
         $expected = "\x00\x00\x03foo\x06direct\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeDeclare(
-            0, 'foo', 'direct', false,
-            false, false,
-            false, false,
+            0,
+            'foo',
+            'direct',
+            false,
+            false,
+            false,
+            false,
+            false,
             []
         );
 
@@ -185,9 +195,13 @@ class Protocol091Test extends TestCase
     {
         $expected = "\x00\x00\x03foo\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueDeclare(
-            0, 'foo', false,
-            false, false,
-            false, false,
+            0,
+            'foo',
+            false,
+            false,
+            false,
+            false,
+            false,
             []
         );
 
@@ -245,7 +259,13 @@ class Protocol091Test extends TestCase
     {
         $expected = "\x00\x00\x03foo\x03bar\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicConsume(
-            0, 'foo', 'bar', false, false, false, false
+            0,
+            'foo',
+            'bar',
+            false,
+            false,
+            false,
+            false
         );
 
         $this->assertEquals($expected, $args->getvalue());

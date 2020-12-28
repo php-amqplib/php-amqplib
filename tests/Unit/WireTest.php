@@ -610,14 +610,16 @@ class WireTest extends TestCase
         ];
     }
 
-    public function shortstrWrData() {
+    public function shortstrWrData()
+    {
         return [
             ['a'],
             ['üıß∑œ´®†¥¨πøˆ¨¥†®'],
         ];
     }
 
-    public function longstrWrData() {
+    public function longstrWrData()
+    {
         return [
             ['a'],
             ['üıß∑œ´®†¥¨πøˆ¨¥†®'],

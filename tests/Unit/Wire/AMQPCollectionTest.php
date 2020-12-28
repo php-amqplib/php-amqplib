@@ -602,7 +602,7 @@ class AMQPCollectionTest extends TestCase
 
         foreach ($a as $key => $val) {
             if (!isset($d[$key])) {
-                $this->fail('Unknown key: '.$key);
+                $this->fail('Unknown key: ' . $key);
             }
             $this->assertEquals(
                 $ed[$key],
@@ -632,7 +632,7 @@ class AMQPCollectionTest extends TestCase
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_protocol');
+        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', 'protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }

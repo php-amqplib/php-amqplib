@@ -1,0 +1,22 @@
+name: Code style and static analysis
+
+on: [push, pull_request]
+
+jobs:
+    php-cs-fixer:
+        name: PHP-CS-Fixer
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '7.4'
+
+            - name: Install dependencies
+              run: composer update --prefer-dist --no-progress --no-suggest
+
+            - name: Run script
+              run: vendor/bin/phpcs

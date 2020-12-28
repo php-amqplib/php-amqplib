@@ -164,7 +164,8 @@ abstract class AbstractConnectionTest extends TestCase
 // mock low level IO write functions
 namespace PhpAmqpLib\Wire\IO;
 
-function fwrite() {
+function fwrite()
+{
     if (\PhpAmqpLib\Tests\Functional\AbstractConnectionTest::$blocked) {
         return 0;
     }
@@ -174,7 +175,8 @@ function fwrite() {
 
 namespace PhpAmqpLib\Wire\IO;
 
-function socket_write() {
+function socket_write()
+{
     if (\PhpAmqpLib\Tests\Functional\AbstractConnectionTest::$blocked) {
         return 0;
     }

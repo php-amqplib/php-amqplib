@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Connection\Heartbeat;
 
 use PhpAmqpLib\Connection\AbstractConnection;

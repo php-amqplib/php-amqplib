@@ -82,7 +82,7 @@ class FileTransferTest extends TestCase
     private function generateRandomBytes($num_bytes)
     {
         // If random_bytes exists (PHP 7) or has been polyfilled, use it
-        if ( function_exists('random_bytes') ) {
+        if (function_exists('random_bytes')) {
             return random_bytes($num_bytes);
         }
         // Otherwise, just make some noise quickly

@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Wire\IO\StreamIO;
@@ -74,11 +75,12 @@ class AMQPStreamConnection extends AbstractConnection
         $this->construct_params = func_get_args();
     }
 
-    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options){
+    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
+    {
         $insist = isset($options['insist']) ?
                         $options['insist'] : false;
         $login_method = isset($options['login_method']) ?
-                              $options['login_method'] :'AMQPLAIN';
+                              $options['login_method'] : 'AMQPLAIN';
         $login_response = isset($options['login_response']) ?
                                 $options['login_response'] : null;
         $locale = isset($options['locale']) ?
@@ -93,19 +95,21 @@ class AMQPStreamConnection extends AbstractConnection
                            $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ?
                            $options['heartbeat'] : 60;
-        return new static($host,
-                          $port,
-                          $user,
-                          $password,
-                          $vhost,
-                          $insist,
-                          $login_method,
-                          $login_response,
-                          $locale,
-                          $connection_timeout,
-                          $read_write_timeout,
-                          $context,
-                          $keepalive,
-                          $heartbeat);
+        return new static(
+            $host,
+            $port,
+            $user,
+            $password,
+            $vhost,
+            $insist,
+            $login_method,
+            $login_response,
+            $locale,
+            $connection_timeout,
+            $read_write_timeout,
+            $context,
+            $keepalive,
+            $heartbeat
+        );
     }
 }

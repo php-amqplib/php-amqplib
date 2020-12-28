@@ -19,3 +19,8 @@
 /phpunit.xml.dist export-ignore
 /spec export-ignore
 /tests export-ignore
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
