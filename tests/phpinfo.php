@@ -18,4 +18,3 @@ ksort($socketConstant);
 foreach ($socketConstant as $name => $value) {
     echo sprintf('%-30s', $name), $value, PHP_EOL;
 }
-

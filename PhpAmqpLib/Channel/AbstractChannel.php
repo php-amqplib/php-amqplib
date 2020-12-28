@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Channel;
 
 use PhpAmqpLib\Connection\AbstractConnection;
@@ -118,7 +119,7 @@ abstract class AbstractChannel
                     $this->protocolVersion
                 ));
         }
-        $this->constants = new $constantClass;
+        $this->constants = new $constantClass();
         $this->debug = new DebugHelper($this->constants);
     }
 
@@ -130,7 +131,7 @@ abstract class AbstractChannel
     {
         $protocol = defined('AMQP_PROTOCOL') ? AMQP_PROTOCOL : Wire\Constants091::VERSION;
         //adding check here to catch unknown protocol ASAP, as this method may be called from the outside
-        if (!in_array($protocol, array(Wire\Constants080::VERSION, Wire\Constants091::VERSION), TRUE)) {
+        if (!in_array($protocol, array(Wire\Constants080::VERSION, Wire\Constants091::VERSION), true)) {
             throw new AMQPOutOfRangeException(sprintf('Protocol version %s not implemented.', $protocol));
         }
 
@@ -304,7 +305,7 @@ abstract class AbstractChannel
             $this->validate_body_frame($frame_type);
             $bodyReceivedBytes += mb_strlen($payload, 'ASCII');
 
-            if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize ) {
+            if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize) {
                 $message->setIsTruncated(true);
                 continue;
             }
@@ -455,11 +456,11 @@ abstract class AbstractChannel
     {
         if ($frameType != $expectedType) {
             throw new AMQPInvalidFrameException(sprintf(
-                    'Expecting %s, received frame type %s (%s)',
-                    $expectedMessage,
-                    $frameType,
-                    $this->constants->getFrameType($frameType)
-                ));
+                'Expecting %s, received frame type %s (%s)',
+                $expectedMessage,
+                $frameType,
+                $this->constants->getFrameType($frameType)
+            ));
         }
     }
 

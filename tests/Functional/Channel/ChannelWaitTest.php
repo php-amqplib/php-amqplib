@@ -113,14 +113,32 @@ class ChannelWaitTest extends TestCase
             try {
                 if ($stream) {
                     $connection = new AMQPStreamConnection(
-                        HOST, PORT, USER, PASS, VHOST,
-                        false, 'AMQPLAIN', null, 'en_us',
-                        $connectionTimeout, $connectionTimeout, null, false, $heartBeat
+                        HOST,
+                        PORT,
+                        USER,
+                        PASS,
+                        VHOST,
+                        false,
+                        'AMQPLAIN',
+                        null,
+                        'en_us',
+                        $connectionTimeout,
+                        $connectionTimeout,
+                        null,
+                        false,
+                        $heartBeat
                     );
                 } else {
                     $connection = new AMQPSocketConnection(
-                        HOST, PORT, USER, PASS, VHOST,
-                        false, 'AMQPLAIN', null, 'en_US',
+                        HOST,
+                        PORT,
+                        USER,
+                        PASS,
+                        VHOST,
+                        false,
+                        'AMQPLAIN',
+                        null,
+                        'en_US',
                         $connectionTimeout,
                         false,
                         $connectionTimeout,

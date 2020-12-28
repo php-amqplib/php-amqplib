@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
@@ -21,8 +22,14 @@ class SocketIO extends AbstractIO
      * @param int|float|null $write_timeout if null defaults to read timeout
      * @param int $heartbeat how often to send heartbeat. 0 means off
      */
-    public function __construct($host, $port, $read_timeout = 3, $keepalive = false, $write_timeout = null, $heartbeat = 0)
-    {
+    public function __construct(
+        $host,
+        $port,
+        $read_timeout = 3,
+        $keepalive = false,
+        $write_timeout = null,
+        $heartbeat = 0
+    ) {
         $this->host = $host;
         $this->port = $port;
         $this->read_timeout = $read_timeout;

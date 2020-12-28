@@ -195,7 +195,7 @@ class AMQPChannel extends AbstractChannel
 
         return $this->wait(array(
             $this->waitHelper->get_wait('channel.close_ok')
-        ), false, $this->channel_rpc_timeout );
+        ), false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -841,7 +841,6 @@ class AMQPChannel extends AbstractChannel
             foreach ($keys as $key) {
                 $this->internal_ack_handler($key, false, $handler);
             }
-
         } else {
             $message = $this->get_and_unset_message($delivery_tag);
             $this->dispatch_to_handler($handler, array($message));
@@ -858,7 +857,6 @@ class AMQPChannel extends AbstractChannel
         $value = (int) $value;
         $keys = array_reduce(
             array_keys($messages),
-
             /**
              * @param string $key
              */
@@ -945,8 +943,10 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Start a queue consumer.
-     * This method asks the server to start a "consumer", which is a transient request for messages from a specific queue.
+     * This method asks the server to start a "consumer", which is a transient request for messages
+     * from a specific queue.
      * Consumers last as long as the channel they were declared on, or until the client cancels them.
+     *
      * @link https://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.consume
      *
      * @param string $queue
@@ -958,6 +958,7 @@ class AMQPChannel extends AbstractChannel
      * @param callable|null $callback
      * @param int|null $ticket
      * @param array $arguments
+     *
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @throws \InvalidArgumentException
      * @return string

@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Tests\Unit\Connection;
 
 use PhpAmqpLib\Connection\AMQPStreamConnection;

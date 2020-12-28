@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Wire\IO\SocketIO;
@@ -59,11 +60,12 @@ class AMQPSocketConnection extends AbstractConnection
         );
     }
 
-    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options){
+    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
+    {
         $insist = isset($options['insist']) ?
                         $options['insist'] : false;
         $login_method = isset($options['login_method']) ?
-                              $options['login_method'] :'AMQPLAIN';
+                              $options['login_method'] : 'AMQPLAIN';
         $login_response = isset($options['login_response']) ?
                                 $options['login_response'] : null;
         $locale = isset($options['locale']) ?
@@ -76,18 +78,20 @@ class AMQPSocketConnection extends AbstractConnection
                                $options['write_timeout'] : 3;
         $heartbeat = isset($options['heartbeat']) ?
                            $options['heartbeat'] : 0;
-        return new static($host,
-                          $port,
-                          $user,
-                          $password,
-                          $vhost,
-                          $insist,
-                          $login_method,
-                          $login_response,
-                          $locale,
-                          $read_timeout,
-                          $keepalive,
-                          $write_timeout,
-                          $heartbeat);
+        return new static(
+            $host,
+            $port,
+            $user,
+            $password,
+            $vhost,
+            $insist,
+            $login_method,
+            $login_response,
+            $locale,
+            $read_timeout,
+            $keepalive,
+            $write_timeout,
+            $heartbeat
+        );
     }
 }

@@ -38,8 +38,18 @@ class ConnectionAuthTest extends AbstractConnectionTest
         $this->createUser($username, $password = 'password');
 
         try {
-            $connection = new AMQPStreamConnection(HOST, PORT, $username, $password, '/', false, 'PLAIN', null, 'en_US',
-                1);
+            $connection = new AMQPStreamConnection(
+                HOST,
+                PORT,
+                $username,
+                $password,
+                '/',
+                false,
+                'PLAIN',
+                null,
+                'en_US',
+                1
+            );
             $this->assertInstanceOf(AMQPStreamConnection::class, $connection);
             $this->assertTrue($connection->isConnected());
             $channel = $connection->channel();
