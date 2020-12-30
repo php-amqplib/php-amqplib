@@ -15,9 +15,9 @@ $consumer_tag = '';
 $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
-$ch->queue_declare($queue, false, false, false, false);
-$ch->exchange_declare($exchange, 'direct', false, false, false);
-$ch->queue_bind($queue, $exchange);
+$ch->queueDeclare($queue, false, false, false, false);
+$ch->exchangeDeclare($exchange, 'direct', false, false, false);
+$ch->queueBind($queue, $exchange);
 
 
 
@@ -49,7 +49,7 @@ class FileConsumer
 
 
 
-$ch->basic_consume($queue, '', false, true, false, false, array(new FileConsumer(), 'process_message'));
+$ch->basicConsume($queue, '', false, true, false, false, array(new FileConsumer(), 'process_message'));
 
 function shutdown($ch, $conn)
 {
@@ -59,6 +59,6 @@ function shutdown($ch, $conn)
 
 register_shutdown_function('shutdown', $ch, $conn);
 
-while ($ch->is_consuming()) {
+while ($ch->isConsuming()) {
     $ch->wait();
 }

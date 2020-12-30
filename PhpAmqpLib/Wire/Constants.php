@@ -10,7 +10,7 @@ abstract class Constants
     /**
      * @var array<int, string>
      */
-    protected static $FRAME_TYPES = array();
+    protected static $frameTypeS = array();
 
     /**
      * @var array<int, string>
@@ -41,7 +41,7 @@ abstract class Constants
      */
     public function isFrameType($type)
     {
-        return array_key_exists($type, static::$FRAME_TYPES);
+        return array_key_exists($type, static::$frameTypeS);
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class Constants
      */
     public function getFrameType($type)
     {
-        return static::$FRAME_TYPES[$type];
+        return static::$frameTypeS[$type];
     }
 
     /**

@@ -16,7 +16,7 @@ class StreamIOTest extends TestCase
     /**
      * @test
      */
-    public function error_handler_is_restored_on_failed_connection()
+    public function errorHandlerIsRestoredOnFailedConnection()
     {
         $this->last_error = null;
         set_error_handler(array($this, 'custom_error_handler'));
@@ -52,7 +52,7 @@ class StreamIOTest extends TestCase
     /**
      * @test
      */
-    public function error_handler_is_restored_on_success()
+    public function errorHandlerIsRestoredOnSuccess()
     {
         set_error_handler(array($this, 'custom_error_handler'));
 

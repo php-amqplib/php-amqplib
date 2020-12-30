@@ -17,7 +17,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function channel_close()
+    public function channelClose()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, '', 0, 0);
@@ -28,7 +28,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function channel_close_error()
+    public function channelCloseError()
     {
         $expected = "\x00\x00\x05error\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->channelClose(0, 'error', 0, 0);
@@ -42,7 +42,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function channel_flow_true()
+    public function channelFlowTrue()
     {
         $expected = "\x01";
         list($class_id, $method_id, $args) = $this->protocol091->channelFlow(true);
@@ -53,7 +53,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function channel_flow_false()
+    public function channelFlowFalse()
     {
         $expected = "\x00";
         list($class_id, $method_id, $args) = $this->protocol091->channelFlow(false);
@@ -64,7 +64,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function channel_open_foo()
+    public function channelOpenFoo()
     {
         $expected = "\x03foo";
         list($class_id, $method_id, $args) = $this->protocol091->channelOpen('foo');
@@ -75,7 +75,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function channel_open_empty_string()
+    public function channelOpenEmptyString()
     {
         $expected = "\x00";
         list($class_id, $method_id, $args) = $this->protocol091->channelOpen('');
@@ -86,7 +86,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function access_request()
+    public function accessRequest()
     {
         $expected = "\x01/\x00";
         list($class_id, $method_id, $args) = $this->protocol091->accessRequest('/', false, false, false, false, false);
@@ -97,7 +97,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function access_request_foo()
+    public function accessRequestFoo()
     {
         $expected = "\x04/foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->accessRequest(
@@ -115,7 +115,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function exchange_declare()
+    public function exchangeDeclare()
     {
         $expected = "\x00\x00\x03foo\x06direct\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeDeclare(
@@ -136,7 +136,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function exchange_delete()
+    public function exchangeDelete()
     {
         $expected = "\x00\x00\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeDelete(0, 'foo', false, false);
@@ -147,7 +147,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function exchange_bind()
+    public function exchangeBind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeBind(0, 'foo', 'bar', 'baz', false, []);
@@ -158,7 +158,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function exchange_unbind()
+    public function exchangeUnbind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->exchangeUnbind(0, 'foo', 'bar', 'baz', false, []);
@@ -169,7 +169,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function queue_bind()
+    public function queueBind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueBind(0, 'foo', 'bar', 'baz', false, []);
@@ -180,7 +180,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function queue_unbind()
+    public function queueUnbind()
     {
         $expected = "\x00\x00\x03foo\x03bar\x03baz\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueUnbind(0, 'foo', 'bar', 'baz', []);
@@ -191,7 +191,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function queue_declare()
+    public function queueDeclare()
     {
         $expected = "\x00\x00\x03foo\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueDeclare(
@@ -211,7 +211,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function queue_delete()
+    public function queueDelete()
     {
         $expected = "\x00\x00\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queueDelete(0, 'foo', false, false, false);
@@ -222,7 +222,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function queue_purge()
+    public function queuePurge()
     {
         $expected = "\x00\x00\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->queuePurge(0, 'foo', false);
@@ -233,7 +233,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_ack()
+    public function basicAck()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00\x01\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicAck(1, false);
@@ -244,7 +244,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_cancel()
+    public function basicCancel()
     {
         $expected = "\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicCancel('foo', false);
@@ -255,7 +255,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_consume()
+    public function basicConsume()
     {
         $expected = "\x00\x00\x03foo\x03bar\x00\x00\x00\x00\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicConsume(
@@ -274,7 +274,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_get()
+    public function basicGet()
     {
         $expected = "\x00\x00\x03foo\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicGet(0, 'foo', false);
@@ -285,7 +285,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_publish()
+    public function basicPublish()
     {
         $expected = "\x00\x00\x03foo\x03bar\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicPublish(0, 'foo', 'bar', false, false);
@@ -296,7 +296,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_qos()
+    public function basicQos()
     {
         $expected = "\x00\x00\x00\xA\x00\x01\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicQos(10, 1, false);
@@ -307,7 +307,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_recover_true()
+    public function basicRecoverTrue()
     {
         $expected = "\x01";
         list($class_id, $method_id, $args) = $this->protocol091->basicRecover(true);
@@ -318,7 +318,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_recover_false()
+    public function basicRecoverFalse()
     {
         $expected = "\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicRecover(false);
@@ -329,7 +329,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_reject_1_true()
+    public function basicReject1True()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00\x01\x01";
         list($class_id, $method_id, $args) = $this->protocol091->basicReject(1, true);
@@ -340,7 +340,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function basic_reject_1_false()
+    public function basicReject1False()
     {
         $expected = "\x00\x00\x00\x00\x00\x00\x00\x01\x00";
         list($class_id, $method_id, $args) = $this->protocol091->basicReject(1, false);
@@ -351,7 +351,7 @@ class Protocol091Test extends TestCase
     /**
      * @test
      */
-    public function connection_blocked()
+    public function connectionBlocked()
     {
         $expected = 'Low on memory';
         list($class_id, $method_id, $args) = $this->protocol091->connectionBlocked($expected);

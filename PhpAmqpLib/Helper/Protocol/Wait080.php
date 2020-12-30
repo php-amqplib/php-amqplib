@@ -109,7 +109,7 @@ class Wait080
      * @var string $method
      * @return string
      */
-    public function get_wait($method)
+    public function getWait($method)
     {
         return $this->wait[$method];
     }

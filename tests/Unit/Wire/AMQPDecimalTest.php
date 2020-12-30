@@ -10,7 +10,7 @@ class AMQPDecimalTest extends TestCase
     /**
      * @test
      */
-    public function as_bc_value()
+    public function asBcValue()
     {
         $decimal = new AMQPDecimal(100, 2);
 
@@ -20,7 +20,7 @@ class AMQPDecimalTest extends TestCase
     /**
      * @test
      */
-    public function get_n()
+    public function getN()
     {
         $decimal = new AMQPDecimal(100, 2);
 
@@ -30,7 +30,7 @@ class AMQPDecimalTest extends TestCase
     /**
      * @test
      */
-    public function get_e()
+    public function getE()
     {
         $decimal = new AMQPDecimal(100, 2);
 

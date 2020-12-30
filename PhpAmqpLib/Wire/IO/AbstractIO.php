@@ -80,11 +80,11 @@ abstract class AbstractIO
      */
     public function select($sec, $usec)
     {
-        $this->check_heartbeat();
-        $this->set_error_handler();
+        $this->checkHeartbeat();
+        $this->setErrorHandler();
         try {
-            $result = $this->do_select($sec, $usec);
-            $this->cleanup_error_handler();
+            $result = $this->doSelect($sec, $usec);
+            $this->cleanupErrorHandler();
         } catch (\ErrorException $e) {
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
         }
@@ -106,7 +106,7 @@ abstract class AbstractIO
      * @param int|null $usec
      * @return int|bool
      */
-    abstract protected function do_select($sec, $usec);
+    abstract protected function doSelect($sec, $usec);
 
     /**
      * Set ups the connection.
@@ -126,7 +126,7 @@ abstract class AbstractIO
      * @return void
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    public function check_heartbeat()
+    public function checkHeartbeat()
     {
         // ignore unless heartbeat interval is set
         if ($this->heartbeat !== 0 && $this->last_read > 0 && $this->last_write > 0) {
@@ -136,7 +136,7 @@ abstract class AbstractIO
             // time for client to send a heartbeat
             $now = microtime(true);
             if (($this->heartbeat / 2) < $now - $this->last_write) {
-                $this->write_heartbeat();
+                $this->writeHeartbeat();
             }
         }
     }
@@ -187,30 +187,30 @@ abstract class AbstractIO
     /**
      * Sends a heartbeat message
      */
-    protected function write_heartbeat()
+    protected function writeHeartbeat()
     {
         $pkt = new AMQPWriter();
-        $pkt->write_octet(8);
-        $pkt->write_short(0);
-        $pkt->write_long(0);
-        $pkt->write_octet(0xCE);
+        $pkt->writeOctet(8);
+        $pkt->writeShort(0);
+        $pkt->writeLong(0);
+        $pkt->writeOctet(0xCE);
         $this->write($pkt->getvalue());
     }
 
     /**
      * Begin tracking errors and set the error handler
      */
-    protected function set_error_handler()
+    protected function setErrorHandler()
     {
         $this->last_error = null;
-        set_error_handler(array($this, 'error_handler'));
+        set_error_handler(array($this, 'errorHandler'));
     }
 
     /**
      * throws an ErrorException if an error was handled
      * @throws \ErrorException
      */
-    protected function cleanup_error_handler()
+    protected function cleanupErrorHandler()
     {
         restore_error_handler();
 
@@ -235,7 +235,7 @@ abstract class AbstractIO
      * @param  array $errcontext
      * @return void
      */
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         // throwing an exception in an error handler will halt execution
         //   set the last error and continue

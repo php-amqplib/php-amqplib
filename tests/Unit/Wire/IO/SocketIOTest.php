@@ -59,7 +59,7 @@ class SocketIOTest extends TestCase
      * @depends connect
      * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
-    public function read_when_closed(SocketIO $socketIO)
+    public function readWhenClosed(SocketIO $socketIO)
     {
         $socketIO->close();
 

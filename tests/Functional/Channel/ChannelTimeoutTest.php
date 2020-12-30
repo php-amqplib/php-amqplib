@@ -51,18 +51,18 @@ class ChannelTimeoutTest extends TestCase
     /**
      * @test
      *
-     * @dataProvider provide_operations
+     * @dataProvider provideOperations
      * @param string $operation
      * @param array $args
      *
-     * @covers \PhpAmqpLib\Channel\AMQPChannel::exchange_declare
-     * @covers \PhpAmqpLib\Channel\AMQPChannel::queue_declare
-     * @covers \PhpAmqpLib\Channel\AMQPChannel::confirm_select
+     * @covers \PhpAmqpLib\Channel\AMQPChannel::exchangeDeclare
+     * @covers \PhpAmqpLib\Channel\AMQPChannel::queueDeclare
+     * @covers \PhpAmqpLib\Channel\AMQPChannel::confirmSelect
      *
      * @expectedException \PhpAmqpLib\Exception\AMQPTimeoutException
      * @expectedExceptionMessage The connection timed out after 3.5 sec while awaiting incoming data
      */
-    public function should_throw_exception_for_basic_operations_when_timeout_exceeded($operation, $args)
+    public function shouldThrowExceptionForBasicOperationsWhenTimeoutExceeded($operation, $args)
     {
         // simulate blocking on the I/O level
         $this->io->expects($this->any())
@@ -73,12 +73,12 @@ class ChannelTimeoutTest extends TestCase
         call_user_func_array(array($this->channel, $operation), $args);
     }
 
-    public function provide_operations()
+    public function provideOperations()
     {
         return array(
-            array('exchange_declare', array('test_ex', 'fanout')),
-            array('queue_declare', array('test_queue')),
-            array('confirm_select', array()),
+            array('exchangeDeclare', array('test_ex', 'fanout')),
+            array('queueDeclare', array('test_queue')),
+            array('confirmSelect', array()),
         );
     }
 

@@ -14,7 +14,7 @@ class DebugHelper
     /**
      * @var resource
      */
-    protected $debug_output;
+    protected $debugOutput;
 
     /**
      * @var Constants
@@ -28,9 +28,9 @@ class DebugHelper
     {
         $this->debug = defined('AMQP_DEBUG') ? AMQP_DEBUG : false;
         if (defined('AMQP_DEBUG_OUTPUT')) {
-            $this->debug_output = AMQP_DEBUG_OUTPUT;
+            $this->debugOutput = AMQP_DEBUG_OUTPUT;
         } else {
-            $this->debug_output = fopen('php://output', 'wb');
+            $this->debugOutput = fopen('php://output', 'wb');
         }
         $this->constants = $constants;
     }
@@ -38,57 +38,57 @@ class DebugHelper
     /**
      * @param string $msg
      */
-    public function debug_msg($msg)
+    public function debugMsg($msg)
     {
         if ($this->debug) {
-            $this->print_msg($msg);
+            $this->printMsg($msg);
         }
     }
 
     /**
-     * @param array $allowed_methods
+     * @param array $allowedMethods
      */
-    public function debug_allowed_methods($allowed_methods)
+    public function debugAllowedMethods($allowedMethods)
     {
         if ($this->debug) {
-            if ($allowed_methods) {
-                $msg = 'waiting for ' . implode(', ', $allowed_methods);
+            if ($allowedMethods) {
+                $msg = 'waiting for ' . implode(', ', $allowedMethods);
             } else {
                 $msg = 'waiting for any method';
             }
-            $this->debug_msg($msg);
+            $this->debugMsg($msg);
         }
     }
 
     /**
-     * @param string $method_sig
+     * @param string $methodSig
      */
-    public function debug_method_signature1($method_sig)
+    public function debugMethodSignature1($methodSig)
     {
-        $this->debug_method_signature('< %s:', $method_sig);
+        $this->debugMethodSignature('< %s:', $methodSig);
     }
 
     /**
      * @param string $msg
-     * @param string $method_sig
+     * @param string $methodSig
      */
-    public function debug_method_signature($msg, $method_sig)
+    public function debugMethodSignature($msg, $methodSig)
     {
         if ($this->debug) {
             $constants = $this->constants;
             $methods = $constants::$GLOBAL_METHOD_NAMES;
-            $key = MiscHelper::methodSig($method_sig);
-            $this->debug_msg(sprintf($msg . ': %s', $key, $methods[$key]));
+            $key = MiscHelper::methodSig($methodSig);
+            $this->debugMsg(sprintf($msg . ': %s', $key, $methods[$key]));
         }
     }
 
     /**
      * @param string $data
      */
-    public function debug_hexdump($data)
+    public function debugHexdump($data)
     {
         if ($this->debug) {
-            $this->debug_msg(
+            $this->debugMsg(
                 sprintf(
                     '< [hex]: %s%s',
                     PHP_EOL,
@@ -99,21 +99,21 @@ class DebugHelper
     }
 
     /**
-     * @param int $version_major
-     * @param int $version_minor
-     * @param array $server_properties
+     * @param int $versionMajor
+     * @param int $versionMinor
+     * @param array $serverProperties
      * @param array $mechanisms
      * @param array $locales
      */
-    public function debug_connection_start($version_major, $version_minor, $server_properties, $mechanisms, $locales)
+    public function debugConnectionStart($versionMajor, $versionMinor, $serverProperties, $mechanisms, $locales)
     {
         if ($this->debug) {
-            $this->debug_msg(
+            $this->debugMsg(
                 sprintf(
                     'Start from server, version: %d.%d, properties: %s, mechanisms: %s, locales: %s',
-                    $version_major,
-                    $version_minor,
-                    MiscHelper::dump_table($server_properties),
+                    $versionMajor,
+                    $versionMinor,
+                    MiscHelper::dumpTable($serverProperties),
                     implode(', ', $mechanisms),
                     implode(', ', $locales)
                 )
@@ -124,8 +124,8 @@ class DebugHelper
     /**
      * @param string $s
      */
-    protected function print_msg($s)
+    protected function printMsg($s)
     {
-        fwrite($this->debug_output, $s . PHP_EOL);
+        fwrite($this->debugOutput, $s . PHP_EOL);
     }
 }

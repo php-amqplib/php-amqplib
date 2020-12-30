@@ -7,6 +7,8 @@ use PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 
+use function Couchbase\defaultDecoder;
+
 /**
  * A Message for use with the Channnel.basic_* methods.
  */
@@ -106,7 +108,7 @@ class AMQPMessage
     public function ack($multiple = false)
     {
         $this->assertUnacked();
-        $this->channel->basic_ack($this->deliveryTag, $multiple);
+        $this->channel->basicAck($this->deliveryTag, $multiple);
         $this->onResponse();
     }
 
@@ -123,7 +125,7 @@ class AMQPMessage
     public function nack($requeue = false, $multiple = false)
     {
         $this->assertUnacked();
-        $this->channel->basic_nack($this->deliveryTag, $multiple, $requeue);
+        $this->channel->basicNack($this->deliveryTag, $multiple, $requeue);
         $this->onResponse();
     }
 
@@ -138,7 +140,7 @@ class AMQPMessage
     public function reject($requeue = true)
     {
         $this->assertUnacked();
-        $this->channel->basic_reject($this->deliveryTag, $requeue);
+        $this->channel->basicReject($this->deliveryTag, $requeue);
         $this->onResponse();
     }
 
@@ -410,7 +412,7 @@ class AMQPMessage
      *
      * @return array
      */
-    public function get_properties()
+    public function getProperties()
     {
         return $this->properties;
     }
@@ -450,13 +452,13 @@ class AMQPMessage
      * NOTE: do not mutate $reader
      * @return $this
      */
-    public function load_properties(AMQPReader $reader)
+    public function loadProperties(AMQPReader $reader)
     {
         // Read 16-bit shorts until we get one with a low bit set to zero
         $flags = array();
 
         while (true) {
-            $flag_bits = $reader->read_short();
+            $flag_bits = $reader->readShort();
             $flags[] = $flag_bits;
 
             if (($flag_bits & 1) === 0) {
@@ -467,7 +469,7 @@ class AMQPMessage
         $shift = 0;
         $data = array();
 
-        foreach (self::$propertyDefinitions as $key => $proptype) {
+        foreach (self::$propertyDefinitions as $key => $prototype) {
             if ($shift === 0) {
                 if (!$flags) {
                     break;
@@ -477,7 +479,7 @@ class AMQPMessage
             }
 
             if ($flag_bits & (1 << $shift)) {
-                $data[$key] = $reader->{'read_' . $proptype}();
+                $data[$key] = $reader->{str_replace('_', '', 'read' . ucwords($prototype, "_"))}();
             }
 
             $shift -= 1;
@@ -497,7 +499,7 @@ class AMQPMessage
      * @return string
      * @todo Inject the AMQPWriter to make the method easier to test
      */
-    public function serialize_properties()
+    public function serializeProperties()
     {
         if (!empty($this->serialized_properties)) {
             return $this->serialized_properties;
@@ -526,7 +528,7 @@ class AMQPMessage
 
             $flag_bits |= (1 << $shift);
             if ($prototype != 'bit') {
-                $raw_bytes->{'write_' . $prototype}($val);
+                $raw_bytes->{str_replace('_', '', 'write' . ucwords($prototype, "_"))}($val);
             }
 
             $shift -= 1;
@@ -535,7 +537,7 @@ class AMQPMessage
         $flags[] = $flag_bits;
         $result = new AMQPWriter();
         foreach ($flags as $flag_bits) {
-            $result->write_short($flag_bits);
+            $result->writeShort($flag_bits);
         }
 
         $result->write($raw_bytes->getvalue());

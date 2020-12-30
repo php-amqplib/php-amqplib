@@ -15,13 +15,13 @@ $consumerTag = 'consumer';
  */
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
-$channel->queue_declare($queue);
+$channel->queueDeclare($queue);
 
 $waitHelper = new Wait091();
 
-$channel->basic_consume($queue, $consumerTag);
-$channel->queue_delete($queue);
+$channel->basicConsume($queue, $consumerTag);
+$channel->queueDelete($queue);
 /*
  * if the server is capable of sending basic.cancel messages, too, this call will end in an AMQPBasicCancelException.
  */
-$channel->wait(array($waitHelper->get_wait('basic.cancel')));
+$channel->wait(array($waitHelper->getWait('basic.cancel')));

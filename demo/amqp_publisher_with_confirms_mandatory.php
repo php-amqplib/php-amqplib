@@ -11,19 +11,19 @@ $exchange = 'someExchange';
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$channel->set_ack_handler(
+$channel->setAckHandler(
     function (AMQPMessage $message) {
         echo "Message acked with content " . $message->body . PHP_EOL;
     }
 );
 
-$channel->set_nack_handler(
+$channel->setNackHandler(
     function (AMQPMessage $message) {
         echo "Message nacked with content " . $message->body . PHP_EOL;
     }
 );
 
-$channel->set_return_listener(
+$channel->setReturnListener(
     function ($replyCode, $replyText, $exchange, $routingKey, AMQPMessage $message) {
         echo "Message returned with content " . $message->body . PHP_EOL;
     }
@@ -35,7 +35,7 @@ $channel->set_return_listener(
  * the next call to $ch->wait() would result in an exception as the publish confirm mode and transactions
  * are mutually exclusive
  */
-$channel->confirm_select();
+$channel->confirmSelect();
 
 /*
     name: $exchange
@@ -45,29 +45,29 @@ $channel->confirm_select();
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
+$channel->exchangeDeclare($exchange, AMQPExchangeType::FANOUT, false, false, true);
 
 $i = 1;
 $message = new AMQPMessage($i, array('content_type' => 'text/plain'));
-$channel->basic_publish($message, $exchange, null, true);
+$channel->basicPublish($message, $exchange, null, true);
 
 /*
  * watching the amqp debug output you can see that the server will ack the message with delivery tag 1 and the
  * multiple flag probably set to false
  */
 
-$channel->wait_for_pending_acks_returns();
+$channel->waitForPendingAcksReturns();
 
 while ($i <= 11) {
     $message = new AMQPMessage($i++, array('content_type' => 'text/plain'));
-    $channel->basic_publish($message, $exchange, null, true);
+    $channel->basicPublish($message, $exchange, null, true);
 }
 
 /*
  * you do not have to wait for pending acks after each message sent. in fact it will be much more efficient
  * to wait for as many messages to be acked as possible.
  */
-$channel->wait_for_pending_acks_returns();
+$channel->waitForPendingAcksReturns();
 
 $channel->close();
 $connection->close();

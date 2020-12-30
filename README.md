@@ -42,7 +42,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 
 * [enqueue/amqp-lib](https://github.com/php-enqueue/amqp-lib) is a [amqp interop](https://github.com/queue-interop/queue-interop#amqp-interop) compatible wrapper.
 
-* [AMQProxy](https://github.com/cloudamqp/amqproxy) is a proxy library with connection and channel pooling/reusing. This allows for lower connection and channel churn when using php-amqplib, leading to less CPU usage of RabbitMQ. 
+* [AMQProxy](https://github.com/cloudamqp/amqproxy) is a proxy library with connection and channel pooling/reusing. This allows for lower connection and channel churn when using php-amqplib, leading to less CPU usage of RabbitMQ.
 
 ## Setup ##
 
@@ -146,16 +146,16 @@ Then you could make use of the `batch_basic_publish` library feature. You can ba
 
 ```php
 $msg = new AMQPMessage($msg_body);
-$ch->batch_basic_publish($msg, $exchange);
+$ch->batchBasicPublish($msg, $exchange);
 
 $msg2 = new AMQPMessage($msg_body);
-$ch->batch_basic_publish($msg2, $exchange);
+$ch->batchBasicPublish($msg2, $exchange);
 ```
 
 and then send the batch like this:
 
 ```php
-$ch->publish_batch();
+$ch->publishBatch();
 ```
 
 ### When do we publish the message batch? ###
@@ -170,14 +170,14 @@ Another way to speed up your message publishing is by reusing the `AMQPMessage` 
 ```php
 $properties = array('content_type' => 'text/plain', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT);
 $msg = new AMQPMessage($body, $properties);
-$ch->basic_publish($msg, $exchange);
+$ch->basicPublish($msg, $exchange);
 ```
 
 Now let's say that while you want to change the message body for future messages, you will keep the same properties, that is, your messages will still be `text/plain` and the `delivery_mode` will still be `AMQPMessage::DELIVERY_MODE_PERSISTENT`. If you create a new `AMQPMessage` instance for every published message, then those properties would have to be re-encoded in the AMQP binary format. You could avoid all that by just reusing the `AMQPMessage` and then resetting the message body like this:
 
 ```php
 $msg->setBody($body2);
-$ch->basic_publish($msg, $exchange);
+$ch->basicPublish($msg, $exchange);
 ```
 
 ## Truncating Large Messages ##

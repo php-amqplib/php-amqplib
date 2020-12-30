@@ -22,7 +22,7 @@ $channel = $connection->channel();
  * @param bool $nowait
  * @return mixed|null
  */
-$channel->exchange_declare('delayed_exchange', 'x-delayed-message', false, true, false, false, false, new AMQPTable(array(
+$channel->exchangeDeclare('delayed_exchange', 'x-delayed-message', false, true, false, false, false, new AMQPTable(array(
    "x-delayed-type" => AMQPExchangeType::FANOUT
 )));
 
@@ -39,16 +39,16 @@ $channel->exchange_declare('delayed_exchange', 'x-delayed-message', false, true,
  * @param null $ticket
  * @return mixed|null
  */
-$channel->queue_declare('delayed_queue', false, false, false, false, false, new AMQPTable(array(
+$channel->queueDeclare('delayed_queue', false, false, false, false, false, new AMQPTable(array(
    "x-dead-letter-exchange" => "delayed"
 )));
 
-$channel->queue_bind('delayed_queue', 'delayed_exchange');
+$channel->queueBind('delayed_queue', 'delayed_exchange');
 
 $headers = new AMQPTable(array("x-delay" => 7000));
 $message = new AMQPMessage('hello', array('delivery_mode' => 2));
 $message->set('application_headers', $headers);
-$channel->basic_publish($message, 'delayed_exchange');
+$channel->basicPublish($message, 'delayed_exchange');
 
 function process_message(AMQPMessage $message)
 {
@@ -68,7 +68,7 @@ function process_message(AMQPMessage $message)
     callback: A PHP Callback
 */
 
-$channel->basic_consume('delayed_queue', '', false, false, false, false, 'process_message');
+$channel->basicConsume('delayed_queue', '', false, false, false, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $channel
@@ -83,6 +83,6 @@ function shutdown($channel, $connection)
 register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while ($channel->is_consuming()) {
+while ($channel->isConsuming()) {
     $channel->wait();
 }

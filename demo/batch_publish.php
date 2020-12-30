@@ -17,11 +17,11 @@ $queue = 'bench_queue';
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$channel->queue_declare($queue, false, false, false, false);
+$channel->queueDeclare($queue, false, false, false, false);
 
-$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, false, false);
+$channel->exchangeDeclare($exchange, AMQPExchangeType::DIRECT, false, false, false);
 
-$channel->queue_bind($queue, $exchange);
+$channel->queueBind($queue, $exchange);
 
 
 $messageBody = <<<EOT
@@ -46,25 +46,25 @@ $batch = isset($argv[2]) ? (int) $argv[2] : 2;
 
 // Publishes $max messages using $messageBody as the content.
 for ($i = 0; $i < $max; $i++) {
-    $channel->batch_basic_publish($message, $exchange);
+    $channel->batchBasicPublish($message, $exchange);
 
     if ($i % $batch == 0) {
         try {
-            $channel->publish_batch();
+            $channel->publishBatch();
         } catch (AMQPConnectionBlockedException $exception) {
             do {
                 sleep(10);
             } while ($connection->isBlocked());
-            $channel->publish_batch();
+            $channel->publishBatch();
         }
     }
 }
 
-$channel->publish_batch();
+$channel->publishBatch();
 
 echo microtime(true) - $time, "\n";
 
-$channel->basic_publish(new AMQPMessage('quit'), $exchange);
+$channel->basicPublish(new AMQPMessage('quit'), $exchange);
 
 $channel->close();
 $connection->close();

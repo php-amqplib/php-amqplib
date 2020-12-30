@@ -26,9 +26,9 @@ class TestConnection extends AbstractConnection
     public function setIsBlocked($blocked = true)
     {
         if ($blocked) {
-            $this->connection_blocked(new AMQPReader(hex2bin('0120')));
+            $this->connectionBlocked(new AMQPReader(hex2bin('0120')));
         } else {
-            $this->connection_unblocked();
+            $this->connectionUnblocked();
         }
     }
 }

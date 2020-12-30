@@ -26,7 +26,7 @@ class TopicExchangeTest extends ChannelTestCase
     {
         $this->connection->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'topic');
+        $this->channel->exchangeDeclare($this->exchange->name, 'topic');
     }
 
     /**
@@ -37,7 +37,7 @@ class TopicExchangeTest extends ChannelTestCase
     {
         $this->channel->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'topic');
+        $this->channel->exchangeDeclare($this->exchange->name, 'topic');
     }
 
     /**
@@ -45,33 +45,33 @@ class TopicExchangeTest extends ChannelTestCase
      */
     public function publish_with_confirm()
     {
-        $this->channel->exchange_declare($this->exchange->name, 'topic');
+        $this->channel->exchangeDeclare($this->exchange->name, 'topic');
 
         $deliveryTags = [];
 
-        $this->channel->set_ack_handler(function (AMQPMessage $message) use (&$deliveryTags) {
+        $this->channel->setAckHandler(function (AMQPMessage $message) use (&$deliveryTags) {
             $deliveryTags[] = (int) $message->get('delivery_tag');
             return false;
         });
 
-        $this->channel->confirm_select();
+        $this->channel->confirmSelect();
 
         $connection2 = new AMQPSocketConnection(HOST, PORT, USER, PASS, VHOST);
         $channel2 = $connection2->channel();
 
-        $channel2->queue_declare('tst.queue3');
-        $channel2->queue_bind('tst.queue3', $this->exchange->name, '#');
+        $channel2->queueDeclare('tst.queue3');
+        $channel2->queueBind('tst.queue3', $this->exchange->name, '#');
 
-        $this->channel->basic_publish(new AMQPMessage('foo'), $this->exchange->name);
-        $this->channel->basic_publish(new AMQPMessage('bar'), $this->exchange->name);
+        $this->channel->basicPublish(new AMQPMessage('foo'), $this->exchange->name);
+        $this->channel->basicPublish(new AMQPMessage('bar'), $this->exchange->name);
 
-        $publishedMessagesProperty = new \ReflectionProperty(get_class($this->channel), 'published_messages');
+        $publishedMessagesProperty = new \ReflectionProperty(get_class($this->channel), 'publishedMessages');
         $publishedMessagesProperty->setAccessible(true);
 
-        $this->channel->wait_for_pending_acks_returns(1);
+        $this->channel->waitForPendingAcksReturns(1);
 
-        $msg1 = $channel2->basic_get('tst.queue3');
-        $msg2 = $channel2->basic_get('tst.queue3');
+        $msg1 = $channel2->basicGet('tst.queue3');
+        $msg2 = $channel2->basicGet('tst.queue3');
 
         $this->assertInstanceOf('PhpAmqpLib\Message\AMQPMessage', $msg1);
         $this->assertInstanceOf('PhpAmqpLib\Message\AMQPMessage', $msg2);

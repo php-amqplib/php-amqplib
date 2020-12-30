@@ -27,8 +27,8 @@ class ReconnectConnectionTest extends TestCase
     public function tearDown()
     {
         if ($this->channel) {
-            $this->channel->exchange_delete($this->exchange);
-            $this->channel->queue_delete($this->queue);
+            $this->channel->exchangeDelete($this->exchange);
+            $this->channel->queueDelete($this->queue);
             $this->channel->close();
             $this->channel = null;
         }
@@ -41,7 +41,7 @@ class ReconnectConnectionTest extends TestCase
     /**
      * @test
      */
-    public function lazy_connection_reconnect()
+    public function lazyConnectionReconnect()
     {
         $this->connection = $this->getLazyConnection();
 
@@ -51,7 +51,7 @@ class ReconnectConnectionTest extends TestCase
     /**
      * @test
      */
-    public function lazy_connection_close_reconnect()
+    public function lazyConnectionCloseReconnect()
     {
         $this->connection = $this->getLazyConnection();
         $this->setupChannel();
@@ -65,7 +65,7 @@ class ReconnectConnectionTest extends TestCase
     /**
      * @test
      */
-    public function socket_connection_reconnect()
+    public function socketConnectionReconnect()
     {
         $this->connection = $this->getSocketConnection();
 
@@ -75,7 +75,7 @@ class ReconnectConnectionTest extends TestCase
     /**
      * @test
      */
-    public function socket_connection_close_reconnect()
+    public function socketConnectionCloseReconnect()
     {
         $this->connection = $this->getSocketConnection();
         $this->connection->close();
@@ -88,7 +88,7 @@ class ReconnectConnectionTest extends TestCase
     /**
      * @test
      */
-    public function lazy_socket_connection_close_reconnect()
+    public function lazySocketConnectionCloseReconnect()
     {
         $this->connection = $this->getLazySocketConnection();
         $this->connection->close();
@@ -101,7 +101,7 @@ class ReconnectConnectionTest extends TestCase
     /**
      * @test
      */
-    public function lazy_connection_socket_reconnect()
+    public function lazyConnectionSocketReconnect()
     {
         $this->connection = $this->getLazySocketConnection();
 
@@ -136,9 +136,9 @@ class ReconnectConnectionTest extends TestCase
     protected function setupChannel()
     {
         $this->channel = $this->connection->channel();
-        $this->channel->exchange_declare($this->exchange, 'direct', false, false, false);
-        $this->channel->queue_declare($this->queue);
-        $this->channel->queue_bind($this->queue, $this->exchange, $this->queue);
+        $this->channel->exchangeDeclare($this->exchange, 'direct', false, false, false);
+        $this->channel->queueDeclare($this->queue);
+        $this->channel->queueBind($this->queue, $this->exchange, $this->queue);
     }
 
     protected function publishGet()
@@ -149,8 +149,8 @@ class ReconnectConnectionTest extends TestCase
             'correlation_id' => 'my_correlation_id',
             'reply_to' => 'my_reply_to'
         ]);
-        $this->channel->basic_publish($msg, $this->exchange, $this->queue);
+        $this->channel->basicPublish($msg, $this->exchange, $this->queue);
 
-        return $this->channel->basic_get($this->queue);
+        return $this->channel->basicGet($this->queue);
     }
 }

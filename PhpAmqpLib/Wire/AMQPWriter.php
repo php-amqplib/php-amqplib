@@ -63,7 +63,7 @@ class AMQPWriter extends AbstractClient
      * @param bool $b
      * @return $this
      */
-    public function write_bit($b)
+    public function writeBit($b)
     {
         $b = $b ? 1 : 0;
         $shift = $this->bitcount % 8;
@@ -81,7 +81,7 @@ class AMQPWriter extends AbstractClient
      * @param bool[] $bits
      * @return $this
      */
-    public function write_bits($bits)
+    public function writeBits($bits)
     {
         $value = 0;
 
@@ -102,7 +102,7 @@ class AMQPWriter extends AbstractClient
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
-    public function write_octet($n)
+    public function writeOctet($n)
     {
         if ($n < 0 || $n > 255) {
             throw new AMQPInvalidArgumentException('Octet out of range: ' . $n);
@@ -117,7 +117,7 @@ class AMQPWriter extends AbstractClient
      * @param int $n
      * @return $this
      */
-    public function write_signed_octet($n)
+    public function writeSignedOctet($n)
     {
         if (($n < -128) || ($n > 127)) {
             throw new AMQPInvalidArgumentException('Signed octet out of range: ' . $n);
@@ -135,7 +135,7 @@ class AMQPWriter extends AbstractClient
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
-    public function write_short($n)
+    public function writeShort($n)
     {
         if ($n < 0 || $n > 65535) {
             throw new AMQPInvalidArgumentException('Short out of range: ' . $n);
@@ -150,7 +150,7 @@ class AMQPWriter extends AbstractClient
      * @param int $n
      * @return $this
      */
-    public function write_signed_short($n)
+    public function writeSignedShort($n)
     {
         if (($n < -32768) || ($n > 32767)) {
             throw new AMQPInvalidArgumentException('Signed short out of range: ' . $n);
@@ -167,7 +167,7 @@ class AMQPWriter extends AbstractClient
      * @param int|string $n
      * @return $this
      */
-    public function write_long($n)
+    public function writeLong($n)
     {
         if (($n < 0) || ($n > 4294967295)) {
             throw new AMQPInvalidArgumentException('Long out of range: ' . $n);
@@ -186,7 +186,7 @@ class AMQPWriter extends AbstractClient
      * @param int $n
      * @return $this
      */
-    private function write_signed_long($n)
+    private function writeSignedLong($n)
     {
         if (($n < -2147483648) || ($n > 2147483647)) {
             throw new AMQPInvalidArgumentException('Signed long out of range: ' . $n);
@@ -205,7 +205,7 @@ class AMQPWriter extends AbstractClient
      * @return $this
      * @throws AMQPOutOfRangeException
      */
-    public function write_longlong($n)
+    public function writeLonglong($n)
     {
         if (is_int($n)) {
             if ($n < 0) {
@@ -223,8 +223,10 @@ class AMQPWriter extends AbstractClient
         }
 
         $value = new BigInteger($n);
-        if ($value->compare(self::getBigInteger('0')) < 0
-            || $value->compare(self::getBigInteger('FFFFFFFFFFFFFFFF', 16)) > 0) {
+        if (
+            $value->compare(self::getBigInteger('0')) < 0
+            || $value->compare(self::getBigInteger('FFFFFFFFFFFFFFFF', 16)) > 0
+        ) {
             throw new AMQPInvalidArgumentException('Longlong out of range: ' . $n);
         }
 
@@ -238,7 +240,7 @@ class AMQPWriter extends AbstractClient
      * @param int|string $n
      * @return $this
      */
-    public function write_signed_longlong($n)
+    public function writeSignedLonglong($n)
     {
         if (is_int($n)) {
             if ($this->is64bits) {
@@ -258,8 +260,10 @@ class AMQPWriter extends AbstractClient
         }
 
         $value = new BigInteger($n);
-        if ($value->compare(self::getBigInteger('-8000000000000000', 16)) < 0
-            || $value->compare(self::getBigInteger('7FFFFFFFFFFFFFFF', 16)) > 0) {
+        if (
+            $value->compare(self::getBigInteger('-8000000000000000', 16)) < 0
+            || $value->compare(self::getBigInteger('7FFFFFFFFFFFFFFF', 16)) > 0
+        ) {
             throw new AMQPInvalidArgumentException('Signed longlong out of range: ' . $n);
         }
 
@@ -277,14 +281,14 @@ class AMQPWriter extends AbstractClient
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
-    public function write_shortstr($s)
+    public function writeShortstr($s)
     {
         $len = mb_strlen($s, 'ASCII');
         if ($len > 255) {
             throw new AMQPInvalidArgumentException('String too long');
         }
 
-        $this->write_octet($len);
+        $this->writeOctet($len);
         $this->out .= $s;
 
         return $this;
@@ -296,9 +300,9 @@ class AMQPWriter extends AbstractClient
      * @param string $s
      * @return $this
      */
-    public function write_longstr($s)
+    public function writeLongstr($s)
     {
-        $this->write_long(mb_strlen($s, 'ASCII'));
+        $this->writeLong(mb_strlen($s, 'ASCII'));
         $this->out .= $s;
 
         return $this;
@@ -311,7 +315,7 @@ class AMQPWriter extends AbstractClient
      * @param AMQPArray|array $a Instance of AMQPArray or PHP array WITHOUT format hints (unlike write_table())
      * @return self
      */
-    public function write_array($a)
+    public function writeArray($a)
     {
         if (!($a instanceof AMQPArray)) {
             $a = new AMQPArray($a);
@@ -319,11 +323,11 @@ class AMQPWriter extends AbstractClient
         $data = new self();
 
         foreach ($a as $v) {
-            $data->write_value($v[0], $v[1]);
+            $data->writeValue($v[0], $v[1]);
         }
 
         $data = $data->getvalue();
-        $this->write_long(mb_strlen($data, 'ASCII'));
+        $this->writeLong(mb_strlen($data, 'ASCII'));
         $this->write($data);
 
         return $this;
@@ -335,9 +339,9 @@ class AMQPWriter extends AbstractClient
      * @param int $v
      * @return $this
      */
-    public function write_timestamp($v)
+    public function writeTimestamp($v)
     {
-        $this->write_longlong($v);
+        $this->writeLonglong($v);
 
         return $this;
     }
@@ -350,19 +354,19 @@ class AMQPWriter extends AbstractClient
      * @return $this
      * @throws \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
-    public function write_table($d)
+    public function writeTable($d)
     {
         $typeIsSym = !($d instanceof AMQPTable); //purely for back-compat purposes
 
         $table_data = new AMQPWriter();
         foreach ($d as $k => $va) {
             list($ftype, $v) = $va;
-            $table_data->write_shortstr($k);
-            $table_data->write_value($typeIsSym ? AMQPAbstractCollection::getDataTypeForSymbol($ftype) : $ftype, $v);
+            $table_data->writeShortstr($k);
+            $table_data->writeValue($typeIsSym ? AMQPAbstractCollection::getDataTypeForSymbol($ftype) : $ftype, $v);
         }
 
         $table_data = $table_data->getvalue();
-        $this->write_long(mb_strlen($table_data, 'ASCII'));
+        $this->writeLong(mb_strlen($table_data, 'ASCII'));
         $this->write($table_data);
 
         return $this;
@@ -374,16 +378,16 @@ class AMQPWriter extends AbstractClient
      * @param AMQPTable|array $d
      * @return $this
      */
-    public function write_table_object($d)
+    public function writeTableObject($d)
     {
-        return $this->write_table($d);
+        return $this->writeTable($d);
     }
 
     /**
      * @param int $type One of AMQPAbstractCollection::T_* constants
      * @param mixed $val
      */
-    private function write_value($type, $val)
+    private function writeValue($type, $val)
     {
         //This will find appropriate symbol for given data type for currently selected protocol
         //Also will raise an exception on unknown type
@@ -391,55 +395,55 @@ class AMQPWriter extends AbstractClient
 
         switch ($type) {
             case AMQPAbstractCollection::T_INT_SHORTSHORT:
-                $this->write_signed_octet($val);
+                $this->writeSignedOctet($val);
                 break;
             case AMQPAbstractCollection::T_INT_SHORTSHORT_U:
-                $this->write_octet($val);
+                $this->writeOctet($val);
                 break;
             case AMQPAbstractCollection::T_INT_SHORT:
-                $this->write_signed_short($val);
+                $this->writeSignedShort($val);
                 break;
             case AMQPAbstractCollection::T_INT_SHORT_U:
-                $this->write_short($val);
+                $this->writeShort($val);
                 break;
             case AMQPAbstractCollection::T_INT_LONG:
-                $this->write_signed_long($val);
+                $this->writeSignedLong($val);
                 break;
             case AMQPAbstractCollection::T_INT_LONG_U:
-                $this->write_long($val);
+                $this->writeLong($val);
                 break;
             case AMQPAbstractCollection::T_INT_LONGLONG:
-                $this->write_signed_longlong($val);
+                $this->writeSignedLonglong($val);
                 break;
             case AMQPAbstractCollection::T_INT_LONGLONG_U:
-                $this->write_longlong($val);
+                $this->writeLonglong($val);
                 break;
             case AMQPAbstractCollection::T_DECIMAL:
-                $this->write_octet($val->getE());
-                $this->write_signed_long($val->getN());
+                $this->writeOctet($val->getE());
+                $this->writeSignedLong($val->getN());
                 break;
             case AMQPAbstractCollection::T_TIMESTAMP:
-                $this->write_timestamp($val);
+                $this->writeTimestamp($val);
                 break;
             case AMQPAbstractCollection::T_BOOL:
-                $this->write_octet($val ? 1 : 0);
+                $this->writeOctet($val ? 1 : 0);
                 break;
             case AMQPAbstractCollection::T_STRING_SHORT:
-                $this->write_shortstr($val);
+                $this->writeShortstr($val);
                 break;
             case AMQPAbstractCollection::T_STRING_LONG:
-                $this->write_longstr($val);
+                $this->writeLongstr($val);
                 break;
             case AMQPAbstractCollection::T_ARRAY:
-                $this->write_array($val);
+                $this->writeArray($val);
                 break;
             case AMQPAbstractCollection::T_TABLE:
-                $this->write_table($val);
+                $this->writeTable($val);
                 break;
             case AMQPAbstractCollection::T_VOID:
                 break;
             case AMQPAbstractCollection::T_BYTES:
-                $this->write_longstr($val);
+                $this->writeLongstr($val);
                 break;
             default:
                 throw new AMQPInvalidArgumentException(sprintf(

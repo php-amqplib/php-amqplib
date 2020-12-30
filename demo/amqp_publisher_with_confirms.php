@@ -11,13 +11,13 @@ $exchange = 'someExchange';
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$channel->set_ack_handler(
+$channel->setAckHandler(
     function (AMQPMessage $message) {
         echo "Message acked with content " . $message->body . PHP_EOL;
     }
 );
 
-$channel->set_nack_handler(
+$channel->setNackHandler(
     function (AMQPMessage $message) {
         echo "Message nacked with content " . $message->body . PHP_EOL;
     }
@@ -29,7 +29,7 @@ $channel->set_nack_handler(
  * the next call to $ch->wait() would result in an exception as the publish confirm mode and transactions
  * are mutually exclusive
  */
-$channel->confirm_select();
+$channel->confirmSelect();
 
 /*
     name: $exchange
@@ -39,29 +39,29 @@ $channel->confirm_select();
     auto_delete: true //the exchange will be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, AMQPExchangeType::FANOUT, false, false, true);
+$channel->exchangeDeclare($exchange, AMQPExchangeType::FANOUT, false, false, true);
 
 $i = 1;
 $msg = new AMQPMessage($i, array('content_type' => 'text/plain'));
-$channel->basic_publish($msg, $exchange);
+$channel->basicPublish($msg, $exchange);
 
 /*
  * watching the amqp debug output you can see that the server will ack the message with delivery tag 1 and the
  * multiple flag probably set to false
  */
 
-$channel->wait_for_pending_acks();
+$channel->waitForPendingAcks();
 
 while ($i <= 11) {
     $msg = new AMQPMessage($i++, array('content_type' => 'text/plain'));
-    $channel->basic_publish($msg, $exchange);
+    $channel->basicPublish($msg, $exchange);
 }
 
 /*
  * you do not have to wait for pending acks after each message sent. in fact it will be much more efficient
  * to wait for as many messages to be acked as possible.
  */
-$channel->wait_for_pending_acks();
+$channel->waitForPendingAcks();
 
 $channel->close();
 $connection->close();

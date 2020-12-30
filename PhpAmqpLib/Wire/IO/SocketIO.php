@@ -63,10 +63,10 @@ class SocketIO extends AbstractIO
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
-        $this->set_error_handler();
+        $this->setErrorHandler();
         try {
             $connected = socket_connect($this->sock, $this->host, $this->port);
-            $this->cleanup_error_handler();
+            $this->cleanupErrorHandler();
         } catch (\ErrorException $e) {
             $connected = false;
         }
@@ -84,7 +84,7 @@ class SocketIO extends AbstractIO
         socket_set_option($this->sock, SOL_TCP, TCP_NODELAY, 1);
 
         if ($this->keepalive) {
-            $this->enable_keepalive();
+            $this->enableKeepalive();
         }
 
         $this->heartbeat = $this->initial_heartbeat;
@@ -110,7 +110,7 @@ class SocketIO extends AbstractIO
             ));
         }
 
-        $this->check_heartbeat();
+        $this->checkHeartbeat();
 
         list($timeout_sec, $timeout_uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
         $read_start = microtime(true);
@@ -175,12 +175,12 @@ class SocketIO extends AbstractIO
         $write_start = microtime(true);
 
         while ($written < $len) {
-            $this->set_error_handler();
+            $this->setErrorHandler();
             try {
-                $this->select_write();
+                $this->selectWrite();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = socket_write($this->sock, $buffer, self::BUFFER_SIZE);
-                $this->cleanup_error_handler();
+                $this->cleanupErrorHandler();
             } catch (\ErrorException $e) {
                 $code = socket_last_error($this->sock);
                 $constants = SocketConstants::getInstance();
@@ -239,7 +239,7 @@ class SocketIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    protected function do_select($sec, $usec)
+    protected function doSelect($sec, $usec)
     {
         $read = array($this->sock);
         $write = null;
@@ -251,7 +251,7 @@ class SocketIO extends AbstractIO
     /**
      * @return int|bool
      */
-    protected function select_write()
+    protected function selectWrite()
     {
         $read = $except = null;
         $write = array($this->sock);
@@ -262,7 +262,7 @@ class SocketIO extends AbstractIO
     /**
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      */
-    protected function enable_keepalive()
+    protected function enableKeepalive()
     {
         if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
             throw new AMQPIOException('Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined');
@@ -274,7 +274,7 @@ class SocketIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
         $constants = SocketConstants::getInstance();
         // socket_select warning that it has been interrupted by a signal - EINTR
@@ -283,15 +283,15 @@ class SocketIO extends AbstractIO
             return;
         }
 
-        parent::error_handler($errno, $errstr, $errfile, $errline, $errcontext);
+        parent::errorHandler($errno, $errstr, $errfile, $errline, $errcontext);
     }
 
     /**
      * @inheritdoc
      */
-    protected function set_error_handler()
+    protected function setErrorHandler()
     {
-        parent::set_error_handler();
+        parent::setErrorHandler();
         socket_clear_error($this->sock);
     }
 }

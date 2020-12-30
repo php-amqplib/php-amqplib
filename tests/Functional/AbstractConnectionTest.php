@@ -22,7 +22,7 @@ abstract class AbstractConnectionTest extends TestCase
      * @param array $options
      * @return AbstractConnection
      */
-    protected function conection_create($type = 'stream', $host = HOST, $port = PORT, $options = array())
+    protected function conectionCreate($type = 'stream', $host = HOST, $port = PORT, $options = array())
     {
         $keepalive = isset($options['keepalive']) ? $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : 0;
@@ -84,11 +84,11 @@ abstract class AbstractConnectionTest extends TestCase
         return $connection;
     }
 
-    protected function queue_bind(AMQPChannel $channel, $exchange_name, &$queue_name)
+    protected function queueBind(AMQPChannel $channel, $exchange_name, &$queue_name)
     {
-        $channel->exchange_declare($exchange_name, AMQPExchangeType::DIRECT);
-        list($queue_name, ,) = $channel->queue_declare();
-        $channel->queue_bind($queue_name, $exchange_name, $queue_name);
+        $channel->exchangeDeclare($exchange_name, AMQPExchangeType::DIRECT);
+        list($queue_name, ,) = $channel->queueDeclare();
+        $channel->queueBind($queue_name, $exchange_name, $queue_name);
     }
 
     /**
@@ -96,11 +96,11 @@ abstract class AbstractConnectionTest extends TestCase
      * @param array $options
      * @return AMQPChannel
      */
-    protected function channel_create($connectionType, $options = [])
+    protected function channelCreate($connectionType, $options = [])
     {
-        $connection = $this->conection_create($connectionType, HOST, PORT, $options);
+        $connection = $this->conectionCreate($connectionType, HOST, PORT, $options);
         $channel = $connection->channel();
-        $this->assertTrue($channel->is_open());
+        $this->assertTrue($channel->isOpen());
 
         return $channel;
     }
@@ -109,15 +109,15 @@ abstract class AbstractConnectionTest extends TestCase
      * @param string $name
      * @return ToxiProxy
      */
-    protected function create_proxy($name = 'amqp_connection')
+    protected function createProxy($name = 'amqp_connection')
     {
-        $proxy = new ToxiProxy($name, $this->get_toxiproxy_host());
-        $proxy->open(HOST, PORT, $this->get_toxiproxy_amqp_port());
+        $proxy = new ToxiProxy($name, $this->getToxiproxyHost());
+        $proxy->open(HOST, PORT, $this->getToxiproxyAmqpPort());
 
         return $proxy;
     }
 
-    protected function get_toxiproxy_host()
+    protected function getToxiproxyHost()
     {
         $host = getenv('TOXIPROXY_HOST');
         if (!$host) {
@@ -127,7 +127,7 @@ abstract class AbstractConnectionTest extends TestCase
         return $host;
     }
 
-    protected function get_toxiproxy_amqp_port()
+    protected function getToxiproxyAmqpPort()
     {
         $port = getenv('TOXIPROXY_AMQP_PORT');
         if (!$port) {
@@ -145,7 +145,7 @@ abstract class AbstractConnectionTest extends TestCase
         // all channels must be closed
         foreach ($connection->channels as $ch) {
             if ($ch instanceof AMQPChannel) {
-                $this->assertFalse($ch->is_open());
+                $this->assertFalse($ch->isOpen());
             }
             if ($ch instanceof AbstractConnection) {
                 $this->assertFalse($ch->isConnected());
@@ -156,7 +156,7 @@ abstract class AbstractConnectionTest extends TestCase
 
     protected function assertChannelClosed(AbstractChannel $channel)
     {
-        $this->assertFalse($channel->is_open());
+        $this->assertFalse($channel->isOpen());
         $this->assertEmpty($channel->callbacks);
     }
 }

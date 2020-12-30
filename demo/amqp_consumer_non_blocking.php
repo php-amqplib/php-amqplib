@@ -24,7 +24,7 @@ $channel = $connection->channel();
     exclusive: false // the queue can be accessed in other channels
     auto_delete: false //the queue won't be deleted once the channel is closed.
 */
-$channel->queue_declare($queue, false, true, false, false);
+$channel->queueDeclare($queue, false, true, false, false);
 
 /*
     name: $exchange
@@ -34,9 +34,9 @@ $channel->queue_declare($queue, false, true, false, false);
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
+$channel->exchangeDeclare($exchange, AMQPExchangeType::DIRECT, false, true, false);
 
-$channel->queue_bind($queue, $exchange);
+$channel->queueBind($queue, $exchange);
 
 /**
  * @param \PhpAmqpLib\Message\AMQPMessage $message
@@ -51,7 +51,7 @@ function process_message($message)
 
     // Send a message with the string "quit" to cancel the consumer.
     if ($message->body === 'quit') {
-        $message->getChannel()->basic_cancel($message->getConsumerTag());
+        $message->getChannel()->basicCancel($message->getConsumerTag());
     }
 }
 
@@ -65,7 +65,7 @@ function process_message($message)
     callback: A PHP Callback
 */
 
-$channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
+$channel->basicConsume($queue, $consumerTag, false, false, false, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $channel
@@ -80,7 +80,7 @@ function shutdown($channel, $connection)
 register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while ($channel->is_consuming()) {
+while ($channel->isConsuming()) {
     $channel->wait(null, true);
     // do something else
     usleep(300000);

@@ -13,8 +13,8 @@ class AMQPSocketConnection extends AbstractConnection
      * @param string $password
      * @param string $vhost
      * @param bool $insist
-     * @param string $login_method
-     * @param null $login_response @deprecated
+     * @param string $loginMethod
+     * @param null $loginResponse @deprecated
      * @param string $locale
      * @param int|float $read_timeout
      * @param bool $keepalive
@@ -30,8 +30,8 @@ class AMQPSocketConnection extends AbstractConnection
         $password,
         $vhost = '/',
         $insist = false,
-        $login_method = 'AMQPLAIN',
-        $login_response = null,
+        $loginMethod = 'AMQPLAIN',
+        $loginResponse = null,
         $locale = 'en_US',
         $read_timeout = 3,
         $keepalive = false,
@@ -50,8 +50,8 @@ class AMQPSocketConnection extends AbstractConnection
             $password,
             $vhost,
             $insist,
-            $login_method,
-            $login_response,
+            $loginMethod,
+            $loginResponse,
             $locale,
             $io,
             $heartbeat,
@@ -60,14 +60,14 @@ class AMQPSocketConnection extends AbstractConnection
         );
     }
 
-    protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
+    protected static function tryCreateConnection($host, $port, $user, $password, $vhost, $options)
     {
         $insist = isset($options['insist']) ?
                         $options['insist'] : false;
-        $login_method = isset($options['login_method']) ?
-                              $options['login_method'] : 'AMQPLAIN';
-        $login_response = isset($options['login_response']) ?
-                                $options['login_response'] : null;
+        $loginMethod = isset($options['loginMethod']) ?
+                              $options['loginMethod'] : 'AMQPLAIN';
+        $loginResponse = isset($options['loginResponse']) ?
+                                $options['loginResponse'] : null;
         $locale = isset($options['locale']) ?
                         $options['locale'] : 'en_US';
         $read_timeout = isset($options['read_timeout']) ?
@@ -85,8 +85,8 @@ class AMQPSocketConnection extends AbstractConnection
             $password,
             $vhost,
             $insist,
-            $login_method,
-            $login_response,
+            $loginMethod,
+            $loginResponse,
             $locale,
             $read_timeout,
             $keepalive,

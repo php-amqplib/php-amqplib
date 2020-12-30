@@ -31,22 +31,22 @@ class Bug256Test extends AbstractConnectionTest
 
     public function setUp()
     {
-        $this->connection = $this->conection_create('socket');
+        $this->connection = $this->conectionCreate('socket');
         $this->channel = $this->connection->channel();
 
-        $this->channel->exchange_declare($this->exchangeName, 'direct', false, true, false);
+        $this->channel->exchangeDeclare($this->exchangeName, 'direct', false, true, false);
 
-        $this->connection2 = $this->conection_create('stream');
+        $this->connection2 = $this->conectionCreate('stream');
         $this->channel2 = $this->connection->channel();
 
-        list($this->queueName, ,) = $this->channel2->queue_declare();
-        $this->channel2->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
+        list($this->queueName, ,) = $this->channel2->queueDeclare();
+        $this->channel2->queueBind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
     public function tearDown()
     {
         if ($this->channel) {
-            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->exchangeDelete($this->exchangeName);
             $this->channel->close();
             $this->channel = null;
         }
@@ -67,17 +67,17 @@ class Bug256Test extends AbstractConnectionTest
     /**
      * @test
      */
-    public function frame_order()
+    public function frameOrder()
     {
         $msg = new AMQPMessage('');
         $hdrs = new AMQPTable(['x-foo' => 'bar']);
         $msg->set('application_headers', $hdrs);
 
         for ($i = 0; $i < $this->messageCount; $i++) {
-            $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);
+            $this->channel->basicPublish($msg, $this->exchangeName, $this->queueName);
         }
 
-        $this->channel2->basic_consume(
+        $this->channel2->basicConsume(
             $this->queueName,
             '',
             false,
@@ -100,7 +100,7 @@ class Bug256Test extends AbstractConnectionTest
 
         if ($this->consumedCount >= $this->messageCount) {
             $delivery_info = $message->delivery_info;
-            $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
+            $delivery_info['channel']->basicCancel($delivery_info['consumer_tag']);
         }
     }
 }

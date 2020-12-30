@@ -12,7 +12,7 @@ final class Constants091 extends Constants
     /**
      * @var array
      */
-    public static $FRAME_TYPES = array(
+    public static $frameTypeS = array(
         1 => 'FRAME-METHOD',
         2 => 'FRAME-HEADER',
         3 => 'FRAME-BODY',

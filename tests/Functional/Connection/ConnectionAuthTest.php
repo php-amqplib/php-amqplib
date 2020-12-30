@@ -18,7 +18,7 @@ class ConnectionAuthTest extends AbstractConnectionTest
      * @group management
      * @covers \PhpAmqpLib\Connection\AbstractConnection::__construct()
      */
-    public function plain_auth_passwordless_must_fail()
+    public function plainAuthPasswordlessMustFail()
     {
         $username = 'test_' . rand();
         // Setting password_hash to "" will ensure the user cannot use a password to log in

@@ -36,7 +36,7 @@ class SignalHeartbeatTest extends AbstractConnectionTest
 
     protected function setUp()
     {
-        $this->connection = $this->conection_create(
+        $this->connection = $this->conectionCreate(
             'stream',
             HOST,
             PORT,
@@ -44,9 +44,9 @@ class SignalHeartbeatTest extends AbstractConnectionTest
         );
         $this->sender = new PCNTLHeartbeatSender($this->connection);
         $this->channel = $this->connection->channel();
-        $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
-        list($this->queueName, ,) = $this->channel->queue_declare();
-        $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
+        $this->channel->exchangeDeclare($this->exchangeName, 'direct', false, false, false);
+        list($this->queueName, ,) = $this->channel->queueDeclare();
+        $this->channel->queueBind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
     public function tearDown()
@@ -55,7 +55,7 @@ class SignalHeartbeatTest extends AbstractConnectionTest
             $this->sender->unregister();
         }
         if ($this->channel) {
-            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->exchangeDelete($this->exchangeName);
             $this->channel->close();
         }
         if ($this->connection) {
@@ -74,15 +74,15 @@ class SignalHeartbeatTest extends AbstractConnectionTest
      * @covers \PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender::registerListener
      * @covers \PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender::unregister
      */
-    public function process_message_longer_than_heartbeat_timeout()
+    public function processMessageLongerThanHeartbeatTimeout()
     {
         $this->sender->register();
 
         $msg = new AMQPMessage($this->heartbeatTimeout, ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]);
 
-        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);
+        $this->channel->basicPublish($msg, $this->exchangeName, $this->queueName);
 
-        $this->channel->basic_consume(
+        $this->channel->basicConsume(
             $this->queueName,
             '',
             false,
@@ -105,8 +105,8 @@ class SignalHeartbeatTest extends AbstractConnectionTest
         }
 
         $delivery_info = $msg->delivery_info;
-        $delivery_info['channel']->basic_ack($delivery_info['delivery_tag']);
-        $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
+        $delivery_info['channel']->basicAck($delivery_info['delivery_tag']);
+        $delivery_info['channel']->basicCancel($delivery_info['consumer_tag']);
 
         self::assertEquals($this->heartbeatTimeout, (int)$msg->body);
     }

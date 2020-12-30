@@ -17,10 +17,10 @@ class ChannelWaitTest extends TestCase
      * @test
      * @small
      * @group signals
-     * @dataProvider provide_channels
+     * @dataProvider provideChannels
      * @param callable $factory
      */
-    public function should_wait_until_signal_by_default($factory)
+    public function shouldWaitUntilSignalByDefault($factory)
     {
         $this->deferSignal(0.5);
         /** @var AMQPChannel $channel */
@@ -39,11 +39,11 @@ class ChannelWaitTest extends TestCase
     /**
      * @test
      * @small
-     * @dataProvider provide_channels
+     * @dataProvider provideChannels
      * @param callable $factory
      * @expectedException \PhpAmqpLib\Exception\AMQPTimeoutException
      */
-    public function should_throw_timeout_exception($factory)
+    public function shouldThrowTimeoutException($factory)
     {
         $channel = $factory();
         $channel->wait(null, false, 0.01);
@@ -53,10 +53,10 @@ class ChannelWaitTest extends TestCase
     /**
      * @test
      * @small
-     * @dataProvider provide_channels
+     * @dataProvider provideChannels
      * @param callable $factory
      */
-    public function should_return_instantly_non_blocking($factory)
+    public function shouldReturnInstantlyNonBlocking($factory)
     {
         $channel = $factory();
         $start = microtime(true);
@@ -73,7 +73,7 @@ class ChannelWaitTest extends TestCase
      * @small
      *
      */
-    public function should_call_handler_on_ack()
+    public function shouldCallHandlerOnAck()
     {
         $receivedAck = false;
         $handler = function ($message) use (&$receivedAck) {
@@ -85,15 +85,15 @@ class ChannelWaitTest extends TestCase
         $factory = $this->channelFactory();
         /** @var AMQPChannel $channel */
         $channel = $factory();
-        $channel->set_ack_handler($handler);
-        $channel->confirm_select();
-        $channel->basic_publish(new AMQPMessage('test'), 'basic_get_test');
-        $channel->wait_for_pending_acks(1);
+        $channel->setAckHandler($handler);
+        $channel->confirmSelect();
+        $channel->basicPublish(new AMQPMessage('test'), 'basic_get_test');
+        $channel->waitForPendingAcks(1);
 
         $this->assertTrue($receivedAck);
     }
 
-    public function provide_channels()
+    public function provideChannels()
     {
         if (!defined('HOST')) {
             $this->markTestSkipped('Unkown RabbitMQ host');
@@ -150,9 +150,9 @@ class ChannelWaitTest extends TestCase
             }
 
             $channel = $connection->channel();
-            $channel->queue_declare($queue = 'basic_get_queue', false, true, false, false);
-            $channel->exchange_declare($exchange = 'basic_get_test', 'fanout', false, true, false);
-            $channel->queue_bind($queue, $exchange);
+            $channel->queueDeclare($queue = 'basic_get_queue', false, true, false, false);
+            $channel->exchangeDeclare($exchange = 'basic_get_test', 'fanout', false, true, false);
+            $channel->queueBind($queue, $exchange);
 
             return $channel;
         };

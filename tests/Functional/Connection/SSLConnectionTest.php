@@ -12,20 +12,20 @@ class SSLConnectionTest extends AbstractConnectionTest
 {
     /**
      * @test
-     * @dataProvider secure_connection_params
+     * @dataProvider secureConnectionParams
      */
-    public function secure_connection_default_params($options)
+    public function secureConnectionDefaultParams($options)
     {
-        $connection = $this->conection_create('ssl', HOST, 5671, $options);
+        $connection = $this->conectionCreate('ssl', HOST, 5671, $options);
         self::assertTrue($connection->isConnected());
         $channel = $connection->channel();
-        self::assertTrue($channel->is_open());
+        self::assertTrue($channel->isOpen());
 
         $channel->close();
         $connection->close();
     }
 
-    public function secure_connection_params()
+    public function secureConnectionParams()
     {
         $sets = [];
 

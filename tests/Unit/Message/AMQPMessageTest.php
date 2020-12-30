@@ -13,15 +13,15 @@ class AMQPMessageTest extends TestCase
      * @dataProvider propertiesData
      * @test
      */
-    public function serialize_properties(array $expected, array $properties)
+    public function serializeProperties(array $expected, array $properties)
     {
         $reader = new AMQPReader(null);
         $message = new AMQPMessage('', $properties);
 
-        $encodedData = $message->serialize_properties();
+        $encodedData = $message->serializeProperties();
         $reader->reuse($encodedData);
-        $message->load_properties($reader);
-        $props = $message->get_properties();
+        $message->loadProperties($reader);
+        $props = $message->getProperties();
 
         if (isset($props['application_headers'])) {
             $props['application_headers'] = $props['application_headers']->getNativeData();
@@ -33,7 +33,7 @@ class AMQPMessageTest extends TestCase
     /**
      * @test
      */
-    public function get_and_set_body()
+    public function getAndSetBody()
     {
         $message = new AMQPMessage('');
         $message->setBody('body');
@@ -48,7 +48,7 @@ class AMQPMessageTest extends TestCase
     /**
      * @test
      */
-    public function delivery_tag_immutable()
+    public function deliveryTagImmutable()
     {
         $message = new AMQPMessage();
         $message->setDeliveryTag('10');
@@ -61,7 +61,7 @@ class AMQPMessageTest extends TestCase
     /**
      * @test
      */
-    public function delivery_tag_empty()
+    public function deliveryTagEmpty()
     {
         $this->expectException(AMQPEmptyDeliveryTagException::class);
         $message = new AMQPMessage();
@@ -134,7 +134,7 @@ class AMQPMessageTest extends TestCase
         ];
     }
 
-    public function ack_new_message()
+    public function ackNewMessage()
     {
         $message = new AMQPMessage();
 

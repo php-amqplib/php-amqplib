@@ -24,7 +24,7 @@ $channel = $connection->channel();
     exclusive: false // the queue can be accessed in other channels
     auto_delete: false //the queue won't be deleted once the channel is closed.
 */
-$channel->queue_declare($queue, false, true, false, false);
+$channel->queueDeclare($queue, false, true, false, false);
 
 /*
     name: $exchange
@@ -34,16 +34,16 @@ $channel->queue_declare($queue, false, true, false, false);
     auto_delete: false //the exchange won't be deleted once the channel is closed.
 */
 
-$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
+$channel->exchangeDeclare($exchange, AMQPExchangeType::DIRECT, false, true, false);
 
-$channel->queue_bind($queue, $exchange);
+$channel->queueBind($queue, $exchange);
 
 $toSend = new AMQPMessage('test message', array('content_type' => 'text/plain', 'delivery_mode' => 2));
-$channel->basic_publish($toSend, $exchange);
+$channel->basicPublish($toSend, $exchange);
 
-$message = $channel->basic_get($queue);
+$message = $channel->basicGet($queue);
 
-$channel->basic_ack($message->delivery_info['delivery_tag']);
+$channel->basicAck($message->delivery_info['delivery_tag']);
 
 var_dump($message->body);
 

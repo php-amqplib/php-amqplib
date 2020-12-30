@@ -11,13 +11,13 @@ $destination = 'my_dest_exchange';
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$channel->exchange_declare($source, AMQPExchangeType::TOPIC, false, true, false);
+$channel->exchangeDeclare($source, AMQPExchangeType::TOPIC, false, true, false);
 
-$channel->exchange_declare($destination, AMQPExchangeType::DIRECT, false, true, false);
+$channel->exchangeDeclare($destination, AMQPExchangeType::DIRECT, false, true, false);
 
-$channel->exchange_bind($destination, $source);
+$channel->exchangeBind($destination, $source);
 
-$channel->exchange_unbind($source, $destination);
+$channel->exchangeUnbind($source, $destination);
 
 $channel->close();
 $connection->close();

@@ -21,11 +21,11 @@ class DirectExchangeTest extends ChannelTestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPChannelClosedException
      */
-    public function exchange_declare_with_closed_connection()
+    public function exchangeDeclareWithClosedConnection()
     {
         $this->connection->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'direct', false, false, false);
+        $this->channel->exchangeDeclare($this->exchange->name, 'direct', false, false, false);
     }
 
     /**
@@ -36,7 +36,7 @@ class DirectExchangeTest extends ChannelTestCase
     {
         $this->channel->close();
 
-        $this->channel->exchange_declare($this->exchange->name, 'direct', false, false, false);
+        $this->channel->exchangeDeclare($this->exchange->name, 'direct', false, false, false);
     }
 
     /**
@@ -44,9 +44,9 @@ class DirectExchangeTest extends ChannelTestCase
      */
     public function basic_consume_foo()
     {
-        $this->channel->exchange_declare($this->exchange->name, 'direct', false, false, false);
-        list($this->queue->name, ,) = $this->channel->queue_declare();
-        $this->channel->queue_bind($this->queue->name, $this->exchange->name, $this->queue->name);
+        $this->channel->exchangeDeclare($this->exchange->name, 'direct', false, false, false);
+        list($this->queue->name, ,) = $this->channel->queueDeclare();
+        $this->channel->queueBind($this->queue->name, $this->exchange->name, $this->queue->name);
 
         $this->message = (object) [
             'body' => 'foo',
@@ -60,7 +60,7 @@ class DirectExchangeTest extends ChannelTestCase
 
         $msg = new AMQPMessage($this->message->body, $this->message->properties);
 
-        $this->channel->basic_publish($msg, $this->exchange->name, $this->queue->name);
+        $this->channel->basicPublish($msg, $this->exchange->name, $this->queue->name);
 
         $callback = function ($msg) {
             $this->assertEquals($this->message->body, $msg->body);
@@ -75,7 +75,7 @@ class DirectExchangeTest extends ChannelTestCase
             $msg->get('no_property');
         };
 
-        $this->channel->basic_consume(
+        $this->channel->basicConsume(
             $this->queue->name,
             getmypid(),
             false,

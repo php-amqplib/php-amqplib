@@ -188,7 +188,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return bool
      */
-    public function read_bit()
+    public function readBit()
     {
         if (empty($this->bitcount)) {
             $this->bits = ord($this->rawread(1));
@@ -205,7 +205,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int
      */
-    public function read_octet()
+    public function readOctet()
     {
         $this->resetCounters();
         list(, $res) = unpack('C', $this->rawread(1));
@@ -216,7 +216,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int
      */
-    public function read_signed_octet()
+    public function readSignedOctet()
     {
         $this->resetCounters();
         list(, $res) = unpack('c', $this->rawread(1));
@@ -227,7 +227,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int
      */
-    public function read_short()
+    public function readShort()
     {
         $this->resetCounters();
         list(, $res) = unpack('n', $this->rawread(2));
@@ -238,7 +238,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int
      */
-    public function read_signed_short()
+    public function readSignedShort()
     {
         $this->resetCounters();
         list(, $res) = unpack('s', $this->correctEndianness($this->rawread(2)));
@@ -258,7 +258,7 @@ class AMQPReader extends AbstractClient
      * Use with caution!
      * @return int|string
      */
-    public function read_php_int()
+    public function readPhpInt()
     {
         list(, $res) = unpack('N', $this->rawread(4));
 
@@ -275,7 +275,7 @@ class AMQPReader extends AbstractClient
      *
      * @return int|string
      */
-    public function read_long()
+    public function readLong()
     {
         $this->resetCounters();
         list(, $res) = unpack('N', $this->rawread(4));
@@ -289,7 +289,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int
      */
-    private function read_signed_long()
+    private function readSignedLong()
     {
         $this->resetCounters();
         list(, $res) = unpack('l', $this->correctEndianness($this->rawread(4)));
@@ -303,7 +303,7 @@ class AMQPReader extends AbstractClient
      *
      * @return int|string
      */
-    public function read_longlong()
+    public function readLonglong()
     {
         $this->resetCounters();
         $bytes = $this->rawread(8);
@@ -330,7 +330,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int|string
      */
-    public function read_signed_longlong()
+    public function readSignedLonglong()
     {
         $this->resetCounters();
         $bytes = $this->rawread(8);
@@ -361,7 +361,7 @@ class AMQPReader extends AbstractClient
      * 255 bytes.  Return it decoded as a PHP unicode object.
      * @return string
      */
-    public function read_shortstr()
+    public function readShortstr()
     {
         $this->resetCounters();
         list(, $slen) = unpack('C', $this->rawread(1));
@@ -375,10 +375,10 @@ class AMQPReader extends AbstractClient
      * a plain PHP string.
      * @return string
      */
-    public function read_longstr()
+    public function readLongstr()
     {
         $this->resetCounters();
-        $slen = $this->read_php_int();
+        $slen = $this->readPhpInt();
 
         if ($slen < 0) {
             throw new AMQPOutOfBoundsException('Strings longer than supported on this platform');
@@ -392,9 +392,9 @@ class AMQPReader extends AbstractClient
      * seconds since the Unix epoch in 1-second resolution.
      * @return int|string
      */
-    public function read_timestamp()
+    public function readTimestamp()
     {
-        return $this->read_longlong();
+        return $this->readLonglong();
     }
 
     /**
@@ -404,10 +404,10 @@ class AMQPReader extends AbstractClient
      * @param bool $returnObject Whether to return AMQPArray instance instead of plain array
      * @return array|AMQPTable
      */
-    public function read_table($returnObject = false)
+    public function readTable($returnObject = false)
     {
         $this->resetCounters();
-        $tlen = $this->read_php_int();
+        $tlen = $this->readPhpInt();
 
         if ($tlen < 0) {
             throw new AMQPOutOfBoundsException('Table is longer than supported');
@@ -417,9 +417,9 @@ class AMQPReader extends AbstractClient
         $result = $returnObject ? new AMQPTable() : array();
 
         while ($table_data->tell() < $tlen) {
-            $name = $table_data->read_shortstr();
+            $name = $table_data->readShortstr();
             $ftype = AMQPAbstractCollection::getDataTypeForSymbol($ftypeSym = $table_data->rawread(1));
-            $val = $table_data->read_value($ftype, $returnObject);
+            $val = $table_data->readValue($ftype, $returnObject);
             $returnObject ? $result->set($name, $val, $ftype) : $result[$name] = array($ftypeSym, $val);
         }
 
@@ -429,9 +429,9 @@ class AMQPReader extends AbstractClient
     /**
      * @return array|AMQPTable
      */
-    public function read_table_object()
+    public function readTableObject()
     {
-        return $this->read_table(true);
+        return $this->readTable(true);
     }
 
     /**
@@ -440,12 +440,12 @@ class AMQPReader extends AbstractClient
      * @param bool $returnObject Whether to return AMQPArray instance instead of plain array
      * @return array|AMQPArray
      */
-    public function read_array($returnObject = false)
+    public function readArray($returnObject = false)
     {
         $this->resetCounters();
 
         // Determine array length and its end position
-        $arrayLength = $this->read_php_int();
+        $arrayLength = $this->readPhpInt();
         $endOffset = $this->offset + $arrayLength;
 
         $result = $returnObject ? new AMQPArray() : array();
@@ -453,7 +453,7 @@ class AMQPReader extends AbstractClient
         // Read values until we reach the end of the array
         while ($this->offset < $endOffset) {
             $fieldType = AMQPAbstractCollection::getDataTypeForSymbol($this->rawread(1));
-            $fieldValue = $this->read_value($fieldType, $returnObject);
+            $fieldValue = $this->readValue($fieldType, $returnObject);
             $returnObject ? $result->push($fieldValue, $fieldType) : $result[] = $fieldValue;
         }
 
@@ -463,9 +463,9 @@ class AMQPReader extends AbstractClient
     /**
      * @return array|AMQPArray
      */
-    public function read_array_object()
+    public function readArrayObject()
     {
-        return $this->read_array(true);
+        return $this->readArray(true);
     }
 
     /**
@@ -476,7 +476,7 @@ class AMQPReader extends AbstractClient
      * @return mixed
      * @throws \PhpAmqpLib\Exception\AMQPDataReadException
      */
-    public function read_value($fieldType, $collectionsAsObjects = false)
+    public function readValue($fieldType, $collectionsAsObjects = false)
     {
         $this->resetCounters();
 
@@ -484,50 +484,50 @@ class AMQPReader extends AbstractClient
             case AMQPAbstractCollection::T_INT_SHORTSHORT:
                 //according to AMQP091 spec, 'b' is not bit, it is short-short-int, also valid for rabbit/qpid
                 //$val=$this->read_bit();
-                $val = $this->read_signed_octet();
+                $val = $this->readSignedOctet();
                 break;
             case AMQPAbstractCollection::T_INT_SHORTSHORT_U:
             case AMQPAbstractCollection::T_BOOL:
-                $val = $this->read_octet();
+                $val = $this->readOctet();
                 break;
             case AMQPAbstractCollection::T_INT_SHORT:
-                $val = $this->read_signed_short();
+                $val = $this->readSignedShort();
                 break;
             case AMQPAbstractCollection::T_INT_SHORT_U:
-                $val = $this->read_short();
+                $val = $this->readShort();
                 break;
             case AMQPAbstractCollection::T_INT_LONG:
-                $val = $this->read_signed_long();
+                $val = $this->readSignedLong();
                 break;
             case AMQPAbstractCollection::T_INT_LONG_U:
-                $val = $this->read_long();
+                $val = $this->readLong();
                 break;
             case AMQPAbstractCollection::T_INT_LONGLONG:
-                $val = $this->read_signed_longlong();
+                $val = $this->readSignedLonglong();
                 break;
             case AMQPAbstractCollection::T_INT_LONGLONG_U:
-                $val = $this->read_longlong();
+                $val = $this->readLonglong();
                 break;
             case AMQPAbstractCollection::T_DECIMAL:
-                $e = $this->read_octet();
-                $n = $this->read_signed_long();
+                $e = $this->readOctet();
+                $n = $this->readSignedLong();
                 $val = new AMQPDecimal($n, $e);
                 break;
             case AMQPAbstractCollection::T_TIMESTAMP:
                 $val = $this->read_timestamp();
                 break;
             case AMQPAbstractCollection::T_STRING_SHORT:
-                $val = $this->read_shortstr();
+                $val = $this->readShortstr();
                 break;
             case AMQPAbstractCollection::T_STRING_LONG:
             case AMQPAbstractCollection::T_BYTES:
-                $val = $this->read_longstr();
+                $val = $this->readLongstr();
                 break;
             case AMQPAbstractCollection::T_ARRAY:
-                $val = $this->read_array($collectionsAsObjects);
+                $val = $this->readArray($collectionsAsObjects);
                 break;
             case AMQPAbstractCollection::T_TABLE:
-                $val = $this->read_table($collectionsAsObjects);
+                $val = $this->readTable($collectionsAsObjects);
                 break;
             case AMQPAbstractCollection::T_VOID:
                 $val = null;

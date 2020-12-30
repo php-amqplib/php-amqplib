@@ -26,15 +26,15 @@ class FileTransferTest extends TestCase
     {
         $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
-        $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
-        list($this->queueName, ,) = $this->channel->queue_declare();
-        $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
+        $this->channel->exchangeDeclare($this->exchangeName, 'direct', false, false, false);
+        list($this->queueName, ,) = $this->channel->queueDeclare();
+        $this->channel->queueBind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
     public function tearDown()
     {
         if ($this->channel) {
-            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->exchangeDelete($this->exchangeName);
             $this->channel->close();
             $this->channel = null;
         }
@@ -47,15 +47,15 @@ class FileTransferTest extends TestCase
     /**
      * @test
      */
-    public function send_file()
+    public function sendFile()
     {
         $this->messageBody = $this->generateRandomBytes(1024 * 1024);
 
         $msg = new AMQPMessage($this->messageBody, ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]);
 
-        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName);
+        $this->channel->basicPublish($msg, $this->exchangeName, $this->queueName);
 
-        $this->channel->basic_consume(
+        $this->channel->basicConsume(
             $this->queueName,
             '',
             false,
@@ -73,8 +73,8 @@ class FileTransferTest extends TestCase
     public function processMessage($msg)
     {
         $delivery_info = $msg->delivery_info;
-        $delivery_info['channel']->basic_ack($delivery_info['delivery_tag']);
-        $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
+        $delivery_info['channel']->basicAck($delivery_info['delivery_tag']);
+        $delivery_info['channel']->basicCancel($delivery_info['consumer_tag']);
 
         $this->assertEquals($this->messageBody, $msg->body);
     }

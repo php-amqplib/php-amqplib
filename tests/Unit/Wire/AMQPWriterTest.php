@@ -27,9 +27,9 @@ class AMQPWriterTest extends TestCase
     /**
      * @test
      */
-    public function write_array()
+    public function writeArray()
     {
-        $this->writer->write_array([
+        $this->writer->writeArray([
             'rabbit@localhost',
             'hare@localhost',
             42,
@@ -45,9 +45,9 @@ class AMQPWriterTest extends TestCase
     /**
      * @test
      */
-    public function write_AMQP_array()
+    public function writeAmqpArray()
     {
-        $this->writer->write_array(
+        $this->writer->writeArray(
             new AMQPArray([
                     'rabbit@localhost',
                     'hare@localhost',
@@ -65,9 +65,9 @@ class AMQPWriterTest extends TestCase
     /**
      * @test
      */
-    public function write_table()
+    public function writeTable()
     {
-        $this->writer->write_table([
+        $this->writer->writeTable([
             'x-foo' => ['S', 'bar'],
             'x-bar' => ['A', ['baz', 'qux']],
             'x-baz' => ['I', 42],
@@ -89,7 +89,7 @@ class AMQPWriterTest extends TestCase
     /**
      * @test
      */
-    public function write_AMQP_table()
+    public function writeAmqpTable()
     {
         $t = new AMQPTable();
         $t->set('x-foo', 'bar', AMQPTable::T_STRING_LONG);
@@ -102,7 +102,7 @@ class AMQPWriterTest extends TestCase
         $t->set('x-short', -1024, AMQPTable::T_INT_SHORT);
         $t->set('x-short-u', 125, AMQPTable::T_INT_SHORT_U);
         $t->set('x-short-str', 'foo', AMQPTable::T_STRING_SHORT);
-        $this->writer->write_table($t);
+        $this->writer->writeTable($t);
 
         $this->assertEquals(
             "\x00\x00\x00\x90\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
@@ -115,9 +115,9 @@ class AMQPWriterTest extends TestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
-    public function write_table_with_invalid_type()
+    public function writeTableWithInvalidType()
     {
-        $this->writer->write_table([
+        $this->writer->writeTable([
             'x-foo' => ['_', 'bar'],
         ]);
     }

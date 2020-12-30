@@ -27,7 +27,7 @@ class Bug458Test extends TestCase
 
     protected function tearDown()
     {
-        if ($this->channel && $this->channel->is_open()) {
+        if ($this->channel && $this->channel->isOpen()) {
             $this->channel->close();
         }
         $this->channel = null;
@@ -40,7 +40,7 @@ class Bug458Test extends TestCase
      *
      * @expectedException \PhpAmqpLib\Exception\AMQPTimeoutException
      */
-    public function stream_select_interruption()
+    public function streamSelectInterruption()
     {
         $pid = getmypid();
         exec('php -r "sleep(1);posix_kill(' . $pid . ', SIGTERM);" > /dev/null 2>/dev/null &');

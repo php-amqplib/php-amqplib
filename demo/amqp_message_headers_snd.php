@@ -11,7 +11,7 @@ $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
 $exchangeName = 'topic_headers_test';
-$channel->exchange_declare($exchangeName, AMQPExchangeType::HEADERS);
+$channel->exchangeDeclare($exchangeName, AMQPExchangeType::HEADERS);
 
 $data = implode(' ', array_slice($argv, 2));
 if (empty($data)) {
@@ -63,7 +63,7 @@ var_dump($headers->getNativeData());
 echo PHP_EOL;
 
 $message->set('application_headers', $headers);
-$channel->basic_publish($message, $exchangeName);
+$channel->basicPublish($message, $exchangeName);
 
 echo ' [x] Sent :', $data, PHP_EOL;
 

@@ -24,7 +24,7 @@ class StreamIO extends AbstractIO
     /**
      * @param string $host
      * @param int $port
-     * @param float $connection_timeout
+     * @param float $connectionTimeout
      * @param float $read_write_timeout
      * @param null $context
      * @param bool $keepalive
@@ -34,7 +34,7 @@ class StreamIO extends AbstractIO
     public function __construct(
         $host,
         $port,
-        $connection_timeout,
+        $connectionTimeout,
         $read_write_timeout,
         $context = null,
         $keepalive = false,
@@ -53,7 +53,7 @@ class StreamIO extends AbstractIO
         $this->protocol = 'tcp';
         $this->host = $host;
         $this->port = $port;
-        $this->connection_timeout = $connection_timeout;
+        $this->connection_timeout = $connectionTimeout;
         $this->read_timeout = $read_write_timeout;
         $this->write_timeout = $read_write_timeout;
         $this->context = $context;
@@ -95,7 +95,7 @@ class StreamIO extends AbstractIO
             $this->port
         );
 
-        $this->set_error_handler();
+        $this->setErrorHandler();
 
         try {
             $this->sock = stream_socket_client(
@@ -106,7 +106,7 @@ class StreamIO extends AbstractIO
                 STREAM_CLIENT_CONNECT,
                 $this->context
             );
-            $this->cleanup_error_handler();
+            $this->cleanupErrorHandler();
         } catch (\ErrorException $e) {
             throw new AMQPIOException($e->getMessage());
         }
@@ -148,7 +148,7 @@ class StreamIO extends AbstractIO
         }
 
         if ($this->keepalive) {
-            $this->enable_keepalive();
+            $this->enableKeepalive();
         }
         $this->heartbeat = $this->initial_heartbeat;
     }
@@ -158,7 +158,7 @@ class StreamIO extends AbstractIO
      */
     public function read($len)
     {
-        $this->check_heartbeat();
+        $this->checkHeartbeat();
 
         list($timeout_sec, $timeout_uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
 
@@ -172,10 +172,10 @@ class StreamIO extends AbstractIO
                 throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
-            $this->set_error_handler();
+            $this->setErrorHandler();
             try {
                 $buffer = fread($this->sock, ($len - $read));
-                $this->cleanup_error_handler();
+                $this->cleanupErrorHandler();
             } catch (\ErrorException $e) {
                 throw new AMQPDataReadException($e->getMessage(), $e->getCode(), $e);
             }
@@ -235,7 +235,7 @@ class StreamIO extends AbstractIO
             }
 
             $result = false;
-            $this->set_error_handler();
+            $this->setErrorHandler();
             // OpenSSL's C library function SSL_write() can balk on buffers > 8192
             // bytes in length, so we're limiting the write size here. On both TLS
             // and plaintext connections, the write loop will continue until the
@@ -245,10 +245,10 @@ class StreamIO extends AbstractIO
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
                 // check stream and prevent from high CPU usage
-                $this->select_write();
+                $this->selectWrite();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = fwrite($this->sock, $buffer);
-                $this->cleanup_error_handler();
+                $this->cleanupErrorHandler();
             } catch (\ErrorException $e) {
                 $code = $this->last_error['errno'];
                 $constants = SocketConstants::getInstance();
@@ -272,7 +272,7 @@ class StreamIO extends AbstractIO
                 throw new AMQPRuntimeException('Error sending data');
             }
 
-            if ($this->timed_out()) {
+            if ($this->timedOut()) {
                 throw AMQPTimeoutException::writeTimeout($this->write_timeout);
             }
 
@@ -295,9 +295,9 @@ class StreamIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext = null)
     {
-        $code = $this->extract_error_code($errstr);
+        $code = $this->extractErrorCode($errstr);
         $constants = SocketConstants::getInstance();
         switch ($code) {
             // fwrite notice that the stream isn't ready - EAGAIN or EWOULDBLOCK
@@ -308,7 +308,7 @@ class StreamIO extends AbstractIO
                 return;
         }
 
-        parent::error_handler($code > 0 ? $code : $errno, $errstr, $errfile, $errline, $errcontext);
+        parent::errorHandler($code > 0 ? $code : $errno, $errstr, $errfile, $errline, $errcontext);
     }
 
     public function close()
@@ -333,7 +333,7 @@ class StreamIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    protected function do_select($sec, $usec)
+    protected function doSelect($sec, $usec)
     {
         $read = array($this->sock);
         $write = null;
@@ -345,7 +345,7 @@ class StreamIO extends AbstractIO
     /**
      * @return int|bool
      */
-    protected function select_write()
+    protected function selectWrite()
     {
         $read = $except = null;
         $write = array($this->sock);
@@ -356,7 +356,7 @@ class StreamIO extends AbstractIO
     /**
      * @return mixed
      */
-    protected function timed_out()
+    protected function timedOut()
     {
         // get status of socket to determine whether or not it has timed out
         $info = stream_get_meta_data($this->sock);
@@ -367,7 +367,7 @@ class StreamIO extends AbstractIO
     /**
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      */
-    protected function enable_keepalive()
+    protected function enableKeepalive()
     {
         if ($this->protocol === 'ssl') {
             throw new AMQPIOException('Can not enable keepalive: ssl connection does not support keepalive (#70939)');
@@ -393,7 +393,7 @@ class StreamIO extends AbstractIO
      * @param string $message
      * @return int
      */
-    protected function extract_error_code($message)
+    protected function extractErrorCode($message)
     {
         if (0 === strpos($message, 'stream_select():')) {
             $pattern = '/\s+\[(\d+)\]:\s+/';

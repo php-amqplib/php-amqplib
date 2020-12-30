@@ -21,13 +21,13 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
      * @covers \PhpAmqpLib\Wire\IO\SocketIO::write()
      * @param string $type
      */
-    public function must_throw_exception_on_completely_blocked_connection($type)
+    public function mustThrowExceptionOnCompletelyBlockedConnection($type)
     {
         self::$blocked = false;
-        $connection = $this->conection_create($type);
+        $connection = $this->conectionCreate($type);
         $channel = $connection->channel();
-        $this->assertTrue($channel->is_open());
-        $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
+        $this->assertTrue($channel->isOpen());
+        $this->queueBind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
 
         self::$blocked = true;
         $message = new AMQPMessage(
@@ -37,7 +37,7 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
 
         $exception = null;
         try {
-            $channel->basic_publish($message, $exchange_name, $queue_name);
+            $channel->basicPublish($message, $exchange_name, $queue_name);
         } catch (\Exception $exception) {
         }
 
@@ -47,7 +47,7 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
         $this->assertInstanceOf(Exception\AMQPTimeoutException::class, $exception);
         $this->assertEquals(1, $exception->getTimeout());
 
-        $this->assertTrue($channel->is_open());
+        $this->assertTrue($channel->isOpen());
         $this->assertTrue($connection->isConnected());
     }
 
@@ -58,14 +58,14 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
      * @covers \PhpAmqpLib\Connection\AbstractConnection::connect()
      * @param string $type
      */
-    public function must_throw_timeout_exception_on_missing_connect_response($type)
+    public function mustThrowTimeoutExceptionOnMissingConnectResponse($type)
     {
-        $proxy = $this->create_proxy();
+        $proxy = $this->createProxy();
         $proxy->mode('timeout', ['timeout' => 0], 'downstream');
         $connection = null;
         $exception = null;
         try {
-            $connection = $this->conection_create(
+            $connection = $this->conectionCreate(
                 $type,
                 $proxy->getHost(),
                 $proxy->getPort(),

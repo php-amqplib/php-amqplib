@@ -7,11 +7,11 @@ class ChannelConsumeTest extends ChannelTestCase
     /**
      * @test
      */
-    public function basic_consume_same_tag_thros_exception()
+    public function basicConsumeSameTagThrosException()
     {
         $this->expectException(\InvalidArgumentException::class);
-        list($queue, ,) = $this->channel->queue_declare();
-        $consumerTag = $this->channel->basic_consume($queue, '');
-        $this->channel->basic_consume($queue, $consumerTag);
+        list($queue, ,) = $this->channel->queueDeclare();
+        $consumerTag = $this->channel->basicConsume($queue, '');
+        $this->channel->basicConsume($queue, $consumerTag);
     }
 }

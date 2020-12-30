@@ -31,17 +31,17 @@ class Bug40Test extends TestCase
         $this->channel = $this->connection->channel();
         $this->channel2 = $this->connection->channel();
 
-        $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
-        list($this->queueName1, ,) = $this->channel->queue_declare();
-        list($this->queueName2, ,) = $this->channel->queue_declare();
-        $this->channel->queue_bind($this->queueName1, $this->exchangeName, $this->queueName1);
-        $this->channel->queue_bind($this->queueName2, $this->exchangeName, $this->queueName2);
+        $this->channel->exchangeDeclare($this->exchangeName, 'direct', false, false, false);
+        list($this->queueName1, ,) = $this->channel->queueDeclare();
+        list($this->queueName2, ,) = $this->channel->queueDeclare();
+        $this->channel->queueBind($this->queueName1, $this->exchangeName, $this->queueName1);
+        $this->channel->queueBind($this->queueName2, $this->exchangeName, $this->queueName2);
     }
 
     public function tearDown()
     {
         if ($this->channel) {
-            $this->channel->exchange_delete($this->exchangeName);
+            $this->channel->exchangeDelete($this->exchangeName);
             $this->channel->close();
             $this->channel = null;
         }
@@ -58,14 +58,14 @@ class Bug40Test extends TestCase
     /**
      * @test
      */
-    public function frame_order()
+    public function frameOrder()
     {
         $msg = new AMQPMessage('test message');
-        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName1);
-        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName1);
-        $this->channel->basic_publish($msg, $this->exchangeName, $this->queueName2);
+        $this->channel->basicPublish($msg, $this->exchangeName, $this->queueName1);
+        $this->channel->basicPublish($msg, $this->exchangeName, $this->queueName1);
+        $this->channel->basicPublish($msg, $this->exchangeName, $this->queueName2);
 
-        $this->channel->basic_consume(
+        $this->channel->basicConsume(
             $this->queueName1,
             '',
             false,
@@ -75,7 +75,7 @@ class Bug40Test extends TestCase
             [$this, 'processMessage1']
         );
 
-        while ($this->channel->is_consuming()) {
+        while ($this->channel->isConsuming()) {
             $this->channel->wait();
         }
     }
@@ -85,7 +85,7 @@ class Bug40Test extends TestCase
         $this->queue1Messages++;
 
         if ($this->queue1Messages === 1) {
-            $this->channel2->basic_consume(
+            $this->channel2->basicConsume(
                 $this->queueName2,
                 '',
                 false,
@@ -96,20 +96,20 @@ class Bug40Test extends TestCase
             );
         }
 
-        while ($this->channel2->is_consuming()) {
+        while ($this->channel2->isConsuming()) {
             $this->channel2->wait();
         }
 
         if ($this->queue1Messages === 2) {
             $delivery_info = $msg->delivery_info;
-            $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
+            $delivery_info['channel']->basicCancel($delivery_info['consumer_tag']);
         }
     }
 
     public function processMessage2($msg)
     {
         $delivery_info = $msg->delivery_info;
-        $delivery_info['channel']->basic_cancel($delivery_info['consumer_tag']);
+        $delivery_info['channel']->basicCancel($delivery_info['consumer_tag']);
         $this->assertLessThan(2, $this->queue1Messages);
     }
 }

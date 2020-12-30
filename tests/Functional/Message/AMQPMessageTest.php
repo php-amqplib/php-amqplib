@@ -14,13 +14,13 @@ class AMQPMessageTest extends ChannelTestCase
     /**
      * @test
      */
-    public function double_ack_throws_exception()
+    public function doubleAckThrowsException()
     {
         $sent = new AMQPMessage('test' . mt_rand());
-        list($queue) = $this->channel->queue_declare();
-        $this->channel->basic_publish($sent, '', $queue);
+        list($queue) = $this->channel->queueDeclare();
+        $this->channel->basicPublish($sent, '', $queue);
 
-        $received = $this->channel->basic_get($queue);
+        $received = $this->channel->basicGet($queue);
 
         self::assertSame($sent->getBody(), $received->getBody());
         self::assertNotEmpty($received->getDeliveryTag());
@@ -41,26 +41,26 @@ class AMQPMessageTest extends ChannelTestCase
     /**
      * @test
      */
-    public function publish_confirm_mode()
+    public function publishConfirmMode()
     {
         $message = new AMQPMessage('test' . mt_rand());
         $confirmed = null;
-        list($queue) = $this->channel->queue_declare();
-        $this->channel->set_ack_handler(
+        list($queue) = $this->channel->queueDeclare();
+        $this->channel->setAckHandler(
             function (AMQPMessage $message) use (&$confirmed) {
                 $confirmed = $message;
             }
         );
 
-        $this->channel->confirm_select();
-        $this->channel->basic_publish($message, '', $queue);
+        $this->channel->confirmSelect();
+        $this->channel->basicPublish($message, '', $queue);
 
         self::assertGreaterThan(0, $message->getDeliveryTag());
         self::assertEquals('', $message->getExchange());
         self::assertEquals($queue, $message->getRoutingKey());
         self::assertFalse($message->isRedelivered());
 
-        $this->channel->wait_for_pending_acks(3);
+        $this->channel->waitForPendingAcks(3);
 
         self::assertSame($message, $confirmed);
     }

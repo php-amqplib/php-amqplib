@@ -10,7 +10,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function encode_080()
+    public function encode080()
     {
         $this->setProtoVersion(Wire\Constants080::VERSION);
 
@@ -106,7 +106,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function encode_091()
+    public function encode091()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
 
@@ -195,7 +195,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function encode_rabbit()
+    public function encodeRabbit()
     {
         $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
 
@@ -285,7 +285,7 @@ class AMQPCollectionTest extends TestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPOutOfBoundsException
      */
-    public function encode_unknown_data_type()
+    public function encodeUnknownDataType()
     {
         $a = new Wire\AMQPArray(array(new \stdClass()));
     }
@@ -294,7 +294,7 @@ class AMQPCollectionTest extends TestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
-    public function push_unsupported_data_type_080()
+    public function pushUnsupportedDataType080()
     {
         $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPArray();
@@ -306,7 +306,7 @@ class AMQPCollectionTest extends TestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
-    public function push_unsupported_data_type_091()
+    public function pushUnsupportedDataType091()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPArray();
@@ -318,7 +318,7 @@ class AMQPCollectionTest extends TestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
-    public function push_unsupported_data_type_rabbit()
+    public function pushUnsupportedDataTypeRabbit()
     {
         $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
         $a = new Wire\AMQPArray();
@@ -329,7 +329,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function push_with_type()
+    public function pushWithType()
     {
         $a = new Wire\AMQPArray();
 
@@ -374,7 +374,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function conflicting_field_symbols()
+    public function conflictingFieldSymbols()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
 
@@ -422,7 +422,7 @@ class AMQPCollectionTest extends TestCase
      * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @expectedExceptionMessage Table key must be non-empty string up to 128 chars in length
      */
-    public function set_empty_key()
+    public function setEmptyKey()
     {
         $t = new Wire\AMQPTable();
 
@@ -445,7 +445,7 @@ class AMQPCollectionTest extends TestCase
      * @test
      * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      */
-    public function push_mismatched_type()
+    public function pushMismatchedType()
     {
         $a = new Wire\AMQPArray();
 
@@ -457,7 +457,7 @@ class AMQPCollectionTest extends TestCase
      * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @expectedExceptionMessage Arrays must be passed as AMQPArray instance
      */
-    public function push_raw_array_with_type()
+    public function pushRawArrayWithType()
     {
         $a = new Wire\AMQPArray();
 
@@ -469,7 +469,7 @@ class AMQPCollectionTest extends TestCase
      * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @expectedExceptionMessage Tables must be passed as AMQPTable instance
      */
-    public function push_raw_table_with_type()
+    public function pushRawTableWithType()
     {
         $a = new Wire\AMQPArray();
 
@@ -481,7 +481,7 @@ class AMQPCollectionTest extends TestCase
      * @expectedException \PhpAmqpLib\Exception\AMQPInvalidArgumentException
      * @expectedExceptionMessage Decimal values must be instance of AMQPDecimal
      */
-    public function push_float_with_decimal_type()
+    public function pushFloatWithDecimalType()
     {
         $a = new Wire\AMQPArray();
 
@@ -491,7 +491,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function array_round_trip_080()
+    public function arrayRoundTrip080()
     {
         $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPArray($this->getTestDataSrc());
@@ -502,7 +502,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function array_round_trip_091()
+    public function arrayRoundTrip091()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPArray($this->getTestDataSrc());
@@ -513,7 +513,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function array_round_trip_rabbit()
+    public function arrayRoundTripRabbit()
     {
         $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
         $a = new Wire\AMQPArray($this->getTestDataSrc());
@@ -524,7 +524,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function table_round_trip_080()
+    public function tableRoundTrip080()
     {
         $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPTable($this->getTestDataSrc());
@@ -535,7 +535,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function table_round_trip_091()
+    public function tableRoundTrip091()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPTable($this->getTestDataSrc());
@@ -546,7 +546,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function table_round_trip_rabbit()
+    public function tableRoundTripRabbit()
     {
         $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
         $a = new Wire\AMQPTable($this->getTestDataSrc());
@@ -616,7 +616,7 @@ class AMQPCollectionTest extends TestCase
     /**
      * @test
      */
-    public function work_with_table_as_array()
+    public function workWithTableAsArray()
     {
         $a = new Wire\AMQPTable();
         $a['test'] = 'value';

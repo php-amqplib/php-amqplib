@@ -17,18 +17,18 @@ class AMQPProtocolException extends \Exception implements AMQPExceptionInterface
     public $args;
 
     /**
-     * @param int $reply_code
-     * @param string $reply_text
-     * @param int[] $method_sig
+     * @param int $replyCode
+     * @param string $replyText
+     * @param int[] $methodSig
      */
-    public function __construct($reply_code, $reply_text, $method_sig)
+    public function __construct($replyCode, $replyText, $methodSig)
     {
-        parent::__construct($reply_text, $reply_code);
+        parent::__construct($replyText, $replyCode);
 
-        $this->amqp_reply_code = $reply_code; // redundant, but kept for BC
-        $this->amqp_reply_text = $reply_text; // redundant, but kept for BC
-        $this->amqp_method_sig = $method_sig;
+        $this->amqp_reply_code = $replyCode; // redundant, but kept for BC
+        $this->amqp_reply_text = $replyText; // redundant, but kept for BC
+        $this->amqp_method_sig = $methodSig;
 
-        $this->args = array($reply_code, $reply_text, $method_sig);
+        $this->args = array($replyCode, $replyText, $methodSig);
     }
 }

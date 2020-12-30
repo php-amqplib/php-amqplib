@@ -36,7 +36,7 @@ class BufferIO extends AbstractIO
     /**
      * @inheritDoc
      */
-    protected function do_select($sec, $usec)
+    protected function doSelect($sec, $usec)
     {
         return !feof($this->buffer);
     }

@@ -20,12 +20,12 @@ $ssl_options = array(
     After reaching the end of the array, it will throw the last connection exception.
     Options will be mapped to constructor arguments for used connection type.
 */
-$connection = AMQPStreamConnection::create_connection([
+$connection = AMQPStreamConnection::createConnection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
 ],
-[
+                                                     [
     'insist' => false,
     'login_method' => 'AMQPLAIN',
     'login_response' => null,
@@ -39,20 +39,20 @@ $connection = AMQPStreamConnection::create_connection([
 
 
 // Use empty options array for defaults
-$connection = AMQPStreamConnection::create_connection([
+$connection = AMQPStreamConnection::createConnection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
 ],
-[]);
+                                                     []);
 
 // Options keys are different for different connection types
-$connection = AMQPSocketConnection::create_connection([
+$connection = AMQPSocketConnection::createConnection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
 ],
-[
+                                                     [
     'insist' => false,
     'login_method' => 'AMQPLAIN',
     'login_response' => null,
@@ -64,7 +64,7 @@ $connection = AMQPSocketConnection::create_connection([
 ]);
 
 // Use empty options array for defaults
-$connection = AMQPSocketConnection::create_connection([
+$connection = AMQPSocketConnection::createConnection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
@@ -74,12 +74,12 @@ $connection = AMQPSocketConnection::create_connection([
 /*
     For SSL connections you should set 'ssl_options' in the options array
 */
-$ssl_connection = AMQPSSLConnection::create_connection([
+$ssl_connection = AMQPSSLConnection::createConnection([
     ['host' => HOST, 'port' => PORT, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5673, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
     ['host' => HOST, 'port' => 5674, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
 ],
-[
+                                                      [
     'ssl_options' => $ssl_options
 ]);
 

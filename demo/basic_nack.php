@@ -18,9 +18,9 @@ $consumerTag = 'consumer';
 $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
-$channel->queue_declare($queue, false, true, false, false);
-$channel->exchange_declare($exchange, AMQPExchangeType::DIRECT, false, true, false);
-$channel->queue_bind($queue, $exchange);
+$channel->queueDeclare($queue, false, true, false, false);
+$channel->exchangeDeclare($exchange, AMQPExchangeType::DIRECT, false, true, false);
+$channel->queueBind($queue, $exchange);
 
 /**
  * @param \PhpAmqpLib\Message\AMQPMessage $message
@@ -35,11 +35,11 @@ function process_message($message)
 
     // Send a message with the string "quit" to cancel the consumer.
     if ($message->body === 'quit') {
-        $message->getChannel()->basic_cancel($message->getConsumerTag());
+        $message->getChannel()->basicCancel($message->getConsumerTag());
     }
 }
 
-$channel->basic_consume($queue, $consumerTag, false, false, false, false, 'process_message');
+$channel->basicConsume($queue, $consumerTag, false, false, false, false, 'process_message');
 
 /**
  * @param \PhpAmqpLib\Channel\AMQPChannel $channel
@@ -54,6 +54,6 @@ function shutdown($channel, $connection)
 register_shutdown_function('shutdown', $channel, $connection);
 
 // Loop as long as the channel has callbacks registered
-while ($channel->is_consuming()) {
+while ($channel->isConsuming()) {
     $channel->wait();
 }

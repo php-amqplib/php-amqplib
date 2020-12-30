@@ -26,7 +26,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
 
     protected function setUp()
     {
-        $this->connection = $this->conection_create(
+        $this->connection = $this->conectionCreate(
             'stream',
             HOST,
             PORT,
@@ -54,7 +54,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     /**
      * @test
      */
-    public function register_should_fail_with_closed_connection()
+    public function registerShouldFailWithClosedConnection()
     {
         $this->expectException(AMQPRuntimeException::class);
         $this->expectExceptionMessage('Unable to register heartbeat sender, connection is not active');
@@ -66,7 +66,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     /**
      * @test
      */
-    public function register_should_fail_after_unregister()
+    public function registerShouldFailAfterUnregister()
     {
         $this->expectException(AMQPRuntimeException::class);
         $this->expectExceptionMessage('Unable to re-register heartbeat sender');
@@ -78,7 +78,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     /**
      * @test
      */
-    public function unregister_should_return_default_signal_handler()
+    public function unregisterShouldReturnDefaultSignalHandler()
     {
         $this->sender->register();
         $this->sender->unregister();
@@ -89,7 +89,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     /**
      * @test
      */
-    public function heartbeat_should_interrupt_non_blocking_action()
+    public function heartbeatShouldInterruptNonBlockingAction()
     {
         $this->sender->register();
 

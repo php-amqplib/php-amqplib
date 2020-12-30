@@ -10,21 +10,21 @@ class TestChannel extends AMQPChannel
 {
     /**
      * @param AbstractConnection $connection
-     * @param int|null $channel_id
-     * @param bool $auto_decode
-     * @param int|float $channel_rpc_timeout
+     * @param int|null           $channelId
+     * @param bool               $autoDecode
+     * @param int|float          $channelRpcTimeout
      */
-    public function __construct($connection, $channel_id = null, $auto_decode = true, $channel_rpc_timeout = 0)
+    public function __construct($connection, $channelId = null, $autoDecode = true, $channelRpcTimeout = 0)
     {
-        if ($channel_id === null) {
-            $channel_id = $connection->get_free_channel_id();
+        if ($channelId === null) {
+            $channelId = $connection->getFreeChannelId();
         }
 
-        AbstractChannel::__construct($connection, $channel_id);
+        AbstractChannel::__construct($connection, $channelId);
 
-        $this->debug->debug_msg('using channel_id: ' . $channel_id);
+        $this->debug->debugMsg('using channel_id: ' . $channelId);
 
-        $this->auto_decode = $auto_decode;
-        $this->channel_rpc_timeout = $channel_rpc_timeout;
+        $this->autoDecode = $autoDecode;
+        $this->channelRpcTimeout = $channelRpcTimeout;
     }
 }

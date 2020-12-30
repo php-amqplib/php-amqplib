@@ -19,9 +19,9 @@ $connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $channel = $connection->channel();
 
 $exchangeName = 'topic_headers_test';
-$channel->exchange_declare($exchangeName, AMQPExchangeType::HEADERS);
+$channel->exchangeDeclare($exchangeName, AMQPExchangeType::HEADERS);
 
-list($queueName, ,) = $channel->queue_declare('', false, false, true);
+list($queueName, ,) = $channel->queueDeclare('', false, false, true);
 
 $bindArguments = [];
 foreach ($headers as $header) {
@@ -29,7 +29,7 @@ foreach ($headers as $header) {
     $bindArguments[$key] = $value;
 }
 
-$channel->queue_bind($queueName, $exchangeName, '', false, new AMQPTable($bindArguments));
+$channel->queueBind($queueName, $exchangeName, '', false, new AMQPTable($bindArguments));
 
 echo ' [*] Waiting for logs. To exit press CTRL+C', "\n";
 
@@ -40,8 +40,8 @@ $callback = function (AMQPMessage $message) {
     echo PHP_EOL;
 };
 
-$channel->basic_consume($queueName, '', false, true, true, false, $callback);
-while ($channel->is_consuming()) {
+$channel->basicConsume($queueName, '', false, true, true, false, $callback);
+while ($channel->isConsuming()) {
     try {
         $channel->wait(null, false, 2);
     } catch (AMQPTimeoutException $exception) {

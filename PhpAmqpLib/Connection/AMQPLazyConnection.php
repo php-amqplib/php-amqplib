@@ -19,11 +19,11 @@ class AMQPLazyConnection extends AMQPStreamConnection
     /**
      * {@inheritdoc}
      */
-    public function channel($channel_id = null)
+    public function channel($channelId = null)
     {
         $this->connect();
 
-        return parent::channel($channel_id);
+        return parent::channel($channelId);
     }
 
     /**

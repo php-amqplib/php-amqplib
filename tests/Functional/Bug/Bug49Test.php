@@ -47,13 +47,13 @@ class Bug49Test extends TestCase
     public function declaration()
     {
         try {
-            $this->channel->queue_declare($queue = 'pretty.queue', true, true);
+            $this->channel->queueDeclare($queue = 'pretty.queue', true, true);
             $this->fail('Should have raised an exception');
         } catch (AMQPProtocolException $exception) {
             $this->assertInstanceOf(AMQPProtocolChannelException::class, $exception);
             $this->assertEquals(404, $exception->getCode());
         }
-        $this->channel2->queue_declare($queue, false, true, true, true);
-        $this->channel2->queue_delete($queue, false, false, true);
+        $this->channel2->queueDeclare($queue, false, true, true, true);
+        $this->channel2->queueDelete($queue, false, false, true);
     }
 }

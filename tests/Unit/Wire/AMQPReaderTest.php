@@ -32,7 +32,7 @@ class AMQPReaderTest extends TestCase
         ];
         $data = hex2bin('0000000f07736e6f776d616e78000000022603');
         $reader = new AMQPReader($data);
-        $parsed = $reader->read_table();
+        $parsed = $reader->readTable();
         $this->assertEquals($expected, $parsed);
     }
 
@@ -40,7 +40,7 @@ class AMQPReaderTest extends TestCase
     {
         $data = hex2bin('0000000080000000');
         $reader = new AMQPReader($data);
-        $parsed = $reader->read_signed_longlong();
+        $parsed = $reader->readSignedLonglong();
         if (PHP_INT_SIZE === 8) {
             $this->assertInternalType('integer', $parsed);
             $this->assertEquals(0x80000000, $parsed);
@@ -54,7 +54,7 @@ class AMQPReaderTest extends TestCase
     {
         $data = hex2bin(str_repeat('f', 16));
         $reader = new AMQPReader($data);
-        $parsed = $reader->read_longlong();
+        $parsed = $reader->readLonglong();
         $this->assertInternalType('string', $parsed);
         $this->assertEquals('18446744073709551615', $parsed);
     }

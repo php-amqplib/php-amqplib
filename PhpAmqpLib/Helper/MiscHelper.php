@@ -116,7 +116,7 @@ class MiscHelper
      * @param array $table
      * @return string
      */
-    public static function dump_table($table)
+    public static function dumpTable($table)
     {
         $tokens = array();
         foreach ($table as $name => $value) {
@@ -125,7 +125,7 @@ class MiscHelper
                     $val = $value[1]->n . 'E' . $value[1]->e;
                     break;
                 case 'F':
-                    $val = '(' . self::dump_table($value[1]) . ')';
+                    $val = '(' . self::dumpTable($value[1]) . ')';
                     break;
                 case 'T':
                     $val = date('Y-m-d H:i:s', $value[1]);

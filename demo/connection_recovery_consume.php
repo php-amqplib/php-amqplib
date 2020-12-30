@@ -20,12 +20,12 @@ const PORT3 = 5674;
 
 function connect() {
     // If you want a better load-balancing, you cann reshuffle the list.
-    return AMQPStreamConnection::create_connection([
+    return AMQPStreamConnection::createConnection([
         ['host' => HOST, 'port' => PORT1, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
         ['host' => HOST, 'port' => PORT2, 'user' => USER, 'password' => PASS, 'vhost' => VHOST],
         ['host' => HOST, 'port' => PORT3, 'user' => USER, 'password' => PASS, 'vhost' => VHOST]
     ],
-    [
+                                                  [
         'insist' => false,
         'login_method' => 'AMQPLAIN',
         'login_response' => null,
@@ -97,7 +97,7 @@ function process_message($message)
 
     // Send a message with the string "quit" to cancel the consumer.
     if ($message->body === 'quit') {
-        $message->getChannel()->basic_cancel($message->getConsumerTag());
+        $message->getChannel()->basicCancel($message->getConsumerTag());
     }
 }
 

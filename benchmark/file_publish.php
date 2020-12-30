@@ -40,9 +40,9 @@ $queue = 'file_queue';
 $conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
-$ch->queue_declare($queue, false, false, false, false);
-$ch->exchange_declare($exchange, 'direct', false, false, false);
-$ch->queue_bind($queue, $exchange);
+$ch->queueDeclare($queue, false, false, false, false);
+$ch->exchangeDeclare($exchange, 'direct', false, false, false);
+$ch->queueBind($queue, $exchange);
 
 $max = isset($argv[1]) ? (int) $argv[1] : 1;
 $msg_size = 1024 * 1024 * 5 + 1;
@@ -54,12 +54,12 @@ $time = microtime(true);
 
 // Publishes $max messages using $msg_body as the content.
 for ($i = 0; $i < $max; $i++) {
-    $ch->basic_publish($msg, $exchange);
+    $ch->basicPublish($msg, $exchange);
 }
 
 echo microtime(true) - $time, "\n";
 
-$ch->basic_publish(new AMQPMessage('quit'), $exchange);
+$ch->basicPublish(new AMQPMessage('quit'), $exchange);
 
 $ch->close();
 $conn->close();
