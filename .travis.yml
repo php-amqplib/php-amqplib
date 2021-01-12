@@ -35,7 +35,7 @@ before_script:
   - php tests/wait_broker.php
 
 script:
-  - vendor/bin/phpunit -d zend.enable_gc=0 --coverage-text --coverage-clover=coverage.clover
+  - vendor/bin/phpunit -d zend.enable_gc=0 -d xdebug.mode=coverage --coverage-text --coverage-clover=coverage.clover
 
 after_success: >
   if [[ $COVERAGE = true ]]; then
