@@ -1,6 +1,6 @@
 <?php
-namespace PhpAmqpLib\Wire;
 
+namespace PhpAmqpLib\Wire;
 
 class AMQPArray extends AMQPAbstractCollection
 {

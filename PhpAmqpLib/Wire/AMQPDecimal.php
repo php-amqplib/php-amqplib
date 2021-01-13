@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;

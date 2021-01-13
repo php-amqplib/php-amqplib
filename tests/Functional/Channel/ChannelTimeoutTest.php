@@ -1,4 +1,5 @@
 <?php
+
 namespace PhpAmqpLib\Tests\Functional\Channel;
 
 use PhpAmqpLib\Channel\AMQPChannel;
@@ -33,7 +34,7 @@ class ChannelTimeoutTest extends TestCase
         $channel_rpc_timeout = 3.5;
 
         list( $this->channel_rpc_timeout_seconds, $this->channel_rpc_timeout_microseconds ) =
-            MiscHelper::splitSecondsMicroseconds( $channel_rpc_timeout );
+            MiscHelper::splitSecondsMicroseconds($channel_rpc_timeout);
 
         $this->io = $this->getMockBuilder(StreamIO::class)
             ->setConstructorArgs(array(HOST, PORT, 3, 3, null, false, 0))

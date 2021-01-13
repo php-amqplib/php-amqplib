@@ -124,7 +124,7 @@ class AMQPWriterTest extends TestCase
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', '_protocol');
+        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', 'protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }
