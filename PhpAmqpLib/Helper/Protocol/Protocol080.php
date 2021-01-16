@@ -20,10 +20,15 @@ class Protocol080
     public function connectionStart(
         $version_major = 0,
         $version_minor = 8,
-        $server_properties,
+        $server_properties = null,
         $mechanisms = 'PLAIN',
         $locales = 'en_US'
     ) {
+        // Check $server_properties for null
+        if ($server_properties === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$server_properties' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_octet($version_major);
         $writer->write_octet($version_minor);
@@ -143,8 +148,15 @@ class Protocol080
      * @param int $method_id
      * @return array
      */
-    public function connectionClose($reply_code, $reply_text = '', $class_id, $method_id)
+    public function connectionClose($reply_code, $reply_text = '', $class_id = null, $method_id = null)
     {
+        // Check $class_id, $method_id properties for null
+        if ($class_id === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$class_id' is required, and can not be null.");
+        } elseif ($method_id === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$method_id' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
         $writer->write_shortstr($reply_text);
@@ -228,8 +240,15 @@ class Protocol080
      * @param int $method_id
      * @return array
      */
-    public function channelClose($reply_code, $reply_text = '', $class_id, $method_id)
+    public function channelClose($reply_code, $reply_text = '', $class_id = null, $method_id = null)
     {
+        // Check $class_id, $method_id properties for null
+        if ($class_id === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$class_id' is required, and can not be null.");
+        } elseif ($method_id === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$method_id' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
         $writer->write_shortstr($reply_text);
@@ -296,7 +315,7 @@ class Protocol080
      */
     public function exchangeDeclare(
         $ticket = 1,
-        $exchange,
+        $exchange = null,
         $type = 'direct',
         $passive = false,
         $durable = false,
@@ -305,6 +324,11 @@ class Protocol080
         $nowait = false,
         $arguments = array()
     ) {
+        // Check $sexchange for null
+        if ($exchange === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$exchange' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
         $writer->write_shortstr($exchange);
@@ -331,8 +355,13 @@ class Protocol080
      * @param bool $nowait
      * @return array
      */
-    public function exchangeDelete($ticket = 1, $exchange, $if_unused = false, $nowait = false)
+    public function exchangeDelete($ticket = 1, $exchange = null, $if_unused = false, $nowait = false)
     {
+        // Check $sexchange for null
+        if ($exchange === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$exchange' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
         $writer->write_shortstr($exchange);
@@ -404,11 +433,16 @@ class Protocol080
     public function queueBind(
         $ticket = 1,
         $queue = '',
-        $exchange,
+        $exchange = null,
         $routing_key = '',
         $nowait = false,
         $arguments = array()
     ) {
+        // Check $sexchange for null
+        if ($exchange === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$exchange' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
         $writer->write_shortstr($queue);
@@ -491,8 +525,13 @@ class Protocol080
      * @param array $arguments
      * @return array
      */
-    public function queueUnbind($ticket = 1, $queue = '', $exchange, $routing_key = '', $arguments = array())
+    public function queueUnbind($ticket = 1, $queue = '', $exchange = null, $routing_key = '', $arguments = array())
     {
+        // Check $exchange for null
+        if ($exchange === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$exchange' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
         $writer->write_shortstr($queue);
@@ -624,7 +663,7 @@ class Protocol080
      * @param string $routing_key
      * @return array
      */
-    public function basicReturn($reply_code, $reply_text = '', $exchange, $routing_key)
+    public function basicReturn($reply_code, $reply_text = '', $exchange = null, $routing_key = null)
     {
         $writer = new AMQPWriter();
         $writer->write_short($reply_code);
@@ -642,8 +681,15 @@ class Protocol080
      * @param string $routing_key
      * @return array
      */
-    public function basicDeliver($consumer_tag, $delivery_tag, $redelivered = false, $exchange, $routing_key)
+    public function basicDeliver($consumer_tag, $delivery_tag, $redelivered = false, $exchange = null, $routing_key = null)
     {
+        // Check $exchange, $routing_key for null
+        if ($exchange === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$exchange' is required, and can not be null.");
+        } elseif ($routing_key === null) { 
+            throw new \InvalidArgumentException(" The parameter '\$routing_key' is required, and can not be null.");
+        }
+
         $writer = new AMQPWriter();
         $writer->write_shortstr($consumer_tag);
         $writer->write_longlong($delivery_tag);
