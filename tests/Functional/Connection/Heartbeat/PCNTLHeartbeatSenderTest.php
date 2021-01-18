@@ -125,7 +125,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
         $sender = new PCNTLHeartbeatSender($connection);
         $sender->register();
 
-        $timeLeft = $this->heartbeatTimeout;
+        $timeLeft = $this->heartbeatTimeout + 1;
         while ($timeLeft > 0) {
             $timeLeft = sleep($timeLeft);
         }
