@@ -102,4 +102,34 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
 
         self::assertEquals(2, $continuation);
     }
+
+    /**
+     * @test
+     */
+    public function alarm_sig_should_be_registered_when_conn_is_writing()
+    {
+        $connection = $this->getMockBuilder(AbstractConnection::class)
+            ->setMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $connection->expects($this->exactly(3))->method('isConnected')->willReturn(true);
+        $connection->expects($this->once())->method('getHeartbeat')->willReturn($this->heartbeatTimeout);
+        $connection->expects($this->exactly(2))
+            ->method('isWriting')
+            ->willReturnOnConsecutiveCalls(true, false);
+        $connection->expects($this->exactly(1))
+            ->method('getLastActivity')
+            ->willReturn(time() + 99);
+
+        $sender = new PCNTLHeartbeatSender($connection);
+        $sender->register();
+
+        $timeLeft = $this->heartbeatTimeout;
+        while ($timeLeft > 0) {
+            $timeLeft = sleep($timeLeft);
+        }
+
+        $sender->unregister();
+    }
 }
