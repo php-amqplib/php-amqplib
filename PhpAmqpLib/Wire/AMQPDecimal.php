@@ -3,7 +3,7 @@
 namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
-use phpseclib\Math\BigInteger;
+use PhpAmqpLib\Helper\BigInteger;
 
 /**
  * AMQP protocol decimal value.

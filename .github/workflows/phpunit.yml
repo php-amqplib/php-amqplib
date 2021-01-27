@@ -4,13 +4,24 @@ on: [push, pull_request]
 
 jobs:
   run:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
-      max-parallel: 2
+      max-parallel: 4
       matrix:
-        operating-system: [ubuntu-latest]
-        php: ['5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '7.4']
+        include:
+            - php: '5.6'
+              phpseclib: '^2.0'
+            - php: '7.0'
+              phpseclib: '^2.0'
+            - php: '7.1'
+              phpseclib: '^2.0'
+            - php: '7.2'
+              phpseclib: '^2.0'
+            - php: '7.3'
+              phpseclib: '^3.0'
+            - php: '7.4'
+              phpseclib: '^3.0'
     services:
       rabbitmq:
         image: rabbitmq:3-management
@@ -43,7 +54,7 @@ jobs:
     - name: Start broker service
       run: docker start ${{ job.services.rabbitmq.id }}
     - name: Composer install
-      run: composer update --prefer-dist --no-progress --no-suggest
+      run: composer require --prefer-dist --no-progress --no-suggest phpseclib/phpseclib ${{ matrix.phpseclib }}
     - name: Wait for broker service
       run: php ./tests/wait_broker.php
     - name: PHPUnit tests
