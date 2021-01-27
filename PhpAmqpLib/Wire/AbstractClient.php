@@ -6,10 +6,8 @@ use phpseclib\Math\BigInteger;
 
 class AbstractClient
 {
-    /**
-     * @var bool
-     */
-    protected $is64bits;
+    /** @var bool */
+    const PLATFORM_64BIT = PHP_INT_SIZE === 8;
 
     /** @var BigInteger[][] */
     protected static $bigIntegers = array();
@@ -18,11 +16,6 @@ class AbstractClient
      * @var bool
      */
     protected static $isLittleEndian;
-
-    public function __construct()
-    {
-        $this->is64bits = PHP_INT_SIZE === 8;
-    }
 
     /**
      * Converts byte-string between native and network byte order, in both directions

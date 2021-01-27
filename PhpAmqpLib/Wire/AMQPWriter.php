@@ -174,7 +174,7 @@ class AMQPWriter extends AbstractClient
         }
 
         //Numeric strings >PHP_INT_MAX on 32bit are casted to PHP_INT_MAX, damn PHP
-        if (!$this->is64bits && is_string($n)) {
+        if (!self::PLATFORM_64BIT && is_string($n)) {
             $n = (float) $n;
         }
         $this->out .= pack('N', $n);
@@ -212,7 +212,7 @@ class AMQPWriter extends AbstractClient
                 throw new AMQPOutOfRangeException('Longlong out of range: ' . $n);
             }
 
-            if ($this->is64bits) {
+            if (self::PLATFORM_64BIT) {
                 $res = pack('J', $n);
                 $this->out .= $res;
             } else {
@@ -241,7 +241,7 @@ class AMQPWriter extends AbstractClient
     public function write_signed_longlong($n)
     {
         if (is_int($n)) {
-            if ($this->is64bits) {
+            if (self::PLATFORM_64BIT) {
                 // q is for 64-bit signed machine byte order
                 $packed = pack('q', $n);
                 if (self::isLittleEndian()) {

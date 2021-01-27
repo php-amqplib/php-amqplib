@@ -57,8 +57,6 @@ class AMQPReader extends AbstractClient
      */
     public function __construct($str, AbstractIO $io = null, $timeout = 0)
     {
-        parent::__construct();
-
         if (is_string($str)) {
             $this->str = (string)$str;
             $this->str_length = mb_strlen($this->str, 'ASCII');
@@ -262,7 +260,7 @@ class AMQPReader extends AbstractClient
     {
         list(, $res) = unpack('N', $this->rawread(4));
 
-        if ($this->is64bits) {
+        if (self::PLATFORM_64BIT) {
             return (int) sprintf('%u', $res);
         }
 
@@ -279,7 +277,7 @@ class AMQPReader extends AbstractClient
     {
         $this->resetCounters();
         list(, $res) = unpack('N', $this->rawread(4));
-        if (!$this->is64bits && $this->getLongMSB($res)) {
+        if (!self::PLATFORM_64BIT && $this->getLongMSB($res)) {
             return sprintf('%u', $res);
         }
 
@@ -308,7 +306,7 @@ class AMQPReader extends AbstractClient
         $this->resetCounters();
         $bytes = $this->rawread(8);
 
-        if ($this->is64bits) {
+        if (self::PLATFORM_64BIT) {
             // we can "unpack" if MSB bit is 0 (at most 63 bit integer), fallback to BigInteger otherwise
             if (!$this->getMSB($bytes)) {
                 $res = unpack('J', $bytes);
@@ -335,7 +333,7 @@ class AMQPReader extends AbstractClient
         $this->resetCounters();
         $bytes = $this->rawread(8);
 
-        if ($this->is64bits) {
+        if (self::PLATFORM_64BIT) {
             $res = unpack('q', $this->correctEndianness($bytes));
             return $res[1];
         } else {
