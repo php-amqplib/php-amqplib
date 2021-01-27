@@ -46,7 +46,7 @@ class SSLConnectionTest extends AbstractConnectionTest
         ];
 
         // #1 TLS protocol
-        $options['protocol'] = 'tls';
+        $options['protocol'] = 'tlsv1.2';
         $sets[] = [$options];
 
         // #2 SNI_enabled
