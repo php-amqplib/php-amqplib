@@ -1,10 +1,10 @@
-name: Code style and static analysis
+name: Code style
 
 on: [push, pull_request]
 
 jobs:
-    php-cs-fixer:
-        name: PHP-CS-Fixer
+    phpcs:
+        name: PHPCS
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
