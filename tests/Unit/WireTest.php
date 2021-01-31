@@ -161,7 +161,7 @@ class WireTest extends TestCase
      */
     public function signed_long_wr($value)
     {
-        $this->wr($value, 'write_signed_long', 'read_signed_long', true);
+        $this->wr($value, 'writeSignedLong', 'readSignedLong', true);
     }
 
     /**
@@ -170,7 +170,7 @@ class WireTest extends TestCase
      */
     public function signed_long_wr_out_of_range_lower()
     {
-        $this->wr('-2147483649', 'write_signed_long', 'read_signed_long', true);
+        $this->wr('-2147483649', 'writeSignedLong', 'readSignedLong', true);
     }
 
     /**
@@ -179,7 +179,7 @@ class WireTest extends TestCase
      */
     public function signed_long_wr_out_of_range_upper()
     {
-        $this->wr('2147483648', 'write_signed_long', 'read_signed_long', true);
+        $this->wr('2147483648', 'writeSignedLong', 'readSignedLong', true);
     }
 
     /**

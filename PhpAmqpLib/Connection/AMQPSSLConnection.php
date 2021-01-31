@@ -24,7 +24,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $options = array(),
         $ssl_protocol = 'ssl'
     ) {
-        $ssl_context = empty($ssl_options) ? null : $this->create_ssl_context($ssl_options);
+        $ssl_context = empty($ssl_options) ? null : $this->createSslContext($ssl_options);
         parent::__construct(
             $host,
             $port,
@@ -55,7 +55,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param array $options
      * @return resource
      */
-    private function create_ssl_context($options)
+    private function createSslContext($options)
     {
         $ssl_context = stream_context_create();
         foreach ($options as $k => $v) {

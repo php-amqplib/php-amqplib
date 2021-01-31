@@ -89,7 +89,7 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Maximum time to wait for operations on this channel, in seconds.
-     * @var float $channel_rpc_timeout
+     * @var float
      */
     protected $channel_rpc_timeout;
 
@@ -1104,7 +1104,7 @@ class AMQPChannel extends AbstractChannel
      * @param int $ticket
      * @return mixed
      */
-    private function pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket)
+    private function prePublish($exchange, $routing_key, $mandatory, $immediate, $ticket)
     {
         $cache_key = sprintf(
             '%s|%s|%s|%s|%s',
@@ -1159,7 +1159,7 @@ class AMQPChannel extends AbstractChannel
     ) {
         $this->checkConnection();
         $pkt = new AMQPWriter();
-        $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
+        $pkt->write($this->prePublish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 
         try {
             $this->connection->send_content(
@@ -1235,7 +1235,7 @@ class AMQPChannel extends AbstractChannel
             $mandatory = isset($m[3]) ? $m[3] : false;
             $immediate = isset($m[4]) ? $m[4] : false;
             $ticket = isset($m[5]) ? $m[5] : null;
-            $pkt->write($this->pre_publish($exchange, $routing_key, $mandatory, $immediate, $ticket));
+            $pkt->write($this->prePublish($exchange, $routing_key, $mandatory, $immediate, $ticket));
 
             $this->connection->prepare_content(
                 $this->channel_id,
