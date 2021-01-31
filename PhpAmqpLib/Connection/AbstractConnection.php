@@ -446,7 +446,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $body_size
      * @param string $packed_properties
      * @param string $body
-     * @param AMQPWriter $pkt
+     * @param AMQPWriter|null $pkt
      * @return AMQPWriter
      */
     public function prepare_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt)
@@ -524,7 +524,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param string $channel
      * @param array $method_sig
      * @param AMQPWriter|string $args
-     * @param AMQPWriter $pkt
+     * @param AMQPWriter|null $pkt
      * @return AMQPWriter
      */
     protected function prepare_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
@@ -605,7 +605,7 @@ abstract class AbstractConnection extends AbstractChannel
 
         $this->input->setTimeout($currentTimeout);
 
-        if ($ch != 0xCE) {
+        if ($ch !== 0xCE) {
             throw new AMQPInvalidFrameException(sprintf(
                 'Framing error, unexpected byte: %x',
                 $ch
@@ -618,7 +618,7 @@ abstract class AbstractConnection extends AbstractChannel
     /**
      * Waits for a frame from the server destined for a particular channel.
      *
-     * @param string $channel_id
+     * @param int $channel_id
      * @param int|float|null $timeout
      * @return array
      */
@@ -635,9 +635,9 @@ abstract class AbstractConnection extends AbstractChannel
                     $this->heartbeat && $this->last_frame
                     && microtime(true) - ($this->heartbeat * 2) > $this->last_frame
                 ) {
-                    $this->debug->debug_msg("missed server heartbeat (at threshold * 2)");
+                    $this->debug->debug_msg('missed server heartbeat (at threshold * 2)');
                     $this->setIsConnected(false);
-                    throw new AMQPHeartbeatMissedException("Missed server heartbeat");
+                    throw new AMQPHeartbeatMissedException('Missed server heartbeat');
                 }
 
                 throw $e;
@@ -647,18 +647,18 @@ abstract class AbstractConnection extends AbstractChannel
 
             if ($frame_channel === 0 && $frame_type === 8) {
                 // skip heartbeat frames and reduce the timeout by the time passed
-                $this->debug->debug_msg("received server heartbeat");
+                $this->debug->debug_msg('received server heartbeat');
                 if ($_timeout > 0) {
                     $_timeout -= $this->last_frame - $start;
                     if ($_timeout <= 0) {
                         // If timeout has been reached, throw the exception without calling wait_frame
-                        throw new AMQPTimeoutException("Timeout waiting on channel");
+                        throw new AMQPTimeoutException('Timeout waiting on channel');
                     }
                 }
                 continue;
             }
 
-            if ($frame_channel == $channel_id) {
+            if ($frame_channel === $channel_id) {
                 return array($frame_type, $payload);
             }
 
@@ -667,7 +667,7 @@ abstract class AbstractConnection extends AbstractChannel
             // Make sure the channel still exists, it could have been
             // closed by a previous Exception.
             if (isset($this->channels[$frame_channel])) {
-                array_push($this->channels[$frame_channel]->frame_queue, array($frame_type, $payload));
+                $this->channels[$frame_channel]->frame_queue[] = [$frame_type, $payload];
             }
 
             // If we just queued up a method for channel 0 (the Connection
@@ -683,7 +683,7 @@ abstract class AbstractConnection extends AbstractChannel
      * Fetches a channel object identified by the numeric channel_id, or
      * create that object if it doesn't already exist.
      *
-     * @param int $channel_id
+     * @param int|null $channel_id
      * @return AMQPChannel
      */
     public function channel($channel_id = null)
@@ -692,7 +692,7 @@ abstract class AbstractConnection extends AbstractChannel
             return $this->channels[$channel_id];
         }
 
-        $channel_id = $channel_id ? $channel_id : $this->get_free_channel_id();
+        $channel_id = $channel_id ?: $this->get_free_channel_id();
         $ch = new AMQPChannel($this, $channel_id, true, $this->channel_rpc_timeout);
         $this->channels[$channel_id] = $ch;
 
@@ -709,12 +709,12 @@ abstract class AbstractConnection extends AbstractChannel
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
-        $result = null;
         $this->io->disableHeartbeat();
         if (empty($this->protocolWriter) || !$this->isConnected()) {
-            return $result;
+            return null;
         }
 
+        $result = null;
         try {
             $this->closeChannels();
             list($class_id, $method_id, $args) = $this->protocolWriter->connectionClose(
@@ -1126,12 +1126,12 @@ abstract class AbstractConnection extends AbstractChannel
         }
 
         foreach ($hosts as $hostdef) {
-            AbstractConnection::validate_host($hostdef);
+            self::validate_host($hostdef);
             $host = $hostdef['host'];
             $port = $hostdef['port'];
             $user = $hostdef['user'];
             $password = $hostdef['password'];
-            $vhost = isset($hostdef['vhost']) ? $hostdef['vhost'] : "/";
+            $vhost = isset($hostdef['vhost']) ? $hostdef['vhost'] : '/';
             try {
                 $conn = static::try_create_connection($host, $port, $user, $password, $vhost, $options);
                 return $conn;

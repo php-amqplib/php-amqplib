@@ -29,9 +29,9 @@ $max = isset($argv[1]) ? (int) $argv[1] : 1;
 for ($i = 0; $i < $max; $i++) {
 
     $ch = $conn->channel();
-    list($queue,) = $ch->queue_declare("", false, false, true, true);
+    list($queue,) = $ch->queue_declare('', false, false, true, true);
     $msg = new AMQPMessage($msg_body);
-    $ch->basic_publish($msg, "", $queue);
+    $ch->basic_publish($msg, '', $queue);
     $ch->close();
 }
 

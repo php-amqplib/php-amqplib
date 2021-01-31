@@ -525,7 +525,7 @@ class AMQPMessage
             }
 
             $flag_bits |= (1 << $shift);
-            if ($prototype != 'bit') {
+            if ($prototype !== 'bit') {
                 $raw_bytes->{'write_' . $prototype}($val);
             }
 

@@ -18,7 +18,7 @@ require_once __DIR__ . '/config.php';
 //suboptimal function to generate random content
 function generate_random_content($bytes)
 {
-    $handle = @fopen("/dev/urandom", "rb");
+    $handle = @fopen('/dev/urandom', 'rb');
 
     $buffer = '';
     if ($handle) {

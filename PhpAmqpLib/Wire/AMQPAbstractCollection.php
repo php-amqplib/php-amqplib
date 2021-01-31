@@ -119,13 +119,13 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
 
     /**
      * @param mixed $val
-     * @param int $type
+     * @param int|null $type
      * @param string $key
      */
     final protected function setValue($val, $type = null, $key = null)
     {
         if ($val instanceof self) {
-            if ($type && ($type != $val->getType())) {
+            if ($type && ($type !== $val->getType())) {
                 throw new Exception\AMQPInvalidArgumentException(
                     sprintf(
                         'Attempted to add instance of %s representing type [%s] as mismatching type [%s]',
@@ -340,7 +340,7 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
      */
     protected function encodeFloat($val)
     {
-        return static::encodeString((string) $val);
+        return $this->encodeString((string) $val);
     }
 
     /**
@@ -384,7 +384,7 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
      */
     final public static function isProtocol($proto)
     {
-        return self::getProtocol() == $proto;
+        return self::getProtocol() === $proto;
     }
 
     /**

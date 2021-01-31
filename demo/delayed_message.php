@@ -23,7 +23,7 @@ $channel = $connection->channel();
  * @return mixed|null
  */
 $channel->exchange_declare('delayed_exchange', 'x-delayed-message', false, true, false, false, false, new AMQPTable(array(
-   "x-delayed-type" => AMQPExchangeType::FANOUT
+   'x-delayed-type' => AMQPExchangeType::FANOUT
 )));
 
 /**
@@ -40,12 +40,12 @@ $channel->exchange_declare('delayed_exchange', 'x-delayed-message', false, true,
  * @return mixed|null
  */
 $channel->queue_declare('delayed_queue', false, false, false, false, false, new AMQPTable(array(
-   "x-dead-letter-exchange" => "delayed"
+   'x-dead-letter-exchange' => 'delayed'
 )));
 
 $channel->queue_bind('delayed_queue', 'delayed_exchange');
 
-$headers = new AMQPTable(array("x-delay" => 7000));
+$headers = new AMQPTable(array('x-delay' => 7000));
 $message = new AMQPMessage('hello', array('delivery_mode' => 2));
 $message->set('application_headers', $headers);
 $channel->basic_publish($message, 'delayed_exchange');
