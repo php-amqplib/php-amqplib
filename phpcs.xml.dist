@@ -10,9 +10,39 @@
     <arg name="tab-width" value="4"/>
     <arg name="report-width" value="120"/>
 
-    <rule ref="PSR2">
-        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
-        <exclude name="PEAR.Functions.ValidDefaultValue"/>
+    <rule ref="PSR12">
+        <!-- Rule requires minimal PHP 7.1 version -->
+        <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
+    </rule>
+
+    <rule ref="PEAR.Functions.ValidDefaultValue">
+        <!-- We should preserve BC with possible child classes until next major version -->
+        <exclude-pattern>PhpAmqpLib/Helper/Protocol/Protocol091.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/Protocol/Protocol080.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AbstractConnection.php</exclude-pattern>
+    </rule>
+
+    <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <!-- We should preserve BC with possible child classes
+            and public method usage until next major version -->
+        <exclude-pattern>PhpAmqpLib/Wire/AMQPReader.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Wire/IO/SocketIO.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Wire/IO/StreamIO.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Wire/IO/AbstractIO.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Wire/AMQPWriter.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AMQPSocketConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AMQPSSLConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AMQPStreamConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AbstractConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Message/AMQPMessage.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/Protocol/Wait091.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/Protocol/MethodMap091.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/Protocol/Wait080.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/Protocol/MethodMap080.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/DebugHelper.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Helper/MiscHelper.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Channel/AMQPChannel.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Channel/AbstractChannel.php</exclude-pattern>
     </rule>
 
     <file>PhpAmqpLib/</file>

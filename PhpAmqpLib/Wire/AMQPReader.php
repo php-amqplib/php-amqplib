@@ -287,7 +287,7 @@ class AMQPReader extends AbstractClient
     /**
      * @return int
      */
-    private function read_signed_long()
+    private function readSignedLong()
     {
         $this->resetCounters();
         list(, $res) = unpack('l', $this->correctEndianness($this->rawread(4)));
@@ -495,7 +495,7 @@ class AMQPReader extends AbstractClient
                 $val = $this->read_short();
                 break;
             case AMQPAbstractCollection::T_INT_LONG:
-                $val = $this->read_signed_long();
+                $val = $this->readSignedLong();
                 break;
             case AMQPAbstractCollection::T_INT_LONG_U:
                 $val = $this->read_long();
@@ -508,7 +508,7 @@ class AMQPReader extends AbstractClient
                 break;
             case AMQPAbstractCollection::T_DECIMAL:
                 $e = $this->read_octet();
-                $n = $this->read_signed_long();
+                $n = $this->readSignedLong();
                 $val = new AMQPDecimal($n, $e);
                 break;
             case AMQPAbstractCollection::T_TIMESTAMP:
