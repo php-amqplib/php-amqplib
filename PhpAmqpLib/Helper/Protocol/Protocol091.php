@@ -285,7 +285,7 @@ class Protocol091
      * @param bool $auto_delete
      * @param bool $internal
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function exchangeDeclare(
@@ -350,7 +350,7 @@ class Protocol091
      * @param string $source
      * @param string $routing_key
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function exchangeBind(
@@ -387,7 +387,7 @@ class Protocol091
      * @param string $source
      * @param string $routing_key
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function exchangeUnbind(
@@ -426,7 +426,7 @@ class Protocol091
      * @param bool $exclusive
      * @param bool $auto_delete
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function queueDeclare(
@@ -466,7 +466,7 @@ class Protocol091
      * @param string $exchange
      * @param string $routing_key
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function queueBind(
@@ -556,7 +556,7 @@ class Protocol091
      * @param string $queue
      * @param string $exchange
      * @param string $routing_key
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function queueUnbind($ticket = 0, $queue = '', $exchange, $routing_key = '', $arguments = array())
@@ -613,7 +613,7 @@ class Protocol091
      * @param bool $no_ack
      * @param bool $exclusive
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function basicConsume(

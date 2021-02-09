@@ -51,10 +51,10 @@ function addPhpDocParams($arguments)
 function translateType($argument)
 {
     $type = null;
-    if (array_key_exists('default-value', $argument)) {
-        $type = gettype($argument['default-value']);
-    } elseif (array_key_exists('type', $argument)) {
+    if (array_key_exists('type', $argument)) {
         $type = $argument['type'];
+    } elseif (array_key_exists('default-value', $argument)) {
+        $type = gettype($argument['default-value']);
     }
 
     switch ($type) {
@@ -63,6 +63,7 @@ function translateType($argument)
         case 'string':
             return 'string';
         case 'short':
+        case 'octet':
         case 'long':
         case 'longlong':
         case 'integer':
@@ -74,9 +75,12 @@ function translateType($argument)
             return 'bool';
         case 'array':
             return 'array';
+        case 'table':
+            return '\PhpAmqpLib\Wire\AMQPTable|array';
         default:
-            return 'mixed';
     }
+
+    return 'mixed';
 }
 
 function argument_default_val($arg)
