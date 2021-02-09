@@ -209,7 +209,7 @@ class Protocol080
     /**
      * @param int $reply_code
      * @param string $reply_text
-     * @param array $details
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $details
      * @return array
      */
     public function channelAlert($reply_code, $reply_text = '', $details = array())
@@ -291,7 +291,7 @@ class Protocol080
      * @param bool $auto_delete
      * @param bool $internal
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function exchangeDeclare(
@@ -358,7 +358,7 @@ class Protocol080
      * @param bool $exclusive
      * @param bool $auto_delete
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function queueDeclare(
@@ -398,7 +398,7 @@ class Protocol080
      * @param string $exchange
      * @param string $routing_key
      * @param bool $nowait
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function queueBind(
@@ -488,7 +488,7 @@ class Protocol080
      * @param string $queue
      * @param string $exchange
      * @param string $routing_key
-     * @param array $arguments
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $arguments
      * @return array
      */
     public function queueUnbind($ticket = 1, $queue = '', $exchange, $routing_key = '', $arguments = array())
@@ -1215,7 +1215,7 @@ class Protocol080
     }
 
     /**
-     * @param mixed $meta_data
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $meta_data
      * @return array
      */
     public function tunnelRequest($meta_data)
@@ -1226,11 +1226,11 @@ class Protocol080
     }
 
     /**
-     * @param mixed $integer_1
+     * @param int $integer_1
      * @param int $integer_2
      * @param int $integer_3
      * @param int $integer_4
-     * @param mixed $operation
+     * @param int $operation
      * @return array
      */
     public function testInteger($integer_1, $integer_2, $integer_3, $integer_4, $operation)
@@ -1258,7 +1258,7 @@ class Protocol080
     /**
      * @param string $string_1
      * @param string $string_2
-     * @param mixed $operation
+     * @param int $operation
      * @return array
      */
     public function testString($string_1, $string_2, $operation)
@@ -1282,9 +1282,9 @@ class Protocol080
     }
 
     /**
-     * @param mixed $table
-     * @param mixed $integer_op
-     * @param mixed $string_op
+     * @param \PhpAmqpLib\Wire\AMQPTable|array $table
+     * @param int $integer_op
+     * @param int $string_op
      * @return array
      */
     public function testTable($table, $integer_op, $string_op)
