@@ -2,7 +2,7 @@
 
 namespace PhpAmqpLib\Wire;
 
-use phpseclib\Math\BigInteger;
+use PhpAmqpLib\Helper\BigInteger;
 
 class AbstractClient
 {
