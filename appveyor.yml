@@ -10,8 +10,6 @@ image: Visual Studio 2017
 environment:
   matrix:
   - dependencies: lowest
-    PHP_VERSION: 5.6
-  - dependencies: lowest
     PHP_VERSION: 7.0
   - dependencies: current
     PHP_VERSION: 7.1
