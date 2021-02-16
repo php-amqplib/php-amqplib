@@ -10,9 +10,6 @@ jobs:
       max-parallel: 4
       matrix:
         include:
-            - php: '5.6'
-              phpseclib: '^2.0'
-              composer: 'composer:v1'
             - php: '7.0'
               phpseclib: '^2.0'
               composer: 'composer:v1'
