@@ -17,9 +17,6 @@
             <directory suffix="Test.php" phpVersionOperator=">=">tests/Functional</directory>
         </testsuite>
     </testsuites>
-    <logging>
-        <log type="coverage-clover" target="clover.xml"/>
-    </logging>
     <filter>
         <whitelist>
             <directory suffix=".php">PhpAmqpLib/</directory>
