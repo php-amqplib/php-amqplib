@@ -66,7 +66,7 @@ class ToxiProxy
 
     /**
      * Enable proxy $type manipulation.
-     * @param $type One of latency, bandwidth, slow_close, timeout, slicer, limit_data
+     * @param string $type One of latency, bandwidth, slow_close, timeout, slicer, limit_data
      * @param array $attributes
      * @param string $direction Either upstream or downstream.
      * @param float $toxicity

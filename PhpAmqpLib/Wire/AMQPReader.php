@@ -4,7 +4,6 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Exception\AMQPDataReadException;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
-use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPTimeoutException;

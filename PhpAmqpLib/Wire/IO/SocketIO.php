@@ -142,7 +142,7 @@ class SocketIO extends AbstractIO
             $data .= $buffer;
         }
 
-        if (mb_strlen($data, 'ASCII') != $len) {
+        if (mb_strlen($data, 'ASCII') !== $len) {
             throw new AMQPIOException(sprintf(
                 'Error reading data. Received %s instead of expected %s bytes',
                 mb_strlen($data, 'ASCII'),

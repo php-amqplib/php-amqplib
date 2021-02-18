@@ -46,7 +46,7 @@ class DebugHelper
     }
 
     /**
-     * @param array $allowed_methods
+     * @param array|null $allowed_methods
      */
     public function debug_allowed_methods($allowed_methods)
     {
@@ -61,7 +61,7 @@ class DebugHelper
     }
 
     /**
-     * @param string $method_sig
+     * @param string|array $method_sig
      */
     public function debug_method_signature1($method_sig)
     {
@@ -70,7 +70,7 @@ class DebugHelper
 
     /**
      * @param string $msg
-     * @param string $method_sig
+     * @param string|array $method_sig
      */
     public function debug_method_signature($msg, $method_sig)
     {

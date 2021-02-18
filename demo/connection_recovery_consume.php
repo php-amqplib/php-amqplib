@@ -62,11 +62,11 @@ while(true){
         cleanup_connection($connection);
         usleep(WAIT_BEFORE_RECONNECT_uS);
     } catch(\RuntimeException $e) {
-        echo "Runtime exception " . PHP_EOL;
+        echo 'Runtime exception ' . PHP_EOL;
         cleanup_connection($connection);
         usleep(WAIT_BEFORE_RECONNECT_uS);
     } catch(\ErrorException $e) {
-        echo "Error exception " . PHP_EOL;
+        echo 'Error exception ' . PHP_EOL;
         cleanup_connection($connection);
         usleep(WAIT_BEFORE_RECONNECT_uS);
     }

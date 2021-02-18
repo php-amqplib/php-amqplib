@@ -12,9 +12,9 @@ $channel = $connection->channel();
 // declare  exchange but don`t bind any queue
 $channel->exchange_declare('hidden_exchange', AMQPExchangeType::TOPIC);
 
-$message = new AMQPMessage("Hello World!");
+$message = new AMQPMessage('Hello World!');
 
-echo " [x] Sent non-mandatory ...";
+echo ' [x] Sent non-mandatory ...';
 $channel->basic_publish(
     $message,
     'hidden_exchange',
@@ -33,7 +33,7 @@ $returnListener = function (
 ) use ($wait) {
     $GLOBALS['wait'] = false;
 
-    echo "return: ",
+    echo 'return: ',
     $replyCode, "\n",
     $replyText, "\n",
     $exchange, "\n",
@@ -43,7 +43,7 @@ $returnListener = function (
 
 $channel->set_return_listener($returnListener);
 
-echo " [x] Sent mandatory ... ";
+echo ' [x] Sent mandatory ... ';
 $channel->basic_publish(
     $message,
     'hidden_exchange',

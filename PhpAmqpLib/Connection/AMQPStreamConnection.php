@@ -18,7 +18,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param string $locale
      * @param float $connection_timeout
      * @param float $read_write_timeout
-     * @param null $context
+     * @param resource|array|null $context
      * @param bool $keepalive
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
