@@ -335,6 +335,11 @@ class StreamIO extends AbstractIO
      */
     protected function do_select($sec, $usec)
     {
+        if ($this->sock === null || !is_resource($this->sock)) {
+            $this->sock = null;
+            throw new AMQPConnectionClosedException('Broken pipe or closed connection', 0);
+        }
+
         $read = array($this->sock);
         $write = null;
         $except = null;

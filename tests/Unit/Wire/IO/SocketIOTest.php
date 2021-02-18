@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
+use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Wire\IO\SocketIO;
 use PHPUnit\Framework\TestCase;
 
@@ -74,5 +75,25 @@ class SocketIOTest extends TestCase
     public function write_when_closed(SocketIO $socketIO)
     {
         $socketIO->write('data');
+    }
+
+    /**
+     * @test
+     * @group linux
+     * @requires OS Linux
+     */
+    public function select_must_throw_io_exception()
+    {
+        $this->expectException(AMQPConnectionClosedException::class);
+        $property = new \ReflectionProperty(SocketIO::class, 'sock');
+        $property->setAccessible(true);
+
+        $resource = fopen('php://temp', 'r');
+        fclose($resource);
+
+        $socket = new SocketIO('0.0.0.0', PORT, 0.1, 0.1, null, false, 0);
+        $property->setValue($socket, $resource);
+
+        $socket->select(0, 0);
     }
 }
