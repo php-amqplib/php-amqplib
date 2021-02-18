@@ -11,17 +11,17 @@ jobs:
       matrix:
         coverage: ['none']
         include:
-            - php: '7.0'
-              phpseclib: '^2.0'
-            - php: '7.1'
-              phpseclib: '^2.0'
-            - php: '7.2'
-              phpseclib: '^2.0'
-            - php: '7.3'
-              phpseclib: '^3.0'
-            - php: '7.4'
-              phpseclib: '^3.0'
-              coverage: 'xdebug'
+          - php: '7.0'
+            phpseclib: '^2.0'
+          - php: '7.1'
+            phpseclib: '^2.0'
+          - php: '7.2'
+            phpseclib: '^2.0'
+          - php: '7.3'
+            phpseclib: '^3.0'
+          - php: '7.4'
+            phpseclib: '^3.0'
+            coverage: 'xdebug'
     services:
       rabbitmq:
         image: rabbitmq:3-management
