@@ -2,10 +2,12 @@
 
 ![PHPUnit tests](https://github.com/php-amqplib/php-amqplib/workflows/PHPUnit%20tests/badge.svg)
 [![Latest Version on Packagist][ico-version]][link-packagist]
+[![Total Downloads][ico-downloads]][link-downloads]
 [![Software License][ico-license]](LICENSE)
+
+[![codecov](https://codecov.io/gh/php-amqplib/php-amqplib/branch/master/graph/badge.svg?token=tgeYkUsaDM)](https://codecov.io/gh/php-amqplib/php-amqplib)
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
-[![Total Downloads][ico-downloads]][link-downloads]
 
 This library is a _pure PHP_ implementation of the [AMQP 0-9-1 protocol](http://www.rabbitmq.com/tutorials/amqp-concepts.html).
 It's been tested against [RabbitMQ](http://www.rabbitmq.com/).
