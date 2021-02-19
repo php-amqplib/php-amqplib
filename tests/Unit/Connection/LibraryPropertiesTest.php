@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Unit\Helper;
+namespace PhpAmqpLib\Tests\Unit\Connection;
 
 use PHPUnit\Framework\TestCase;
 

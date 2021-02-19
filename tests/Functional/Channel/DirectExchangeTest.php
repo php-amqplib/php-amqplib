@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAmqpLib\Tests\Functional;
+namespace PhpAmqpLib\Tests\Functional\Channel;
 
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\Functional\Channel\ChannelTestCase;
