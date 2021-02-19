@@ -12,14 +12,22 @@ jobs:
         include:
           - php: '7.0'
             phpseclib: '^2.0'
+            composer: 'composer:v1'
           - php: '7.1'
             phpseclib: '^2.0'
+            composer: 'composer:v1'
           - php: '7.2'
             phpseclib: '^2.0'
+            composer: 'composer:v1'
           - php: '7.3'
             phpseclib: '^3.0'
+            composer: 'composer:v1'
           - php: '7.4'
             phpseclib: '^3.0'
+            composer: 'composer:v1'
+          - php: '7.4'
+            phpseclib: '^3.0'
+            composer: 'composer:v2'
             coverage: 'xdebug'
     services:
       rabbitmq:
@@ -46,7 +54,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php }}
-        tools: composer:v1
+        tools: ${{ matrix.composer }}
         extensions: bcmath, curl, dom, mbstring, pcntl, sockets, xml
         coverage: ${{ matrix.coverage }}
 
