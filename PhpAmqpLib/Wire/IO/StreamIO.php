@@ -26,7 +26,7 @@ class StreamIO extends AbstractIO
      * @param int $port
      * @param float $connection_timeout
      * @param float $read_write_timeout
-     * @param null $context
+     * @param resource|array|null $context
      * @param bool $keepalive
      * @param int $heartbeat
      * @param string|null $ssl_protocol
@@ -50,6 +50,10 @@ class StreamIO extends AbstractIO
         }
          */
 
+        if (!is_resource($context) || get_resource_type($context) !== 'stream-context') {
+            $context = stream_context_create();
+        }
+
         $this->protocol = 'tcp';
         $this->host = $host;
         $this->port = $port;
@@ -61,10 +65,6 @@ class StreamIO extends AbstractIO
         $this->heartbeat = $heartbeat;
         $this->initial_heartbeat = $heartbeat;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
-
-        if (!is_resource($this->context) || get_resource_type($this->context) !== 'stream-context') {
-            $this->context = stream_context_create();
-        }
 
         // tcp_nodelay was added in 7.1.0
         if (PHP_VERSION_ID >= 70100) {

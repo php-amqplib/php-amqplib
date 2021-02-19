@@ -15,7 +15,7 @@ $channel->exchange_declare($exchangeName, AMQPExchangeType::HEADERS);
 
 $data = implode(' ', array_slice($argv, 2));
 if (empty($data)) {
-    $data = "Hello World!";
+    $data = 'Hello World!';
 }
 
 $message = new AMQPMessage($data);

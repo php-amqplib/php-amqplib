@@ -358,7 +358,7 @@ class AMQPWriter extends AbstractClient
     {
         $typeIsSym = !($d instanceof AMQPTable); //purely for back-compat purposes
 
-        $table_data = new AMQPWriter();
+        $table_data = new self();
         foreach ($d as $k => $va) {
             list($ftype, $v) = $va;
             $table_data->write_shortstr($k);

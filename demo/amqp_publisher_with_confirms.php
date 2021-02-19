@@ -13,13 +13,13 @@ $channel = $connection->channel();
 
 $channel->set_ack_handler(
     function (AMQPMessage $message) {
-        echo "Message acked with content " . $message->body . PHP_EOL;
+        echo 'Message acked with content ' . $message->body . PHP_EOL;
     }
 );
 
 $channel->set_nack_handler(
     function (AMQPMessage $message) {
-        echo "Message nacked with content " . $message->body . PHP_EOL;
+        echo 'Message nacked with content ' . $message->body . PHP_EOL;
     }
 );
 
