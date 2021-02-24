@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
 use PhpAmqpLib\Wire\AMQPWriter;
@@ -105,6 +106,7 @@ abstract class AbstractIO
      * @param int|null $sec
      * @param int|null $usec
      * @return int|bool
+     * @throws AMQPConnectionClosedException
      */
     abstract protected function do_select($sec, $usec);
 
