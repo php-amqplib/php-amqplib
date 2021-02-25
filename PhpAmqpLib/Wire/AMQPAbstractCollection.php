@@ -12,10 +12,6 @@ use PhpAmqpLib\Wire;
 abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
 {
     //protocol defines available field types and their corresponding symbols
-    /** @deprecated */
-    const PROTOCOL_080 = Wire\Constants080::VERSION;
-    /** @deprecated  */
-    const PROTOCOL_091 = Wire\Constants091::VERSION;
     const PROTOCOL_RBT = 'rabbit'; //pseudo proto
 
     //Abstract data types

@@ -2,7 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Tests\TestCaseCompat;
 
@@ -23,7 +23,7 @@ class FileTransferTest extends TestCaseCompat
 
     protected function setUpCompat()
     {
-        $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+        $this->connection = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
         list($this->queueName, ,) = $this->channel->queue_declare();

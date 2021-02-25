@@ -937,15 +937,6 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @return resource
-     * @deprecated No direct access to communication socket should be available.
-     */
-    public function getSocket()
-    {
-        return $this->io->getSocket();
-    }
-
-    /**
      * @return \PhpAmqpLib\Wire\IO\AbstractIO
      * @deprecated
      */
