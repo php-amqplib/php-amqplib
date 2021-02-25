@@ -4,18 +4,6 @@ namespace PhpAmqpLib\Connection;
 
 class AMQPLazySSLConnection extends AMQPSSLConnection
 {
-     /**
-     * Gets socket from current connection
-     *
-     * @deprecated
-     */
-    public function getSocket()
-    {
-        $this->connect();
-
-        return parent::getSocket();
-    }
-
     /**
      * {@inheritdoc}
      */
