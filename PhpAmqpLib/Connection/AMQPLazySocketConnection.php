@@ -8,18 +8,6 @@ namespace PhpAmqpLib\Connection;
 class AMQPLazySocketConnection extends AMQPSocketConnection
 {
     /**
-     * Gets socket from current connection
-     *
-     * @deprecated
-     */
-    public function getSocket()
-    {
-        $this->connect();
-
-        return parent::getSocket();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function channel($channel_id = null)

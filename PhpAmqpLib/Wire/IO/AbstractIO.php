@@ -119,11 +119,6 @@ abstract class AbstractIO
     abstract public function connect();
 
     /**
-     * @return resource
-     */
-    abstract public function getSocket();
-
-    /**
      * Heartbeat logic: check connection health here
      * @return void
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException

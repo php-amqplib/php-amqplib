@@ -141,7 +141,6 @@ abstract class AbstractConnectionTest extends TestCaseCompat
     {
         $this->assertFalse($connection->isConnected());
         $this->assertNotNull($connection->getIO());
-        $this->assertNull($connection->getIO()->getSocket());
         // all channels must be closed
         foreach ($connection->channels as $ch) {
             if ($ch instanceof AMQPChannel) {
