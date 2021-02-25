@@ -6,19 +6,19 @@ use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPArray;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
-class AMQPWriterTest extends TestCase
+class AMQPWriterTest extends TestCaseCompat
 {
     protected $writer;
 
-    public function setUp()
+    protected function setUpCompat()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $this->writer = new AMQPWriter();
     }
 
-    public function tearDown()
+    protected function tearDownCompat()
     {
         $this->setProtoVersion(AMQPArray::PROTOCOL_RBT);
         $this->writer = null;
@@ -113,10 +113,11 @@ class AMQPWriterTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPOutOfRangeException
      */
     public function write_table_with_invalid_type()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+
         $this->writer->write_table([
             'x-foo' => ['_', 'bar'],
         ]);

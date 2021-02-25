@@ -2,15 +2,14 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
 /**
  * @group connection
  */
-class FileTransferTest extends TestCase
+class FileTransferTest extends TestCaseCompat
 {
     protected $exchangeName = 'test_exchange';
 
@@ -22,7 +21,7 @@ class FileTransferTest extends TestCase
 
     protected $messageBody;
 
-    public function setUp()
+    protected function setUpCompat()
     {
         $this->connection = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
         $this->channel = $this->connection->channel();
@@ -31,7 +30,7 @@ class FileTransferTest extends TestCase
         $this->channel->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
-    public function tearDown()
+    protected function tearDownCompat()
     {
         if ($this->channel) {
             $this->channel->exchange_delete($this->exchangeName);

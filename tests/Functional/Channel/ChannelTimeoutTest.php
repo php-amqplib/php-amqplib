@@ -7,12 +7,12 @@ use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Helper\MiscHelper;
 use PhpAmqpLib\Wire\IO\AbstractIO;
 use PhpAmqpLib\Wire\IO\StreamIO;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
 /**
  * @group connection
  */
-class ChannelTimeoutTest extends TestCase
+class ChannelTimeoutTest extends TestCaseCompat
 {
     /** @var int $channel_rpc_timeout */
     private $channel_rpc_timeout_seconds;
@@ -29,7 +29,7 @@ class ChannelTimeoutTest extends TestCase
     /** @var AMQPChannel $channel */
     private $channel;
 
-    protected function setUp()
+    protected function setUpCompat()
     {
         $channel_rpc_timeout = 3.5;
 
@@ -58,12 +58,12 @@ class ChannelTimeoutTest extends TestCase
      * @covers \PhpAmqpLib\Channel\AMQPChannel::exchange_declare
      * @covers \PhpAmqpLib\Channel\AMQPChannel::queue_declare
      * @covers \PhpAmqpLib\Channel\AMQPChannel::confirm_select
-     *
-     * @expectedException \PhpAmqpLib\Exception\AMQPTimeoutException
-     * @expectedExceptionMessage The connection timed out after 3.5 sec while awaiting incoming data
      */
     public function should_throw_exception_for_basic_operations_when_timeout_exceeded($operation, $args)
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPTimeoutException::class);
+        $this->expectExceptionMessage('The connection timed out after 3.5 sec while awaiting incoming data');
+
         // simulate blocking on the I/O level
         $this->io->expects($this->any())
             ->method('select')
@@ -82,7 +82,7 @@ class ChannelTimeoutTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDownCompat()
     {
         if ($this->channel) {
             $this->channel->close();

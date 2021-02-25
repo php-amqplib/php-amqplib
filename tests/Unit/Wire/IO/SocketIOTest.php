@@ -26,10 +26,11 @@ class SocketIOTest extends TestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPIOException
      */
     public function connect_with_invalid_credentials()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPIOException::class);
+
         $socket = new SocketIO('invalid_host', 5672);
         @$socket->connect();
     }
@@ -58,10 +59,11 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @depends connect
-     * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function read_when_closed(SocketIO $socketIO)
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPSocketException::class);
+
         $socketIO->close();
 
         $socketIO->read(1);
@@ -70,10 +72,11 @@ class SocketIOTest extends TestCase
     /**
      * @test
      * @depends connect
-     * @expectedException \PhpAmqpLib\Exception\AMQPSocketException
      */
     public function write_when_closed(SocketIO $socketIO)
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPSocketException::class);
+
         $socketIO->write('data');
     }
 
@@ -88,11 +91,8 @@ class SocketIOTest extends TestCase
         $property = new \ReflectionProperty(SocketIO::class, 'sock');
         $property->setAccessible(true);
 
-        $resource = fopen('php://temp', 'r');
-        fclose($resource);
-
         $socket = new SocketIO('0.0.0.0', PORT, 0.1, 0.1, null, false, 0);
-        $property->setValue($socket, $resource);
+        $property->setValue($socket, null);
 
         $socket->select(0, 0);
     }

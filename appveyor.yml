@@ -19,6 +19,8 @@ environment:
     PHP_VERSION: 7.3
   - dependencies: highest
     PHP_VERSION: 7.4
+  - dependencies: highest
+    PHP_VERSION: 8.0
   COMPOSER_CACHE: "%USERPROFILE%\\composer"
   RABBITMQ_VERSION: 3.7.17
   ERLANG_VERSION: 10.4

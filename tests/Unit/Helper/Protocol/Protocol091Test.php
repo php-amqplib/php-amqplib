@@ -3,13 +3,13 @@
 namespace PhpAmqpLib\Tests\Unit\Helper\Protocol;
 
 use PhpAmqpLib\Helper\Protocol\Protocol091;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
-class Protocol091Test extends TestCase
+class Protocol091Test extends TestCaseCompat
 {
     protected $protocol091;
 
-    public function setUp()
+    protected function setUpCompat()
     {
         $this->protocol091 = new Protocol091();
     }

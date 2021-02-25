@@ -228,7 +228,7 @@ class SocketIO extends AbstractIO
     public function close()
     {
         $this->disableHeartbeat();
-        if (is_resource($this->sock)) {
+        if (is_resource($this->sock) || is_a($this->sock, \Socket::class)) {
             socket_close($this->sock);
         }
         $this->sock = null;
@@ -241,7 +241,7 @@ class SocketIO extends AbstractIO
      */
     protected function do_select($sec, $usec)
     {
-        if ($this->sock === null || !is_resource($this->sock)) {
+        if (!is_resource($this->sock) && !is_a($this->sock, \Socket::class)) {
             $this->sock = null;
             throw new AMQPConnectionClosedException('Broken pipe or closed connection', 0);
         }

@@ -11,19 +11,20 @@ use PhpAmqpLib\Tests\Functional\Channel\ChannelTestCase;
  */
 class TopicExchangeTest extends ChannelTestCase
 {
-    public function setUp()
+    public function setUpCompat()
     {
-        parent::setUp();
+        parent::setUpCompat();
 
         $this->exchange->name = 'test_topic_exchange';
     }
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPChannelClosedException
      */
     public function exchange_declare_with_closed_connection()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPChannelClosedException::class);
+
         $this->connection->close();
 
         $this->channel->exchange_declare($this->exchange->name, 'topic');
@@ -31,10 +32,11 @@ class TopicExchangeTest extends ChannelTestCase
 
     /**
      * @test
-     * @expectedException \PhpAmqpLib\Exception\AMQPChannelClosedException
      */
     public function exchange_declare_with_closed_channel()
     {
+        $this->expectException(\PhpAmqpLib\Exception\AMQPChannelClosedException::class);
+
         $this->channel->close();
 
         $this->channel->exchange_declare($this->exchange->name, 'topic');
