@@ -40,15 +40,4 @@ jobs:
         directory: ./docs
         branch: gh-pages
         force: true
-    - name: Update submodule reference
-      run: |
-        cd ${{ github.workspace }}
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add ./docs
-        git commit -m "update docs submodule"
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
+
