@@ -331,7 +331,7 @@ class Protocol080
      * @param bool $nowait
      * @return array
      */
-    public function exchangeDelete($ticket = 1, $exchange, $if_unused = false, $nowait = false)
+    public function exchangeDelete($ticket = 1, $exchange = '', $if_unused = false, $nowait = false)
     {
         $writer = new AMQPWriter();
         $writer->write_short($ticket);
