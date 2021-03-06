@@ -296,7 +296,7 @@ class Protocol080
      */
     public function exchangeDeclare(
         $ticket = 1,
-        $exchange,
+        $exchange = '',
         $type = 'direct',
         $passive = false,
         $durable = false,
