@@ -18,10 +18,9 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 ## Project Maintainers
 
-Thanks to [videlalvaro](https://github.com/videlalvaro) and [postalservice14](https://github.com/postalservice14) for their hard work maintaining php-amqplib! The library wouldn't be where it is without them.
+Thanks to [videlalvaro](https://github.com/videlalvaro) and [postalservice14](https://github.com/postalservice14) for creating `php-amqplib`.
 
-The package is now maintained by [nubeiro](https://github.com/nubeiro) and several Pivotal engineers
-working on RabbitMQ and related projects.
+The package is now maintained by [Ramūnas Dronga](https://github.com/ramunasd), [Luke Bakken](https://github.com/lukebakken) and several VMware engineers working on RabbitMQ.
 
 ## Supported RabbitMQ Versions ##
 
