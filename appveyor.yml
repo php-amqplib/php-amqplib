@@ -47,7 +47,7 @@ install:
     - IF %dependencies%==lowest composer update --prefer-lowest --no-progress
     - IF %dependencies%==current composer update --prefer-stable --no-progress
     - IF %dependencies%==highest composer update --no-progress --prefer-dist
-    - ps: Invoke-WebRequest "https://raw.githubusercontent.com/ramunasd/appveyor-rabbitmq/v1.2/install.ps1" -OutFile "install-rabbitmq.ps1"
+    - ps: Invoke-WebRequest "https://raw.githubusercontent.com/php-amqplib/appveyor-rabbitmq/v1.2/install.ps1" -OutFile "install-rabbitmq.ps1"
     - ps: .\install-rabbitmq.ps1
 
 ## Run the actual test
