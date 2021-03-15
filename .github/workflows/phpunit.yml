@@ -7,24 +7,28 @@ jobs:
     runs-on: 'ubuntu-latest'
     strategy:
       fail-fast: false
-      max-parallel: 4
       matrix:
         include:
           - php: '7.0'
             phpseclib: '^2.0'
             composer: 'composer:v1'
+            coverage: none
           - php: '7.1'
             phpseclib: '^2.0'
             composer: 'composer:v1'
+            coverage: none
           - php: '7.2'
             phpseclib: '^2.0'
             composer: 'composer:v1'
+            coverage: none
           - php: '7.3'
             phpseclib: '^3.0'
             composer: 'composer:v1'
+            coverage: none
           - php: '7.4'
             phpseclib: '^3.0'
             composer: 'composer:v1'
+            coverage: none
           - php: '7.4'
             phpseclib: '^3.0'
             composer: 'composer:v2'
@@ -32,7 +36,7 @@ jobs:
           - php: '8.0'
             phpseclib: '^3.0'
             composer: 'composer:v2'
-            coverage: 'xdebug'
+            coverage: none
     services:
       rabbitmq:
         image: rabbitmq:3-management
@@ -76,16 +80,22 @@ jobs:
 
     - name: PHPUnit tests
       run: ./vendor/bin/phpunit --exclude-group proxy
-      if: matrix.coverage != 'xdebug'
+      if: matrix.coverage == 'none'
 
-    - name: PHPUnit tests and Log Code coverage
+    - name: PHPUnit tests + coverage
       run: ./vendor/bin/phpunit --exclude-group proxy --coverage-clover=coverage.xml
-      if: matrix.coverage == 'xdebug'
+      if: matrix.coverage != 'none'
 
-    - name: Run codecov
+    - name: Upload Codecov coverage
+      if: matrix.coverage != 'none'
       uses: codecov/codecov-action@v1
-      if: matrix.coverage == 'xdebug'
       with:
         file: './coverage.xml'
         fail_ci_if_error: true
 
+    - name: Upload Scrutinizer coverage
+      if: matrix.coverage != 'none'
+      continue-on-error: true
+      uses: sudo-bot/action-scrutinizer@latest
+      with:
+          cli-args: "--format=php-clover coverage.xml"
