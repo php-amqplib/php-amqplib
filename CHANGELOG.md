@@ -2,7 +2,7 @@
 
 All Notable changes to `php-amqplib` will be documented in this file
 
-## 3.0.0 - 2021-03-10
+## 3.0.0 - 2021-03-16
 
 This version introduces PHP8 compatibility.
 
