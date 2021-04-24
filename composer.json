@@ -32,7 +32,7 @@
         "php": "^7.0|~8.0.0",
         "ext-sockets": "*",
         "ext-mbstring": "*",
-        "phpseclib/phpseclib": "^2.0|^3.0"
+        "phpseclib/phpseclib": "^2.0.31|^3.0.7"
     },
     "require-dev": {
         "ext-curl": "*",
