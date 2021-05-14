@@ -42,8 +42,7 @@ $toSend = new AMQPMessage('test message', array('content_type' => 'text/plain', 
 $channel->basic_publish($toSend, $exchange);
 
 $message = $channel->basic_get($queue);
-
-$channel->basic_ack($message->delivery_info['delivery_tag']);
+$message->ack();
 
 var_dump($message->body);
 

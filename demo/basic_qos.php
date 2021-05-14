@@ -14,7 +14,7 @@ $channel->basic_qos(null, 10000, null);
 
 function process_message($message)
 {
-    $message->delivery_info['channel']->basic_ack($message->delivery_info['delivery_tag']);
+    $message->ack();
 }
 
 $channel->basic_consume('qos_queue', '', false, false, false, false, 'process_message');
