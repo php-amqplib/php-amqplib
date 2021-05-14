@@ -38,8 +38,12 @@ Getting message properties:
 
 You can acknowledge messages by sending a `basic_ack` on the channel:
 
-    $msg->delivery_info['channel']->
-        basic_ack($msg->delivery_info['delivery_tag']);
+    $msg->getChannel()->
+        basic_ack($msg->getDeliveryTag());
+
+Or by sending `ack` method on the message:
+
+    $msg->ack();
 
 Keep in mind that the `delivery_tag` has to be valid so most of the time just use the one provide by the server.
 
