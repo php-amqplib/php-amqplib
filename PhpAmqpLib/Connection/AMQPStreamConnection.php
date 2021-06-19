@@ -88,7 +88,7 @@ class AMQPStreamConnection extends AbstractConnection
         $connection_timeout = isset($options['connection_timeout']) ?
                                     $options['connection_timeout'] : 3.0;
         $read_write_timeout = isset($options['read_write_timeout']) ?
-                                    $options['read_write_timeout'] : 130.0;
+                                    $options['read_write_timeout'] : 3.0;
         $context = isset($options['context']) ?
                          $options['context'] : null;
         $keepalive = isset($options['keepalive']) ?
