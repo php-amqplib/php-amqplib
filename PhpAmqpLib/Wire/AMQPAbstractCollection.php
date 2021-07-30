@@ -196,11 +196,13 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         return $val;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->data[$offset]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         $value = isset($this->data[$offset]) ? $this->data[$offset] : null;
@@ -208,11 +210,13 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         return is_array($value) ? $value[1] : $value;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->setValue($value, null, $offset);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
@@ -467,26 +471,31 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         return $symbols[$symbol];
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->data);
     }
 
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->data);
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         next($this->data);
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         reset($this->data);
     }
 
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return key($this->data) !== null;

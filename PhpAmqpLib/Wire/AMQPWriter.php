@@ -283,6 +283,12 @@ class AMQPWriter extends AbstractClient
      */
     public function write_shortstr($s)
     {
+        if ($s === null) {
+            $this->write_octet(0);
+
+            return $this;
+        }
+
         $len = mb_strlen($s, 'ASCII');
         if ($len > 255) {
             throw new AMQPInvalidArgumentException('String too long');
@@ -302,6 +308,12 @@ class AMQPWriter extends AbstractClient
      */
     public function write_longstr($s)
     {
+        if ($s === null) {
+            $this->write_long(0);
+
+            return $this;
+        }
+
         $this->write_long(mb_strlen($s, 'ASCII'));
         $this->out .= $s;
 

@@ -123,6 +123,20 @@ class AMQPWriterTest extends TestCaseCompat
         ]);
     }
 
+    /**
+     * @test
+     */
+    public function write_table_with_null_strings()
+    {
+        $this->writer->write_table([
+            'x-long-str' => ['S', null],
+            'x-short-str' => ['s', null],
+        ]);
+
+        $expected = "\x00\x00\x00\x1e\x0ax-long-strS\x00\x00\x00\x00\x0bx-short-strs\x00";
+        $this->assertEquals($expected, $this->writer->getvalue());
+    }
+
     protected function setProtoVersion($proto)
     {
         $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', 'protocol');
