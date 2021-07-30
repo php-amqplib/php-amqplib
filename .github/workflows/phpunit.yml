@@ -37,9 +37,13 @@ jobs:
             phpseclib: '^3.0'
             composer: 'composer:v2'
             coverage: none
+          - php: '8.1'
+            phpseclib: '^3.0'
+            composer: 'composer:v2'
+            coverage: none
     services:
       rabbitmq:
-        image: rabbitmq:3-management
+        image: rabbitmq:3.8-management
         ports:
           - 5671:5671
           - 5672:5672
@@ -53,7 +57,7 @@ jobs:
           RABBITMQ_SSL_KEYFILE: /src/tests/certs/server_key.pem
           RABBITMQ_SSL_VERIFY: verify_peer
           RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: 0
-    name: PHP ${{ matrix.php }} Test on ${{ matrix.operating-system }}
+    name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -70,7 +74,7 @@ jobs:
       run: php tests/phpinfo.php
 
     - name: Start broker service
-      run: docker start ${{ job.services.rabbitmq.id }}
+      run: docker restart ${{ job.services.rabbitmq.id }}
 
     - name: Composer install
       run: composer require --prefer-dist --no-progress --no-suggest phpseclib/phpseclib ${{ matrix.phpseclib }}
