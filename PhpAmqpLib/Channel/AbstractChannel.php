@@ -162,7 +162,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @return AbstractConnection
+     * @return AbstractConnection|null
      */
     public function getConnection()
     {
