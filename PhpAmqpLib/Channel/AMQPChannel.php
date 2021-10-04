@@ -2,22 +2,6 @@
 
 namespace PhpAmqpLib\Channel;
 
-use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Exception\AMQPBasicCancelException;
-use PhpAmqpLib\Exception\AMQPChannelClosedException;
-use PhpAmqpLib\Exception\AMQPConnectionBlockedException;
-use PhpAmqpLib\Exception\AMQPConnectionClosedException;
-use PhpAmqpLib\Exception\AMQPProtocolChannelException;
-use PhpAmqpLib\Exception\AMQPRuntimeException;
-use PhpAmqpLib\Helper\Assert;
-use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Wire;
-use PhpAmqpLib\Wire\AMQPReader;
-use PhpAmqpLib\Wire\AMQPTable;
-use PhpAmqpLib\Wire\AMQPWriter;
-
-class AMQPChannel extends AbstractChannel
-{
     /**
      * @var callable[]
      * @internal Use is_consuming() to check if there is active callbacks
