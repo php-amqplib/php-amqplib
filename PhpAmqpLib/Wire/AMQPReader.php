@@ -354,6 +354,28 @@ class AMQPReader extends AbstractClient
     }
 
     /**
+     * @return float
+     */
+    public function read_float()
+    {
+        $this->resetCounters();
+        list(, $res) = unpack('G', $this->rawread(4));
+
+        return (float)$res;
+    }
+
+    /**
+     * @return float
+     */
+    public function read_double()
+    {
+        $this->resetCounters();
+        list(, $res) = unpack('E', $this->rawread(8));
+
+        return (float)$res;
+    }
+
+    /**
      * Read a utf-8 encoded string that's stored in up to
      * 255 bytes.  Return it decoded as a PHP unicode object.
      * @return string
@@ -528,6 +550,12 @@ class AMQPReader extends AbstractClient
                 break;
             case AMQPAbstractCollection::T_VOID:
                 $val = null;
+                break;
+            case AMQPAbstractCollection::T_FLOAT:
+                $val = $this->read_float();
+                break;
+            case AMQPAbstractCollection::T_DOUBLE:
+                $val = $this->read_double();
                 break;
             default:
                 throw new AMQPInvalidArgumentException(sprintf(

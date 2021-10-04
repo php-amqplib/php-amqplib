@@ -37,6 +37,10 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
     const T_TABLE = 16;
 
     const T_BYTES = 17;
+
+    const T_FLOAT = 18;
+    const T_DOUBLE = 19;
+
     /**
      * @var string
      */
@@ -46,6 +50,7 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
      * Field types messy mess http://www.rabbitmq.com/amqp-0-9-1-errata.html#section_3
      * Default behaviour is to use rabbitMQ compatible field-set
      * Define AMQP_STRICT_FLD_TYPES=true to use strict AMQP instead
+     * @var array<int, string>
      */
     private static $types_080 = array(
         self::T_INT_LONG => 'I',
@@ -56,7 +61,7 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
     );
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private static $types_091 = array(
         self::T_INT_SHORTSHORT => 'b',
@@ -67,6 +72,8 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         self::T_INT_LONG_U => 'i',
         self::T_INT_LONGLONG => 'L',
         self::T_INT_LONGLONG_U => 'l',
+        self::T_FLOAT => 'f',
+        self::T_DOUBLE => 'd',
         self::T_DECIMAL => 'D',
         self::T_TIMESTAMP => 'T',
         self::T_VOID => 'V',
@@ -79,13 +86,18 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
     );
 
     /**
-     * @var array
+     * @var array<int, string>
      */
     private static $types_rabbit = array(
         self::T_INT_SHORTSHORT => 'b',
+        self::T_INT_SHORTSHORT_U => 'B',
         self::T_INT_SHORT => 's',
+        self::T_INT_SHORT_U => 'u',
         self::T_INT_LONG => 'I',
+        self::T_INT_LONG_U => 'i',
         self::T_INT_LONGLONG => 'l',
+        self::T_FLOAT => 'f',
+        self::T_DOUBLE => 'd',
         self::T_DECIMAL => 'D',
         self::T_TIMESTAMP => 'T',
         self::T_VOID => 'V',

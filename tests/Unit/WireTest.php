@@ -2,14 +2,21 @@
 
 namespace PhpAmqpLib\Tests\Unit;
 
+use PhpAmqpLib\Tests\TestCaseCompat;
+use PhpAmqpLib\Wire\AMQPAbstractCollection;
 use PhpAmqpLib\Wire\AMQPArray;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
-use PHPUnit\Framework\TestCase;
 
-class WireTest extends TestCase
+class WireTest extends TestCaseCompat
 {
+    public function setUpCompat()
+    {
+        // TODO test other protocols as well
+        $this->setProtoVersion(AMQPAbstractCollection::PROTOCOL_RBT);
+    }
+
     /**
      * @dataProvider bitWrData
      * @test
@@ -656,5 +663,12 @@ class WireTest extends TestCase
             $readValue,
             'Written: ' . bin2hex($writer->getvalue()) . ', read: ' . bin2hex($readValue)
         );
+    }
+
+    protected function setProtoVersion($proto)
+    {
+        $r = new \ReflectionProperty(AMQPAbstractCollection::class, 'protocol');
+        $r->setAccessible(true);
+        $r->setValue(null, $proto);
     }
 }

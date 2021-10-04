@@ -50,4 +50,9 @@ class TestCaseCompat extends \PHPUnit\Framework\TestCase
     {
         $this->assertInternalType('integer', $actual, $message);
     }
+
+    protected static function assertIsFloat($actual, $message = '')
+    {
+        self::assertInternalType('float', $actual, $message);
+    }
 }

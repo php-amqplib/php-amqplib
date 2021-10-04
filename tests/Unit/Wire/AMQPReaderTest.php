@@ -5,10 +5,10 @@ namespace PhpAmqpLib\Tests\Unit\Wire;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
 use PhpAmqpLib\Tests\TestCaseCompat;
+use PhpAmqpLib\Wire\AMQPAbstractCollection;
 
 class AMQPReaderTest extends TestCaseCompat
 {
-
     protected function setUpCompat()
     {
         $this->setProtoVersion(Wire\Constants091::VERSION);
@@ -16,7 +16,7 @@ class AMQPReaderTest extends TestCaseCompat
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', 'protocol');
+        $r = new \ReflectionProperty(AMQPAbstractCollection::class, 'protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }
@@ -53,5 +53,20 @@ class AMQPReaderTest extends TestCaseCompat
         $parsed = $reader->read_longlong();
         $this->assertIsString($parsed);
         $this->assertEquals('18446744073709551615', $parsed);
+    }
+
+    public function testDecodeFloatingPointValues()
+    {
+        $data = hex2bin('3a83126f');
+        $reader = new AMQPReader($data);
+        $parsed = $reader->read_value(AMQPAbstractCollection::T_FLOAT);
+        self::assertIsFloat($parsed);
+        self::assertEquals(0.001, $parsed);
+
+        $data = hex2bin('3feff7ced916872b');
+        $reader = new AMQPReader($data);
+        $parsed = $reader->read_value(AMQPAbstractCollection::T_DOUBLE);
+        self::assertIsFloat($parsed);
+        self::assertEquals(0.999, $parsed);
     }
 }
