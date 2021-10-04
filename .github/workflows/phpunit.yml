@@ -43,7 +43,7 @@ jobs:
             coverage: none
     services:
       rabbitmq:
-        image: rabbitmq:3.8-management
+        image: rabbitmq:3.9-management
         ports:
           - 5671:5671
           - 5672:5672
@@ -51,12 +51,7 @@ jobs:
           - 15672:15672
         volumes:
           - ${{ github.workspace }}:/src
-        env:
-          RABBITMQ_SSL_CACERTFILE: /src/tests/certs/ca_certificate.pem
-          RABBITMQ_SSL_CERTFILE: /src/tests/certs/server_certificate.pem
-          RABBITMQ_SSL_KEYFILE: /src/tests/certs/server_key.pem
-          RABBITMQ_SSL_VERIFY: verify_peer
-          RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: 0
+          - ${{ github.workspace }}/docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
     steps:
     - name: Checkout
