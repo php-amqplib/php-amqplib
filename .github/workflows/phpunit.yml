@@ -43,7 +43,9 @@ jobs:
             coverage: none
     services:
       rabbitmq:
-        image: rabbitmq:3.9-management
+        # 3.8.10 and later versions has enabled TLSv1.3 by default which is not supported by PHP images
+        # TLSv1.3 can be disabled by using configuration file, but not environment variables
+        image: rabbitmq:3.8.9-management
         ports:
           - 5671:5671
           - 5672:5672
@@ -51,13 +53,17 @@ jobs:
           - 15672:15672
         volumes:
           - ${{ github.workspace }}:/src
-          - ${{ github.workspace }}/docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+        env:
+            RABBITMQ_SSL_CACERTFILE: /src/tests/certs/ca_certificate.pem
+            RABBITMQ_SSL_CERTFILE: /src/tests/certs/server_certificate.pem
+            RABBITMQ_SSL_KEYFILE: /src/tests/certs/server_key.pem
+            RABBITMQ_SSL_VERIFY: verify_peer
+            RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: 0
+
     name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      with:
-        clean: false # cleanup fails due to docker mounts
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
