@@ -2,6 +2,9 @@
 
 namespace PhpAmqpLib\Tests\Unit\Wire;
 
+use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
+use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
+use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Wire;
 use PHPUnit\Framework\TestCase;
 
@@ -121,9 +124,11 @@ class AMQPCollectionTest extends TestCase
             ['foo' => 'bar'],
             ['foo'],
             [],
+            .9999,
+            -.9999,
         ]);
 
-        $is64 = PHP_INT_SIZE == 8;
+        $is64 = PHP_INT_SIZE === 8;
 
         $this->assertEquals(
             [
@@ -181,6 +186,14 @@ class AMQPCollectionTest extends TestCase
                     Wire\AMQPAbstractCollection::getDataTypeForSymbol('A'),
                     [],
                 ],
+                [
+                    Wire\AMQPAbstractCollection::getDataTypeForSymbol('S'),
+                    '0.9999',
+                ],
+                [
+                    Wire\AMQPAbstractCollection::getDataTypeForSymbol('S'),
+                    '-0.9999',
+                ],
             ],
             $this->getEncodedRawData($a)
         );
@@ -210,9 +223,11 @@ class AMQPCollectionTest extends TestCase
             ['foo' => 'bar'],
             ['foo'],
             [],
+            .9999,
+            -.9999,
         ]);
 
-        $is64 = PHP_INT_SIZE == 8;
+        $is64 = PHP_INT_SIZE === 8;
 
         $this->assertEquals(
             [
@@ -270,6 +285,14 @@ class AMQPCollectionTest extends TestCase
                     Wire\AMQPAbstractCollection::getDataTypeForSymbol('A'),
                     [],
                 ],
+                [
+                    Wire\AMQPAbstractCollection::getDataTypeForSymbol('S'),
+                    '0.9999',
+                ],
+                [
+                    Wire\AMQPAbstractCollection::getDataTypeForSymbol('S'),
+                    '-0.9999',
+                ],
             ],
             $this->getEncodedRawData($a)
         );
@@ -286,8 +309,8 @@ class AMQPCollectionTest extends TestCase
      */
     public function encode_unknown_data_type()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfBoundsException::class);
-        $a = new Wire\AMQPArray(array(new \stdClass()));
+        $this->expectException(AMQPOutOfBoundsException::class);
+        new Wire\AMQPArray(array(new \stdClass()));
     }
 
     /**
@@ -295,12 +318,12 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_unsupported_data_type_080()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+        $this->expectException(AMQPOutOfRangeException::class);
 
         $this->setProtoVersion(Wire\Constants080::VERSION);
         $a = new Wire\AMQPArray();
 
-        $a->push(12345, Wire\AMQPArray::T_INT_LONGLONG);
+        $a->push(12345, Wire\AMQPAbstractCollection::T_INT_LONGLONG);
     }
 
     /**
@@ -308,7 +331,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_unsupported_data_type_091()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+        $this->expectException(AMQPOutOfRangeException::class);
 
         $this->setProtoVersion(Wire\Constants091::VERSION);
         $a = new Wire\AMQPArray();
@@ -321,12 +344,12 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_unsupported_data_type_rabbit()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+        $this->expectException(AMQPOutOfRangeException::class);
 
         $this->setProtoVersion(Wire\AMQPAbstractCollection::PROTOCOL_RBT);
         $a = new Wire\AMQPArray();
 
-        $a->push(12345, Wire\AMQPArray::T_INT_LONGLONG_U);
+        $a->push(12345, Wire\AMQPAbstractCollection::T_INT_LONGLONG_U);
     }
 
     /**
@@ -425,7 +448,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function set_empty_key()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectException(AMQPInvalidArgumentException::class);
         $this->expectExceptionMessage('Table key must be non-empty string up to 128 chars in length');
 
         $t = new Wire\AMQPTable();
@@ -438,7 +461,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function set_long_key()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectException(AMQPInvalidArgumentException::class);
         $this->expectExceptionMessage('Table key must be non-empty string up to 128 chars in length');
 
         $t = new Wire\AMQPTable();
@@ -451,7 +474,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_mismatched_type()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectException(AMQPInvalidArgumentException::class);
 
         $a = new Wire\AMQPArray();
 
@@ -463,7 +486,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_raw_array_with_type()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectException(AMQPInvalidArgumentException::class);
         $this->expectExceptionMessage('Arrays must be passed as AMQPArray instance');
 
         $a = new Wire\AMQPArray();
@@ -476,7 +499,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_raw_table_with_type()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectException(AMQPInvalidArgumentException::class);
         $this->expectExceptionMessage('Tables must be passed as AMQPTable instance');
 
         $a = new Wire\AMQPArray();
@@ -489,7 +512,7 @@ class AMQPCollectionTest extends TestCase
      */
     public function push_float_with_decimal_type()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPInvalidArgumentException::class);
+        $this->expectException(AMQPInvalidArgumentException::class);
         $this->expectExceptionMessage('Decimal values must be instance of AMQPDecimal');
 
         $a = new Wire\AMQPArray();
@@ -641,7 +664,7 @@ class AMQPCollectionTest extends TestCase
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', 'protocol');
+        $r = new \ReflectionProperty(Wire\AMQPAbstractCollection::class, 'protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }

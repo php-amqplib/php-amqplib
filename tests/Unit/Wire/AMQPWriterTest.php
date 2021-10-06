@@ -2,40 +2,30 @@
 
 namespace PhpAmqpLib\Tests\Unit\Wire;
 
+use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPArray;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
 use PhpAmqpLib\Tests\TestCaseCompat;
+use PhpAmqpLib\Wire\AMQPAbstractCollection;
 
 class AMQPWriterTest extends TestCaseCompat
 {
-    protected $writer;
-
-    protected function setUpCompat()
-    {
-        $this->setProtoVersion(Wire\Constants091::VERSION);
-        $this->writer = new AMQPWriter();
-    }
-
-    protected function tearDownCompat()
-    {
-        $this->setProtoVersion(AMQPArray::PROTOCOL_RBT);
-        $this->writer = null;
-    }
-
     /**
      * @test
      */
     public function write_array()
     {
-        $this->writer->write_array([
+        $this->setProtoVersion(Wire\Constants091::VERSION);
+        $writer = new AMQPWriter();
+        $writer->write_array([
             'rabbit@localhost',
             'hare@localhost',
             42,
             true
         ]);
-        $out = $this->writer->getvalue();
+        $out = $writer->getvalue();
         $expected = "\x00\x00\x00\x2fS\x00\x00\x00\x10rabbit@localhostS\x00\x00\x00\x0Ehare@localhostI\x00\x00\x00\x2at\x01";
 
         $this->assertEquals(51, mb_strlen($out, 'ASCII'));
@@ -47,7 +37,9 @@ class AMQPWriterTest extends TestCaseCompat
      */
     public function write_AMQP_array()
     {
-        $this->writer->write_array(
+        $this->setProtoVersion(Wire\Constants091::VERSION);
+        $writer = new AMQPWriter();
+        $writer->write_array(
             new AMQPArray([
                     'rabbit@localhost',
                     'hare@localhost',
@@ -58,7 +50,7 @@ class AMQPWriterTest extends TestCaseCompat
 
         $this->assertEquals(
             "\x00\x00\x00\x2fS\x00\x00\x00\x10rabbit@localhostS\x00\x00\x00\x0Ehare@localhostI\x00\x00\x00\x2at\x01",
-            $this->writer->getvalue()
+            $writer->getvalue()
         );
     }
 
@@ -67,7 +59,9 @@ class AMQPWriterTest extends TestCaseCompat
      */
     public function write_table()
     {
-        $this->writer->write_table([
+        $this->setProtoVersion(Wire\Constants091::VERSION);
+        $writer = new AMQPWriter();
+        $writer->write_table([
             'x-foo' => ['S', 'bar'],
             'x-bar' => ['A', ['baz', 'qux']],
             'x-baz' => ['I', 42],
@@ -80,7 +74,7 @@ class AMQPWriterTest extends TestCaseCompat
             'x-short-str' => ['s', 'foo'],
             'x-bytes' => array('x', 'foobar'),
         ]);
-        $out = $this->writer->getvalue();
+        $out = $writer->getvalue();
         $expected = "\x00\x00\x00\xa3\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
             "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo\x07x-bytesx\x00\x00\x00\x06foobar";
         $this->assertEquals($expected, $out);
@@ -102,12 +96,15 @@ class AMQPWriterTest extends TestCaseCompat
         $t->set('x-short', -1024, AMQPTable::T_INT_SHORT);
         $t->set('x-short-u', 125, AMQPTable::T_INT_SHORT_U);
         $t->set('x-short-str', 'foo', AMQPTable::T_STRING_SHORT);
-        $this->writer->write_table($t);
+
+        $this->setProtoVersion(Wire\Constants091::VERSION);
+        $writer = new AMQPWriter();
+        $writer->write_table($t);
 
         $this->assertEquals(
             "\x00\x00\x00\x90\x05x-fooS\x00\x00\x00\x03bar\x05x-barA\x00\x00\x00\x10S\x00\x00\x00\x03bazS\x00\x00\x00\x03qux\x05x-bazI\x00\x00\x00\x2a\x06x-truet\x01\x07x-falset\x00" .
             "\X0cx-shortshortb\xfb\x0ex-shortshort-uB\x05\x07x-shortU\xfc\x00\x09x-short-uu\x00\x7d\x0bx-short-strs\x03foo",
-            $this->writer->getvalue()
+            $writer->getvalue()
         );
     }
 
@@ -116,9 +113,11 @@ class AMQPWriterTest extends TestCaseCompat
      */
     public function write_table_with_invalid_type()
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPOutOfRangeException::class);
+        $this->expectException(AMQPOutOfRangeException::class);
 
-        $this->writer->write_table([
+        $this->setProtoVersion(Wire\Constants091::VERSION);
+        $writer = new AMQPWriter();
+        $writer->write_table([
             'x-foo' => ['_', 'bar'],
         ]);
     }
@@ -128,18 +127,20 @@ class AMQPWriterTest extends TestCaseCompat
      */
     public function write_table_with_null_strings()
     {
-        $this->writer->write_table([
+        $this->setProtoVersion(Wire\Constants091::VERSION);
+        $writer = new AMQPWriter();
+        $writer->write_table([
             'x-long-str' => ['S', null],
             'x-short-str' => ['s', null],
         ]);
 
         $expected = "\x00\x00\x00\x1e\x0ax-long-strS\x00\x00\x00\x00\x0bx-short-strs\x00";
-        $this->assertEquals($expected, $this->writer->getvalue());
+        $this->assertEquals($expected, $writer->getvalue());
     }
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty('\\PhpAmqpLib\\Wire\\AMQPAbstractCollection', 'protocol');
+        $r = new \ReflectionProperty(AMQPAbstractCollection::class, 'protocol');
         $r->setAccessible(true);
         $r->setValue(null, $proto);
     }
