@@ -9,10 +9,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - php: '7.0'
-            phpseclib: '^2.0'
-            composer: 'composer:v1'
-            coverage: none
           - php: '7.1'
             phpseclib: '^2.0'
             composer: 'composer:v1'

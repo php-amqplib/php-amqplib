@@ -9,8 +9,6 @@ image: Visual Studio 2017
 ## Build matrix for lowest and highest possible targets
 environment:
   matrix:
-  - dependencies: lowest
-    PHP_VERSION: 7.0
   - dependencies: current
     PHP_VERSION: 7.1
   - dependencies: current
