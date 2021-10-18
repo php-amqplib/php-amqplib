@@ -10,11 +10,6 @@
     <arg name="tab-width" value="4"/>
     <arg name="report-width" value="120"/>
 
-    <rule ref="PSR12">
-        <!-- Rule requires minimal PHP 7.1 version -->
-        <exclude name="PSR12.Properties.ConstantVisibility.NotFound"/>
-    </rule>
-
     <rule ref="PEAR.Functions.ValidDefaultValue">
         <!-- We should preserve BC with possible child classes until next major version -->
         <exclude-pattern>PhpAmqpLib/Helper/Protocol/Protocol091.php</exclude-pattern>

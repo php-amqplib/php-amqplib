@@ -66,10 +66,7 @@ class StreamIO extends AbstractIO
         $this->initial_heartbeat = $heartbeat;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
-        // tcp_nodelay was added in 7.1.0
-        if (PHP_VERSION_ID >= 70100) {
-            stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
-        }
+        stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
 
         $options = stream_context_get_options($this->context);
         if (!empty($options['ssl'])) {
