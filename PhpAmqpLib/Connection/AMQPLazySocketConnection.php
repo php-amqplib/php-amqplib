@@ -38,4 +38,19 @@ class AMQPLazySocketConnection extends AMQPSocketConnection
     {
         return false;
     }
+
+    /**
+     * @param string[][] $hosts
+     * @param string[] $options
+     * @return self
+     * @throws \Exception
+     */
+    public static function create_connection($hosts, $options = array())
+    {
+        if (count($hosts) > 1) {
+            throw new \RuntimeException('Lazy connection does not support multiple hosts');
+        }
+
+        return parent::create_connection($hosts, $options);
+    }
 }

@@ -33,6 +33,9 @@
         <exclude-pattern>PhpAmqpLib/Connection/AMQPSocketConnection.php</exclude-pattern>
         <exclude-pattern>PhpAmqpLib/Connection/AMQPSSLConnection.php</exclude-pattern>
         <exclude-pattern>PhpAmqpLib/Connection/AMQPStreamConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AMQPLazyConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AMQPLazySocketConnection.php</exclude-pattern>
+        <exclude-pattern>PhpAmqpLib/Connection/AMQPLazySSLConnection.php</exclude-pattern>
         <exclude-pattern>PhpAmqpLib/Connection/AbstractConnection.php</exclude-pattern>
         <exclude-pattern>PhpAmqpLib/Message/AMQPMessage.php</exclude-pattern>
         <exclude-pattern>PhpAmqpLib/Helper/Protocol/Wait091.php</exclude-pattern>
