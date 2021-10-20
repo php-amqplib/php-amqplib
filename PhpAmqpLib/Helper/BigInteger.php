@@ -1,5 +1,5 @@
 <?php
-// phpcs:ignoreFile
+
 namespace PhpAmqpLib\Helper;
 
 if (class_exists('phpseclib\Math\BigInteger')) {
