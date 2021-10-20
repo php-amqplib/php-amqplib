@@ -11,7 +11,7 @@ use PhpAmqpLib\Exception\AMQPRuntimeException;
 final class PCNTLHeartbeatSender
 {
     /**
-     * @var AbstractConnection
+     * @var AbstractConnection|null
      */
     private $connection;
 

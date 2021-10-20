@@ -335,7 +335,7 @@ class AMQPChannel extends AbstractChannel
      * Grants access to server resources
      *
      * @param AMQPReader $reader
-     * @return string
+     * @return int
      */
     protected function access_request_ok($reader)
     {

@@ -46,7 +46,7 @@ abstract class AbstractConnection extends AbstractChannel
     );
 
     /**
-     * @var AMQPChannel[]
+     * @var AMQPChannel[]|AbstractChannel[]
      * @internal
      */
     public $channels = array();
@@ -169,8 +169,8 @@ abstract class AbstractConnection extends AbstractChannel
      * @param string $locale
      * @param AbstractIO $io
      * @param int $heartbeat
-     * @param int $connection_timeout
-     * @param float $channel_rpc_timeout
+     * @param int|float $connection_timeout
+     * @param int|float $channel_rpc_timeout
      * @throws \Exception
      */
     public function __construct(
@@ -427,7 +427,7 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param string $channel
+     * @param int $channel
      * @param int $class_id
      * @param int $weight
      * @param int $body_size
@@ -444,7 +444,7 @@ abstract class AbstractConnection extends AbstractChannel
     /**
      * Returns a new AMQPWriter or mutates the provided $pkt
      *
-     * @param string $channel
+     * @param int $channel
      * @param int $class_id
      * @param int $weight
      * @param int $body_size
@@ -510,7 +510,7 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param string $channel
+     * @param int $channel
      * @param array $method_sig
      * @param AMQPWriter|string $args
      * @param null $pkt
@@ -525,7 +525,7 @@ abstract class AbstractConnection extends AbstractChannel
     /**
      * Returns a new AMQPWriter or mutates the provided $pkt
      *
-     * @param string $channel
+     * @param int $channel
      * @param array $method_sig
      * @param AMQPWriter|string $args
      * @param AMQPWriter|null $pkt
