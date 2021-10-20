@@ -10,3 +10,5 @@ phpDocumentor.phar
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
+
+.phpunit.result.cache
