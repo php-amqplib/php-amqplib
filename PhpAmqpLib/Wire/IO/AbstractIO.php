@@ -84,7 +84,7 @@ abstract class AbstractIO
         $this->check_heartbeat();
         $this->set_error_handler();
         try {
-            $result = $this->do_select($sec, $usec);
+            $result = $this->do_select($sec, $sec === null ? null : $usec);
             $this->cleanup_error_handler();
         } catch (\ErrorException $e) {
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);

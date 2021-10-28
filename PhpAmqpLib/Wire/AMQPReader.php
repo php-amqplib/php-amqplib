@@ -123,7 +123,7 @@ class AMQPReader extends AbstractClient
         } else {
             // wait indefinitely for data if timeout=0
             $sec = null;
-            $usec = 0;
+            $usec = null;
         }
 
         $result = $this->io->select($sec, $usec);
