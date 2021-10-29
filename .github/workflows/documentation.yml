@@ -18,13 +18,13 @@ jobs:
     - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 7.2
-        extensions: ctype, dom, iconv, json, libxml, simplexml, zlib
+        php-version: 7.4
+        extensions: ctype, dom, hash, iconv, json, libxml, mbstring, simplexml, zlib, xml
         coverage: none
     - name: Download phpDocumentator
-      run: wget -qN https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.1/phpDocumentor.phar
+      run: wget -qN https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.1.2/phpDocumentor.phar
     - name: Generate docs
-      run: php -d error_reporting=1 ./phpDocumentor.phar run --force --template=clean --defaultpackagename=PhpAmqpLib --title='php-amqplib' -d ./PhpAmqpLib -t ./docs
+      run: php -d error_reporting=1 ./phpDocumentor.phar run -v --force --defaultpackagename=PhpAmqpLib --title='php-amqplib' -d ./PhpAmqpLib -t ./docs
     - name: Commit changes
       run: |
         cd ./docs

@@ -12,3 +12,4 @@ phpDocumentor.phar
 ###< squizlabs/php_codesniffer ###
 
 .phpunit.result.cache
+.phpdoc

@@ -1025,7 +1025,7 @@ abstract class AbstractConnection extends AbstractChannel
     /**
      * Get the connection blocked state.
      * @return bool
-     * @since v2.12.0
+     * @since 2.12.0
      */
     public function isBlocked()
     {
