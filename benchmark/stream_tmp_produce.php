@@ -1,11 +1,12 @@
 <?php
 
 use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 require_once __DIR__ . '/config.php';
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 
 $msg_body = <<<EOT
 abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz

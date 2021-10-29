@@ -7,6 +7,7 @@
  */
 
 use PhpAmqpLib\Connection\AMQPConnection;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
 include(__DIR__ . '/config.php');
@@ -14,7 +15,7 @@ include(__DIR__ . '/config.php');
 $exchange = 'bench_exchange';
 $queue = 'bench_queue';
 
-$conn = new AMQPConnection(HOST, PORT, USER, PASS, VHOST);
+$conn = new AMQPStreamConnection(HOST, PORT, USER, PASS, VHOST);
 $ch = $conn->channel();
 
 $ch->queue_declare($queue, false, false, false, false);
