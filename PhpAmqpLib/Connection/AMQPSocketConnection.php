@@ -21,6 +21,7 @@ class AMQPSocketConnection extends AbstractConnection
      * @param int $write_timeout
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
+     * @param AMQPConnectionConfig|null $config
      * @throws \Exception
      */
     public function __construct(
@@ -37,7 +38,8 @@ class AMQPSocketConnection extends AbstractConnection
         $keepalive = false,
         $write_timeout = 3,
         $heartbeat = 0,
-        $channel_rpc_timeout = 0.0
+        $channel_rpc_timeout = 0.0,
+        ?AMQPConnectionConfig $config = null
     ) {
         if ($channel_rpc_timeout > $read_timeout) {
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read timeout');
@@ -56,10 +58,14 @@ class AMQPSocketConnection extends AbstractConnection
             $io,
             $heartbeat,
             max($read_timeout, $write_timeout),
-            $channel_rpc_timeout
+            $channel_rpc_timeout,
+            $config
         );
     }
 
+    /**
+     * @deprecated Use ConnectionFactory
+     */
     protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
     {
         $insist = isset($options['insist']) ?

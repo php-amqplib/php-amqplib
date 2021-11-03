@@ -41,6 +41,7 @@ class AMQPLazySSLConnection extends AMQPSSLConnection
      * @param string[] $options
      * @return self
      * @throws \Exception
+     * @deprecated Use ConnectionFactory
      */
     public static function create_connection($hosts, $options = array())
     {
