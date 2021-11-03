@@ -1,3 +1,10 @@
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+
 filter:
     paths: [PhpAmqpLib/*]
     excluded_paths: [tests/*, demo/*, benchmark/*, spec/*, PhpAmqpLib/Helper/Protocol/*, PhpAmqpLib/Wire/Constants*]
