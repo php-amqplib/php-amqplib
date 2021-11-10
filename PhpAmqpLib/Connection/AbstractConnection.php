@@ -513,7 +513,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $channel
      * @param array $method_sig
      * @param AMQPWriter|string $args
-     * @param null $pkt
+     * @param AMQPWriter|null $pkt
      */
     protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
@@ -529,7 +529,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param array $method_sig
      * @param AMQPWriter|string $args
      * @param AMQPWriter|null $pkt
-     * @return AMQPWriter
+     * @return AMQPWriter|null
      */
     protected function prepare_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
