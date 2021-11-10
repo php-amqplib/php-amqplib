@@ -776,7 +776,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Acknowledges one or more messages
      *
-     * @param int $delivery_tag
+     * @param int|string $delivery_tag
      * @param bool $multiple
      */
     public function basic_ack($delivery_tag, $multiple = false)
@@ -830,7 +830,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Handles the deletion of messages from this->publishedMessages and dispatches them to the $handler
      *
-     * @param int $delivery_tag
+     * @param int|string $delivery_tag
      * @param bool $multiple
      * @param callable $handler
      */
@@ -877,7 +877,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Rejects one or several received messages
      *
-     * @param int $delivery_tag
+     * @param int|string $delivery_tag
      * @param bool $multiple
      * @param bool $requeue
      */
@@ -890,7 +890,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Ends a queue consumer
      *
-     * @param string $consumer_tag
+     * @param int|string $consumer_tag
      * @param bool $nowait
      * @param bool $noreturn
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
@@ -951,7 +951,7 @@ class AMQPChannel extends AbstractChannel
      * @link https://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.consume
      *
      * @param string $queue
-     * @param string $consumer_tag
+     * @param int|string $consumer_tag
      * @param bool $no_local
      * @param bool $no_ack
      * @param bool $exclusive
@@ -1317,7 +1317,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Rejects an incoming message
      *
-     * @param int $delivery_tag
+     * @param int|string $delivery_tag
      * @param bool $requeue
      */
     public function basic_reject($delivery_tag, $requeue)
