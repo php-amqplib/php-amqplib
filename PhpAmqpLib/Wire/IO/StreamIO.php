@@ -342,7 +342,7 @@ class StreamIO extends AbstractIO
         $except = null;
 
         if ($sec === null && PHP_VERSION_ID >= 80100) {
-            $usec = null;
+            $usec = 0;
         }
 
         return stream_select($read, $write, $except, $sec, $usec);
