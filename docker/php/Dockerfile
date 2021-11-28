@@ -1,8 +1,8 @@
 FROM php:7.1-cli
 
 RUN apt update && \
-    apt -qy install git unzip zlib1g-dev && \
-    docker-php-ext-install sockets pcntl zip
+    apt -qy install git unzip zlib1g-dev libzip-dev
+RUN docker-php-ext-install sockets pcntl zip
 
 WORKDIR /src
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
