@@ -187,7 +187,7 @@ abstract class AbstractConnection extends AbstractChannel
         $channel_rpc_timeout = 0.0
     ) {
         if (is_null($io)) {
-            throw new \InvalidArgumentException('"io" can not be null');
+            throw new \InvalidArgumentException('Argument $io cannot be null');
         }
 
         // save the params for the use of __clone
