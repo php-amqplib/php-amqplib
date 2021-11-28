@@ -3,6 +3,7 @@
 namespace PhpAmqpLib\Tests;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Runner\Version;
 
 class TestCaseCompat extends TestCase
 {
@@ -23,10 +24,20 @@ class TestCaseCompat extends TestCase
     }
 
     protected function setUp(): void {
-        static::setUpCompat();
+        $this->setUpCompat();
     }
 
     protected function tearDown(): void {
-        static::tearDownCompat();
+        $this->tearDownCompat();
+    }
+
+    public static function assertPattern(string $pattern, string $string, string $message = ''): void
+    {
+        $series = Version::series();
+        if (version_compare($series, '9.5') >= 0) {
+            self::assertMatchesRegularExpression($pattern, $string, $message);
+        } else {
+            self::assertRegExp($pattern, $string, $message);
+        }
     }
 }
