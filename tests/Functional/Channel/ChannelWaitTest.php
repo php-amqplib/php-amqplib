@@ -161,10 +161,10 @@ class ChannelWaitTest extends TestCase
         return $factory;
     }
 
-    protected function deferSignal($delay = 1)
+    public static function deferSignal($delay = 1)
     {
         if (!extension_loaded('pcntl')) {
-            $this->markTestSkipped('pcntl extension is not available');
+            self::markTestSkipped('pcntl extension is not available');
         }
         pcntl_signal(SIGTERM, function () {
         });

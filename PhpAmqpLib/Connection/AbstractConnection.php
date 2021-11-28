@@ -337,11 +337,15 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @param int $sec
+     * @param int|null $sec
      * @param int $usec
-     * @return mixed
+     * @return int
+     * @throws AMQPIOException
+     * @throws AMQPRuntimeException
+     * @throws AMQPConnectionClosedException
+     * @throws AMQPRuntimeException
      */
-    public function select($sec, $usec = 0)
+    public function select(?int $sec, int $usec = 0): int
     {
         try {
             return $this->io->select($sec, $usec);
@@ -413,7 +417,7 @@ abstract class AbstractConnection extends AbstractChannel
 
     /**
      * @return int
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws AMQPRuntimeException
      */
     public function get_free_channel_id()
     {
@@ -562,7 +566,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @return array
      * @throws \Exception
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws AMQPRuntimeException
      */
     protected function wait_frame($timeout = 0)
     {

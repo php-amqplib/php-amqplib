@@ -330,7 +330,7 @@ class StreamIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    protected function do_select($sec, $usec)
+    protected function do_select(?int $sec, int $usec)
     {
         if ($this->sock === null || !is_resource($this->sock)) {
             $this->sock = null;
@@ -342,7 +342,7 @@ class StreamIO extends AbstractIO
         $except = null;
 
         if ($sec === null && PHP_VERSION_ID >= 80100) {
-            $usec = null;
+            $usec = 0;
         }
 
         return stream_select($read, $write, $except, $sec, $usec);
