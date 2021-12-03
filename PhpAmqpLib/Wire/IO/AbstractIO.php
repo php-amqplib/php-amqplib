@@ -74,12 +74,12 @@ abstract class AbstractIO
 
     /**
      * @param int|null $sec
-     * @param int|null $usec
+     * @param int $usec
      * @return int
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
      */
-    public function select($sec, $usec)
+    public function select(?int $sec, int $usec = 0)
     {
         $this->check_heartbeat();
         $this->set_error_handler();
@@ -104,11 +104,11 @@ abstract class AbstractIO
 
     /**
      * @param int|null $sec
-     * @param int|null $usec
+     * @param int $usec
      * @return int|bool
      * @throws AMQPConnectionClosedException
      */
-    abstract protected function do_select($sec, $usec);
+    abstract protected function do_select(?int $sec, int $usec);
 
     /**
      * Set ups the connection.

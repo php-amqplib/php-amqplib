@@ -239,7 +239,7 @@ class SocketIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    protected function do_select($sec, $usec)
+    protected function do_select(?int $sec, int $usec)
     {
         if (!is_resource($this->sock) && !is_a($this->sock, \Socket::class)) {
             $this->sock = null;
