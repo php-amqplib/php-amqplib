@@ -208,12 +208,15 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         return $val;
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
 
+    /**
+     * @param mixed $offset
+     * @return mixed
+     */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
@@ -222,14 +225,12 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         return is_array($value) ? $value[1] : $value;
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->setValue($value, null, $offset);
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }
@@ -480,32 +481,35 @@ abstract class AMQPAbstractCollection implements \Iterator, \ArrayAccess
         return $symbols[$symbol];
     }
 
+    /**
+     * @return mixed
+     */
     #[\ReturnTypeWillChange]
     public function current()
     {
         return current($this->data);
     }
 
+    /**
+     * @return mixed
+     */
     #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->data);
     }
 
-    #[\ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         next($this->data);
     }
 
-    #[\ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->data);
     }
 
-    #[\ReturnTypeWillChange]
-    public function valid()
+    public function valid(): bool
     {
         return key($this->data) !== null;
     }
