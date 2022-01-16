@@ -1,0 +1,29 @@
+name: Update changelog
+on:
+  release:
+    types:
+      - published
+jobs:
+  run:
+    name: Update changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate changelog
+        uses: addnab/docker-run-action@v3
+        with:
+          image: githubchangeloggenerator/github-changelog-generator
+          options: "-e SRC_PATH=/github/workspace"
+          run: "github_changelog_generator --user php-amqplib --project php-amqplib --token ${{ secrets.GITHUB_TOKEN }}"
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "update changelog" || true
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
