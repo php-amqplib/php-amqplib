@@ -92,7 +92,7 @@ class StreamIO extends AbstractIO
             $this->port
         );
 
-        $this->set_error_handler();
+        $this->setErrorHandler();
 
         try {
             $this->sock = stream_socket_client(
@@ -103,9 +103,11 @@ class StreamIO extends AbstractIO
                 STREAM_CLIENT_CONNECT,
                 $this->context
             );
-            $this->cleanup_error_handler();
+            $this->throwOnError();
         } catch (\ErrorException $e) {
             throw new AMQPIOException($e->getMessage());
+        } finally {
+            $this->restoreErrorHandler();
         }
 
         if (false === $this->sock) {
@@ -169,12 +171,14 @@ class StreamIO extends AbstractIO
                 throw new AMQPConnectionClosedException('Broken pipe or closed connection');
             }
 
-            $this->set_error_handler();
+            $this->setErrorHandler();
             try {
                 $buffer = fread($this->sock, ($len - $read));
-                $this->cleanup_error_handler();
+                $this->throwOnError();
             } catch (\ErrorException $e) {
                 throw new AMQPDataReadException($e->getMessage(), $e->getCode(), $e);
+            } finally {
+                $this->restoreErrorHandler();
             }
 
             if ($buffer === false) {
@@ -232,7 +236,7 @@ class StreamIO extends AbstractIO
             }
 
             $result = false;
-            $this->set_error_handler();
+            $this->setErrorHandler();
             // OpenSSL's C library function SSL_write() can balk on buffers > 8192
             // bytes in length, so we're limiting the write size here. On both TLS
             // and plaintext connections, the write loop will continue until the
@@ -245,7 +249,7 @@ class StreamIO extends AbstractIO
                 $this->select_write();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = fwrite($this->sock, $buffer);
-                $this->cleanup_error_handler();
+                $this->throwOnError();
             } catch (\ErrorException $e) {
                 $code = $this->last_error['errno'];
                 $constants = SocketConstants::getInstance();
@@ -263,6 +267,8 @@ class StreamIO extends AbstractIO
                     default:
                         throw new AMQPRuntimeException($e->getMessage(), $code, $e);
                 }
+            } finally {
+                $this->restoreErrorHandler();
             }
 
             if ($result === false) {
