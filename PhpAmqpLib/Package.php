@@ -5,5 +5,5 @@ namespace PhpAmqpLib;
 final class Package
 {
     const NAME = 'AMQPLib';
-    const VERSION = '3.1.0';
+    const VERSION = '3.1.2';
 }
