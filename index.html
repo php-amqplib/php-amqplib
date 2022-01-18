@@ -1,282 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8">
     <title>php-amqplib</title>
-    <meta name="author" content=""/>
-    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">php-amqplib</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
 
-    <link href="css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-    <link href="css/font-awesome.min.css" rel="stylesheet">
-    <link href="css/prism.css" rel="stylesheet" media="all"/>
-    <link href="css/template.css" rel="stylesheet" media="all"/>
-    <!--[if lt IE 9]>
-    <script src="js/html5.js"></script>
-    <![endif]-->
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <script src="js/ui/1.10.4/jquery-ui.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.smooth-scroll.js"></script>
-    <script src="js/prism.min.js"></script>
-    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
-    <link rel="shortcut icon" href="images/favicon.ico"/>
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"/>
-</head>
-<body>
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <i class="icon-ellipsis-vertical"></i>
-            </a>
-            <a class="brand" href="index.html">php-amqplib</a>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpamqplib.html">PhpAmqpLib</a></h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/phpamqplib-channel.html">Channel</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-connection.html">Connection</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-exception.html">Exception</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-exchange.html">Exchange</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-helper.html">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-message.html">Message</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-wire.html">Wire</a>
+                
+            </li>
+            </ul>
 
-            <div class="nav-collapse">
-                <ul class="nav pull-right">                    <li class="dropdown">
-                        <a href="index.html" class="dropdown-toggle" data-toggle="dropdown">
-                            API Documentation <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">                            <li><a href="namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>                        </ul>
-                    </li>                    <li class="dropdown" id="charts-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Charts <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="graphs/class.html">
-                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown" id="reports-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Reports <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="reports/errors.html">                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">626</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="reports/markers.html">                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="reports/deprecated.html">                                    <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">15</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!--<div class="go_to_top">-->
-    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
-    <!--</div>-->
-</div>
+                        </section>
+                <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/PhpAmqpLib.html">PhpAmqpLib</a></h4>
 
-<div id="___" class="container-fluid">    <section class="row-fluid">
-        <div class="span2 sidebar">    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-toggle" data-toggle="collapse" data-target="#namespace-746297614"></a>                <a href="namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
-            </div>
-            <div id="namespace-746297614" class="accordion-body collapsein">
-                <div class="accordion-inner">    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-1435652563"></a>                <a href="namespaces/PhpAmqpLib.html" style="margin-left: 30px; padding-left: 0">PhpAmqpLib</a>
-            </div>
-            <div id="namespace-1435652563" class="accordion-body collapse">
-                <div class="accordion-inner">    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-918237914"></a>                <a href="namespaces/PhpAmqpLib.Channel.html" style="margin-left: 30px; padding-left: 0">Channel</a>
-            </div>
-            <div id="namespace-918237914" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Channel.AbstractChannel.html">AbstractChannel</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Channel.AMQPChannel.html">AMQPChannel</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-1218037613"></a>                <a href="namespaces/PhpAmqpLib.Connection.html" style="margin-left: 30px; padding-left: 0">Connection</a>
-            </div>
-            <div id="namespace-1218037613" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AbstractConnection.html">AbstractConnection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AMQPConnection.html">AMQPConnection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AMQPLazyConnection.html">AMQPLazyConnection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AMQPLazySocketConnection.html">AMQPLazySocketConnection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AMQPSocketConnection.html">AMQPSocketConnection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AMQPSSLConnection.html">AMQPSSLConnection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Connection.AMQPStreamConnection.html">AMQPStreamConnection</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-512535255"></a>                <a href="namespaces/PhpAmqpLib.Exception.html" style="margin-left: 30px; padding-left: 0">Exception</a>
-            </div>
-            <div id="namespace-512535255" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="interface"><a href="classes/PhpAmqpLib.Exception.AMQPExceptionInterface.html">AMQPExceptionInterface</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPBasicCancelException.html">AMQPBasicCancelException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPChannelClosedException.html">AMQPChannelClosedException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPChannelException.html">AMQPChannelException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPConnectionClosedException.html">AMQPConnectionClosedException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPConnectionException.html">AMQPConnectionException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPDataReadException.html">AMQPDataReadException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPEmptyDeliveryTagException.html">AMQPEmptyDeliveryTagException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPException.html">AMQPException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPHeartbeatMissedException.html">AMQPHeartbeatMissedException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPInvalidArgumentException.html">AMQPInvalidArgumentException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPInvalidFrameException.html">AMQPInvalidFrameException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPIOException.html">AMQPIOException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPIOWaitException.html">AMQPIOWaitException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPLogicException.html">AMQPLogicException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPNoDataException.html">AMQPNoDataException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPNotImplementedException.html">AMQPNotImplementedException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPOutOfBoundsException.html">AMQPOutOfBoundsException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPOutOfRangeException.html">AMQPOutOfRangeException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPProtocolChannelException.html">AMQPProtocolChannelException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPProtocolConnectionException.html">AMQPProtocolConnectionException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPProtocolException.html">AMQPProtocolException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPRuntimeException.html">AMQPRuntimeException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPSocketException.html">AMQPSocketException</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Exception.AMQPTimeoutException.html">AMQPTimeoutException</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-1736911484"></a>                <a href="namespaces/PhpAmqpLib.Exchange.html" style="margin-left: 30px; padding-left: 0">Exchange</a>
-            </div>
-            <div id="namespace-1736911484" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Exchange.AMQPExchangeType.html">AMQPExchangeType</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-179828195"></a>                <a href="namespaces/PhpAmqpLib.Helper.html" style="margin-left: 30px; padding-left: 0">Helper</a>
-            </div>
-            <div id="namespace-179828195" class="accordion-body collapse">
-                <div class="accordion-inner">    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-1242717689"></a>                <a href="namespaces/PhpAmqpLib.Helper.Protocol.html" style="margin-left: 30px; padding-left: 0">Protocol</a>
-            </div>
-            <div id="namespace-1242717689" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.Protocol.MethodMap080.html">MethodMap080</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.Protocol.MethodMap091.html">MethodMap091</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.Protocol.Protocol080.html">Protocol080</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.Protocol.Protocol091.html">Protocol091</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.Protocol.Wait080.html">Wait080</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.Protocol.Wait091.html">Wait091</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.DebugHelper.html">DebugHelper</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.MiscHelper.html">MiscHelper</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Helper.SocketConstants.html">SocketConstants</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-873130998"></a>                <a href="namespaces/PhpAmqpLib.Message.html" style="margin-left: 30px; padding-left: 0">Message</a>
-            </div>
-            <div id="namespace-873130998" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Message.AMQPMessage.html">AMQPMessage</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-1789567343"></a>                <a href="namespaces/PhpAmqpLib.Wire.html" style="margin-left: 30px; padding-left: 0">Wire</a>
-            </div>
-            <div id="namespace-1789567343" class="accordion-body collapse">
-                <div class="accordion-inner">    <div class="accordion" style="margin-bottom: 0">
-        <div class="accordion-group">
-            <div class="accordion-heading">                    <a class="accordion-togglecollapsed" data-toggle="collapse" data-target="#namespace-1152130734"></a>                <a href="namespaces/PhpAmqpLib.Wire.IO.html" style="margin-left: 30px; padding-left: 0">IO</a>
-            </div>
-            <div id="namespace-1152130734" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.IO.AbstractIO.html">AbstractIO</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.IO.SocketIO.html">SocketIO</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.IO.StreamIO.html">StreamIO</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-                    <ul>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AbstractClient.html">AbstractClient</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AMQPAbstractCollection.html">AMQPAbstractCollection</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AMQPArray.html">AMQPArray</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AMQPDecimal.html">AMQPDecimal</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AMQPReader.html">AMQPReader</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AMQPTable.html">AMQPTable</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.AMQPWriter.html">AMQPWriter</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.Constants.html">Constants</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.Constants080.html">Constants080</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.Constants091.html">Constants091</a></li>                            <li class="class"><a href="classes/PhpAmqpLib.Wire.GenericContent.html">GenericContent</a></li>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-                    <ul>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-                    <ul>                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-        </div>
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
     </section>
-    <section class="row-fluid">
-        <div class="span10 offset2">
-            <div class="row-fluid">
-                <div class="span8 content namespace">
-                    <nav>                    </nav>
-                    <h1><small></small>\</h1>                    <h2>Namespaces</h2>
-                    <table class="table table-hover">                            <tr>
-                                <td><a href="namespaces/PhpAmqpLib.html">PhpAmqpLib</a></td>
-                            </tr>                    </table>                </div>
 
-                <aside class="span4 detailsbar">
-                    <dl>
-                        <dt>Namespace hierarchy</dt>
-                        <dd class="hierarchy">                            <div class="namespace-wrapper">\</div>
-                        </dd>
-                    </dl>
-                </aside>
-            </div>            <div class="row-fluid">
-                <section class="span8 content namespace">
-                    <h2>Constants</h2>
-                </section>
-                <aside class="span4 detailsbar"></aside>
-            </div>    <div class="row-fluid">
-        <div class="span8 content class">
-            <a id="constant_STDOUT" name="constant_STDOUT" class="anchor"></a>
-            <article id="constant_STDOUT" class="constant">
-                <h3 class="">STDOUT</h3>
-                <pre class="signature">STDOUT</pre>
-                <p><em></em></p>
-            </article>
-        </div>
-        <aside class="span4 detailsbar">
-            <h1><i class="icon-arrow-down"></i></h1>            <dl>                <dt>File</dt>
-                <dd><a href=""><div class="path-wrapper"></div></a></dd>            </dl>
-            <h2>Tags</h2>
-            <table class="table table-condensed">                    <tr>
-                        <th>package
-                        </th>
-                        <td><p>PhpAmqpLib</p>                        </td>
-                    </tr>            </table>
-        </aside>
-    </div>
-        </div>
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
     </section>
-    <footer class="row-fluid">
-        <section class="span10 offset2">
-            <section class="row-fluid">
-                <section class="span10 offset1">
-                    <section class="row-fluid footer-sections">
-                        <section class="span4">                            <h1><i class="icon-code"></i></h1>
-                            <div>
-                                <ul>                                        <li><a href="namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>                                </ul>
-                            </div>
-                        </section>
-                        <section class="span4">                            <h1><i class="icon-bar-chart"></i></h1>
-                            <div>
-                                <ul>
-                                    <li><a href="graphs/class.html">Class Hierarchy Diagram</a></li>
-                                </ul>
-                            </div>
-                        </section>
-                        <section class="span4">                            <h1><i class="icon-pushpin"></i></h1>
-                            <div>
-                                <ul>
-                                    <li><a href="reports/errors.html">Errors</a></li>
-                                    <li><a href="reports/markers.html">Markers</a></li>
-                                </ul>
-                            </div>
-                        </section>
-                    </section>
-                </section>
-            </section>
-            <section class="row-fluid">
-                <section class="span10 offset1">
-                    <hr />
-                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    onJanuary 8th, 2020 at 00:08.
-                </section>
-            </section>
+</aside>
+
+            <div class="phpdocumentor-column -eight phpdocumentor-content">
+                    <h2>Documentation</h2>
+
+    
+    <h3 id="packages">
+    Packages
+    <a href="#packages" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -package"><a href="packages/PhpAmqpLib.html"><abbr title="\PhpAmqpLib">PhpAmqpLib</abbr></a></dt>
+    </dl>
+
+<h3 id="namespaces">
+    Namespaces
+    <a href="#namespaces" class="headerlink"><i class="fas fa-link"></i></a>
+</h3>
+
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -namespace"><a href="namespaces/phpamqplib.html"><abbr title="\PhpAmqpLib">PhpAmqpLib</abbr></a></dt>
+    </dl>
+
+
+
+
+    
+
+    
+                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
         </section>
-    </footer>
-</div>
+    </section>
+</section>
+            </div>
+        </div>
+        <a href="index.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>

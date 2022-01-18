@@ -1,333 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <meta charset="utf-8"/>
-    <title> &raquo; Deprecated elements</title>
-    <meta name="author" content=""/>
-    <meta name="description" content=""/>
+    <meta charset="utf-8">
+    <title>    php-amqplib &raquo; Deprecated elements
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">php-amqplib</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
 
-    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-    <link href="../css/font-awesome.min.css" rel="stylesheet">
-    <link href="../css/prism.css" rel="stylesheet" media="all"/>
-    <link href="../css/template.css" rel="stylesheet" media="all"/>
-    <!--[if lt IE 9]>
-    <script src="../js/html5.js"></script>
-    <![endif]-->
-    <script src="../js/jquery-1.11.0.min.js"></script>
-    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/jquery.smooth-scroll.js"></script>
-    <script src="../js/prism.min.js"></script>
-    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
-    <link rel="shortcut icon" href="../images/favicon.ico"/>
-    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
-</head>
-<body>
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <i class="icon-ellipsis-vertical"></i>
-            </a>
-            <a class="brand" href="../index.html">php-amqplib</a>
-
-            <div class="nav-collapse">
-                <ul class="nav pull-right">                    <li class="dropdown">
-                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
-                            API Documentation <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">                            <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>                        </ul>
-                    </li>                    <li class="dropdown" id="charts-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Charts <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="../graphs/class.html">
-                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown" id="reports-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            Reports <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="../reports/errors.html">                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">626</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="../reports/markers.html">                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">2</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="../reports/deprecated.html">                                    <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">15</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!--<div class="go_to_top">-->
-    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
-    <!--</div>-->
-</div>
-
-<div id="___" class="container-fluid">    <div class="row-fluid">
-
-        <div class="span2 sidebar">
-            <ul class="side-nav nav nav-list">
-                <li class="nav-header">Navigation</li>                        <li><a href="#Connection/AbstractConnection.php"><i class="icon-file"></i>Connection/AbstractConnection.php</a></li>                        <li><a href="#Connection/AMQPLazySocketConnection.php"><i class="icon-file"></i>Connection/AMQPLazySocketConnection.php</a></li>                        <li><a href="#Connection/AMQPLazyConnection.php"><i class="icon-file"></i>Connection/AMQPLazyConnection.php</a></li>                        <li><a href="#Connection/AMQPConnection.php"><i class="icon-file"></i>Connection/AMQPConnection.php</a></li>                        <li><a href="#Exception/AMQPProtocolConnectionException.php"><i class="icon-file"></i>Exception/AMQPProtocolConnectionException.php</a></li>                        <li><a href="#Exception/AMQPException.php"><i class="icon-file"></i>Exception/AMQPException.php</a></li>                        <li><a href="#Exception/AMQPChannelException.php"><i class="icon-file"></i>Exception/AMQPChannelException.php</a></li>                        <li><a href="#Exception/AMQPConnectionException.php"><i class="icon-file"></i>Exception/AMQPConnectionException.php</a></li>                        <li><a href="#Channel/AbstractChannel.php"><i class="icon-file"></i>Channel/AbstractChannel.php</a></li>                        <li><a href="#Wire/AMQPWriter.php"><i class="icon-file"></i>Wire/AMQPWriter.php</a></li>                        <li><a href="#Wire/AMQPAbstractCollection.php"><i class="icon-file"></i>Wire/AMQPAbstractCollection.php</a></li>            </ul>
-        </div>
-
-        <div class="span10 offset2">
-            <ul class="breadcrumb">
-                <li><a href="../"><i class="icon-remove-sign"></i></a><span class="divider">\</span></li>
-                <li>Deprecated elements</li>
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -four phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpamqplib.html">PhpAmqpLib</a></h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/phpamqplib-channel.html">Channel</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-connection.html">Connection</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-exception.html">Exception</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-exchange.html">Exchange</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-helper.html">Helper</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-message.html">Message</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/phpamqplib-wire.html">Wire</a>
+                
+            </li>
             </ul>
 
-            <div id="marker-accordion">                    <a name="Connection/AbstractConnection.php" id="Connection/AbstractConnection.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Connection/AbstractConnection.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
+                        </section>
+                <section class="phpdocumentor-sidebar__category">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/PhpAmqpLib.html">PhpAmqpLib</a></h4>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -eight phpdocumentor-content">
+                    <ul class="phpdocumentor-breadcrumbs">
+        <li><a href="">Home</a></li>
+    </ul>
+
+    <div class="phpdocumentor-row">
+        <h2 class="phpdocumentor-content__title">Deprecated</h2>
+
+                <h3>Table of Contents</h3>
+        <table class="phpdocumentor-table_of_contents">
                             <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Connection\AbstractConnection::getSocket()</td>
-                                    <td>926</td>
-                                    <td>No direct access to communication socket should be available.</td>
-                                </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Connection\AbstractConnection::getIO()</td>
-                                    <td>935</td>
-                                    <td></td>
-                                </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Connection\AbstractConnection::login_response</td>
-                                    <td>88</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Connection/AMQPLazySocketConnection.php" id="Connection/AMQPLazySocketConnection.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Connection/AMQPLazySocketConnection.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
+                    <td class="phpdocumentor-cell"><a href="reports/deprecated.html#PhpAmqpLib/Channel/AbstractChannel.php">PhpAmqpLib/Channel/AbstractChannel.php</a></td>
+                </tr>
                             <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Connection\AMQPLazySocketConnection::getSocket()</td>
-                                    <td>15</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Connection/AMQPLazyConnection.php" id="Connection/AMQPLazyConnection.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Connection/AMQPLazyConnection.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
+                    <td class="phpdocumentor-cell"><a href="reports/deprecated.html#PhpAmqpLib/Connection/AbstractConnection.php">PhpAmqpLib/Connection/AbstractConnection.php</a></td>
+                </tr>
                             <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Connection\AMQPLazyConnection::getSocket()</td>
-                                    <td>11</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Connection/AMQPConnection.php" id="Connection/AMQPConnection.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Connection/AMQPConnection.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Connection\AMQPConnection</td>
-                                    <td>11</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Exception/AMQPProtocolConnectionException.php" id="Exception/AMQPProtocolConnectionException.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Exception/AMQPProtocolConnectionException.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Exception\AMQPProtocolConnectionException</td>
-                                    <td>7</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Exception/AMQPException.php" id="Exception/AMQPException.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Exception/AMQPException.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Exception\AMQPException</td>
-                                    <td>7</td>
-                                    <td>use AMQPProtocolException instead</td>
-                                </tr>                        </table>
-                    </div>                    <a name="Exception/AMQPChannelException.php" id="Exception/AMQPChannelException.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Exception/AMQPChannelException.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Exception\AMQPChannelException</td>
-                                    <td>7</td>
-                                    <td>use AMQPProtocolChannelException instead</td>
-                                </tr>                        </table>
-                    </div>                    <a name="Exception/AMQPConnectionException.php" id="Exception/AMQPConnectionException.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Exception/AMQPConnectionException.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Exception\AMQPConnectionException</td>
-                                    <td>7</td>
-                                    <td>use AMQPProtocolConnectionException instead</td>
-                                </tr>                        </table>
-                    </div>                    <a name="Channel/AbstractChannel.php" id="Channel/AbstractChannel.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Channel/AbstractChannel.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Channel\AbstractChannel::PROTOCOL_080</td>
-                                    <td>28</td>
-                                    <td></td>
-                                </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Channel\AbstractChannel::PROTOCOL_091</td>
-                                    <td>33</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Wire/AMQPWriter.php" id="Wire/AMQPWriter.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Wire/AMQPWriter.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Wire\AMQPWriter::write_bit()</td>
-                                    <td>65</td>
-                                    <td></td>
-                                </tr>                        </table>
-                    </div>                    <a name="Wire/AMQPAbstractCollection.php" id="Wire/AMQPAbstractCollection.php"></a>
-                    <h3>
-                        <i class="icon-file"></i>Wire/AMQPAbstractCollection.php
-                        <small style="float: right;padding-right: 10px;">1</small>
-                    </h3>
-                    <div>
-                        <table class="table markers table-bordered">
-                            <tr>
-                                <th>Element</th>
-                                <th>Line</th>
-                                <th>Description</th>
-                            </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Wire\AMQPAbstractCollection::PROTOCOL_080</td>
-                                    <td>16</td>
-                                    <td></td>
-                                </tr>                                <tr>
-                                    <td>\PhpAmqpLib\Wire\AMQPAbstractCollection::PROTOCOL_091</td>
-                                    <td>18</td>
-                                    <td></td>
-                                </tr>                    </table>
-                </div>
+                    <td class="phpdocumentor-cell"><a href="reports/deprecated.html#PhpAmqpLib/Wire/AMQPWriter.php">PhpAmqpLib/Wire/AMQPWriter.php</a></td>
+                </tr>
+                    </table>
+        
+                    <a id="PhpAmqpLib/Channel/AbstractChannel.php"></a>
+            <h3><abbr title="PhpAmqpLib/Channel/AbstractChannel.php">AbstractChannel.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">29</td>
+                            <td class="phpdocumentor-cell"><a href="classes/PhpAmqpLib-Channel-AbstractChannel.html#constant_PROTOCOL_080"><abbr title="\PhpAmqpLib\Channel\AbstractChannel::PROTOCOL_080">AbstractChannel::PROTOCOL_080</abbr></a></td>
+                            <td class="phpdocumentor-cell"></td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell">34</td>
+                            <td class="phpdocumentor-cell"><a href="classes/PhpAmqpLib-Channel-AbstractChannel.html#constant_PROTOCOL_091"><abbr title="\PhpAmqpLib\Channel\AbstractChannel::PROTOCOL_091">AbstractChannel::PROTOCOL_091</abbr></a></td>
+                            <td class="phpdocumentor-cell"></td>
+                        </tr>
+                                                </table>
+                    <a id="PhpAmqpLib/Connection/AbstractConnection.php"></a>
+            <h3><abbr title="PhpAmqpLib/Connection/AbstractConnection.php">AbstractConnection.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">947</td>
+                            <td class="phpdocumentor-cell"><a href="classes/PhpAmqpLib-Connection-AbstractConnection.html#method_getIO"><abbr title="\PhpAmqpLib\Connection\AbstractConnection::getIO()">AbstractConnection::getIO()</abbr></a></td>
+                            <td class="phpdocumentor-cell"></td>
+                        </tr>
+                                                                                <tr>
+                            <td class="phpdocumentor-cell">91</td>
+                            <td class="phpdocumentor-cell"><a href="classes/PhpAmqpLib-Connection-AbstractConnection.html#property_login_response"><abbr title="\PhpAmqpLib\Connection\AbstractConnection::$login_response">AbstractConnection::$login_response</abbr></a></td>
+                            <td class="phpdocumentor-cell"></td>
+                        </tr>
+                                                </table>
+                    <a id="PhpAmqpLib/Wire/AMQPWriter.php"></a>
+            <h3><abbr title="PhpAmqpLib/Wire/AMQPWriter.php">AMQPWriter.php</abbr></h3>
+            <table>
+                <tr>
+                    <th class="phpdocumentor-heading">Line</th>
+                    <th class="phpdocumentor-heading">Element</th>
+                    <th class="phpdocumentor-heading">Reason</th>
+                </tr>
+                                                            <tr>
+                            <td class="phpdocumentor-cell">66</td>
+                            <td class="phpdocumentor-cell"><a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_bit"><abbr title="\PhpAmqpLib\Wire\AMQPWriter::write_bit()">AMQPWriter::write_bit()</abbr></a></td>
+                            <td class="phpdocumentor-cell"></td>
+                        </tr>
+                                                </table>
+            </div>
+                <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
             </div>
         </div>
-    </div>
-    <footer class="row-fluid">
-        <section class="span10 offset2">
-            <section class="row-fluid">
-                <section class="span10 offset1">
-                    <section class="row-fluid footer-sections">
-                        <section class="span4">                            <h1><i class="icon-code"></i></h1>
-                            <div>
-                                <ul>                                        <li><a href="../namespaces/PhpAmqpLib.html">\PhpAmqpLib</a></li>                                </ul>
-                            </div>
-                        </section>
-                        <section class="span4">                            <h1><i class="icon-bar-chart"></i></h1>
-                            <div>
-                                <ul>
-                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
-                                </ul>
-                            </div>
-                        </section>
-                        <section class="span4">                            <h1><i class="icon-pushpin"></i></h1>
-                            <div>
-                                <ul>
-                                    <li><a href="../reports/errors.html">Errors</a></li>
-                                    <li><a href="../reports/markers.html">Markers</a></li>
-                                </ul>
-                            </div>
-                        </section>
-                    </section>
-                </section>
-            </section>
-            <section class="row-fluid">
-                <section class="span10 offset1">
-                    <hr />
-                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    onJanuary 8th, 2020 at 00:08.
-                </section>
-            </section>
-        </section>
-    </footer>
-</div>
+        <a href="reports/deprecated.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
 </body>
 </html>
