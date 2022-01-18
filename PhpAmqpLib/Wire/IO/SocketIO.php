@@ -63,12 +63,14 @@ class SocketIO extends AbstractIO
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
-        $this->set_error_handler();
+        $this->setErrorHandler();
         try {
             $connected = socket_connect($this->sock, $this->host, $this->port);
-            $this->cleanup_error_handler();
+            $this->throwOnError();
         } catch (\ErrorException $e) {
             $connected = false;
+        } finally {
+            $this->restoreErrorHandler();
         }
         if (!$connected) {
             $errno = socket_last_error($this->sock);
@@ -175,12 +177,12 @@ class SocketIO extends AbstractIO
         $write_start = microtime(true);
 
         while ($written < $len) {
-            $this->set_error_handler();
+            $this->setErrorHandler();
             try {
                 $this->select_write();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
                 $result = socket_write($this->sock, $buffer, self::BUFFER_SIZE);
-                $this->cleanup_error_handler();
+                $this->throwOnError();
             } catch (\ErrorException $e) {
                 $code = socket_last_error($this->sock);
                 $constants = SocketConstants::getInstance();
@@ -201,6 +203,8 @@ class SocketIO extends AbstractIO
                             socket_strerror($code)
                         ), $code, $e);
                 }
+            } finally {
+                $this->restoreErrorHandler();
             }
 
             if ($result === false) {
@@ -294,9 +298,9 @@ class SocketIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    protected function set_error_handler()
+    protected function setErrorHandler(): void
     {
-        parent::set_error_handler();
+        parent::setErrorHandler();
         socket_clear_error($this->sock);
     }
 }

@@ -82,12 +82,14 @@ abstract class AbstractIO
     public function select(?int $sec, int $usec = 0)
     {
         $this->check_heartbeat();
-        $this->set_error_handler();
+        $this->setErrorHandler();
         try {
             $result = $this->do_select($sec, $usec);
-            $this->cleanup_error_handler();
+            $this->throwOnError();
         } catch (\ErrorException $e) {
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+        } finally {
+            $this->restoreErrorHandler();
         }
 
         if ($this->canDispatchPcntlSignal) {
@@ -197,20 +199,14 @@ abstract class AbstractIO
     /**
      * Begin tracking errors and set the error handler
      */
-    protected function set_error_handler()
+    protected function setErrorHandler(): void
     {
         $this->last_error = null;
         set_error_handler(array($this, 'error_handler'));
     }
 
-    /**
-     * throws an ErrorException if an error was handled
-     * @throws \ErrorException
-     */
-    protected function cleanup_error_handler()
+    protected function throwOnError(): void
     {
-        restore_error_handler();
-
         if ($this->last_error !== null) {
             throw new \ErrorException(
                 $this->last_error['errstr'],
@@ -220,6 +216,11 @@ abstract class AbstractIO
                 $this->last_error['errline']
             );
         }
+    }
+
+    protected function restoreErrorHandler(): void
+    {
+        restore_error_handler();
     }
 
     /**
