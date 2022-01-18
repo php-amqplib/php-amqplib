@@ -1,2 +1,3 @@
 unreleased=false
 since-tag=v2.7.2
+cache-file=build/github-changelog-http-cache

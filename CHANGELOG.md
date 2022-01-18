@@ -1,23 +1,37 @@
 # Changelog
 
+## [v3.1.2](https://github.com/php-amqplib/php-amqplib/tree/v3.1.2) (2022-01-18)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.1.1...v3.1.2)
+
+**Implemented enhancements:**
+
+- use github changelog generator [\#970](https://github.com/php-amqplib/php-amqplib/pull/970) ([ramunasd](https://github.com/ramunasd))
+
+**Fixed bugs:**
+
+- Always restore original error handler after socket/stream actions [\#969](https://github.com/php-amqplib/php-amqplib/pull/969) ([ramunasd](https://github.com/ramunasd))
+
+**Closed issues:**
+
+- Deprecation warnings on ArrayAccess methods [\#967](https://github.com/php-amqplib/php-amqplib/issues/967)
+
+**Merged pull requests:**
+
+- add return type hints in AMQPAbstractCollection [\#968](https://github.com/php-amqplib/php-amqplib/pull/968) ([ramunasd](https://github.com/ramunasd))
+
 ## [v3.1.1](https://github.com/php-amqplib/php-amqplib/tree/v3.1.1) (2021-12-03)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.1.0...v3.1.1)
 
-**Implemented enhancements:**
+**Fixed bugs:**
 
-- PHP 7.1 has asynchronous signal handling [\#468](https://github.com/php-amqplib/php-amqplib/issues/468)
+- fix deprecation notice from stream\_select\(\) on PHP8.1 [\#963](https://github.com/php-amqplib/php-amqplib/pull/963) ([ramunasd](https://github.com/ramunasd))
 
 **Closed issues:**
 
-- Is there any update book about this library [\#960](https://github.com/php-amqplib/php-amqplib/issues/960)
 - Support for PHP 8.1 [\#959](https://github.com/php-amqplib/php-amqplib/issues/959)
-- stream\_select\(\): unable to select \[9\]: Bad file descriptor \(max\_fd=444\) [\#955](https://github.com/php-amqplib/php-amqplib/issues/955)
 - php.56 overtime [\#952](https://github.com/php-amqplib/php-amqplib/issues/952)
-
-**Merged pull requests:**
-
-- fix deprecation notice from stream\_select\(\) on PHP8.1 [\#963](https://github.com/php-amqplib/php-amqplib/pull/963) ([ramunasd](https://github.com/ramunasd))
 
 ## [v3.1.0](https://github.com/php-amqplib/php-amqplib/tree/v3.1.0) (2021-10-22)
 
@@ -84,6 +98,10 @@
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.12.3...v3.0.0-rc1)
 
+**Implemented enhancements:**
+
+- Support php 8.0 [\#858](https://github.com/php-amqplib/php-amqplib/pull/858) ([axxapy](https://github.com/axxapy))
+
 **Fixed bugs:**
 
 - BigInteger breaks authoritative class maps [\#885](https://github.com/php-amqplib/php-amqplib/issues/885)
@@ -98,7 +116,6 @@
 - feat\(Travis\) remove travis. [\#881](https://github.com/php-amqplib/php-amqplib/pull/881) ([Yozhef](https://github.com/Yozhef))
 - feat\(CodeCov\) add Codecov phpunit code coverage. [\#880](https://github.com/php-amqplib/php-amqplib/pull/880) ([Yozhef](https://github.com/Yozhef))
 - Phpdoc types and minor improvements [\#869](https://github.com/php-amqplib/php-amqplib/pull/869) ([andrew-demb](https://github.com/andrew-demb))
-- Support php 8.0 [\#858](https://github.com/php-amqplib/php-amqplib/pull/858) ([axxapy](https://github.com/axxapy))
 
 ## [v2.12.3](https://github.com/php-amqplib/php-amqplib/tree/v2.12.3) (2021-03-01)
 
@@ -622,6 +639,89 @@
 **Closed issues:**
 
 - Getting really often "Connection reset by peer" [\#546](https://github.com/php-amqplib/php-amqplib/issues/546)
+
+## [v2.8.0](https://github.com/php-amqplib/php-amqplib/tree/v2.8.0) (2018-10-23)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.7.2.1...v2.8.0)
+
+**Closed issues:**
+
+- Feature Request: Allow overriding of LIBRARY\_PROPERTIES [\#603](https://github.com/php-amqplib/php-amqplib/issues/603)
+
+**Merged pull requests:**
+
+- Add getLibraryProperties abstract connection method and test [\#606](https://github.com/php-amqplib/php-amqplib/pull/606) ([madrussa](https://github.com/madrussa))
+- Fix potential indefinite wait [\#602](https://github.com/php-amqplib/php-amqplib/pull/602) ([lukebakken](https://github.com/lukebakken))
+- fix the logical error [\#601](https://github.com/php-amqplib/php-amqplib/pull/601) ([aisuhua](https://github.com/aisuhua))
+- Use specific exceptions instead of general AMQPRuntimeException [\#600](https://github.com/php-amqplib/php-amqplib/pull/600) ([ondrej-bouda](https://github.com/ondrej-bouda))
+
+## [v2.7.2.1](https://github.com/php-amqplib/php-amqplib/tree/v2.7.2.1) (2018-10-17)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.8.0-rc1...v2.7.2.1)
+
+**Closed issues:**
+
+- When heartbeats parameter is greater than 0 [\#352](https://github.com/php-amqplib/php-amqplib/issues/352)
+
+## [v2.8.0-rc1](https://github.com/php-amqplib/php-amqplib/tree/v2.8.0-rc1) (2018-10-11)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.7.3...v2.8.0-rc1)
+
+**Closed issues:**
+
+- "Server nack'ed unknown delivery\_tag" when using batch\_basic\_publish [\#597](https://github.com/php-amqplib/php-amqplib/issues/597)
+- fwrite: errno=11 in StreamIO [\#596](https://github.com/php-amqplib/php-amqplib/issues/596)
+- Use swoole to generate multi-process channel errors [\#592](https://github.com/php-amqplib/php-amqplib/issues/592)
+- Connecting RMQ with multiple host connection  [\#588](https://github.com/php-amqplib/php-amqplib/issues/588)
+- where is the function "AMQPStreamConnection::create\_connection\(\)" [\#586](https://github.com/php-amqplib/php-amqplib/issues/586)
+- RPC server not sending reply down the wire [\#585](https://github.com/php-amqplib/php-amqplib/issues/585)
+- Please add support for AMQP 1.0 [\#583](https://github.com/php-amqplib/php-amqplib/issues/583)
+- Connecting to Red Hat JBOSS [\#580](https://github.com/php-amqplib/php-amqplib/issues/580)
+- Consuming message coming in truncated [\#579](https://github.com/php-amqplib/php-amqplib/issues/579)
+- can't throw fwrite\(\) error immediately [\#578](https://github.com/php-amqplib/php-amqplib/issues/578)
+- Can't reuse AMQPMessage object with new properties [\#576](https://github.com/php-amqplib/php-amqplib/issues/576)
+- Invalid frame type 65 [\#572](https://github.com/php-amqplib/php-amqplib/issues/572)
+- The set\_nack\_handle  can not be triggered correctly. [\#571](https://github.com/php-amqplib/php-amqplib/issues/571)
+- channel-\>wait\(\) with timeout make memory leak [\#566](https://github.com/php-amqplib/php-amqplib/issues/566)
+- SOCKS Proxy between RMQ and client [\#558](https://github.com/php-amqplib/php-amqplib/issues/558)
+- Version 2.7 connects as 2.6 [\#555](https://github.com/php-amqplib/php-amqplib/issues/555)
+- Update minimum php version in composer.json [\#543](https://github.com/php-amqplib/php-amqplib/issues/543)
+- StreamIO can wait for data indefinitely [\#416](https://github.com/php-amqplib/php-amqplib/issues/416)
+- Releasing connection reference too early in a channel leads to a segmentation fault [\#415](https://github.com/php-amqplib/php-amqplib/issues/415)
+- StreamConnection does not time out [\#408](https://github.com/php-amqplib/php-amqplib/issues/408)
+- $this-\>debug can be null in AbstractConnection.php [\#386](https://github.com/php-amqplib/php-amqplib/issues/386)
+- Read and write to multiple queues within one script [\#293](https://github.com/php-amqplib/php-amqplib/issues/293)
+- lazy channels [\#291](https://github.com/php-amqplib/php-amqplib/issues/291)
+- decode\(\) method not defined [\#160](https://github.com/php-amqplib/php-amqplib/issues/160)
+
+**Merged pull requests:**
+
+- Use errno instead of error strings [\#599](https://github.com/php-amqplib/php-amqplib/pull/599) ([marek-obuchowicz](https://github.com/marek-obuchowicz))
+- Corrected typo and comment alignment in demo/amqp\_consumer\_exclusive.php [\#591](https://github.com/php-amqplib/php-amqplib/pull/591) ([lkorczewski](https://github.com/lkorczewski))
+- Corrected typos in demo/amqp\_publisher\_exclusive.php [\#590](https://github.com/php-amqplib/php-amqplib/pull/590) ([lkorczewski](https://github.com/lkorczewski))
+- Fix heartbeat-check if pcntl is unavailable [\#584](https://github.com/php-amqplib/php-amqplib/pull/584) ([srebbsrebb](https://github.com/srebbsrebb))
+- don't throw an exception in an error handler [\#581](https://github.com/php-amqplib/php-amqplib/pull/581) ([deweller](https://github.com/deweller))
+- Cleanup serialized\_properties on property set [\#577](https://github.com/php-amqplib/php-amqplib/pull/577) ([p-golovin](https://github.com/p-golovin))
+- Annotate at @throws \ErrorException at AbstractChannel::wait [\#575](https://github.com/php-amqplib/php-amqplib/pull/575) ([nohponex](https://github.com/nohponex))
+- Structuring tests [\#574](https://github.com/php-amqplib/php-amqplib/pull/574) ([programarivm](https://github.com/programarivm))
+- Test with php 5.3 and 7.2 [\#569](https://github.com/php-amqplib/php-amqplib/pull/569) ([snapshotpl](https://github.com/snapshotpl))
+- Add extended datatype for bytes [\#568](https://github.com/php-amqplib/php-amqplib/pull/568) ([masell](https://github.com/masell))
+- Fwrite \ErrorException not being thrown to the top function call when doing basic\_publish [\#564](https://github.com/php-amqplib/php-amqplib/pull/564) ([dp-indrak](https://github.com/dp-indrak))
+- Introduce a method to create connection from multiple hosts. [\#562](https://github.com/php-amqplib/php-amqplib/pull/562) ([hairyhum](https://github.com/hairyhum))
+- Throw exception on missed heartbeat [\#559](https://github.com/php-amqplib/php-amqplib/pull/559) ([hairyhum](https://github.com/hairyhum))
+
+## [v2.7.3](https://github.com/php-amqplib/php-amqplib/tree/v2.7.3) (2018-04-30)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.7.2...v2.7.3)
+
+**Closed issues:**
+
+- stream\_select\(\) ErrorException FD\_SETSIZE [\#552](https://github.com/php-amqplib/php-amqplib/issues/552)
+- Whoops, looks like something went wrong. \(1/1\) ErrorException getimagesize\(\): send of 18 bytes failed with errno=104 Connection reset by peer [\#551](https://github.com/php-amqplib/php-amqplib/issues/551)
+- no-local? [\#550](https://github.com/php-amqplib/php-amqplib/issues/550)
+- Can php-amqplib consumer work on a web page? [\#549](https://github.com/php-amqplib/php-amqplib/issues/549)
+- Functional tests fail after upgrading to 2.7.1 and 2.7.2 [\#545](https://github.com/php-amqplib/php-amqplib/issues/545)
+- fwrite failure / not sure how to debug further [\#544](https://github.com/php-amqplib/php-amqplib/issues/544)
 
 # Previous releases
 
