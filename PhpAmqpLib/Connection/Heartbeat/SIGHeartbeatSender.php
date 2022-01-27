@@ -5,48 +5,33 @@ use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 /**
- * Manages pcntl-based heartbeat sending for a {@link AbstractConnection}.
- * Unlike PCNTLHeartbeatSender, does not require the use of `SIGALRM` as the signal.
- * Any signal can be used. Default is `SIGUSR1`
+ * @see AbstractSignalHeartbeatSender
+ *
+ * This version of a signal based heartbeat sendler allows using any signal number. It forks the current process
+ * to create a child process that periodically sends a signal to the parent process.
+ * The default signal used is SIGUSR1
  */
-final class SIGHeartbeatSender
+final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
 {
     /**
-     * @var AbstractConnection
+     * @var int the UNIX signal to be used for managing heartbeats
      */
-    private $connection;
+    private $signal = SIGUSR1;
 
-    private $signal;
-
+    /**
+     * @var int the PID (process ID) of the child process sending regular signals to manage heartbeats
+     */
     private $childPid;
 
     /**
      * @param AbstractConnection $connection
+     * @param int $signal
      * @throws AMQPRuntimeException
      */
     public function __construct(AbstractConnection $connection, $signal = SIGUSR1)
     {
-        if (!$this->isSupported()) {
-            throw new AMQPRuntimeException('Signal-based heartbeat sender is unsupported');
-        }
-
+        parent::__construct($connection);
         $this->signal = $signal;
-        $this->connection = $connection;
-    }
-
-    public function __destruct()
-    {
-        $this->unregister();
-    }
-
-    /**
-     * @return bool
-     */
-    private function isSupported()
-    {
-        return extension_loaded('pcntl')
-               && function_exists('pcntl_async_signals')
-               && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
     }
 
     public function register()
@@ -85,21 +70,16 @@ final class SIGHeartbeatSender
         pcntl_async_signals(true);
         $this->periodicAlarm($interval);
         pcntl_signal($this->signal, function () use ($interval) {
-            if (!$this->connection || $this->connection->isWriting()) {
-                return;
-            }
-
-            if (!$this->connection->isConnected()) {
-                $this->unregister();
-                return;
-            }
-
-            if (time() > ($this->connection->getLastActivity() + $interval)) {
-                $this->connection->checkHeartBeat();
-            }
+            $this->handleSignal($interval);
         });
     }
 
+    /**
+     * Forks the current process to create a child process that will send periodic signals to the parent
+     *
+     * @param int $interval
+     * @return void
+     */
     private function periodicAlarm($interval)
     {
         $parent = getmypid();

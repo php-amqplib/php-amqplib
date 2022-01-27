@@ -35,11 +35,8 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
             PORT,
             ['timeout' => 3, 'heartbeat' => $this->heartbeatTimeout]
         );
-        // try {
-            $this->sender = new SIGHeartbeatSender($this->connection, $this->signal);
-        // } catch (\Exception $exception) {
-        //     $this->markTestSkipped($exception->getMessage());
-        // }
+
+        $this->sender = new SIGHeartbeatSender($this->connection, $this->signal);
     }
 
     protected function tearDownCompat()
@@ -116,7 +113,7 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $connection->expects($this->exactly(2))->method('isConnected')->willReturn(true);
+        $connection->expects($this->exactly(3))->method('isConnected')->willReturn(true);
         $connection->expects($this->once())->method('getHeartbeat')->willReturn($this->heartbeatTimeout);
         $connection->expects($this->exactly(2))
             ->method('isWriting')
