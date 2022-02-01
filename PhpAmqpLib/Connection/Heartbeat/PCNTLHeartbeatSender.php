@@ -95,6 +95,6 @@ final class PCNTLHeartbeatSender
             }
 
             pcntl_alarm($interval);
-        });
+        }, true);
     }
 }
