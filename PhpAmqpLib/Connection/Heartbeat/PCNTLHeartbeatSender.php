@@ -2,47 +2,16 @@
 
 namespace PhpAmqpLib\Connection\Heartbeat;
 
-use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 /**
- * Manages pcntl-based heartbeat sending for a {@link AbstractConnection}.
+ * @see AbstractSignalHeartbeatSender
+ *
+ * This version of a signal based heartbeat sendler relies on using SIGALRM and uses the OS to trigger an alarm
+ * after a given time.
  */
-final class PCNTLHeartbeatSender
+final class PCNTLHeartbeatSender extends AbstractSignalHeartbeatSender
 {
-    /**
-     * @var AbstractConnection|null
-     */
-    private $connection;
-
-    /**
-     * @param AbstractConnection $connection
-     * @throws AMQPRuntimeException
-     */
-    public function __construct(AbstractConnection $connection)
-    {
-        if (!$this->isSupported()) {
-            throw new AMQPRuntimeException('Signal-based heartbeat sender is unsupported');
-        }
-
-        $this->connection = $connection;
-    }
-
-    public function __destruct()
-    {
-        $this->unregister();
-    }
-
-    /**
-     * @return bool
-     */
-    private function isSupported()
-    {
-        return extension_loaded('pcntl')
-               && function_exists('pcntl_async_signals')
-               && (defined('AMQP_WITHOUT_SIGNALS') ? !AMQP_WITHOUT_SIGNALS : true);
-    }
-
     public function register()
     {
         if (!$this->connection) {
@@ -76,25 +45,10 @@ final class PCNTLHeartbeatSender
     private function registerListener($interval)
     {
         pcntl_signal(SIGALRM, function () use ($interval) {
-            if (!$this->connection) {
-                return;
-            }
-
-            if (!$this->connection->isConnected()) {
-                $this->unregister();
-                return;
-            }
-
-            if ($this->connection->isWriting()) {
+            $this->handleSignal($interval);
+            if ($this->connection) {
                 pcntl_alarm($interval);
-                return;
             }
-
-            if (time() > ($this->connection->getLastActivity() + $interval)) {
-                $this->connection->checkHeartBeat();
-            }
-
-            pcntl_alarm($interval);
         }, true);
     }
 }
