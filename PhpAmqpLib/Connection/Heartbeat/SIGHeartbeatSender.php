@@ -6,6 +6,7 @@ use PhpAmqpLib\Exception\AMQPRuntimeException;
 
 /**
  * @see AbstractSignalHeartbeatSender
+ * @since 3.2.0
  *
  * This version of a signal based heartbeat sendler allows using any signal number. It forks the current process
  * to create a child process that periodically sends a signal to the parent process.
