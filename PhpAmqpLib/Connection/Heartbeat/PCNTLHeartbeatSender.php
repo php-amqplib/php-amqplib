@@ -49,6 +49,6 @@ final class PCNTLHeartbeatSender extends AbstractSignalHeartbeatSender
             if ($this->connection) {
                 pcntl_alarm($interval);
             }
-        });
+        }, true);
     }
 }
