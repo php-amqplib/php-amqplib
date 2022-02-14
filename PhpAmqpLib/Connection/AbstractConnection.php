@@ -693,6 +693,10 @@ abstract class AbstractConnection extends AbstractChannel
      *
      * @param int|null $channel_id
      * @return AMQPChannel
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
      */
     public function channel($channel_id = null)
     {
