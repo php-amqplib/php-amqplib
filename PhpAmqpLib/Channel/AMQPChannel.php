@@ -99,7 +99,10 @@ class AMQPChannel extends AbstractChannel
      * @param int|null $channel_id
      * @param bool $auto_decode
      * @param int|float $channel_rpc_timeout
-     * @throws \Exception
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
      */
     public function __construct($connection, $channel_id = null, $auto_decode = true, $channel_rpc_timeout = 0)
     {
@@ -271,7 +274,10 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * @param string $out_of_band
-     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
+     * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
      * @return mixed
      */
     protected function x_open($out_of_band = '')
