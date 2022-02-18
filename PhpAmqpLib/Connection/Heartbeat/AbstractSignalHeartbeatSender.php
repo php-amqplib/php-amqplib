@@ -36,7 +36,7 @@ abstract class AbstractSignalHeartbeatSender
     /**
      * @return bool
      */
-    protected function isSupported()
+    protected function isSupported(): bool
     {
         return extension_loaded('pcntl')
                && function_exists('pcntl_async_signals')
@@ -45,25 +45,20 @@ abstract class AbstractSignalHeartbeatSender
 
     /**
      * Starts the heartbeats
-     *
-     * @return void
      */
-    abstract public function register();
+    abstract public function register(): void;
 
     /**
      * Stops the heartbeats.
-     *
-     * @return void
      */
-    abstract public function unregister();
+    abstract public function unregister(): void;
 
     /**
      * Handles the heartbeat when a signal interrupt is received
      *
      * @param int $interval
-     * @return void
      */
-    protected function handleSignal($interval)
+    protected function handleSignal(int $interval): void
     {
         if (!$this->connection) {
             return;

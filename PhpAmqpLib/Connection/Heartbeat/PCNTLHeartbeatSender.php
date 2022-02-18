@@ -12,7 +12,7 @@ use PhpAmqpLib\Exception\AMQPRuntimeException;
  */
 final class PCNTLHeartbeatSender extends AbstractSignalHeartbeatSender
 {
-    public function register()
+    public function register(): void
     {
         if (!$this->connection) {
             throw new AMQPRuntimeException('Unable to re-register heartbeat sender');
@@ -25,24 +25,21 @@ final class PCNTLHeartbeatSender extends AbstractSignalHeartbeatSender
         $timeout = $this->connection->getHeartbeat();
 
         if ($timeout > 0) {
-            $interval = ceil($timeout / 2);
+            $interval = (int)ceil($timeout / 2);
             pcntl_async_signals(true);
             $this->registerListener($interval);
             pcntl_alarm($interval);
         }
     }
 
-    public function unregister()
+    public function unregister(): void
     {
         $this->connection = null;
         // restore default signal handler
         pcntl_signal(SIGALRM, SIG_IGN);
     }
 
-    /**
-     * @param int $interval
-     */
-    private function registerListener($interval)
+    private function registerListener(int $interval): void
     {
         pcntl_signal(SIGALRM, function () use ($interval) {
             $this->handleSignal($interval);
