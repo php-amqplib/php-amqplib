@@ -7,8 +7,10 @@ use PhpAmqpLib\Exception\AMQPBasicCancelException;
 use PhpAmqpLib\Exception\AMQPChannelClosedException;
 use PhpAmqpLib\Exception\AMQPConnectionBlockedException;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
+use PhpAmqpLib\Exception\AMQPNoDataException;
 use PhpAmqpLib\Exception\AMQPProtocolChannelException;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Helper\Assert;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
@@ -32,6 +34,9 @@ class AMQPChannel extends AbstractChannel
 
     /** @var bool */
     protected $active = true;
+
+    /** @var bool */
+    protected $stopConsume = false;
 
     /** @var array */
     protected $alerts = array();
@@ -1568,5 +1573,57 @@ class AMQPChannel extends AbstractChannel
         if ($this->connection->isBlocked()) {
             throw new AMQPConnectionBlockedException();
         }
+    }
+
+    /**
+     * Wait and process all incoming messages in an endless loop,
+     * until connection exception or manual stop using self::stopConsume()
+     *
+     * @param float $maximumPoll Maximum time in seconds between read attempts
+     * @throws \PhpAmqpLib\Exception\AMQPOutOfBoundsException
+     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
+     * @throws \ErrorException
+     * @since 3.2.0
+     */
+    public function consume(float $maximumPoll = 10.0): void
+    {
+        $this->checkConnection();
+
+        if ($this->stopConsume) {
+            $this->stopConsume = false;
+            return;
+        }
+
+        $timeout = $this->connection->getReadTimeout();
+        $heartBeat = $this->connection->getHeartbeat();
+        if ($heartBeat > 2) {
+            $timeout = min($timeout, floor($heartBeat / 2));
+        }
+        $timeout = max(min($timeout, $maximumPoll), 1);
+        while ($this->is_consuming() || !empty($this->method_queue)) {
+            if ($this->stopConsume) {
+                $this->stopConsume = false;
+                return;
+            }
+            try {
+                $this->wait(null, false, $timeout);
+            } catch (AMQPTimeoutException $exception) {
+                // something might be wrong, try to send heartbeat which involves select+write
+                $this->connection->checkHeartBeat();
+                continue;
+            } catch (AMQPNoDataException $exception) {
+                continue;
+            }
+        }
+    }
+
+    /**
+     * Stop AMQPChannel::consume() loop. Useful for signal handlers and other interrupts.
+     * @since 3.2.0
+     */
+    public function stopConsume()
+    {
+        $this->stopConsume = true;
     }
 }
