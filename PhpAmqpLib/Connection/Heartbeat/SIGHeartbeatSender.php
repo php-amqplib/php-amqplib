@@ -57,7 +57,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
         $this->connection = null;
         // restore default signal handler
         pcntl_signal($this->signal, SIG_IGN);
-        if ($this->childPid) {
+        if ($this->childPid > 0) {
             posix_kill($this->childPid, SIGKILL);
         }
         $this->childPid = null;
