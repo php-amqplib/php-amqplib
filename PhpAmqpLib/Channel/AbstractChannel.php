@@ -72,7 +72,7 @@ abstract class AbstractChannel
     /** @var MethodMap080|MethodMap091 */
     protected $methodMap;
 
-    /** @var int|null */
+    /** @var int */
     protected $channel_id;
 
     /** @var AMQPReader */
