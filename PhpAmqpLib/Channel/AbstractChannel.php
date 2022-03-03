@@ -139,7 +139,7 @@ abstract class AbstractChannel
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getChannelId()
     {
