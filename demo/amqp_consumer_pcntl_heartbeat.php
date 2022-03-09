@@ -68,6 +68,4 @@ function shutdown($channel, $connection)
 
 register_shutdown_function('shutdown', $channel, $connection);
 
-while ($channel->is_consuming()) {
-    $channel->wait();
-}
+$channel->consume();

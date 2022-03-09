@@ -32,8 +32,8 @@ class SocketIO extends AbstractIO
     ) {
         $this->host = $host;
         $this->port = $port;
-        $this->read_timeout = $read_timeout;
-        $this->write_timeout = $write_timeout ?: $read_timeout;
+        $this->read_timeout = (float)$read_timeout;
+        $this->write_timeout = (float)($write_timeout ?: $read_timeout);
         $this->heartbeat = $heartbeat;
         $this->initial_heartbeat = $heartbeat;
         $this->keepalive = $keepalive;

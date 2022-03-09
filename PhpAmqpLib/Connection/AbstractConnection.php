@@ -986,6 +986,15 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * @return float
+     * @since 3.2.0
+     */
+    public function getReadTimeout(): float
+    {
+        return $this->io->getReadTimeout();
+    }
+
+    /**
      * Handles connection blocked notifications
      *
      * @param AMQPReader $args

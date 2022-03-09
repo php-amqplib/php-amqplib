@@ -58,8 +58,8 @@ class StreamIO extends AbstractIO
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;
-        $this->read_timeout = $read_write_timeout;
-        $this->write_timeout = $read_write_timeout;
+        $this->read_timeout = (float)$read_write_timeout;
+        $this->write_timeout = (float)$read_write_timeout;
         $this->context = $context;
         $this->keepalive = $keepalive;
         $this->heartbeat = $heartbeat;
