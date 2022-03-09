@@ -13,6 +13,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param array $ssl_options
      * @param array $options
      * @param string $ssl_protocol
+     * @param AMQPConnectionConfig|null $config
      */
     public function __construct(
         $host,
@@ -22,7 +23,8 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $vhost = '/',
         $ssl_options = array(),
         $options = array(),
-        $ssl_protocol = 'ssl'
+        $ssl_protocol = 'ssl',
+        ?AMQPConnectionConfig $config = null
     ) {
         $ssl_context = empty($ssl_options) ? null : $this->createSslContext($ssl_options);
         parent::__construct(
@@ -41,10 +43,14 @@ class AMQPSSLConnection extends AMQPStreamConnection
             isset($options['keepalive']) ? $options['keepalive'] : false,
             isset($options['heartbeat']) ? $options['heartbeat'] : 0,
             isset($options['channel_rpc_timeout']) ? $options['channel_rpc_timeout'] : 0.0,
-            $ssl_protocol
+            $ssl_protocol,
+            $config
         );
     }
 
+    /**
+     * @deprecated Use ConnectionFactory
+     */
     public static function try_create_connection($host, $port, $user, $password, $vhost, $options)
     {
         $ssl_options = isset($options['ssl_options']) ? $options['ssl_options'] : [];

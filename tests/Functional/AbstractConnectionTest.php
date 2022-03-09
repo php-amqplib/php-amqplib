@@ -5,9 +5,8 @@ namespace PhpAmqpLib\Tests\Functional;
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Connection\AMQPSocketConnection;
-use PhpAmqpLib\Connection\AMQPSSLConnection;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
+use PhpAmqpLib\Connection\AMQPConnectionFactory;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Tests\TestCaseCompat;
 
@@ -15,70 +14,38 @@ abstract class AbstractConnectionTest extends TestCaseCompat
 {
     public static $blocked = false;
 
-    /**
-     * @param string $type
-     * @param string $host
-     * @param string $port
-     * @param array $options
-     * @return AbstractConnection
-     */
-    protected function conection_create($type = 'stream', $host = HOST, $port = PORT, $options = array())
-    {
-        $keepalive = isset($options['keepalive']) ? $options['keepalive'] : false;
-        $heartbeat = isset($options['heartbeat']) ? $options['heartbeat'] : 0;
-        $timeout = isset($options['timeout']) ? $options['timeout'] : 1;
-        $connectionTimeout = isset($options['connectionTimeout']) ? $options['connectionTimeout'] : $timeout;
-
-        switch ($type) {
-            case 'stream':
-                $connection = new AMQPStreamConnection(
-                    $host,
-                    $port,
-                    USER,
-                    PASS,
-                    VHOST,
-                    false,
-                    'AMQPLAIN',
-                    null,
-                    'en_US',
-                    $connectionTimeout,
-                    $timeout,
-                    null,
-                    $keepalive,
-                    $heartbeat
-                );
-                break;
-            case 'socket':
-                $connection = new AMQPSocketConnection(
-                    $host,
-                    $port,
-                    USER,
-                    PASS,
-                    VHOST,
-                    false,
-                    'AMQPLAIN',
-                    null,
-                    'en_US',
-                    $timeout,
-                    $keepalive,
-                    $timeout,
-                    $heartbeat
-                );
-                break;
-            case 'ssl':
-                $connection = new AMQPSSLConnection(
-                    $host,
-                    $port,
-                    USER,
-                    PASS,
-                    VHOST,
-                    isset($options['ssl']) ? $options['ssl'] : [],
-                    $options,
-                    isset($options['protocol']) ? $options['protocol'] : 'ssl'
-                );
-            default:
+    protected function conection_create(
+        string $type = 'stream',
+        string $host = HOST,
+        int $port = PORT,
+        array $options = array()
+    ): AbstractConnection {
+        $timeout = $options['timeout'] ?? 1;
+        $config = new AMQPConnectionConfig();
+        $config->setIsLazy(false);
+        if ($type === 'ssl') {
+            $config->setIoType(AMQPConnectionConfig::IO_TYPE_STREAM);
+            $config->setIsSecure(true);
+            $config->setNetworkProtocol($options['protocol'] ?? 'ssl');
+            $config->setSslCaCert($options['ssl']['cafile'] ?? null);
+            $config->setSslCert($options['ssl']['local_cert'] ?? null);
+            $config->setSslKey($options['ssl']['local_pk'] ?? null);
+            $config->setSslVerify($options['ssl']['verify_peer'] ?? null);
+            $config->setSslVerifyName($options['ssl']['verify_peer_name'] ?? null);
+            $config->setSslPassPhrase($options['ssl']['passphrase'] ?? null);
+            $config->setSslCiphers($options['ssl']['ciphers'] ?? null);
+        } else {
+            $config->setIoType($type);
         }
+        $config->setHost($host);
+        $config->setPort($port);
+        $config->setKeepalive($options['keepalive'] ?? false);
+        $config->setHeartbeat($options['heartbeat'] ?? 0);
+        $config->setReadTimeout($timeout);
+        $config->setWriteTimeout($timeout);
+        $config->setConnectionTimeout($options['connectionTimeout'] ?? $timeout);
 
+        $connection = AMQPConnectionFactory::create($config);
         $this->assertTrue($connection->isConnected());
 
         return $connection;

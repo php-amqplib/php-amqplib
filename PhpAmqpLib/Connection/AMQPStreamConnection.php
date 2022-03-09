@@ -23,6 +23,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
      * @param string|null $ssl_protocol
+     * @param AMQPConnectionConfig|null $config
      */
     public function __construct(
         $host,
@@ -40,7 +41,8 @@ class AMQPStreamConnection extends AbstractConnection
         $keepalive = false,
         $heartbeat = 0,
         $channel_rpc_timeout = 0.0,
-        $ssl_protocol = null
+        $ssl_protocol = null,
+        ?AMQPConnectionConfig $config = null
     ) {
         if ($channel_rpc_timeout > $read_write_timeout) {
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read-write timeout');
@@ -68,13 +70,17 @@ class AMQPStreamConnection extends AbstractConnection
             $io,
             $heartbeat,
             $connection_timeout,
-            $channel_rpc_timeout
+            $channel_rpc_timeout,
+            $config
         );
 
         // save the params for the use of __clone, this will overwrite the parent
         $this->construct_params = func_get_args();
     }
 
+    /**
+     * @deprecated Use ConnectionFactory
+     */
     protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
     {
         $insist = isset($options['insist']) ?
