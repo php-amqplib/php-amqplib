@@ -1,5 +1,11 @@
 # Changelog
 
+## [v3.2.0](https://github.com/php-amqplib/php-amqplib/tree/v3.2.0) (2022-03-10)
+
+[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/24?closed=1)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.1.2...v3.2.0)
+
 ## [v3.1.2](https://github.com/php-amqplib/php-amqplib/tree/v3.1.2) (2022-01-18)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.1.1...v3.1.2)
