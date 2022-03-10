@@ -142,6 +142,10 @@
     content: 'P'
 }
 
+.phpdocumentor-table-of-contents .phpdocumentor-table-of-contents__entry.-enum:before {
+    content: 'E'
+}
+
 .phpdocumentor-table-of-contents dd {
     font-style: italic;
     margin-left: 2rem;

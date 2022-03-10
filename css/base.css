@@ -21,12 +21,14 @@
     --text-xxxxxl: calc(var(--text-base-size) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio) * var(--text-scale-ratio));
 
     /* Colors */
-    --primary-color: hsl(96, 57%, 60%);
-    --primary-color-darken: hsl(96, 57%, 40%);
-    --primary-color-darker: hsl(96, 57%, 20%);
-    --primary-color-darkest: hsl(96, 57%, 10%);
-    --primary-color-lighten: hsl(96, 57%, 80%);
-    --primary-color-lighter: hsl(96, 57%, 99%);
+    --primary-color-hue: 96;
+    --primary-color-saturation: 57%;
+    --primary-color: hsl(var(--primary-color-hue), var(--primary-color-saturation), 60%);
+    --primary-color-darken: hsl(var(--primary-color-hue), var(--primary-color-saturation), 40%);
+    --primary-color-darker: hsl(var(--primary-color-hue), var(--primary-color-saturation), 20%);
+    --primary-color-darkest: hsl(var(--primary-color-hue), var(--primary-color-saturation), 10%);
+    --primary-color-lighten: hsl(var(--primary-color-hue), var(--primary-color-saturation), 80%);
+    --primary-color-lighter: hsl(var(--primary-color-hue), var(--primary-color-saturation), 99%);
     --dark-gray: #d1d1d1;
     --light-gray: #f0f0f0;
 
@@ -34,8 +36,8 @@
 
     --header-height: var(--spacing-xxxxl);
     --header-bg-color: var(--primary-color);
-    --code-background-color: #f7faf5;
-    --code-border-color: #d6e7cb;
+    --code-background-color: var(--primary-color-lighter);
+    --code-border-color: --primary-color-lighten;
     --button-border-color: var(--primary-color-darken);
     --button-color: transparent;
     --button-color-primary: var(--primary-color);
@@ -172,6 +174,11 @@ body {
     text-align: center;
     font-style: italic;
     font-size: 80%;
+}
+
+.phpdocumentor-uml-diagram svg {
+    max-width: 100%;
+    height: auto !important;
 }
 .phpdocumentor-line {
     border-top: 1px solid #E1E1E1;
@@ -432,20 +439,25 @@ input[type="checkbox"].phpdocumentor-field,
 input[type="radio"].phpdocumentor-field {
     display: inline;
 }
+.phpdocumentor-column ul,
 div.phpdocumentor-list > ul,
 ul.phpdocumentor-list {
-    list-style: circle inside;
+    list-style: circle;
 }
 
+.phpdocumentor-column ol,
+div.phpdocumentor-list > ol,
 ol.phpdocumentor-list {
-    list-style: decimal inside;
+    list-style: decimal;
 }
 
+
+.phpdocumentor-column ul,
 div.phpdocumentor-list > ul,
 ol.phpdocumentor-list,
 ul.phpdocumentor-list {
     margin-top: 0;
-    padding-left: 0;
+    padding-left: 1rem;
     margin-bottom: var(--spacing-md);
 }
 
@@ -453,6 +465,7 @@ dl {
     margin-bottom: var(--spacing-md);
 }
 
+.phpdocumentor-column ul ul,
 div.phpdocumentor-list > ul ul,
 ul.phpdocumentor-list ul.phpdocumentor-list,
 ul.phpdocumentor-list ol.phpdocumentor-list,
@@ -462,8 +475,9 @@ ol.phpdocumentor-list ul.phpdocumentor-list {
     margin: var(--spacing-xs) 0 var(--spacing-xs) calc(var(--spacing-xs) * 2);
 }
 
-li.phpdocumentor-list {
-    margin-bottom: var(--spacing-md);
+.phpdocumentor-column ul li,
+.phpdocumentor-list li {
+    padding-bottom: var(--spacing-xs);
 }
 
 .phpdocumentor dl dt {
@@ -732,7 +746,8 @@ td.phpdocumentor-cell:last-child {
     transition: padding-left .4s ease-out;
 }
 
-.phpdocumentor .phpdocumentor-sidebar a:hover {
+.phpdocumentor .phpdocumentor-sidebar a:hover,
+.phpdocumentor .phpdocumentor-sidebar a.-active {
     padding-left: 5px;
     font-weight: 600;
 }
@@ -1058,6 +1073,8 @@ td.phpdocumentor-cell:last-child {
     background: #fff;
     position: relative;
     padding: 2em;
+    box-sizing: border-box;
+    max-width:100vw;
 }
 
 .phpdocumentor-modal__close {

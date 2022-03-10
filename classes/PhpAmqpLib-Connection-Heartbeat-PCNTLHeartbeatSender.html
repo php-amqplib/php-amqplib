@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>php-amqplib</title>
+            <title>php-amqplib</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
@@ -54,34 +55,36 @@
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpamqplib.html">PhpAmqpLib</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/phpamqplib.html" class="">PhpAmqpLib</a>
+</h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="namespaces/phpamqplib-channel.html">Channel</a>
+                <a href="namespaces/phpamqplib-channel.html" class="">Channel</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-connection.html">Connection</a>
+                <a href="namespaces/phpamqplib-connection.html" class="">Connection</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-exception.html">Exception</a>
+                <a href="namespaces/phpamqplib-exception.html" class="">Exception</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-exchange.html">Exchange</a>
+                <a href="namespaces/phpamqplib-exchange.html" class="">Exchange</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-helper.html">Helper</a>
+                <a href="namespaces/phpamqplib-helper.html" class="">Helper</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-message.html">Message</a>
+                <a href="namespaces/phpamqplib-message.html" class="">Message</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-wire.html">Wire</a>
+                <a href="namespaces/phpamqplib-wire.html" class="">Wire</a>
                 
             </li>
             </ul>
@@ -89,7 +92,9 @@
                         </section>
                 <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/PhpAmqpLib.html">PhpAmqpLib</a></h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/PhpAmqpLib.html" class="">PhpAmqpLib</a>
+</h4>
 
                         </section>
             
@@ -117,6 +122,9 @@
         <h2 class="phpdocumentor-content__title">
     PCNTLHeartbeatSender
 
+        <span class="phpdocumentor-element__extends">
+        extends <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html"><abbr title="\PhpAmqpLib\Connection\Heartbeat\AbstractSignalHeartbeatSender">AbstractSignalHeartbeatSender</abbr></a>
+    </span>
     
             <div class="phpdocumentor-element__package">
             in package
@@ -131,7 +139,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">11</span>
+    <span class="phpdocumentor-element-found-in__line">13</span>
 
     </aside>
 
@@ -139,6 +147,23 @@
 
 
 
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="#tags" class="headerlink"><i class="fas fa-link"></i></a>
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                                    <dt class="phpdocumentor-tag-list__entry">
+                    <span class="phpdocumentor-tag__name">see</span>
+                </dt>
+                <dd class="phpdocumentor-tag-list__definition">
+                                                                                    <span class="phpdocumentor-tag-link"><a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html"><abbr title="\PhpAmqpLib\Connection\Heartbeat\AbstractSignalHeartbeatSender">AbstractSignalHeartbeatSender</abbr></a></span>
+                                        
+                                                 <section class="phpdocumentor-description"><p>This version of a signal based heartbeat sendler relies on using SIGALRM and uses the OS to trigger an alarm
+after a given time.</p>
+</section>
+
+                                    </dd>
+                        </dl>
 
 
 
@@ -151,52 +176,59 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                <dt class="phpdocumentor-table-of-contents__entry -property -private">
-    <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#property_connection">$connection</a>
+                    <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#property_connection">$connection</a>
     <span>
-                &nbsp;: <a href="classes/PhpAmqpLib-Connection-AbstractConnection.html"><abbr title="\PhpAmqpLib\Connection\AbstractConnection">AbstractConnection</abbr></a>|null            </span>
+                        &nbsp;: <a href="classes/PhpAmqpLib-Connection-AbstractConnection.html"><abbr title="\PhpAmqpLib\Connection\AbstractConnection">AbstractConnection</abbr></a>|null            </span>
 </dt>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method___construct">__construct()</a>
+    <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method___construct">__construct()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method___destruct">__destruct()</a>
+    <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method___destruct">__destruct()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method_register">register()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: void    </span>
 </dt>
-<dd></dd>
+<dd>Starts the heartbeats</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method_unregister">unregister()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: void    </span>
 </dt>
-<dd></dd>
+<dd>Stops the heartbeats.</dd>
 
-            <dt class="phpdocumentor-table-of-contents__entry -method -private">
-    <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method_isSupported">isSupported()</a>
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method_handleSignal">handleSignal()</a>
     <span>
-                        &nbsp;: bool    </span>
+                                &nbsp;: void    </span>
+</dt>
+<dd>Handles the heartbeat when a signal interrupt is received</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -protected">
+    <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method_isSupported">isSupported()</a>
+    <span>
+                                &nbsp;: bool    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method_registerListener">registerListener()</a>
     <span>
-                        &nbsp;: mixed    </span>
+                                &nbsp;: void    </span>
 </dt>
 <dd></dd>
 
@@ -216,17 +248,17 @@
         class="
             phpdocumentor-element
             -property
-            -private
+            -protected
                                                         "
 >
     <h4 class="phpdocumentor-element__name" id="property_connection">
         $connection
-        <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#property_connection" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#property_connection" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-abstractsignalheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php">AbstractSignalHeartbeatSender.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">16</span>
 
@@ -234,7 +266,7 @@
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
+    <span class="phpdocumentor-signature__visibility">protected</span>
         <span class="phpdocumentor-signature__type"><a href="classes/PhpAmqpLib-Connection-AbstractConnection.html"><abbr title="\PhpAmqpLib\Connection\AbstractConnection">AbstractConnection</abbr></a>|null</span>
     <span class="phpdocumentor-signature__name">$connection</span>
     </code>
@@ -259,10 +291,10 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___construct">
         __construct()
-        <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method___construct" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-abstractsignalheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php">AbstractSignalHeartbeatSender.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">22</span>
 
@@ -315,10 +347,10 @@
 >
     <h4 class="phpdocumentor-element__name" id="method___destruct">
         __destruct()
-        <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method___destruct" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method___destruct" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-abstractsignalheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php">AbstractSignalHeartbeatSender.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">31</span>
 
@@ -353,22 +385,22 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">15</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">Starts the heartbeats</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">register</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                <span class="phpdocumentor-signature__name">register</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
@@ -386,22 +418,22 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">66</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">Stops the heartbeats.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                <span class="phpdocumentor-signature__name">unregister</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                <span class="phpdocumentor-signature__name">unregister</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-        <section class="phpdocumentor-description"></section>
-
+    
     
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
@@ -409,15 +441,58 @@
                     <article
         class="phpdocumentor-element
             -method
-            -private
+            -protected
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_handleSignal">
+        handleSignal()
+        <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method_handleSignal" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-abstractsignalheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php">AbstractSignalHeartbeatSender.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">61</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Handles the heartbeat when a signal interrupt is received</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+                <span class="phpdocumentor-signature__name">handleSignal</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$interval</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$interval</span>
+                : <span class="phpdocumentor-signature__argument__return-type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">void</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -protected
                                                         "
 >
     <h4 class="phpdocumentor-element__name" id="method_isSupported">
         isSupported()
-        <a href="classes/PhpAmqpLib-Connection-Heartbeat-PCNTLHeartbeatSender.html#method_isSupported" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#method_isSupported" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-abstractsignalheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/AbstractSignalHeartbeatSender.php">AbstractSignalHeartbeatSender.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">39</span>
 
@@ -425,7 +500,7 @@
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">private</span>
+    <span class="phpdocumentor-signature__visibility">protected</span>
                 <span class="phpdocumentor-signature__name">isSupported</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
 
     
@@ -451,16 +526,17 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php"><a href="files/phpamqplib-connection-heartbeat-pcntlheartbeatsender.html"><abbr title="PhpAmqpLib/Connection/Heartbeat/PCNTLHeartbeatSender.php">PCNTLHeartbeatSender.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">76</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-                <span class="phpdocumentor-signature__name">registerListener</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$interval</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                <span class="phpdocumentor-signature__name">registerListener</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$interval</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
 
-    
+        <section class="phpdocumentor-description"></section>
+
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -468,14 +544,15 @@
                 : <span class="phpdocumentor-signature__argument__return-type">int</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                
+                    <section class="phpdocumentor-description"></section>
+
             </dd>
             </dl>
 
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">mixed</span>
+    <span class="phpdocumentor-signature__response_type">void</span>
             &mdash;
         
     
