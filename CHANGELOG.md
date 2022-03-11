@@ -2,9 +2,24 @@
 
 ## [v3.2.0](https://github.com/php-amqplib/php-amqplib/tree/v3.2.0) (2022-03-10)
 
-[GitHub Milestone](https://github.com/php-amqplib/php-amqplib/milestone/24?closed=1)
-
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.1.2...v3.2.0)
+
+**Implemented enhancements:**
+
+- Channel method for continuous message consumption [\#977](https://github.com/php-amqplib/php-amqplib/pull/977) ([ramunasd](https://github.com/ramunasd))
+- Propagate real exceptions [\#976](https://github.com/php-amqplib/php-amqplib/pull/976) ([dmitryuk](https://github.com/dmitryuk))
+- unified configuration class and factory for all kinds of connection [\#975](https://github.com/php-amqplib/php-amqplib/pull/975) ([ramunasd](https://github.com/ramunasd))
+- Custom PCNTL Heartbeat Sender [\#971](https://github.com/php-amqplib/php-amqplib/pull/971) ([khepin](https://github.com/khepin))
+
+**Fixed bugs:**
+
+- PCNTL SIGTERM break on select ? [\#458](https://github.com/php-amqplib/php-amqplib/issues/458)
+- Add $restart\_syscalls = true explicitly when calling pcntl\_signal to avoid crashing SQL Server connections [\#972](https://github.com/php-amqplib/php-amqplib/pull/972) ([maxiwheat](https://github.com/maxiwheat))
+
+**Merged pull requests:**
+
+- Php amqplib 3.2.0 [\#984](https://github.com/php-amqplib/php-amqplib/pull/984) ([lukebakken](https://github.com/lukebakken))
+- getChannelId can return null [\#981](https://github.com/php-amqplib/php-amqplib/pull/981) ([dmitryuk](https://github.com/dmitryuk))
 
 ## [v3.1.2](https://github.com/php-amqplib/php-amqplib/tree/v3.1.2) (2022-01-18)
 
@@ -37,7 +52,6 @@
 **Closed issues:**
 
 - Support for PHP 8.1 [\#959](https://github.com/php-amqplib/php-amqplib/issues/959)
-- php.56 overtime [\#952](https://github.com/php-amqplib/php-amqplib/issues/952)
 
 ## [v3.1.0](https://github.com/php-amqplib/php-amqplib/tree/v3.1.0) (2021-10-22)
 
@@ -47,6 +61,7 @@
 
 - drop support for PHP7.0 [\#949](https://github.com/php-amqplib/php-amqplib/pull/949) ([ramunasd](https://github.com/ramunasd))
 - Add support for floating point values in tables/array [\#945](https://github.com/php-amqplib/php-amqplib/pull/945) ([ramunasd](https://github.com/ramunasd))
+- Add PHP 8.1 support [\#929](https://github.com/php-amqplib/php-amqplib/pull/929) ([javer](https://github.com/javer))
 
 **Fixed bugs:**
 
@@ -56,12 +71,8 @@
 **Closed issues:**
 
 - How $channel-\>wait\(\) work on loop forever [\#939](https://github.com/php-amqplib/php-amqplib/issues/939)
-- Severity: error --\> Exception: stream\_socket\_client\(\): unable to connect to [\#938](https://github.com/php-amqplib/php-amqplib/issues/938)
-- stream\_socket\_client\(\): unable to connect to ssl: connection time out [\#937](https://github.com/php-amqplib/php-amqplib/issues/937)
 - The header isn't fragmented causing large headers to hit the maximum frame size. [\#934](https://github.com/php-amqplib/php-amqplib/issues/934)
 - Keeping a connection open for publishing [\#932](https://github.com/php-amqplib/php-amqplib/issues/932)
-- How to locate problems by exception code -\> CHANNEL\_ERROR - expected 'channel.open'\(40, 10\) [\#930](https://github.com/php-amqplib/php-amqplib/issues/930)
-- php5.6.9  Unable to use AMQPStreamConnection to connect RabbitServer but AMQPSocketConnection is normal  [\#928](https://github.com/php-amqplib/php-amqplib/issues/928)
 - How to start a quorum queue? [\#921](https://github.com/php-amqplib/php-amqplib/issues/921)
 - prefetch\_count seems to consume always only 1 message [\#919](https://github.com/php-amqplib/php-amqplib/issues/919)
 - Can't connect to ssl amqp hosts. [\#918](https://github.com/php-amqplib/php-amqplib/issues/918)
@@ -75,7 +86,6 @@
 
 - throw exception on attempt to create lazy connection to multiple hosts [\#951](https://github.com/php-amqplib/php-amqplib/pull/951) ([ramunasd](https://github.com/ramunasd))
 - Fix static analysis warnings [\#948](https://github.com/php-amqplib/php-amqplib/pull/948) ([ramunasd](https://github.com/ramunasd))
-- Add PHP 8.1 support [\#929](https://github.com/php-amqplib/php-amqplib/pull/929) ([javer](https://github.com/javer))
 - Use correct default for read\_write\_timeout in AMQPStreamConnection\#try\_create\_connection [\#923](https://github.com/php-amqplib/php-amqplib/pull/923) ([bezhermoso](https://github.com/bezhermoso))
 - Improved examples and dosc [\#917](https://github.com/php-amqplib/php-amqplib/pull/917) ([corpsee](https://github.com/corpsee))
 - Fix code style: unnecessary space [\#915](https://github.com/php-amqplib/php-amqplib/pull/915) ([maximal](https://github.com/maximal))
@@ -104,8 +114,13 @@
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.12.3...v3.0.0-rc1)
 
+**Breaking changes:**
+
+- Drop deprecated things [\#897](https://github.com/php-amqplib/php-amqplib/pull/897) ([ramunasd](https://github.com/ramunasd))
+
 **Implemented enhancements:**
 
+- Allow to use SSL connection as lazy [\#893](https://github.com/php-amqplib/php-amqplib/pull/893) ([odombrovskyi-dev](https://github.com/odombrovskyi-dev))
 - Support php 8.0 [\#858](https://github.com/php-amqplib/php-amqplib/pull/858) ([axxapy](https://github.com/axxapy))
 
 **Fixed bugs:**
@@ -115,8 +130,6 @@
 
 **Merged pull requests:**
 
-- Drop deprecated things [\#897](https://github.com/php-amqplib/php-amqplib/pull/897) ([ramunasd](https://github.com/ramunasd))
-- Allow to use SSL connection as lazy [\#893](https://github.com/php-amqplib/php-amqplib/pull/893) ([adombrovsky](https://github.com/adombrovsky))
 - Drop support for PHP5.6 [\#884](https://github.com/php-amqplib/php-amqplib/pull/884) ([ramunasd](https://github.com/ramunasd))
 - feat\(Composer\) run test composer 2. [\#882](https://github.com/php-amqplib/php-amqplib/pull/882) ([Yozhef](https://github.com/Yozhef))
 - feat\(Travis\) remove travis. [\#881](https://github.com/php-amqplib/php-amqplib/pull/881) ([Yozhef](https://github.com/Yozhef))
@@ -136,7 +149,6 @@
 - process multiple messages at the same  [\#898](https://github.com/php-amqplib/php-amqplib/issues/898)
 - application\_headers vs headers [\#890](https://github.com/php-amqplib/php-amqplib/issues/890)
 - Remove support for PHP 5.X [\#877](https://github.com/php-amqplib/php-amqplib/issues/877)
-- Ideas and deprecations for next major release 4.0 [\#662](https://github.com/php-amqplib/php-amqplib/issues/662)
 
 ## [2.12.2](https://github.com/php-amqplib/php-amqplib/tree/2.12.2) (2021-02-12)
 
@@ -144,7 +156,6 @@
 
 **Implemented enhancements:**
 
-- TLS connection example needed in readme [\#801](https://github.com/php-amqplib/php-amqplib/issues/801)
 - Add support for next major version of phpseclib/phpseclib [\#875](https://github.com/php-amqplib/php-amqplib/pull/875) ([ramunasd](https://github.com/ramunasd))
 
 **Fixed bugs:**
@@ -165,9 +176,6 @@
 - Why is the client disconnecting automatically with no errors nor Exceptions? [\#847](https://github.com/php-amqplib/php-amqplib/issues/847)
 - PHP 8: Required parameter $io follows optional parameter $vhost [\#846](https://github.com/php-amqplib/php-amqplib/issues/846)
 - AMQPProtocolException phpdoc arguments type annotations are swapped [\#844](https://github.com/php-amqplib/php-amqplib/issues/844)
-- Multiple consumers at one connection [\#843](https://github.com/php-amqplib/php-amqplib/issues/843)
-- Too many publishers produce many messages In an hour, occasionally cause an exception: "stream\_socket\_client\(\): unable to connect to tcp://RABBITMQ-\*\*\*amazonaws.com:5672 \(Connection timed out\)" [\#842](https://github.com/php-amqplib/php-amqplib/issues/842)
-- Framing Error trying to connect to a RabbitMQ docker Container [\#840](https://github.com/php-amqplib/php-amqplib/issues/840)
 - PHP Fatal error:  Uncaught exception 'PhpAmqpLib\Exception\AMQPTimeoutException' with message 'The connection timed out after 3 sec while awaiting incoming data' [\#839](https://github.com/php-amqplib/php-amqplib/issues/839)
 - The dependency phpseclib needs an update to version 3.\* [\#867](https://github.com/php-amqplib/php-amqplib/issues/867)
 
@@ -213,6 +221,7 @@
 
 **Implemented enhancements:**
 
+- Add signal-based heartbeat option [\#815](https://github.com/php-amqplib/php-amqplib/pull/815) ([laurynasgadl](https://github.com/laurynasgadl))
 - CI tests for PHP 7.4 [\#800](https://github.com/php-amqplib/php-amqplib/pull/800) ([ramunasd](https://github.com/ramunasd))
 - AMQPMessage new interface [\#799](https://github.com/php-amqplib/php-amqplib/pull/799) ([ramunasd](https://github.com/ramunasd))
 - Enable TLS SNI by setting peer\_name to $host in $ssl\_options [\#785](https://github.com/php-amqplib/php-amqplib/pull/785) ([carlhoerberg](https://github.com/carlhoerberg))
@@ -236,7 +245,6 @@
 
 - AbstractIO::select\(\) never returns false [\#817](https://github.com/php-amqplib/php-amqplib/pull/817) ([szepeviktor](https://github.com/szepeviktor))
 - Tidy up CI configuration [\#816](https://github.com/php-amqplib/php-amqplib/pull/816) ([szepeviktor](https://github.com/szepeviktor))
-- Add signal-based heartbeat option [\#815](https://github.com/php-amqplib/php-amqplib/pull/815) ([laurynasgadl](https://github.com/laurynasgadl))
 - add type check for basic\_consume\(\) callback [\#814](https://github.com/php-amqplib/php-amqplib/pull/814) ([ramunasd](https://github.com/ramunasd))
 - Exclude non-essential files from dist [\#796](https://github.com/php-amqplib/php-amqplib/pull/796) ([fedotov-as](https://github.com/fedotov-as))
 
@@ -267,9 +275,12 @@
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.11.0...v2.11.1)
 
+**Implemented enhancements:**
+
+- Blocked connection check [\#779](https://github.com/php-amqplib/php-amqplib/pull/779) ([ramunasd](https://github.com/ramunasd))
+
 **Fixed bugs:**
 
-- Incorrect documentation for AMQPMessage constructor \(and others\) [\#769](https://github.com/php-amqplib/php-amqplib/issues/769)
 - Handling of SOCKET\_EAGAIN in StreamIO not working in PHP 7.4 [\#764](https://github.com/php-amqplib/php-amqplib/issues/764)
 - fix: ensure hosts is an array, otherwise latest\_exception can be null [\#778](https://github.com/php-amqplib/php-amqplib/pull/778) ([mr-feek](https://github.com/mr-feek))
 - change phpDocumentator template, fix incorrect constructor documentation [\#771](https://github.com/php-amqplib/php-amqplib/pull/771) ([ramunasd](https://github.com/ramunasd))
@@ -281,7 +292,6 @@
 **Merged pull requests:**
 
 - Add package meta class [\#782](https://github.com/php-amqplib/php-amqplib/pull/782) ([ramunasd](https://github.com/ramunasd))
-- Blocked connection check [\#779](https://github.com/php-amqplib/php-amqplib/pull/779) ([ramunasd](https://github.com/ramunasd))
 - Code style and static analysis warnings [\#768](https://github.com/php-amqplib/php-amqplib/pull/768) ([ramunasd](https://github.com/ramunasd))
 - Mention AMQProxy as related library [\#767](https://github.com/php-amqplib/php-amqplib/pull/767) ([johanrhodin](https://github.com/johanrhodin))
 - Fix comments [\#766](https://github.com/php-amqplib/php-amqplib/pull/766) ([Yurunsoft](https://github.com/Yurunsoft))
@@ -295,6 +305,7 @@
 
 - Remove bcmath dependency [\#754](https://github.com/php-amqplib/php-amqplib/pull/754) ([ramunasd](https://github.com/ramunasd))
 - Run phpunit on appveyor [\#751](https://github.com/php-amqplib/php-amqplib/pull/751) ([ramunasd](https://github.com/ramunasd))
+- Add support for PLAIN authentication method [\#749](https://github.com/php-amqplib/php-amqplib/pull/749) ([ramunasd](https://github.com/ramunasd))
 
 **Fixed bugs:**
 
@@ -311,7 +322,6 @@
 
 - Fix phpunit tests reported as risked [\#755](https://github.com/php-amqplib/php-amqplib/pull/755) ([ramunasd](https://github.com/ramunasd))
 - throw AMQPConnectionClosedException when broker wants to close connection [\#750](https://github.com/php-amqplib/php-amqplib/pull/750) ([ramunasd](https://github.com/ramunasd))
-- Add support for PLAIN authentication method [\#749](https://github.com/php-amqplib/php-amqplib/pull/749) ([ramunasd](https://github.com/ramunasd))
 
 ## [v2.10.1](https://github.com/php-amqplib/php-amqplib/tree/v2.10.1) (2019-10-10)
 
@@ -332,13 +342,11 @@
 **Closed issues:**
 
 - basic\_publish and memory alarms [\#743](https://github.com/php-amqplib/php-amqplib/issues/743)
-- Fail to apply arguments to  queue\_declare [\#741](https://github.com/php-amqplib/php-amqplib/issues/741)
 - Connection timeout error [\#739](https://github.com/php-amqplib/php-amqplib/issues/739)
 - Exchanges list [\#734](https://github.com/php-amqplib/php-amqplib/issues/734)
 - Cannot create a durable queue [\#731](https://github.com/php-amqplib/php-amqplib/issues/731)
 - isConnected remains true while AMQPConnectionClosedException is thrown [\#730](https://github.com/php-amqplib/php-amqplib/issues/730)
 - Use v2.9~2.10, the CPU will 99% when waiting for new messages. v2.8 has no such problem. [\#729](https://github.com/php-amqplib/php-amqplib/issues/729)
-- How to set connection name ? [\#728](https://github.com/php-amqplib/php-amqplib/issues/728)
 - Headers exchange - php example [\#554](https://github.com/php-amqplib/php-amqplib/issues/554)
 - AMQPMessage::basic\_consume + $nowait=null results in $nowait=true [\#422](https://github.com/php-amqplib/php-amqplib/issues/422)
 
@@ -379,7 +387,6 @@
 
 **Closed issues:**
 
-- Heartbeat problem when the consumer consume a message for too long [\#725](https://github.com/php-amqplib/php-amqplib/issues/725)
 - Enhance PHPUnit version definitions in composer.json [\#718](https://github.com/php-amqplib/php-amqplib/issues/718)
 - Connection timeout disguised as missed server heartbeat [\#713](https://github.com/php-amqplib/php-amqplib/issues/713)
 - why php alway quit [\#708](https://github.com/php-amqplib/php-amqplib/issues/708)
@@ -428,7 +435,6 @@
 **Closed issues:**
 
 - stream\_socket\_client\(\): unable to connect to tcp:// [\#682](https://github.com/php-amqplib/php-amqplib/issues/682)
-- Demo error [\#680](https://github.com/php-amqplib/php-amqplib/issues/680)
 - Broken pipe connection [\#679](https://github.com/php-amqplib/php-amqplib/issues/679)
 -  Error Wrong parameters for PhpAmqpLib\Exception\AMQPRuntimeException\(\[string $message \[, long $code \[, Throwable $previous = NULL\]\]\]\) [\#671](https://github.com/php-amqplib/php-amqplib/issues/671)
 - stream\_select\(\): unable to select \[4\]: Interrupted system call \(max\_fd=5\) [\#670](https://github.com/php-amqplib/php-amqplib/issues/670)
@@ -526,7 +532,6 @@
 - What compatibility with Symfony4 [\#635](https://github.com/php-amqplib/php-amqplib/issues/635)
 - Workers consuming multiple queues in topic exchange don't always process in parallel prefetch\_count=1 [\#607](https://github.com/php-amqplib/php-amqplib/issues/607)
 - Call protected function outside class [\#604](https://github.com/php-amqplib/php-amqplib/issues/604)
-- Lazy SSL connection [\#582](https://github.com/php-amqplib/php-amqplib/issues/582)
 - Queue declare not timing out [\#561](https://github.com/php-amqplib/php-amqplib/issues/561)
 - Error handler relies on locale setting [\#557](https://github.com/php-amqplib/php-amqplib/issues/557)
 - Error handling of connection issues [\#548](https://github.com/php-amqplib/php-amqplib/issues/548)
@@ -673,12 +678,14 @@
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v2.7.3...v2.8.0-rc1)
 
+**Implemented enhancements:**
+
+- lazy channels [\#291](https://github.com/php-amqplib/php-amqplib/issues/291)
+
 **Closed issues:**
 
 - "Server nack'ed unknown delivery\_tag" when using batch\_basic\_publish [\#597](https://github.com/php-amqplib/php-amqplib/issues/597)
 - fwrite: errno=11 in StreamIO [\#596](https://github.com/php-amqplib/php-amqplib/issues/596)
-- Use swoole to generate multi-process channel errors [\#592](https://github.com/php-amqplib/php-amqplib/issues/592)
-- Connecting RMQ with multiple host connection  [\#588](https://github.com/php-amqplib/php-amqplib/issues/588)
 - where is the function "AMQPStreamConnection::create\_connection\(\)" [\#586](https://github.com/php-amqplib/php-amqplib/issues/586)
 - RPC server not sending reply down the wire [\#585](https://github.com/php-amqplib/php-amqplib/issues/585)
 - Please add support for AMQP 1.0 [\#583](https://github.com/php-amqplib/php-amqplib/issues/583)
@@ -697,7 +704,6 @@
 - StreamConnection does not time out [\#408](https://github.com/php-amqplib/php-amqplib/issues/408)
 - $this-\>debug can be null in AbstractConnection.php [\#386](https://github.com/php-amqplib/php-amqplib/issues/386)
 - Read and write to multiple queues within one script [\#293](https://github.com/php-amqplib/php-amqplib/issues/293)
-- lazy channels [\#291](https://github.com/php-amqplib/php-amqplib/issues/291)
 - decode\(\) method not defined [\#160](https://github.com/php-amqplib/php-amqplib/issues/160)
 
 **Merged pull requests:**

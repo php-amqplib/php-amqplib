@@ -18,7 +18,7 @@ jobs:
           env:
             CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
           image: githubchangeloggenerator/github-changelog-generator
-          options: "--env SRC_PATH=/github/workspace --workdir /github/workspace"
+          options: "-v ${{ github.workspace }}:/github/workspace --env SRC_PATH=/github/workspace --workdir /github/workspace"
           run: "github_changelog_generator --user php-amqplib --project php-amqplib --token ${{ secrets.CHANGELOG_GITHUB_TOKEN }}"
       - name: Commit changes
         run: |

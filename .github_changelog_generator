@@ -1,3 +1,5 @@
 unreleased=false
 since-tag=v2.7.2
 cache-file=build/github-changelog-http-cache
+enhancement-labels=enhancement,feature
+exclude-labels=duplicate,question,invalid,wontfix,help-wanted,discussion
