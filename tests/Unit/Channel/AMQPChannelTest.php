@@ -63,15 +63,22 @@ class AMQPChannelTest extends TestCase
      */
     public function publish_batch_opened_connection(): void
     {
-        $connection_mock = $this->getMockBuilder(TestConnection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'prepare_content',
-                'prepare_channel_method_frame',
-                'write',
-            ])
-            ->getMock();
+        $mock_builder = $this->getMockBuilder(TestConnection::class)
+            ->disableOriginalConstructor();
 
+        $methods_to_mock = [
+            'prepare_content',
+            'prepare_channel_method_frame',
+            'write',
+        ];
+
+        if (!method_exists($mock_builder, 'onlyMethods')) {
+            $mock_builder->setMethods($methods_to_mock);
+        } else {
+            $mock_builder->onlyMethods($methods_to_mock);
+        }
+
+        $connection_mock = $mock_builder->getMock();
         $channel = new TestChannel($connection_mock, 1);
 
         $message = new AMQPMessage();
