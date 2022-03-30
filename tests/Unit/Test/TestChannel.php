@@ -27,4 +27,8 @@ class TestChannel extends AMQPChannel
         $this->auto_decode = $auto_decode;
         $this->channel_rpc_timeout = $channel_rpc_timeout;
     }
+
+    public function close_connection(): void {
+        $this->do_close();
+    }
 }
