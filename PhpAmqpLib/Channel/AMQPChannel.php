@@ -1235,6 +1235,8 @@ class AMQPChannel extends AbstractChannel
             return;
         }
 
+        $this->checkConnection();
+
         /** @var AMQPWriter $pkt */
         $pkt = new AMQPWriter();
 
@@ -1265,7 +1267,6 @@ class AMQPChannel extends AbstractChannel
             }
         }
 
-        $this->checkConnection();
         $this->connection->write($pkt->getvalue());
         $this->batch_messages = array();
     }
