@@ -87,6 +87,11 @@ final class AMQPConnectionConfig
     /** @var string|null */
     private $sslCaCert;
 
+    /**
+     * @var string|null
+     */
+    private $sslCaPath;
+
     /** @var string|null */
     private $sslCert;
 
@@ -376,6 +381,16 @@ final class AMQPConnectionConfig
     public function setSslCaCert(?string $sslCaCert): void
     {
         $this->sslCaCert = $sslCaCert;
+    }
+
+    public function getSslCaPath(): ?string
+    {
+        return $this->sslCaPath;
+    }
+
+    public function setSslCaPath(?string $sslCaPath): void
+    {
+        $this->sslCaPath = $sslCaPath;
     }
 
     public function getSslCert(): ?string
