@@ -108,6 +108,7 @@ class AMQPConnectionFactory
     {
         return array_filter([
            'cafile' => $config->getSslCaCert(),
+           'capath' => $config->getSslCaPath(),
            'local_cert' => $config->getSslCert(),
            'local_pk' => $config->getSslKey(),
            'verify_peer' => $config->getSslVerify(),

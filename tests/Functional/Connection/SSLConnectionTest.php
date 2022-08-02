@@ -60,6 +60,17 @@ class SSLConnectionTest extends AbstractConnectionTest
         ];
         $sets[] = [$options];
 
+        // #3 capath option
+        $options = [
+            'ssl' => [
+                'capath' => $certsPath . '/hashed/',
+                'verify_peer_name' => false,
+            ],
+        ];
+        $sets[] = [
+            $options
+        ];
+
         return $sets;
     }
 }

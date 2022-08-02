@@ -28,6 +28,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
             $config->setIsSecure(true);
             $config->setNetworkProtocol($options['protocol'] ?? 'ssl');
             $config->setSslCaCert($options['ssl']['cafile'] ?? null);
+            $config->setSslCaPath($options['ssl']['capath'] ?? null);
             $config->setSslCert($options['ssl']['local_cert'] ?? null);
             $config->setSslKey($options['ssl']['local_pk'] ?? null);
             $config->setSslVerify($options['ssl']['verify_peer'] ?? null);
