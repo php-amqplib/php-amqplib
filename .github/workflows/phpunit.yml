@@ -55,8 +55,17 @@ jobs:
             RABBITMQ_SSL_KEYFILE: /src/tests/certs/server_key.pem
             RABBITMQ_SSL_VERIFY: verify_peer
             RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: 0
+      proxy:
+        image: ghcr.io/shopify/toxiproxy:2.5.0
+        ports:
+          - 8474:8474
+          - 5673:5673
 
     name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
+    env:
+      TOXIPROXY_HOST: localhost
+      TOXIPROXY_AMQP_TARGET: rabbitmq
+      TOXIPROXY_AMQP_PORT: 5673
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -82,11 +91,11 @@ jobs:
       run: php ./tests/wait_broker.php
 
     - name: PHPUnit tests
-      run: ./vendor/bin/phpunit --exclude-group proxy
+      run: ./vendor/bin/phpunit
       if: matrix.coverage == 'none'
 
     - name: PHPUnit tests + coverage
-      run: ./vendor/bin/phpunit --exclude-group proxy --coverage-clover=coverage.xml
+      run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
       if: matrix.coverage != 'none'
 
     - name: Upload Codecov coverage

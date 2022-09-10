@@ -79,8 +79,12 @@ abstract class AbstractConnectionTest extends TestCaseCompat
      */
     protected function create_proxy($name = 'amqp_connection')
     {
+        $host = trim(getenv('TOXIPROXY_AMQP_TARGET'));
+        if (empty($host)) {
+            $host = HOST;
+        }
         $proxy = new ToxiProxy($name, $this->get_toxiproxy_host());
-        $proxy->open(HOST, PORT, $this->get_toxiproxy_amqp_port());
+        $proxy->open($host, PORT, $this->get_toxiproxy_amqp_port());
 
         return $proxy;
     }
