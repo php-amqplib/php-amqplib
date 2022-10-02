@@ -40,4 +40,28 @@ class ConnectionCreationTest extends AbstractConnectionTest
         $conn = AMQPStreamConnection::create_connection($hosts, array());
         $this->assertInstanceOf('PhpAmqpLib\Connection\AMQPStreamConnection', $conn);
     }
+
+    /**
+     * @test
+     * @covers \PhpAmqpLib\Connection\AbstractConnection::__construct()
+     * @covers \PhpAmqpLib\Connection\AbstractConnection::connection_tune()
+     */
+    public function heartbeat_negotiation()
+    {
+        $connection = $this->conection_create();
+        $serverHeartBeat = $connection->getHeartbeat();
+        $connection->close();
+        unset($connection);
+
+        if ($serverHeartBeat > 0) {
+            // try to negotiate lower value
+            $connection = $this->conection_create('stream', HOST, PORT, ['heartbeat' => $serverHeartBeat - 1]);
+            self::assertLessThan($serverHeartBeat, $connection->getHeartbeat());
+        } else {
+            // try to negotiate higher value
+            $connection = $this->conection_create('stream', HOST, PORT, ['heartbeat' => 30]);
+            self::assertEquals(30, $connection->getHeartbeat());
+        }
+        $connection->close();
+    }
 }
