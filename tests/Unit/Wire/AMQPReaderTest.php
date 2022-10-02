@@ -61,7 +61,7 @@ class AMQPReaderTest extends TestCaseCompat
         $reader = new AMQPReader($data);
         $parsed = $reader->read_value(AMQPAbstractCollection::T_FLOAT);
         self::assertIsFloat($parsed);
-        self::assertEquals(0.001, $parsed);
+        self::assertEquals(0.0010000000474974513, $parsed);
 
         $data = hex2bin('3feff7ced916872b');
         $reader = new AMQPReader($data);
