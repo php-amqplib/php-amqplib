@@ -91,7 +91,7 @@ class SocketIOTest extends TestCase
         $property = new \ReflectionProperty(SocketIO::class, 'sock');
         $property->setAccessible(true);
 
-        $socket = new SocketIO('0.0.0.0', PORT, 0.1, 0.1, null, false, 0);
+        $socket = new SocketIO('0.0.0.0', PORT, 0.1, false, 0.1, 0);
         $property->setValue($socket, null);
 
         $socket->select(0, 0);

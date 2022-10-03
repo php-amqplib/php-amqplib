@@ -72,6 +72,9 @@ final class AMQPConnectionConfig
     /** @var resource|null */
     private $streamContext;
 
+    /** @var int */
+    private $sendBufferSize = 0;
+
     /** @var bool */
     private $dispatchSignals = true;
 
@@ -338,6 +341,27 @@ final class AMQPConnectionConfig
             throw new InvalidArgumentException('Resource must be valid stream context');
         }
         $this->streamContext = $streamContext;
+    }
+
+    /**
+     * @return int
+     * @since 3.2.1
+     */
+    public function getSendBufferSize(): int
+    {
+        return $this->sendBufferSize;
+    }
+
+    /**
+     * Socket send buffer size. Set 0 to keep system default.
+     * @param int $sendBufferSize
+     * @return void
+     * @since 3.2.1
+     */
+    public function setSendBufferSize(int $sendBufferSize): void
+    {
+        self::assertGreaterOrEq($sendBufferSize, 0, 'sendBufferSize');
+        $this->sendBufferSize = $sendBufferSize;
     }
 
     public function isSignalsDispatchEnabled(): bool

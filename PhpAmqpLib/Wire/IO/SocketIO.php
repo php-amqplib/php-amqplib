@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Exception\AMQPSocketException;
@@ -21,6 +22,7 @@ class SocketIO extends AbstractIO
      * @param bool $keepalive
      * @param int|float|null $write_timeout if null defaults to read timeout
      * @param int $heartbeat how often to send heartbeat. 0 means off
+     * @param null|AMQPConnectionConfig $config
      */
     public function __construct(
         $host,
@@ -28,8 +30,10 @@ class SocketIO extends AbstractIO
         $read_timeout = 3,
         $keepalive = false,
         $write_timeout = null,
-        $heartbeat = 0
+        $heartbeat = 0,
+        ?AMQPConnectionConfig $config = null
     ) {
+        $this->config = $config;
         $this->host = $host;
         $this->port = $port;
         $this->read_timeout = (float)$read_timeout;
@@ -84,6 +88,9 @@ class SocketIO extends AbstractIO
 
         socket_set_block($this->sock);
         socket_set_option($this->sock, SOL_TCP, TCP_NODELAY, 1);
+        if ($this->config && $this->config->getSendBufferSize() > 0) {
+            socket_set_option($this->sock, SOL_SOCKET, SO_SNDBUF, $this->config->getSendBufferSize());
+        }
 
         if ($this->keepalive) {
             $this->enable_keepalive();
@@ -181,7 +188,7 @@ class SocketIO extends AbstractIO
             try {
                 $this->select_write();
                 $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
-                $result = socket_write($this->sock, $buffer, self::BUFFER_SIZE);
+                $result = socket_write($this->sock, $buffer);
                 $this->throwOnError();
             } catch (\ErrorException $e) {
                 $code = socket_last_error($this->sock);
