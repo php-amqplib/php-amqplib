@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Wire\IO;
 
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
@@ -10,6 +11,9 @@ use PhpAmqpLib\Wire\AMQPWriter;
 abstract class AbstractIO
 {
     const BUFFER_SIZE = 8192;
+
+    /** @var null|AMQPConnectionConfig */
+    protected $config;
 
     /** @var string */
     protected $host;

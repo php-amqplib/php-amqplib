@@ -45,6 +45,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
         $config->setReadTimeout($timeout);
         $config->setWriteTimeout($timeout);
         $config->setConnectionTimeout($options['connectionTimeout'] ?? $timeout);
+        $config->setSendBufferSize(16384);
 
         $connection = AMQPConnectionFactory::create($config);
         $this->assertTrue($connection->isConnected());

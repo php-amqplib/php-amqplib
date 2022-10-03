@@ -45,7 +45,7 @@ class AMQPSocketConnection extends AbstractConnection
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read timeout');
         }
 
-        $io = new SocketIO($host, $port, $read_timeout, $keepalive, $write_timeout, $heartbeat);
+        $io = new SocketIO($host, $port, $read_timeout, $keepalive, $write_timeout, $heartbeat, $config);
 
         parent::__construct(
             $user,
