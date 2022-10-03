@@ -30,7 +30,7 @@ services:
         - RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT=0
 
   proxy:
-    image: shopify/toxiproxy
+    image: ghcr.io/shopify/toxiproxy:2.5.0
     ports:
       - "8474:8474"
       - "5673:5673"

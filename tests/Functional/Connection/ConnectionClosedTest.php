@@ -73,7 +73,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
      * @group proxy
      * @testWith ["stream", 1024]
      *           ["stream", 32768]
-     *           ["socket", 32768]
+     *           ["socket", 102400]
      * @covers \PhpAmqpLib\Wire\IO\StreamIO::write()
      * @covers \PhpAmqpLib\Wire\IO\SocketIO::write()
      *
@@ -84,12 +84,13 @@ class ConnectionClosedTest extends AbstractConnectionTest
     {
         $proxy = $this->create_proxy();
 
-        /** @var AbstractConnection $connection */
         $connection = $this->conection_create(
             $type,
             $proxy->getHost(),
             $proxy->getPort()
         );
+
+
 
         $channel = $connection->channel();
         $this->assertTrue($channel->is_open());
@@ -101,7 +102,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
         );
 
         $exception = null;
-        // block proxy connection
+        // drop proxy connection
         $proxy->close();
         unset($proxy);
 
@@ -110,6 +111,11 @@ class ConnectionClosedTest extends AbstractConnectionTest
         } catch (\PHPUnit_Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
+        }
+
+        if (!$exception && $type === 'socket') {
+            $sendBuffer = socket_get_option($connection->getIO()->getSocket(), SOL_SOCKET, SO_SNDBUF);
+            print_r($sendBuffer);
         }
 
         $this->assertInstanceOf(AMQPConnectionClosedException::class, $exception);
@@ -240,13 +246,13 @@ class ConnectionClosedTest extends AbstractConnectionTest
 
         $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
         $message = new AMQPMessage(
-            str_repeat('0', 1024 * 32), // 32kb fills up buffer completely on most OS
+            str_repeat('0', 1024 * 100), // 32kb fills up buffer completely on most OS
             ['delivery_mode' => AMQPMessage::DELIVERY_MODE_NON_PERSISTENT]
         );
         $channel->basic_publish($message, $exchange_name, $queue_name);
 
-        // close proxy and wait longer than timeout
-        unset($proxy);
+        // drop proxy connection and wait longer than timeout
+        $proxy->close();
         sleep($timeout);
         usleep(100000);
         $proxy = $this->create_proxy();
@@ -257,6 +263,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
         } catch (\Exception $exception) {
         }
 
+        $proxy->close();
         unset($proxy);
 
         $this->assertInstanceOf(AMQPConnectionClosedException::class, $exception);
