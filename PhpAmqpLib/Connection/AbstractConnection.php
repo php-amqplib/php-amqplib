@@ -935,14 +935,14 @@ abstract class AbstractConnection extends AbstractChannel
         // Otherwise the smaller value of the two is used
         // A zero value indicates that a peer suggests disabling heartbeats entirely.
         // To disable heartbeats, both peers have to opt in and use the value of 0
+        // For BC, this library opts for disabled heartbeat if client value is 0.
         $v = $args->read_short();
-        if ($this->heartbeat === 0) {
-            $this->heartbeat = $v;
-        } elseif ($v > 0) {
+        if ($this->heartbeat > 0) {
             $this->heartbeat = min($this->heartbeat, $v);
         }
 
         $this->x_tune_ok($this->channel_max, $this->frame_max, $this->heartbeat);
+        $this->io->afterTune($this->heartbeat);
     }
 
     /**
