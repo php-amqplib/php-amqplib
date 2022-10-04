@@ -106,17 +106,17 @@ class ConnectionClosedTest extends AbstractConnectionTest
         $proxy->close();
         unset($proxy);
 
-        try {
-            $channel->basic_publish($message, $exchange_name, $queue_name);
-        } catch (\PHPUnit_Exception $exception) {
-            throw $exception;
-        } catch (\Exception $exception) {
-        }
-
-        if (!$exception && $type === 'socket') {
-            $sendBuffer = socket_get_option($connection->getIO()->getSocket(), SOL_SOCKET, SO_SNDBUF);
-            print_r($sendBuffer);
-        }
+        // send data frames until buffer gets full
+        $retry = 0;
+        do {
+            try {
+                $channel->basic_publish($message, $exchange_name, $queue_name);
+            } catch (\PHPUnit_Exception $exception) {
+                throw $exception;
+            } catch (\Exception $exception) {
+                break;
+            }
+        } while (!$exception && ++$retry < 100);
 
         $this->assertInstanceOf(AMQPConnectionClosedException::class, $exception);
         $this->assertEquals(SOCKET_EPIPE, $exception->getCode());
