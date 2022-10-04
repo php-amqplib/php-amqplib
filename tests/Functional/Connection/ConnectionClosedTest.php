@@ -258,10 +258,17 @@ class ConnectionClosedTest extends AbstractConnectionTest
         $proxy = $this->create_proxy();
 
         $exception = null;
-        try {
-            $channel->basic_publish($message, $exchange_name, $queue_name);
-        } catch (\Exception $exception) {
-        }
+        // send data frames until buffer gets full
+        $retry = 0;
+        do {
+            try {
+                $channel->basic_publish($message, $exchange_name, $queue_name);
+            } catch (\PHPUnit_Exception $exception) {
+                throw $exception;
+            } catch (\Exception $exception) {
+                break;
+            }
+        } while (!$exception && ++$retry < 100);
 
         $proxy->close();
         unset($proxy);
