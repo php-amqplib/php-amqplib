@@ -125,6 +125,16 @@ abstract class AbstractIO
     abstract public function connect();
 
     /**
+     * Set connection params connection tune(negotiation).
+     * @param int $heartbeat
+     */
+    public function afterTune(int $heartbeat): void
+    {
+        $this->heartbeat = $heartbeat;
+        $this->initial_heartbeat = $heartbeat;
+    }
+
+    /**
      * Heartbeat logic: check connection health here
      * @return void
      * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
@@ -177,6 +187,7 @@ abstract class AbstractIO
      */
     public function disableHeartbeat()
     {
+        $this->initial_heartbeat = $this->heartbeat;
         $this->heartbeat = 0;
 
         return $this;
