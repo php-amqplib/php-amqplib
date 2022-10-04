@@ -7,6 +7,8 @@ jobs:
   run:
     name: Update changelog
     runs-on: ubuntu-latest
+    env:
+      CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -15,11 +17,9 @@ jobs:
       - name: Generate changelog
         uses: addnab/docker-run-action@v3
         with:
-          env:
-            CHANGELOG_GITHUB_TOKEN: ${{ secrets.CHANGELOG_GITHUB_TOKEN }}
           image: githubchangeloggenerator/github-changelog-generator
-          options: "-v ${{ github.workspace }}:/github/workspace --env SRC_PATH=/github/workspace --workdir /github/workspace"
-          run: "github_changelog_generator --user php-amqplib --project php-amqplib --token ${{ secrets.CHANGELOG_GITHUB_TOKEN }}"
+          options: "-v ${{ github.workspace }}:/github/workspace --env SRC_PATH=/github/workspace --env CHANGELOG_GITHUB_TOKEN --workdir /github/workspace"
+          run: "github_changelog_generator --user php-amqplib --project php-amqplib"
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"

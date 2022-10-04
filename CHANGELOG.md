@@ -1,5 +1,27 @@
 # Changelog
 
+## [v3.3.0](https://github.com/php-amqplib/php-amqplib/tree/v3.3.0) (2022-10-03)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.2.0...v3.3.0)
+
+**Implemented enhancements:**
+
+- Allow set socket send buffer size [\#1026](https://github.com/php-amqplib/php-amqplib/pull/1026) ([ramunasd](https://github.com/ramunasd))
+- Add capath SSL option support [\#1014](https://github.com/php-amqplib/php-amqplib/pull/1014) ([amino-garricklam](https://github.com/amino-garricklam))
+
+**Fixed bugs:**
+
+- Heartbeat of client overwrite without any conditions the one from server [\#1018](https://github.com/php-amqplib/php-amqplib/issues/1018)
+- Fix heartbeat negotiation [\#1024](https://github.com/php-amqplib/php-amqplib/pull/1024) ([ramunasd](https://github.com/ramunasd))
+- Throw connection exceptions on batch publish [\#983](https://github.com/php-amqplib/php-amqplib/pull/983) ([foment](https://github.com/foment))
+
+**Merged pull requests:**
+
+- Update codecov action to latest version [\#1028](https://github.com/php-amqplib/php-amqplib/pull/1028) ([ramunasd](https://github.com/ramunasd))
+- Upgrade toxiproxy, enable all tests on CI [\#1025](https://github.com/php-amqplib/php-amqplib/pull/1025) ([ramunasd](https://github.com/ramunasd))
+- chore: Set permissions for GitHub actions [\#1001](https://github.com/php-amqplib/php-amqplib/pull/1001) ([nathannaveen](https://github.com/nathannaveen))
+- Fix rate limiting [\#985](https://github.com/php-amqplib/php-amqplib/pull/985) ([lukebakken](https://github.com/lukebakken))
+
 ## [v3.2.0](https://github.com/php-amqplib/php-amqplib/tree/v3.2.0) (2022-03-10)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.1.2...v3.2.0)
@@ -195,6 +217,7 @@
 
 **Implemented enhancements:**
 
+- Tests should run with TLS enabled [\#758](https://github.com/php-amqplib/php-amqplib/issues/758)
 - Use docker containers for broker and proxy in travis CI tests [\#831](https://github.com/php-amqplib/php-amqplib/pull/831) ([ramunasd](https://github.com/ramunasd))
 
 **Fixed bugs:**
@@ -207,7 +230,6 @@
 
 - Does the library supports federation conf? [\#826](https://github.com/php-amqplib/php-amqplib/issues/826)
 - Publishing not happend after publishing to non-existent exchange [\#823](https://github.com/php-amqplib/php-amqplib/issues/823)
-- Tests should run with TLS enabled [\#758](https://github.com/php-amqplib/php-amqplib/issues/758)
 
 **Merged pull requests:**
 
