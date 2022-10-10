@@ -162,7 +162,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @param AMQPReader $reader
      */
-    protected function channel_alert($reader)
+    protected function channel_alert(AMQPReader $reader): void
     {
         $reply_code = $reader->read_short();
         $reply_text = $reader->read_shortstr();
@@ -209,9 +209,9 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * @param AMQPReader $reader
-     * @throws \PhpAmqpLib\Exception\AMQPProtocolChannelException
+     * @throws AMQPProtocolChannelException
      */
-    protected function channel_close($reader)
+    protected function channel_close(AMQPReader $reader): void
     {
         $reply_code = $reader->read_short();
         $reply_text = $reader->read_shortstr();
@@ -250,10 +250,7 @@ class AMQPChannel extends AbstractChannel
         ), false, $this->channel_rpc_timeout);
     }
 
-    /**
-     * @param AMQPReader $reader
-     */
-    protected function channel_flow($reader)
+    protected function channel_flow(AMQPReader $reader): void
     {
         $this->active = $reader->read_bit();
         $this->x_flow_ok($this->active);
@@ -268,11 +265,7 @@ class AMQPChannel extends AbstractChannel
         $this->send_method_frame(array($class_id, $method_id), $args);
     }
 
-    /**
-     * @param AMQPReader $reader
-     * @return bool
-     */
-    protected function channel_flow_ok($reader)
+    protected function channel_flow_ok(AMQPReader $reader): bool
     {
         return $reader->read_bit();
     }
@@ -348,7 +341,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @return int
      */
-    protected function access_request_ok($reader)
+    protected function access_request_ok(AMQPReader $reader): int
     {
         $this->default_ticket = $reader->read_short();
 
@@ -694,7 +687,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @return string[]
      */
-    protected function queue_declare_ok($reader)
+    protected function queue_declare_ok(AMQPReader $reader)
     {
         $queue = $reader->read_shortstr();
         $message_count = $reader->read_long();
@@ -741,9 +734,9 @@ class AMQPChannel extends AbstractChannel
      * Confirms deletion of a queue
      *
      * @param AMQPReader $reader
-     * @return string
+     * @return int|string
      */
-    protected function queue_delete_ok($reader)
+    protected function queue_delete_ok(AMQPReader $reader)
     {
         return $reader->read_long();
     }
@@ -777,9 +770,9 @@ class AMQPChannel extends AbstractChannel
      * Confirms a queue purge
      *
      * @param AMQPReader $reader
-     * @return string
+     * @return int|string
      */
-    protected function queue_purge_ok($reader)
+    protected function queue_purge_ok(AMQPReader $reader)
     {
         return $reader->read_long();
     }
@@ -802,7 +795,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @throws AMQPRuntimeException
      */
-    protected function basic_ack_from_server(AMQPReader $reader)
+    protected function basic_ack_from_server(AMQPReader $reader): void
     {
         $delivery_tag = $reader->read_longlong();
         $multiple = (bool) $reader->read_bit();
@@ -823,7 +816,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @throws AMQPRuntimeException
      */
-    protected function basic_nack_from_server($reader)
+    protected function basic_nack_from_server(AMQPReader $reader): void
     {
         $delivery_tag = $reader->read_longlong();
         $multiple = (bool) $reader->read_bit();
@@ -937,7 +930,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @return string
      */
-    protected function basic_cancel_ok($reader)
+    protected function basic_cancel_ok(AMQPReader $reader): string
     {
         $consumerTag = $reader->read_shortstr();
         unset($this->callbacks[$consumerTag]);
@@ -1027,7 +1020,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @return string
      */
-    protected function basic_consume_ok($reader)
+    protected function basic_consume_ok(AMQPReader $reader): string
     {
         return $reader->read_shortstr();
     }
@@ -1038,7 +1031,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @param AMQPMessage $message
      */
-    protected function basic_deliver($reader, $message)
+    protected function basic_deliver(AMQPReader $reader, AMQPMessage $message): void
     {
         $consumer_tag = $reader->read_shortstr();
         $delivery_tag = $reader->read_longlong();
@@ -1092,7 +1085,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPMessage $message
      * @return AMQPMessage
      */
-    protected function basic_get_ok($reader, $message)
+    protected function basic_get_ok(AMQPReader $reader, AMQPMessage $message): AMQPMessage
     {
         $delivery_tag = $reader->read_longlong();
         $redelivered = $reader->read_bit();
@@ -1344,7 +1337,7 @@ class AMQPChannel extends AbstractChannel
      * @param AMQPReader $reader
      * @param AMQPMessage $message
      */
-    protected function basic_return($reader, $message)
+    protected function basic_return(AMQPReader $reader, AMQPMessage $message)
     {
         $callback = $this->basic_return_callback;
         if (!is_callable($callback)) {

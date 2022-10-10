@@ -3,7 +3,7 @@
 namespace PhpAmqpLib\Tests\Unit\Test;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPBufferReader;
 
 class TestConnection extends AbstractConnection
 {
@@ -26,7 +26,7 @@ class TestConnection extends AbstractConnection
     public function setIsBlocked($blocked = true)
     {
         if ($blocked) {
-            $this->connection_blocked(new AMQPReader(hex2bin('0120')));
+            $this->connection_blocked(new AMQPBufferReader(hex2bin('0120')));
         } else {
             $this->connection_unblocked();
         }

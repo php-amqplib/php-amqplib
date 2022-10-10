@@ -75,13 +75,13 @@ abstract class AbstractChannel
     /** @var int|null */
     protected $channel_id;
 
-    /** @var AMQPReader */
+    /** @var Wire\AMQPBufferReader */
     protected $msg_property_reader;
 
-    /** @var AMQPReader */
+    /** @var Wire\AMQPBufferReader */
     protected $wait_content_reader;
 
-    /** @var AMQPReader */
+    /** @var Wire\AMQPBufferReader */
     protected $dispatch_reader;
 
     /**
@@ -95,9 +95,9 @@ abstract class AbstractChannel
         $this->channel_id = (int)$channel_id;
         $connection->channels[$channel_id] = $this;
 
-        $this->msg_property_reader = new AMQPReader(null);
-        $this->wait_content_reader = new AMQPReader(null);
-        $this->dispatch_reader = new AMQPReader(null);
+        $this->msg_property_reader = new Wire\AMQPBufferReader('');
+        $this->wait_content_reader = new Wire\AMQPBufferReader('');
+        $this->dispatch_reader = new Wire\AMQPBufferReader('');
 
         $this->protocolVersion = self::getProtocolVersion();
         switch ($this->protocolVersion) {
@@ -211,7 +211,7 @@ abstract class AbstractChannel
             ));
         }
 
-        $this->dispatch_reader->reuse($args);
+        $this->dispatch_reader->reset($args);
 
         if ($amqpMessage === null) {
             return call_user_func(array($this, $amqp_method), $this->dispatch_reader);
@@ -271,13 +271,13 @@ abstract class AbstractChannel
 
         $this->validate_header_frame($frame_type);
 
-        $this->wait_content_reader->reuse(mb_substr($payload, 0, 12, 'ASCII'));
+        $this->wait_content_reader->reset(mb_substr($payload, 0, 12, 'ASCII'));
 
         $this->wait_content_reader->read_short();
         $this->wait_content_reader->read_short();
 
         //hack to avoid creating new instances of AMQPReader;
-        $this->msg_property_reader->reuse(mb_substr($payload, 12, mb_strlen($payload, 'ASCII') - 12, 'ASCII'));
+        $this->msg_property_reader->reset(mb_substr($payload, 12, mb_strlen($payload, 'ASCII') - 12, 'ASCII'));
 
         return $this->createMessage(
             $this->msg_property_reader,
@@ -490,7 +490,7 @@ abstract class AbstractChannel
      * @param string $payload
      * @return string
      */
-    protected function extract_args($payload)
+    protected function extract_args(string $payload): string
     {
         return mb_substr($payload, 4, mb_strlen($payload, 'ASCII') - 4, 'ASCII');
     }

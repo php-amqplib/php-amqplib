@@ -5,7 +5,7 @@ namespace PhpAmqpLib\Tests\Unit;
 use PhpAmqpLib\Tests\TestCaseCompat;
 use PhpAmqpLib\Wire\AMQPAbstractCollection;
 use PhpAmqpLib\Wire\AMQPArray;
-use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPBufferReader;
 use PhpAmqpLib\Wire\AMQPTable;
 use PhpAmqpLib\Wire\AMQPWriter;
 
@@ -297,7 +297,7 @@ class WireTest extends TestCaseCompat
         $w = new AMQPWriter();
         $w->write_array($d);
 
-        $r = new AMQPReader($w->getvalue());
+        $r = new AMQPBufferReader($w->getvalue());
         $rd = $r->read_array();
 
         $this->assertEquals($d, $rd);
@@ -336,7 +336,7 @@ class WireTest extends TestCaseCompat
             )
         );
 
-        $r = new AMQPReader($w->getvalue());
+        $r = new AMQPBufferReader($w->getvalue());
 
         //type casting - thanks to ancient phpunit on travis
         $this->assertEquals(
@@ -387,7 +387,7 @@ class WireTest extends TestCaseCompat
         $w = new AMQPWriter();
         $w->write_table($d);
 
-        $r = new AMQPReader($w->getvalue());
+        $r = new AMQPBufferReader($w->getvalue());
         $rd = $r->read_table();
 
         $this->assertEquals($d, $rd);
@@ -429,7 +429,7 @@ class WireTest extends TestCaseCompat
             )
         );
 
-        $r = new AMQPReader($w->getvalue());
+        $r = new AMQPBufferReader($w->getvalue());
 
         //type casting - thanks to ancient phpunit on travis
         $this->assertEquals(
@@ -649,7 +649,7 @@ class WireTest extends TestCaseCompat
             $writer->{$write_method}($value);
         }
 
-        $reader = new AMQPReader($writer->getvalue());
+        $reader = new AMQPBufferReader($writer->getvalue());
         if ($reflection) {
             $m = new \ReflectionMethod($reader, $read_method);
             $m->setAccessible(true);

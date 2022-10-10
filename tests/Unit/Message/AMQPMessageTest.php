@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Tests\Unit\Message;
 
 use PhpAmqpLib\Exception\AMQPEmptyDeliveryTagException;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPBufferReader;
 use PHPUnit\Framework\TestCase;
 
 class AMQPMessageTest extends TestCase
@@ -15,11 +15,11 @@ class AMQPMessageTest extends TestCase
      */
     public function serialize_properties(array $expected, array $properties)
     {
-        $reader = new AMQPReader(null);
+        $reader = new AMQPBufferReader('');
         $message = new AMQPMessage('', $properties);
 
         $encodedData = $message->serialize_properties();
-        $reader->reuse($encodedData);
+        $reader->reset($encodedData);
         $message->load_properties($reader);
         $props = $message->get_properties();
 
