@@ -1,0 +1,57 @@
+name: phpcs
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  phpcs:
+    name: PHP Code Sniffer (${{ matrix.phpcs-sniffers }} for PHP${{ matrix.php-versions }} and higher)
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '7.4','8.1' ]
+        phpcs-sniffers: ['PHPCompatibility']
+
+    steps:
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v5.1
+
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.branch-name.outputs.current_branch }}
+
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+          extensions: mbstring, xml, ctype, iconv, xdebug, imap, zip, ssh2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer global require squizlabs/php_codesniffer:^3 phpcompatibility/php-compatibility:^9
+
+      - name: Run Tests ${{ matrix.php-versions }}
+        run: |
+          $(composer config -g home)/vendor/bin/phpcs --config-set installed_paths $(composer config -g home)/vendor/phpcompatibility/php-compatibility
+          $(composer config -g home)/vendor/bin/phpcs --standard=PHPCompatibility --runtime-set testVersion ${{ matrix.php-versions}}- --runtime-set ignore_warnings_on_exit true --ignore=./uploads/*,./vendor/* .
