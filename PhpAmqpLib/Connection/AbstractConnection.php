@@ -174,6 +174,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $heartbeat
      * @param int|float $connection_timeout
      * @param int|float $channel_rpc_timeout
+     * @param \PhpAmqpLib\Connection\AMQPConnectionConfig | null $config
      * @throws \Exception
      */
     public function __construct(
@@ -239,6 +240,7 @@ abstract class AbstractConnection extends AbstractChannel
 
     /**
      * Connects to the AMQP server
+     * @throws \Exception
      */
     protected function connect()
     {
@@ -303,6 +305,7 @@ abstract class AbstractConnection extends AbstractChannel
     /**
      * Reconnects using the original connection settings.
      * This will not recreate any channels that were established previously
+     * @throws \Exception
      */
     public function reconnect()
     {
@@ -398,6 +401,7 @@ abstract class AbstractConnection extends AbstractChannel
 
     /**
      * @param string $data
+     * @throws AMQPIOException
      */
     public function write($data)
     {
@@ -449,6 +453,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param string $packed_properties
      * @param string $body
      * @param AMQPWriter $pkt
+     * @throws AMQPIOException
      */
     public function send_content($channel, $class_id, $weight, $body_size, $packed_properties, $body, $pkt)
     {
@@ -529,6 +534,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param array $method_sig
      * @param AMQPWriter|string $args
      * @param null $pkt
+     * @throws AMQPIOException
      */
     protected function send_channel_method_frame($channel, $method_sig, $args = '', $pkt = null)
     {
@@ -640,6 +646,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $channel_id
      * @param int|float|null $timeout
      * @return array
+     * @throws \Exception
      */
     protected function wait_channel($channel_id, $timeout = 0)
     {
@@ -729,6 +736,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param string $reply_text
      * @param array $method_sig
      * @return mixed|null
+     * @throws \Exception
      */
     public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
     {
@@ -1137,7 +1145,12 @@ abstract class AbstractConnection extends AbstractChannel
      */
     public function getLibraryProperties()
     {
-        return self::$LIBRARY_PROPERTIES;
+        $connectionName = $this->config->getConnectionName();
+        $config = self::$LIBRARY_PROPERTIES;
+        if ($connectionName !== '') {
+            $config['connection_name'] = ['S', $connectionName];
+        }
+        return $config;
     }
 
     /**

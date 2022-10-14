@@ -65,6 +65,7 @@ class AMQPSocketConnection extends AbstractConnection
 
     /**
      * @deprecated Use ConnectionFactory
+     * @throws \Exception
      */
     protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
     {

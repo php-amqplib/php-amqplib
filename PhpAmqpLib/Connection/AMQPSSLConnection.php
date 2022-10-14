@@ -14,6 +14,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param array $options
      * @param string $ssl_protocol
      * @param AMQPConnectionConfig|null $config
+     * @throws \Exception
      */
     public function __construct(
         $host,
@@ -50,6 +51,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
 
     /**
      * @deprecated Use ConnectionFactory
+     * @throws \Exception
      */
     public static function try_create_connection($host, $port, $user, $password, $vhost, $options)
     {

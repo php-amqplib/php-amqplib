@@ -24,6 +24,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param float $channel_rpc_timeout
      * @param string|null $ssl_protocol
      * @param AMQPConnectionConfig|null $config
+     * @throws \Exception
      */
     public function __construct(
         $host,
@@ -80,6 +81,7 @@ class AMQPStreamConnection extends AbstractConnection
 
     /**
      * @deprecated Use ConnectionFactory
+     * @throws \Exception
      */
     protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
     {
