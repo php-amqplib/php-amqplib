@@ -174,6 +174,7 @@ abstract class AbstractConnection extends AbstractChannel
      * @param int $heartbeat
      * @param int|float $connection_timeout
      * @param int|float $channel_rpc_timeout
+     * @param \PhpAmqpLib\Connection\AMQPConnectionConfig | null $config
      * @throws \Exception
      */
     public function __construct(
