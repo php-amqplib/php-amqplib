@@ -1145,10 +1145,12 @@ abstract class AbstractConnection extends AbstractChannel
      */
     public function getLibraryProperties()
     {
-        $connectionName = $this->config->getConnectionName();
         $config = self::$LIBRARY_PROPERTIES;
-        if ($connectionName !== '') {
-            $config['connection_name'] = ['S', $connectionName];
+        if ($this->config !== null) {
+            $connectionName = $this->config->getConnectionName();
+            if ($connectionName !== '') {
+                $config['connection_name'] = ['S', $connectionName];
+            }
         }
         return $config;
     }
