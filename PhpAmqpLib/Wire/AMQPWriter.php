@@ -6,7 +6,7 @@ use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Helper\BigInteger;
 
-class AMQPWriter extends AbstractClient
+class AMQPWriter extends AMQPByteStream
 {
     /** @var string */
     protected $out = '';

@@ -4,10 +4,20 @@ namespace PhpAmqpLib\Wire;
 
 use PhpAmqpLib\Helper\BigInteger;
 
-class AbstractClient
+abstract class AMQPByteStream
 {
+    public const BIT = 1;
+    public const OCTET = 1;
+    public const SHORTSTR = 1;
+    public const SHORT = 2;
+    public const LONG = 4;
+    public const SIGNED_LONG = 4;
+    public const READ_PHP_INT = 4; // use READ_ to avoid possible clashes with PHP
+    public const LONGLONG = 8;
+    public const TIMESTAMP = 8;
+
     /** @var bool */
-    const PLATFORM_64BIT = PHP_INT_SIZE === 8;
+    protected const PLATFORM_64BIT = PHP_INT_SIZE === 8;
 
     /** @var BigInteger[][] */
     protected static $bigIntegers = array();

@@ -72,7 +72,7 @@ abstract class AbstractConnection extends AbstractChannel
     /** @var string */
     protected $known_hosts;
 
-    /** @var null|AMQPReader */
+    /** @var null|Wire\AMQPIOReader */
     protected $input;
 
     /** @var string */
@@ -114,10 +114,10 @@ abstract class AbstractConnection extends AbstractChannel
     /** @var bool Maintain connection status */
     protected $is_connected = false;
 
-    /** @var \PhpAmqpLib\Wire\IO\AbstractIO */
+    /** @var AbstractIO */
     protected $io;
 
-    /** @var \PhpAmqpLib\Wire\AMQPReader */
+    /** @var Wire\AMQPBufferReader */
     protected $wait_frame_reader;
 
     /** @var callable Handles connection blocking from the server */
@@ -202,7 +202,7 @@ abstract class AbstractConnection extends AbstractChannel
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
 
-        $this->wait_frame_reader = new AMQPReader(null);
+        $this->wait_frame_reader = new Wire\AMQPBufferReader('');
         $this->vhost = $vhost;
         $this->insist = $insist;
         $this->login_method = $login_method;
@@ -257,7 +257,7 @@ abstract class AbstractConnection extends AbstractChannel
                 // The connection object itself is treated as channel 0
                 parent::__construct($this, 0);
 
-                $this->input = new AMQPReader(null, $this->io);
+                $this->input = new Wire\AMQPIOReader($this->io);
 
                 $this->write($this->constants->getHeader());
                 // assume frame was sent successfully, used in $this->wait_channel()
@@ -592,7 +592,7 @@ abstract class AbstractConnection extends AbstractChannel
 
         try {
             // frame_type + channel_id + size
-            $this->wait_frame_reader->reuse(
+            $this->wait_frame_reader->reset(
                 $this->input->read(AMQPReader::OCTET + AMQPReader::SHORT + AMQPReader::LONG)
             );
 
@@ -604,7 +604,7 @@ abstract class AbstractConnection extends AbstractChannel
             $size = $this->wait_frame_reader->read_long();
 
             // payload + ch
-            $this->wait_frame_reader->reuse($this->input->read(AMQPReader::OCTET + (int) $size));
+            $this->wait_frame_reader->reset($this->input->read(AMQPReader::OCTET + (int) $size));
 
             $payload = $this->wait_frame_reader->read($size);
             $ch = $this->wait_frame_reader->read_octet();
@@ -964,7 +964,7 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * @return \PhpAmqpLib\Wire\IO\AbstractIO
+     * @return AbstractIO
      * @deprecated
      */
     public function getIO()
