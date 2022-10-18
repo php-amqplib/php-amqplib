@@ -1,18 +1,8 @@
 # Changelog
 
-## [v3.4.-](https://github.com/php-amqplib/php-amqplib/tree/v3.4.-) (2022-10-18)
-
-[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.3.1...v3.4.0)
-
 ## [v3.3.1](https://github.com/php-amqplib/php-amqplib/tree/v3.3.1) (2022-10-04)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.3.0...v3.3.1)
-
-[Milestone](https://github.com/php-amqplib/php-amqplib/milestone/27?closed=1)
-
-**Implemented enhancements:**
-
-- Allow setting the connection name [\#1035](https://github.com/php-amqplib/php-amqplib/pull/1035) ([Александр](https://github.com/i3bepb))
 
 **Fixed bugs:**
 
