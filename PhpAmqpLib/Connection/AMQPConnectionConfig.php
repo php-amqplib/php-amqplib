@@ -113,6 +113,9 @@ final class AMQPConnectionConfig
     /** @var string|null */
     private $sslCiphers;
 
+    /** @var string */
+    private $connectionName = '';
+
     /**
      * Output all networks packets for debug purposes.
      * @var bool
@@ -505,5 +508,21 @@ final class AMQPConnectionConfig
         if ($value < $limit) {
             throw new InvalidArgumentException(sprintf('Parameter "%s" must be greater than zero', $param));
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getConnectionName(): string
+    {
+        return $this->connectionName;
+    }
+
+    /**
+     * @param string $connectionName
+     */
+    public function setConnectionName(string $connectionName): void
+    {
+        $this->connectionName = $connectionName;
     }
 }
