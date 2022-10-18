@@ -1,5 +1,22 @@
 # Changelog
 
+## [v3.4.0](https://github.com/php-amqplib/php-amqplib/tree/v3.4.0) (2022-10-18)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.3.1...v3.4.0)
+
+**Implemented enhancements:**
+
+- Add the ability to set the connection name through AMQPConnectionConfig [\#1035](https://github.com/php-amqplib/php-amqplib/pull/1035) ([i3bepb](https://github.com/i3bepb))
+
+**Closed issues:**
+
+- v3.3.0 heartbeat error [\#1029](https://github.com/php-amqplib/php-amqplib/issues/1029)
+
+**Merged pull requests:**
+
+- Missing PHPDoc param in AbstractConnection constructor [\#1033](https://github.com/php-amqplib/php-amqplib/pull/1033) ([i3bepb](https://github.com/i3bepb))
+- Split buffer and IO readers into separate classes [\#1031](https://github.com/php-amqplib/php-amqplib/pull/1031) ([ramunasd](https://github.com/ramunasd))
+
 ## [v3.3.1](https://github.com/php-amqplib/php-amqplib/tree/v3.3.1) (2022-10-04)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.3.0...v3.3.1)
@@ -107,12 +124,10 @@
 - How $channel-\>wait\(\) work on loop forever [\#939](https://github.com/php-amqplib/php-amqplib/issues/939)
 - The header isn't fragmented causing large headers to hit the maximum frame size. [\#934](https://github.com/php-amqplib/php-amqplib/issues/934)
 - Keeping a connection open for publishing [\#932](https://github.com/php-amqplib/php-amqplib/issues/932)
-- How to start a quorum queue? [\#921](https://github.com/php-amqplib/php-amqplib/issues/921)
 - prefetch\_count seems to consume always only 1 message [\#919](https://github.com/php-amqplib/php-amqplib/issues/919)
 - Can't connect to ssl amqp hosts. [\#918](https://github.com/php-amqplib/php-amqplib/issues/918)
 - Updating "phpseclib/phpseclib" is necessary! [\#914](https://github.com/php-amqplib/php-amqplib/issues/914)
 - README - Non-existant code of conduct file [\#913](https://github.com/php-amqplib/php-amqplib/issues/913)
-- How to get list of consumers with tags for a specific queue [\#910](https://github.com/php-amqplib/php-amqplib/issues/910)
 - consumer\_tag: Consumer identifier [\#909](https://github.com/php-amqplib/php-amqplib/issues/909)
 - AMQPLazyConnection::create\_connection does not work [\#798](https://github.com/php-amqplib/php-amqplib/issues/798)
 
