@@ -12,6 +12,7 @@ final class AMQPConnectionConfig
 {
     public const AUTH_PLAIN = 'PLAIN';
     public const AUTH_AMQPPLAIN = 'AMQPLAIN';
+    public const AUTH_EXTERNAL = 'EXTERNAL';
     public const IO_TYPE_STREAM = 'stream';
     public const IO_TYPE_SOCKET = 'socket';
 
@@ -41,6 +42,9 @@ final class AMQPConnectionConfig
 
     /** @var string */
     private $loginMethod = self::AUTH_AMQPPLAIN;
+
+    /** @var string|null */
+    private $loginResponse;
 
     /** @var string */
     private $locale = 'en_US';
@@ -220,10 +224,20 @@ final class AMQPConnectionConfig
 
     public function setLoginMethod(string $loginMethod): void
     {
-        if ($loginMethod !== self::AUTH_PLAIN && $loginMethod !== self::AUTH_AMQPPLAIN) {
+        if ($loginMethod !== self::AUTH_PLAIN && $loginMethod !== self::AUTH_AMQPPLAIN && $loginMethod !== self::AUTH_EXTERNAL) {
             throw new InvalidArgumentException('Unknown login method: ' . $loginMethod);
         }
         $this->loginMethod = $loginMethod;
+    }
+
+    public function getLoginResponse(): string
+    {
+        return $this->loginResponse;
+    }
+
+    public function setLoginReponse(string $loginResponse): void
+    {
+        $this->loginResponse = $loginResponse;
     }
 
     public function getLocale(): string
