@@ -127,7 +127,7 @@ abstract class AbstractConnection extends AbstractChannel
     private $connection_unblock_handler;
 
     /** @var int Connection timeout value*/
-    protected $connection_timeout ;
+    protected $connection_timeout;
 
     /** @var AMQPConnectionConfig|null */
     protected $config;
@@ -224,6 +224,12 @@ abstract class AbstractConnection extends AbstractChannel
 
                 // Skip the length
                 $responseValue = $login_response->getvalue();
+                $this->login_response = mb_substr($responseValue, 4, mb_strlen($responseValue, 'ASCII') - 4, 'ASCII');
+            } elseif ($login_method === "EXTERNAL") {
+                $tokenXml = new AMQPWriter();
+                $tokenXml->write_longstr($login_response);
+
+                $responseValue = $tokenXml->getvalue();
                 $this->login_response = mb_substr($responseValue, 4, mb_strlen($responseValue, 'ASCII') - 4, 'ASCII');
             } else {
                 throw new \InvalidArgumentException('Unknown login method: ' . $login_method);
