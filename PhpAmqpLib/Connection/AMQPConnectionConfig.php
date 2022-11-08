@@ -230,7 +230,7 @@ final class AMQPConnectionConfig
         $this->loginMethod = $loginMethod;
     }
 
-    public function getLoginResponse(): string
+    public function getLoginResponse(): ?string
     {
         return $this->loginResponse;
     }
