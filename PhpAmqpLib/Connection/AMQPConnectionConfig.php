@@ -235,7 +235,7 @@ final class AMQPConnectionConfig
         return $this->loginResponse;
     }
 
-    public function setLoginReponse(string $loginResponse): void
+    public function setLoginResponse(string $loginResponse): void
     {
         $this->loginResponse = $loginResponse;
     }
