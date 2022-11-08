@@ -225,15 +225,11 @@ abstract class AbstractConnection extends AbstractChannel
                 // Skip the length
                 $responseValue = $login_response->getvalue();
                 $this->login_response = mb_substr($responseValue, 4, mb_strlen($responseValue, 'ASCII') - 4, 'ASCII');
-            } elseif ($login_method === "EXTERNAL") {
-                $tokenXml = new AMQPWriter();
-                $tokenXml->write_longstr($login_response);
-
-                $responseValue = $tokenXml->getvalue();
-                $this->login_response = mb_substr($responseValue, 4, mb_strlen($responseValue, 'ASCII') - 4, 'ASCII');
             } else {
                 throw new \InvalidArgumentException('Unknown login method: ' . $login_method);
             }
+        } elseif ($login_method === "EXTERNAL") {
+            $this->login_response = $login_response;
         } else {
             $this->login_response = null;
         }
