@@ -104,7 +104,7 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: './coverage.xml'
-        fail_ci_if_error: true
+        fail_ci_if_error: false
 
     - name: Upload Scrutinizer coverage
       if: matrix.coverage != 'none'
