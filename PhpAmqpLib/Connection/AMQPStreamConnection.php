@@ -103,6 +103,8 @@ class AMQPStreamConnection extends AbstractConnection
                            $options['keepalive'] : false;
         $heartbeat = isset($options['heartbeat']) ?
                            $options['heartbeat'] : 60;
+        $channel_rpc_timeout = isset($options['channel_rpc_timeout']) ?
+                                    $options['channel_rpc_timeout'] : 0.0;
         return new static(
             $host,
             $port,
@@ -117,7 +119,8 @@ class AMQPStreamConnection extends AbstractConnection
             $read_write_timeout,
             $context,
             $keepalive,
-            $heartbeat
+            $heartbeat,
+            $channel_rpc_timeout
         );
     }
 }
