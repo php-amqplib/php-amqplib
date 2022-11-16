@@ -715,6 +715,9 @@ abstract class AbstractConnection extends AbstractChannel
      */
     public function channel($channel_id = null)
     {
+        if (!$this->is_connected) {
+            $this->connect();
+        }
         if (isset($this->channels[$channel_id])) {
             return $this->channels[$channel_id];
         }
@@ -1114,8 +1117,12 @@ abstract class AbstractConnection extends AbstractChannel
      *
      * @return bool
      */
-    public function connectOnConstruct()
+    public function connectOnConstruct(): bool
     {
+        if ($this->config) {
+            return !$this->config->isLazy();
+        }
+
         return true;
     }
 
@@ -1158,6 +1165,7 @@ abstract class AbstractConnection extends AbstractChannel
      *
      * @return mixed
      * @throws \Exception
+     * @deprecated Use AMQPConnectionFactory.
      */
     public static function create_connection($hosts, $options = array())
     {

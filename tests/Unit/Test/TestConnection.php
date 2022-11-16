@@ -10,7 +10,7 @@ class TestConnection extends AbstractConnection
     /**
      * @inheritDoc
      */
-    public function connectOnConstruct()
+    public function connectOnConstruct(): bool
     {
         return false;
     }
