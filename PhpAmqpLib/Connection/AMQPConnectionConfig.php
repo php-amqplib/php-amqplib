@@ -20,7 +20,7 @@ final class AMQPConnectionConfig
     private $ioType = self::IO_TYPE_STREAM;
 
     /** @var bool */
-    private $isLazy = true;
+    private $isLazy = false;
 
     /** @var string */
     private $host = '127.0.0.1';
