@@ -6,7 +6,8 @@
 
 use PhpAmqpLib\Connection\AMQPConnection;
 
-require_once __DIR__ . '/config.php';
+require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../tests/config.php';
 
 $exchange = 'file_exchange';
 $queue = 'file_queue';
