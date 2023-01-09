@@ -4,6 +4,7 @@ namespace PhpAmqpLib\Connection;
 
 use PhpAmqpLib\Channel\AbstractChannel;
 use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Channel\Frame;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPInvalidFrameException;
@@ -117,9 +118,6 @@ abstract class AbstractConnection extends AbstractChannel
     /** @var AbstractIO */
     protected $io;
 
-    /** @var Wire\AMQPBufferReader */
-    protected $wait_frame_reader;
-
     /** @var callable Handles connection blocking from the server */
     private $connection_block_handler;
 
@@ -202,7 +200,6 @@ abstract class AbstractConnection extends AbstractChannel
         // save the params for the use of __clone
         $this->construct_params = func_get_args();
 
-        $this->wait_frame_reader = new Wire\AMQPBufferReader('');
         $this->vhost = $vhost;
         $this->insist = $insist;
         $this->login_method = $login_method;
@@ -423,7 +420,7 @@ abstract class AbstractConnection extends AbstractChannel
 
     protected function do_close()
     {
-        $this->frame_queue = [];
+        $this->frame_queue = new \SplQueue();
         $this->method_queue = [];
         $this->setIsConnected(false);
         $this->close_input();
@@ -580,12 +577,12 @@ abstract class AbstractConnection extends AbstractChannel
      * Waits for a frame from the server
      *
      * @param int|float|null $timeout
-     * @return array
+     * @return Frame
      * @throws \Exception
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      * @throws AMQPRuntimeException
      */
-    protected function wait_frame($timeout = 0)
+    protected function wait_frame($timeout = 0): Frame
     {
         if (null === $this->input) {
             $this->setIsConnected(false);
@@ -596,23 +593,17 @@ abstract class AbstractConnection extends AbstractChannel
         $this->input->setTimeout($timeout);
 
         try {
-            // frame_type + channel_id + size
-            $this->wait_frame_reader->reset(
-                $this->input->read(AMQPReader::OCTET + AMQPReader::SHORT + AMQPReader::LONG)
-            );
-
-            $frame_type = $this->wait_frame_reader->read_octet();
+            $header = $this->input->readFrameHeader();
+            $frame_type = $header['type'];
             if (!$this->constants->isFrameType($frame_type)) {
                 throw new AMQPInvalidFrameException('Invalid frame type ' . $frame_type);
             }
-            $channel = $this->wait_frame_reader->read_short();
-            $size = $this->wait_frame_reader->read_long();
+            $size = $header['size'];
 
             // payload + ch
-            $this->wait_frame_reader->reset($this->input->read(AMQPReader::OCTET + (int) $size));
-
-            $payload = $this->wait_frame_reader->read($size);
-            $ch = $this->wait_frame_reader->read_octet();
+            $result = unpack('a' . $size . 'payload/Cch', $this->input->read(AMQPReader::OCTET + $size));
+            $ch = $result['ch'];
+            $frame = new Frame($frame_type, $header['channel'], $size, $result['payload']);
         } catch (AMQPTimeoutException $e) {
             if ($this->input) {
                 $this->input->setTimeout($currentTimeout);
@@ -626,18 +617,22 @@ abstract class AbstractConnection extends AbstractChannel
         } catch (AMQPConnectionClosedException $exception) {
             $this->do_close();
             throw $exception;
+        } finally {
+            if ($this->input) {
+                $this->input->setTimeout($currentTimeout);
+            }
         }
 
         $this->input->setTimeout($currentTimeout);
 
-        if ($ch !== 0xCE) {
+        if ($ch !== Frame::END) {
             throw new AMQPInvalidFrameException(sprintf(
                 'Framing error, unexpected byte: %x',
                 $ch
             ));
         }
 
-        return array($frame_type, $channel, $payload);
+        return $frame;
     }
 
     /**
@@ -645,17 +640,17 @@ abstract class AbstractConnection extends AbstractChannel
      *
      * @param int $channel_id
      * @param int|float|null $timeout
-     * @return array
+     * @return Frame
      * @throws \Exception
      */
-    protected function wait_channel($channel_id, $timeout = 0)
+    protected function wait_channel(int $channel_id, $timeout = 0): Frame
     {
         // Keeping the original timeout unchanged.
         $_timeout = $timeout;
         while (true) {
             $start = microtime(true);
             try {
-                list($frame_type, $frame_channel, $payload) = $this->wait_frame($_timeout);
+                $frame = $this->wait_frame($_timeout);
             } catch (AMQPTimeoutException $e) {
                 if (
                     $this->heartbeat && $this->last_frame
@@ -670,8 +665,9 @@ abstract class AbstractConnection extends AbstractChannel
             }
 
             $this->last_frame = microtime(true);
+            $frame_channel = $frame->getChannel();
 
-            if ($frame_channel === 0 && $frame_type === 8) {
+            if ($frame_channel === 0 && $frame->isHeartbeat()) {
                 // skip heartbeat frames and reduce the timeout by the time passed
                 $this->debug->debug_msg('received server heartbeat');
                 if ($_timeout > 0) {
@@ -685,7 +681,7 @@ abstract class AbstractConnection extends AbstractChannel
             }
 
             if ($frame_channel === $channel_id) {
-                return array($frame_type, $payload);
+                return $frame;
             }
 
             // Not the channel we were looking for.  Queue this frame
@@ -693,13 +689,13 @@ abstract class AbstractConnection extends AbstractChannel
             // Make sure the channel still exists, it could have been
             // closed by a previous Exception.
             if (isset($this->channels[$frame_channel])) {
-                $this->channels[$frame_channel]->frame_queue[] = [$frame_type, $payload];
+                $this->channels[$frame_channel]->frame_queue->enqueue($frame);
             }
 
             // If we just queued up a method for channel 0 (the Connection
             // itself) it's probably a close method in reaction to some
             // error, so deal with it right away.
-            if ($frame_type === 1 && $frame_channel === 0) {
+            if ($frame_channel === 0 && $frame->isMethod()) {
                 $this->wait();
             }
         }
