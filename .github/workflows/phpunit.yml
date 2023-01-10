@@ -37,6 +37,10 @@ jobs:
             phpseclib: '^3.0'
             composer: 'composer:v2'
             coverage: none
+          - php: '8.2'
+            phpseclib: '^3.0'
+            composer: 'composer:v2'
+            coverage: none
     services:
       rabbitmq:
         # 3.8.10 and later versions has enabled TLSv1.3 by default which is not supported by PHP images
