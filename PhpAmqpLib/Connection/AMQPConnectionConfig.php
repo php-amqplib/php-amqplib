@@ -224,8 +224,15 @@ final class AMQPConnectionConfig
 
     public function setLoginMethod(string $loginMethod): void
     {
-        if ($loginMethod !== self::AUTH_PLAIN && $loginMethod !== self::AUTH_AMQPPLAIN && $loginMethod !== self::AUTH_EXTERNAL) {
+        if (
+            $loginMethod !== self::AUTH_PLAIN
+            && $loginMethod !== self::AUTH_AMQPPLAIN
+            && $loginMethod !== self::AUTH_EXTERNAL
+        ) {
             throw new InvalidArgumentException('Unknown login method: ' . $loginMethod);
+        }
+        if ($loginMethod === self::AUTH_EXTERNAL && (!empty($this->user) || !empty($this->password))) {
+            throw new InvalidArgumentException('External auth method cannot be used together with user credentials.');
         }
         $this->loginMethod = $loginMethod;
     }

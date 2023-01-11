@@ -86,7 +86,6 @@ abstract class AbstractConnection extends AbstractChannel
 
     /**
      * @var null|string
-     * @deprecated
      */
     protected $login_response;
 
@@ -228,7 +227,7 @@ abstract class AbstractConnection extends AbstractChannel
             } else {
                 throw new \InvalidArgumentException('Unknown login method: ' . $login_method);
             }
-        } elseif ($login_method === "EXTERNAL") {
+        } elseif ($login_method === 'EXTERNAL') {
             $this->login_response = $login_response;
         } else {
             $this->login_response = null;
