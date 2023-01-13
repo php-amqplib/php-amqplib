@@ -27,7 +27,10 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $ssl_protocol = 'ssl',
         ?AMQPConnectionConfig $config = null
     ) {
-        $ssl_context = empty($ssl_options) ? null : $this->createSslContext($ssl_options);
+        if (empty($ssl_options)) {
+            $ssl_options = ['verify_peer' => true];
+        }
+        $ssl_context = $this->createSslContext($ssl_options);
         parent::__construct(
             $host,
             $port,
