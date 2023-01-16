@@ -29,6 +29,7 @@ class AMQPConnectionFactory
                     [
                         'insist' => $config->isInsist(),
                         'login_method' => $config->getLoginMethod(),
+                        'login_response' => $config->getLoginResponse(),
                         'locale' => $config->getLocale(),
                         'connection_timeout' => $config->getConnectionTimeout(),
                         'read_write_timeout' => self::getReadWriteTimeout($config),
@@ -52,7 +53,7 @@ class AMQPConnectionFactory
                     $config->getVhost(),
                     $config->isInsist(),
                     $config->getLoginMethod(),
-                    null,
+                    $config->getLoginResponse(),
                     $config->getLocale(),
                     $config->getConnectionTimeout(),
                     self::getReadWriteTimeout($config),
@@ -82,7 +83,7 @@ class AMQPConnectionFactory
                 $config->getVhost(),
                 $config->isInsist(),
                 $config->getLoginMethod(),
-                null,
+                $config->getLoginResponse(),
                 $config->getLocale(),
                 $config->getReadTimeout(),
                 $config->isKeepalive(),
@@ -107,14 +108,16 @@ class AMQPConnectionFactory
     private static function getSslOptions(AMQPConnectionConfig $config): array
     {
         return array_filter([
-           'cafile' => $config->getSslCaCert(),
-           'capath' => $config->getSslCaPath(),
-           'local_cert' => $config->getSslCert(),
-           'local_pk' => $config->getSslKey(),
-           'verify_peer' => $config->getSslVerify(),
-           'verify_peer_name' => $config->getSslVerifyName(),
-           'passphrase' => $config->getSslPassPhrase(),
-           'ciphers' => $config->getSslCiphers(),
-        ], static function ($value) { return null !== $value; });
+            'cafile' => $config->getSslCaCert(),
+            'capath' => $config->getSslCaPath(),
+            'local_cert' => $config->getSslCert(),
+            'local_pk' => $config->getSslKey(),
+            'verify_peer' => $config->getSslVerify(),
+            'verify_peer_name' => $config->getSslVerifyName(),
+            'passphrase' => $config->getSslPassPhrase(),
+            'ciphers' => $config->getSslCiphers(),
+        ], static function ($value) {
+            return null !== $value;
+        });
     }
 }

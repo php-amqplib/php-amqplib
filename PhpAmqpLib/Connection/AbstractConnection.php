@@ -87,7 +87,6 @@ abstract class AbstractConnection extends AbstractChannel
 
     /**
      * @var null|string
-     * @deprecated
      */
     protected $login_response;
 
@@ -106,7 +105,7 @@ abstract class AbstractConnection extends AbstractChannel
     /** @var int */
     protected $frame_max = 131072;
 
-     /** @var array Constructor parameters for clone */
+    /** @var array Constructor parameters for clone */
     protected $construct_params;
 
     /** @var bool Close the connection in destructor */
@@ -125,7 +124,7 @@ abstract class AbstractConnection extends AbstractChannel
     private $connection_unblock_handler;
 
     /** @var int Connection timeout value*/
-    protected $connection_timeout ;
+    protected $connection_timeout;
 
     /** @var AMQPConnectionConfig|null */
     protected $config;
@@ -225,6 +224,8 @@ abstract class AbstractConnection extends AbstractChannel
             } else {
                 throw new \InvalidArgumentException('Unknown login method: ' . $login_method);
             }
+        } elseif ($login_method === 'EXTERNAL') {
+            $this->login_response = $login_response;
         } else {
             $this->login_response = null;
         }
