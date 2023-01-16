@@ -1,5 +1,26 @@
 # Changelog
 
+## [v3.5.0](https://github.com/php-amqplib/php-amqplib/tree/v3.5.0) (2023-01-16)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.4.0...v3.5.0)
+
+**Implemented enhancements:**
+
+- Support for authentication method "external" [\#1064](https://github.com/php-amqplib/php-amqplib/pull/1064) ([ramunasd](https://github.com/ramunasd))
+- Optimize frame parsing logic [\#1063](https://github.com/php-amqplib/php-amqplib/pull/1063) ([ramunasd](https://github.com/ramunasd))
+- Add support for lazy connect to all classes [\#1042](https://github.com/php-amqplib/php-amqplib/pull/1042) ([ramunasd](https://github.com/ramunasd))
+- Added channel\_rpc\_timeout [\#1041](https://github.com/php-amqplib/php-amqplib/pull/1041) ([bravoman](https://github.com/bravoman))
+
+**Fixed bugs:**
+
+- SIGHeartbeatSender uses fixed Signal [\#1039](https://github.com/php-amqplib/php-amqplib/issues/1039)
+- Define default ssl context parameter [\#1060](https://github.com/php-amqplib/php-amqplib/pull/1060) ([ramunasd](https://github.com/ramunasd))
+- Fix hardcoded signal code in SIGHeartbeatSender [\#1043](https://github.com/php-amqplib/php-amqplib/pull/1043) ([ramunasd](https://github.com/ramunasd))
+
+**Closed issues:**
+
+- Tests fail on PHP8.1 [\#1055](https://github.com/php-amqplib/php-amqplib/issues/1055)
+
 ## [v3.4.0](https://github.com/php-amqplib/php-amqplib/tree/v3.4.0) (2022-10-18)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.3.1...v3.4.0)
@@ -8,7 +29,7 @@
 
 - Add the ability to set the connection name through AMQPConnectionConfig [\#1035](https://github.com/php-amqplib/php-amqplib/pull/1035) ([i3bepb](https://github.com/i3bepb))
 
-**Closed issues:**
+**Fixed bugs:**
 
 - v3.3.0 heartbeat error [\#1029](https://github.com/php-amqplib/php-amqplib/issues/1029)
 
