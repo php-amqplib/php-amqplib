@@ -6,7 +6,7 @@ jobs:
   run:
     runs-on: 'ubuntu-latest'
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - php: '7.1'
@@ -43,9 +43,7 @@ jobs:
             coverage: none
     services:
       rabbitmq:
-        # 3.8.10 and later versions has enabled TLSv1.3 by default which is not supported by PHP images
-        # TLSv1.3 can be disabled by using configuration file, but not environment variables
-        image: rabbitmq:3.8.9-management
+        image: rabbitmq:3.11-management
         ports:
           - 5671:5671
           - 5672:5672
@@ -54,11 +52,7 @@ jobs:
         volumes:
           - ${{ github.workspace }}:/src
         env:
-            RABBITMQ_SSL_CACERTFILE: /src/tests/certs/ca_certificate.pem
-            RABBITMQ_SSL_CERTFILE: /src/tests/certs/server_certificate.pem
-            RABBITMQ_SSL_KEYFILE: /src/tests/certs/server_key.pem
-            RABBITMQ_SSL_VERIFY: verify_peer
-            RABBITMQ_SSL_FAIL_IF_NO_PEER_CERT: 0
+          RABBITMQ_CONFIG_FILE: /src/tests/rabbitmq.conf
       proxy:
         image: ghcr.io/shopify/toxiproxy:2.5.0
         ports:
@@ -85,7 +79,7 @@ jobs:
     - name: Check PHP info
       run: php tests/phpinfo.php
 
-    - name: Start broker service
+    - name: Re-start broker service to pick up rabbitmq.conf
       run: docker restart ${{ job.services.rabbitmq.id }}
 
     - name: Composer install
