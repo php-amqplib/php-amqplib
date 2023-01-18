@@ -28,7 +28,7 @@
         </whitelist>
     </filter>
     <php>
-        <ini name="error_reporting" value="E_ALL"/>
+        <ini name="error_reporting" value="E_ALL ^ E_USER_DEPRECATED"/>
     </php>
     <logging>
         <log type="junit" target="build/report.junit.xml"/>
