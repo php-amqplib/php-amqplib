@@ -54,7 +54,7 @@ class StreamIO extends AbstractIO
             $context = stream_context_create();
         }
 
-        $this->protocol = $ssl_protocol ?? 'tcp';
+        $this->protocol = 'tcp';
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;
@@ -67,6 +67,15 @@ class StreamIO extends AbstractIO
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
 
         stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
+
+        $options = stream_context_get_options($this->context);
+        if (!empty($options['ssl'])) {
+            if (isset($ssl_protocol)) {
+                $this->protocol = $ssl_protocol;
+            } else {
+                $this->protocol = 'ssl';
+            }
+        }
     }
 
     /**

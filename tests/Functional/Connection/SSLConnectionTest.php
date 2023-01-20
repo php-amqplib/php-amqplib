@@ -16,7 +16,8 @@ class SSLConnectionTest extends AbstractConnectionTest
      */
     public function secure_connection_default_params($options)
     {
-        $connection = $this->conection_create('ssl', HOST, 5671, $options);
+        $port = $options['port'] ?? 5671;
+        $connection = $this->conection_create('ssl', HOST, $port, $options);
         self::assertTrue($connection->isConnected());
         $channel = $connection->channel();
         self::assertTrue($channel->is_open());
@@ -67,6 +68,12 @@ class SSLConnectionTest extends AbstractConnectionTest
                 'verify_peer_name' => false,
             ],
         ];
+        $sets[] = [
+            $options
+        ];
+
+        // #4 non-TLS options
+        $options = ['port' => 5672];
         $sets[] = [
             $options
         ];

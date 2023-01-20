@@ -28,9 +28,11 @@ class AMQPSSLConnection extends AMQPStreamConnection
         ?AMQPConnectionConfig $config = null
     ) {
         if (empty($ssl_options)) {
-            $ssl_options = ['verify_peer' => true];
+            trigger_error('Using non-TLS instances of AMQPSSLConnection is deprecated and will be removed in version 4 of php-amqplib', E_USER_DEPRECATED);
+            $ssl_context = null;
+        } else {
+            $ssl_context = $this->createSslContext($ssl_options);
         }
-        $ssl_context = $this->createSslContext($ssl_options);
         parent::__construct(
             $host,
             $port,
