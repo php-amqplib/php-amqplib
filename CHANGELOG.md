@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.5.1](https://github.com/php-amqplib/php-amqplib/tree/v3.5.1) (2023-01-20)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.5.0...v3.5.1)
+
+**Closed issues:**
+
+- Connect error since 3.5.0 [\#1065](https://github.com/php-amqplib/php-amqplib/issues/1065)
+
+**Merged pull requests:**
+
+- Update GHA to use latest RabbitMQ [\#1068](https://github.com/php-amqplib/php-amqplib/pull/1068) ([lukebakken](https://github.com/lukebakken))
+- Revert \#1060 [\#1066](https://github.com/php-amqplib/php-amqplib/pull/1066) ([lukebakken](https://github.com/lukebakken))
+
 ## [v3.5.0](https://github.com/php-amqplib/php-amqplib/tree/v3.5.0) (2023-01-16)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.4.0...v3.5.0)
