@@ -20,7 +20,7 @@ final class AMQPConnectionConfig
     private $ioType = self::IO_TYPE_STREAM;
 
     /** @var bool */
-    private $isLazy = true;
+    private $isLazy = false;
 
     /** @var string */
     private $host = '127.0.0.1';
@@ -116,6 +116,9 @@ final class AMQPConnectionConfig
 
     /** @var string|null */
     private $sslCiphers;
+
+    /** @var int|null */
+    private $sslSecurityLevel;
 
     /** @var string */
     private $connectionName = '';
@@ -224,8 +227,15 @@ final class AMQPConnectionConfig
 
     public function setLoginMethod(string $loginMethod): void
     {
-        if ($loginMethod !== self::AUTH_PLAIN && $loginMethod !== self::AUTH_AMQPPLAIN && $loginMethod !== self::AUTH_EXTERNAL) {
+        if (
+            $loginMethod !== self::AUTH_PLAIN
+            && $loginMethod !== self::AUTH_AMQPPLAIN
+            && $loginMethod !== self::AUTH_EXTERNAL
+        ) {
             throw new InvalidArgumentException('Unknown login method: ' . $loginMethod);
+        }
+        if ($loginMethod === self::AUTH_EXTERNAL && (!empty($this->user) || !empty($this->password))) {
+            throw new InvalidArgumentException('External auth method cannot be used together with user credentials.');
         }
         $this->loginMethod = $loginMethod;
     }
@@ -492,6 +502,16 @@ final class AMQPConnectionConfig
     public function setSslCiphers(?string $sslCiphers): void
     {
         $this->sslCiphers = $sslCiphers;
+    }
+
+    public function getSslSecurityLevel(): ?int
+    {
+        return $this->sslSecurityLevel;
+    }
+
+    public function setSslSecurityLevel(?int $sslSecurityLevel): void
+    {
+        $this->sslSecurityLevel = $sslSecurityLevel;
     }
 
     public function isDebugPackets(): bool

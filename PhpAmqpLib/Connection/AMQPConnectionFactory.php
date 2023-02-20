@@ -13,13 +13,7 @@ class AMQPConnectionFactory
     {
         if ($config->getIoType() === AMQPConnectionConfig::IO_TYPE_STREAM) {
             if ($config->isSecure()) {
-                if ($config->isLazy()) {
-                    $class = AMQPLazySSLConnection::class;
-                } else {
-                    $class = AMQPSSLConnection::class;
-                }
-
-                $connection = new $class(
+                $connection = new AMQPSSLConnection(
                     $config->getHost(),
                     $config->getPort(),
                     $config->getUser(),
@@ -40,12 +34,7 @@ class AMQPConnectionFactory
                     $config
                 );
             } else {
-                if ($config->isLazy()) {
-                    $class = AMQPLazyConnection::class;
-                } else {
-                    $class = AMQPStreamConnection::class;
-                }
-                $connection = new $class(
+                $connection = new AMQPStreamConnection(
                     $config->getHost(),
                     $config->getPort(),
                     $config->getUser(),
@@ -70,12 +59,7 @@ class AMQPConnectionFactory
                 throw new LogicException('The socket connection implementation does not support secure connections.');
             }
 
-            if ($config->isLazy()) {
-                $class = AMQPLazySocketConnection::class;
-            } else {
-                $class = AMQPSocketConnection::class;
-            }
-            $connection = new $class(
+            $connection = new AMQPSocketConnection(
                 $config->getHost(),
                 $config->getPort(),
                 $config->getUser(),
@@ -116,6 +100,7 @@ class AMQPConnectionFactory
             'verify_peer_name' => $config->getSslVerifyName(),
             'passphrase' => $config->getSslPassPhrase(),
             'ciphers' => $config->getSslCiphers(),
+            'security_level' => $config->getSslSecurityLevel()
         ], static function ($value) {
             return null !== $value;
         });
