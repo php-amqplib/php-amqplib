@@ -84,7 +84,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
         if(!$pid) {
             while (true){
                 sleep($interval);
-                posix_kill($parent, SIGUSR1);
+                posix_kill($parent, $this->signal);
             }
         } else {
             $this->childPid = $pid;

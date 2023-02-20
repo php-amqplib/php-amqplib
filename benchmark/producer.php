@@ -10,7 +10,8 @@ use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
-include(__DIR__ . '/config.php');
+require __DIR__ . '/../vendor/autoload.php';
+include __DIR__ . '/../tests/config.php';
 
 $exchange = 'bench_exchange';
 $queue = 'bench_queue';
