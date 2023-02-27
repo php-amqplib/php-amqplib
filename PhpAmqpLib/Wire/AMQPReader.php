@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Wire;
 
+use PhpAmqpLib\Channel\Frame;
 use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Helper\BigInteger;
@@ -335,6 +336,14 @@ abstract class AMQPReader extends AMQPByteStream
     public function read_array_object()
     {
         return $this->read_array(true);
+    }
+
+    /**
+     * @return array{type:int, channel:int, size:int}
+     */
+    public function readFrameHeader(): array
+    {
+        return unpack('Ctype/nchannel/Nsize', $this->rawread(Frame::FRAME_HEADER_SIZE));
     }
 
     /**

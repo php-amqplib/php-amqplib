@@ -26,4 +26,19 @@ class AMQPConnectionConfigTest extends TestCase
         $config->setConnectionName($name);
         $this->assertEquals($name, $config->getConnectionName());
     }
+
+    /**
+     * @test
+     */
+    public function external_auth_with_user_credentials()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $config = new AMQPConnectionConfig();
+        $config->setUser('');
+        $config->setPassword('');
+        $config->setLoginMethod(AMQPConnectionConfig::AUTH_EXTERNAL);
+
+        $config = new AMQPConnectionConfig();
+        $config->setLoginMethod(AMQPConnectionConfig::AUTH_EXTERNAL);
+    }
 }

@@ -105,8 +105,8 @@ final class AMQPConnectionConfig
     /** @var string|null */
     private $sslKey;
 
-    /** @var bool */
-    private $sslVerify = true;
+    /** @var bool|null */
+    private $sslVerify;
 
     /** @var bool|null */
     private $sslVerifyName;
@@ -464,12 +464,12 @@ final class AMQPConnectionConfig
         $this->sslKey = $sslKey;
     }
 
-    public function getSslVerify(): bool
+    public function getSslVerify(): ?bool
     {
         return $this->sslVerify;
     }
 
-    public function setSslVerify(bool $sslVerify): void
+    public function setSslVerify(?bool $sslVerify): void
     {
         $this->sslVerify = $sslVerify;
     }
