@@ -117,6 +117,9 @@ final class AMQPConnectionConfig
     /** @var string|null */
     private $sslCiphers;
 
+    /** @var int|null */
+    private $sslSecurityLevel;
+
     /** @var string */
     private $connectionName = '';
 
@@ -499,6 +502,16 @@ final class AMQPConnectionConfig
     public function setSslCiphers(?string $sslCiphers): void
     {
         $this->sslCiphers = $sslCiphers;
+    }
+
+    public function getSslSecurityLevel(): ?int
+    {
+        return $this->sslSecurityLevel;
+    }
+
+    public function setSslSecurityLevel(?int $sslSecurityLevel): void
+    {
+        $this->sslSecurityLevel = $sslSecurityLevel;
     }
 
     public function isDebugPackets(): bool

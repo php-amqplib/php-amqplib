@@ -100,6 +100,7 @@ class AMQPConnectionFactory
             'verify_peer_name' => $config->getSslVerifyName(),
             'passphrase' => $config->getSslPassPhrase(),
             'ciphers' => $config->getSslCiphers(),
+            'security_level' => $config->getSslSecurityLevel()
         ], static function ($value) {
             return null !== $value;
         });
