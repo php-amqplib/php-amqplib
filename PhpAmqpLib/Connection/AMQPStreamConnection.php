@@ -80,7 +80,7 @@ class AMQPStreamConnection extends AbstractConnection
     }
 
     /**
-     * @deprecated Use ConnectionFactory
+     * @deprecated Use AmqpConnectionFactory
      * @throws \Exception
      */
     protected static function try_create_connection($host, $port, $user, $password, $vhost, $options)
