@@ -55,7 +55,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
     }
 
     /**
-     * @deprecated Use ConnectionFactory
+     * @deprecated Use AmqpConnectionFactory
      * @throws \Exception
      */
     public static function try_create_connection($host, $port, $user, $password, $vhost, $options)
