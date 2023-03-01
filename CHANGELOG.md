@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.5.2](https://github.com/php-amqplib/php-amqplib/tree/v3.5.2) (2023-03-01)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.5.1...v3.5.2)
+
+**Implemented enhancements:**
+
+- Security levels SSL options [\#1075](https://github.com/php-amqplib/php-amqplib/pull/1075) ([alexanderbirch](https://github.com/alexanderbirch))
+
+**Fixed bugs:**
+
+- Does not pass `$config` parameter to AMQPSocketConnection using `AMQPConnectionFactory::create` [\#1076](https://github.com/php-amqplib/php-amqplib/issues/1076)
+- Bug fix, Deprecation notice update [\#1077](https://github.com/php-amqplib/php-amqplib/pull/1077) ([ssi-anik](https://github.com/ssi-anik))
+
 ## [v3.5.1](https://github.com/php-amqplib/php-amqplib/tree/v3.5.1) (2023-01-20)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.5.0...v3.5.1)
