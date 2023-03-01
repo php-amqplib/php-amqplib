@@ -73,7 +73,8 @@ class AMQPConnectionFactory
                 $config->isKeepalive(),
                 $config->getWriteTimeout(),
                 $config->getHeartbeat(),
-                $config->getChannelRPCTimeout()
+                $config->getChannelRPCTimeout(),
+                $config
             );
         }
 
