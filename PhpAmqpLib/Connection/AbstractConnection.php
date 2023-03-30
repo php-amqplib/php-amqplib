@@ -945,7 +945,7 @@ abstract class AbstractConnection extends AbstractChannel
         // To disable heartbeats, both peers have to opt in and use the value of 0
         // For BC, this library opts for disabled heartbeat if client value is 0.
         $v = $args->read_short();
-        if ($this->heartbeat > 0) {
+        if ($this->heartbeat > 0 && $v > 0) {
             $this->heartbeat = min($this->heartbeat, $v);
         }
 
