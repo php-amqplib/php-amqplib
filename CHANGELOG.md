@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.5.3](https://github.com/php-amqplib/php-amqplib/tree/v3.5.3) (2023-04-03)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.5.2...v3.5.3)
+
+**Fixed bugs:**
+
+- Fix server heartbeat overwrite client value [\#1081](https://github.com/php-amqplib/php-amqplib/pull/1081) ([ramunasd](https://github.com/ramunasd))
+
 ## [v3.5.2](https://github.com/php-amqplib/php-amqplib/tree/v3.5.2) (2023-03-01)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.5.1...v3.5.2)
@@ -83,7 +91,7 @@
 **Implemented enhancements:**
 
 - Allow set socket send buffer size [\#1026](https://github.com/php-amqplib/php-amqplib/pull/1026) ([ramunasd](https://github.com/ramunasd))
-- Add capath SSL option support [\#1014](https://github.com/php-amqplib/php-amqplib/pull/1014) ([amino-garricklam](https://github.com/amino-garricklam))
+- Add capath SSL option support [\#1014](https://github.com/php-amqplib/php-amqplib/pull/1014) ([garrick-lam](https://github.com/garrick-lam))
 
 **Fixed bugs:**
 
