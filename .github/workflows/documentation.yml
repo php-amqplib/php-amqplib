@@ -1,6 +1,7 @@
 name: Update documentation page
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
 
