@@ -16,6 +16,11 @@ abstract class AbstractSignalHeartbeatSender
     protected $connection;
 
     /**
+     * @var bool
+     */
+    protected $wasActive = false;
+
+    /**
      * @param AbstractConnection $connection
      * @throws AMQPRuntimeException
      */
@@ -61,6 +66,15 @@ abstract class AbstractSignalHeartbeatSender
     protected function handleSignal(int $interval): void
     {
         if (!$this->connection) {
+            return;
+        }
+
+        // Support for lazy connections
+        if (!$this->wasActive && $this->connection->isConnected()) {
+            $this->wasActive = true;
+        }
+
+        if (!$this->wasActive) {
             return;
         }
 

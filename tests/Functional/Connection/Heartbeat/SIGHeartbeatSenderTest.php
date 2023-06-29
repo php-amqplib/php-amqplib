@@ -54,18 +54,6 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
     /**
      * @test
      */
-    public function register_should_fail_with_closed_connection()
-    {
-        $this->expectException(AMQPRuntimeException::class);
-        $this->expectExceptionMessage('Unable to register heartbeat sender, connection is not active');
-
-        $this->connection->close();
-        $this->sender->register();
-    }
-
-    /**
-     * @test
-     */
     public function register_should_fail_after_unregister()
     {
         $this->expectException(AMQPRuntimeException::class);

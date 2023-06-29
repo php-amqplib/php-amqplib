@@ -54,18 +54,6 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     /**
      * @test
      */
-    public function register_should_fail_with_closed_connection()
-    {
-        $this->expectException(AMQPRuntimeException::class);
-        $this->expectExceptionMessage('Unable to register heartbeat sender, connection is not active');
-
-        $this->connection->close();
-        $this->sender->register();
-    }
-
-    /**
-     * @test
-     */
     public function register_should_fail_after_unregister()
     {
         $this->expectException(AMQPRuntimeException::class);
@@ -129,6 +117,51 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
         while ($timeLeft > 0) {
             $timeLeft = sleep($timeLeft);
         }
+
+        $sender->unregister();
+    }
+
+    /**
+     * @test
+     * @covers \PhpAmqpLib\Connection\Heartbeat\AbstractSignalHeartbeatSender::handleSignal
+     */
+    public function signal_handler_should_ignore_inactive_lazy_connections()
+    {
+        $connection = $this->getMockBuilder(AbstractConnection::class)
+            ->setMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity', 'checkHeartBeat'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $connection
+            ->expects(self::exactly(4))
+            ->method('isConnected')
+            ->willReturnOnConsecutiveCalls(false, true, true, false);
+        $connection
+            ->expects(self::exactly(1))
+            ->method('isWriting')
+            ->willReturn(false);
+
+
+        $sender = new PCNTLHeartbeatSender($connection);
+
+        $reflection = new \ReflectionClass($sender);
+        $wasActive = $reflection->getProperty('wasActive');
+        $wasActive->setAccessible(true);
+        $conn = $reflection->getProperty('connection');
+        $conn->setAccessible(true);
+        $method = $reflection->getMethod('handleSignal');
+        $method->setAccessible(true);
+
+
+        $method->invoke($sender, 10);
+        self::assertFalse($wasActive->getValue($sender));
+
+        $method->invoke($sender, 10);
+        self::assertTrue($wasActive->getValue($sender));
+        self::assertNotNull($conn->getValue($sender));
+
+        $method->invoke($sender, 10);
+        self::assertTrue($wasActive->getValue($sender));
+        self::assertNull($conn->getValue($sender));
 
         $sender->unregister();
     }
