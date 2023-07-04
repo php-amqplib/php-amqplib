@@ -15,7 +15,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: master
-      - uses: actions/cache@v3
+      - uses: actions/cache/restore@v3
+        id: cache-restore
         with:
           key: changelog-generator
           path: build/github-changelog-http-cache
@@ -37,9 +38,9 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: master
       - name: Save changelog cache
-        if: ${{ failure() }}
+        if: always()
         uses: actions/cache/save@v3
         with:
-          key: changelog-generator
+          key: ${{ steps.cache-restore.outputs.cache-primary-key }}
           path: build/github-changelog-http-cache
 
