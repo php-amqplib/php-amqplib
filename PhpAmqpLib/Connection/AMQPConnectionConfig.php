@@ -333,6 +333,10 @@ final class AMQPConnectionConfig
     public function setIsSecure(bool $isSecure): void
     {
         $this->isSecure = $isSecure;
+
+        if ($this->isSecure) {
+            $this->setNetworkProtocol("ssl");
+        }
     }
 
     public function getNetworkProtocol(): string
@@ -472,6 +476,10 @@ final class AMQPConnectionConfig
     public function setSslVerify(?bool $sslVerify): void
     {
         $this->sslVerify = $sslVerify;
+
+        if (!$this->sslVerify) {
+            $this->setSslVerifyName(false);
+        }
     }
 
     public function getSslVerifyName(): ?bool
