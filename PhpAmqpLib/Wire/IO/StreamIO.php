@@ -74,7 +74,11 @@ class StreamIO extends AbstractIO
                 $this->protocol = $ssl_protocol;
             } else {
                 // https://www.php.net/manual/en/transports.inet.php
-                $this->protocol = 'tls';
+                if (PHP_VERSION_ID >= 70100) {
+                    $this->protocol = 'tls';
+                } else {
+                    $this->protocol = 'ssl';
+                }
             }
         }
     }
