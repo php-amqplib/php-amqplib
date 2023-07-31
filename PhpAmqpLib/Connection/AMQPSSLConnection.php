@@ -33,10 +33,12 @@ class AMQPSSLConnection extends AMQPStreamConnection
         } else {
             $ssl_context = $this->createSslContext($ssl_options);
         }
-        if (PHP_VERSION_ID >= 70100) {
-            $ssl_protocol = 'tls';
-        } else {
-            $ssl_protocol = 'ssl';
+        if (empty($ssl_protocol)) {
+            if (PHP_VERSION_ID >= 70100) {
+                $ssl_protocol = 'tls';
+            } else {
+                $ssl_protocol = 'ssl';
+            }
         }
         parent::__construct(
             $host,
