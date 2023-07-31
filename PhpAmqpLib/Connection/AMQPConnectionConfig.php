@@ -335,7 +335,7 @@ final class AMQPConnectionConfig
         $this->isSecure = $isSecure;
 
         if ($this->isSecure) {
-            if (PHP_VERSION_ID > 70100) {
+            if (PHP_VERSION_ID >= 70200) {
                 $this->setNetworkProtocol('tls');
             } else {
                 $this->setNetworkProtocol('ssl');
