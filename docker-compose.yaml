@@ -15,7 +15,7 @@ services:
     entrypoint: ['tail', '-f', '/dev/null']
 
   rabbitmq:
-    image: rabbitmq:3.11-management
+    image: rabbitmq:3-management
     ports:
       - "5671:5671"
       - "5672:5672"
@@ -26,7 +26,7 @@ services:
         - RABBITMQ_CONFIG_FILE=/src/tests/rabbitmq.conf
 
   proxy:
-    image: ghcr.io/shopify/toxiproxy:2.5.0
+    image: ghcr.io/shopify/toxiproxy:latest
     ports:
       - "8474:8474"
       - "5673:5673"

@@ -3,6 +3,8 @@
 namespace PhpAmqpLib\Tests\Unit\Connection;
 
 use PhpAmqpLib\Connection\AMQPConnectionConfig;
+use PhpAmqpLib\Connection\AMQPConnectionFactory;
+use PhpAmqpLib\Exception\AMQPInvalidFrameException;
 use PHPUnit\Framework\TestCase;
 
 class AMQPConnectionConfigTest extends TestCase
@@ -40,5 +42,86 @@ class AMQPConnectionConfigTest extends TestCase
 
         $config = new AMQPConnectionConfig();
         $config->setLoginMethod(AMQPConnectionConfig::AUTH_EXTERNAL);
+    }
+
+    /**
+     * @test
+     */
+    public function secure_with_incorrect_network_protocol()
+    {
+        $this->expectException(AMQPInvalidFrameException::class);
+        $this->expectExceptionMessage('Invalid frame type 21');
+
+        $cert_dir = realpath(__DIR__ . "/../../certs");
+        $config = new AMQPConnectionConfig();
+        $config->setHost(HOST);
+        $config->setPort(5671);
+        $config->setUser(USER);
+        $config->setPassword(PASS);
+        $config->setVhost(VHOST);
+
+        $config->setIsSecure(true);
+        $config->setNetworkProtocol("tcp");
+
+        $config->setSslVerify(true);
+        // CommonName is different make sure to not check
+        $config->setSslVerifyName(false);
+
+        $config->setSslCaCert($cert_dir . "/ca_certificate.pem");
+        $config->setSslKey($cert_dir . "/client_key.pem");
+        $config->setSslCert($cert_dir . "/client_certificate.pem");
+
+        AMQPConnectionFactory::create($config);
+    }
+
+    /**
+     * @test
+     */
+    public function secure_with_correct_network_protocol()
+    {
+        $cert_dir = realpath(__DIR__ . "/../../certs");
+        $config = new AMQPConnectionConfig();
+        $config->setHost(HOST);
+        $config->setPort(5671);
+        $config->setUser(USER);
+        $config->setPassword(PASS);
+        $config->setVhost(VHOST);
+
+        $config->setSslCaCert($cert_dir . "/ca_certificate.pem");
+        $config->setSslKey($cert_dir . "/client_key.pem");
+        $config->setSslCert($cert_dir . "/client_certificate.pem");
+
+        // setIsSecure now also set correct network protocol to ssl
+        $config->setIsSecure(true);
+        $config->setSslVerify(true);
+
+        // CommonName is different make sure to not check
+        $config->setSslVerifyName(false);
+
+        $connection = AMQPConnectionFactory::create($config);
+
+        $this->assertEquals($connection->isConnected(), true);
+    }
+
+    /**
+     * @test
+     */
+    public function insecure_connection()
+    {
+        $config = new AMQPConnectionConfig();
+        $config->setHost(HOST);
+        $config->setPort(5671);
+        $config->setUser(USER);
+        $config->setPassword(PASS);
+        $config->setVhost(VHOST);
+
+        $config->setIsSecure(true);
+
+        // This will set sslverifyname to false
+        $config->setSslVerify(false);
+
+        $connection = AMQPConnectionFactory::create($config);
+
+        $this->assertEquals($connection->isConnected(), true);
     }
 }

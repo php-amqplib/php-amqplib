@@ -24,7 +24,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $vhost = '/',
         $ssl_options = array(),
         $options = array(),
-        $ssl_protocol = 'ssl',
+        $ssl_protocol = 'tls',
         ?AMQPConnectionConfig $config = null
     ) {
         if (empty($ssl_options)) {
@@ -32,6 +32,13 @@ class AMQPSSLConnection extends AMQPStreamConnection
             $ssl_context = null;
         } else {
             $ssl_context = $this->createSslContext($ssl_options);
+        }
+        if (empty($ssl_protocol)) {
+            if (PHP_VERSION_ID >= 70200) {
+                $ssl_protocol = 'tls';
+            } else {
+                $ssl_protocol = 'ssl';
+            }
         }
         parent::__construct(
             $host,
@@ -72,6 +79,8 @@ class AMQPSSLConnection extends AMQPStreamConnection
     {
         $ssl_context = stream_context_create();
         foreach ($options as $k => $v) {
+            // Note: 'ssl' applies to 'tls' as well
+            // https://www.php.net/manual/en/context.ssl.php
             stream_context_set_option($ssl_context, 'ssl', $k, $v);
         }
 
