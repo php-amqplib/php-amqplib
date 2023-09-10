@@ -27,6 +27,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
             $config->setIoType(AMQPConnectionConfig::IO_TYPE_STREAM);
             $config->setIsSecure(true);
             $config->setNetworkProtocol($options['protocol'] ?? 'ssl');
+            $config->setSslCryptoMethod($options['ssl']['crypto_method'] ?? null);
             $config->setSslCaCert($options['ssl']['cafile'] ?? null);
             $config->setSslCaPath($options['ssl']['capath'] ?? null);
             $config->setSslCert($options['ssl']['local_cert'] ?? null);

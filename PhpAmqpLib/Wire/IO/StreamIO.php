@@ -12,9 +12,6 @@ use PhpAmqpLib\Helper\SocketConstants;
 
 class StreamIO extends AbstractIO
 {
-    /** @var string */
-    protected $protocol;
-
     /** @var null|resource */
     protected $context;
 
@@ -29,7 +26,7 @@ class StreamIO extends AbstractIO
      * @param resource|array|null $context
      * @param bool $keepalive
      * @param int $heartbeat
-     * @param string|null $ssl_protocol
+     * @param string|null $ssl_protocol @deprecated
      */
     public function __construct(
         $host,
@@ -41,6 +38,12 @@ class StreamIO extends AbstractIO
         $heartbeat = 0,
         $ssl_protocol = null
     ) {
+        if (func_num_args() === 8) {
+            trigger_error(
+                '$ssl_protocol parameter is deprecated, use stream_context_set_option($context, \'ssl\', \'crypto_method\', $ssl_protocol) instead (see https://www.php.net/manual/en/function.stream-socket-enable-crypto.php for possible values)',
+                E_USER_DEPRECATED
+            );
+        }
         // TODO FUTURE change comparison to <=
         // php-amqplib/php-amqplib#648, php-amqplib/php-amqplib#666
         /*
@@ -54,7 +57,6 @@ class StreamIO extends AbstractIO
             $context = stream_context_create();
         }
 
-        $this->protocol = 'tcp';
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;
@@ -69,16 +71,9 @@ class StreamIO extends AbstractIO
         stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
 
         $options = stream_context_get_options($this->context);
-        if (!empty($options['ssl'])) {
-            if (isset($ssl_protocol)) {
-                $this->protocol = $ssl_protocol;
-            } else {
-                // https://www.php.net/manual/en/transports.inet.php
-                if (PHP_VERSION_ID >= 70200) {
-                    $this->protocol = 'tls';
-                } else {
-                    $this->protocol = 'ssl';
-                }
+        if (!empty($options['ssl']) && !isset($options['ssl']['crypto_method'])) {
+            if (!stream_context_set_option($this->context, 'ssl', 'crypto_method', STREAM_CRYPTO_METHOD_ANY_CLIENT)) {
+                throw new AMQPIOException("Can not set ssl.crypto_method stream context option");
             }
         }
     }
@@ -91,8 +86,7 @@ class StreamIO extends AbstractIO
         $errstr = $errno = null;
 
         $remote = sprintf(
-            '%s://%s:%s',
-            $this->protocol,
+            'tcp://%s:%s',
             $this->host,
             $this->port
         );
@@ -154,6 +148,12 @@ class StreamIO extends AbstractIO
         if ($this->keepalive) {
             $this->enable_keepalive();
         }
+
+        $options = stream_context_get_options($this->context);
+        if (isset($options['ssl']['crypto_method'])) {
+            $this->enable_crypto();
+        }
+
         $this->heartbeat = $this->initial_heartbeat;
     }
 
@@ -386,14 +386,6 @@ class StreamIO extends AbstractIO
      */
     protected function enable_keepalive()
     {
-        if ($this->protocol === 'ssl') {
-            throw new AMQPIOException('Can not enable keepalive: ssl connection does not support keepalive (#70939)');
-        }
-
-        if ($this->protocol === 'tls') {
-            throw new AMQPIOException('Can not enable keepalive: tls connection does not support keepalive (#70939)');
-        }
-
         if (!function_exists('socket_import_stream')) {
             throw new AMQPIOException('Can not enable keepalive: function socket_import_stream does not exist');
         }
@@ -424,5 +416,18 @@ class StreamIO extends AbstractIO
         }
 
         return 0;
+    }
+
+    private function enable_crypto(): void
+    {
+        $timeout_at = time() + ($this->read_timeout + $this->write_timeout) * 2; // 2 round-trips during handshake
+
+        do {
+            $enabled = stream_socket_enable_crypto($this->sock, true);
+        } while ($enabled !== true && time() < $timeout_at);
+
+        if ($enabled !== true) {
+            throw new AMQPIOException('Can not enable crypto');
+        }
     }
 }

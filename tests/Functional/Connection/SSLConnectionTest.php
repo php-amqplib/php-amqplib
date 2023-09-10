@@ -26,6 +26,16 @@ class SSLConnectionTest extends AbstractConnectionTest
         $connection->close();
     }
 
+    /**
+     * @test
+     * @dataProvider secure_connection_params
+     */
+    public function secure_connection_default_params_with_keepalive($options)
+    {
+        $options['keepalive'] = true;
+        $this->secure_connection_default_params($options);
+    }
+
     public function secure_connection_params()
     {
         $sets = [];
@@ -74,6 +84,12 @@ class SSLConnectionTest extends AbstractConnectionTest
 
         // #4 non-TLS options
         $options = ['port' => 5672];
+        $sets[] = [
+            $options
+        ];
+
+        // #5 TLS crypto method
+        $options[] = ['ssl' => ['crypto_method' => STREAM_CRYPTO_METHOD_ANY_CLIENT]];
         $sets[] = [
             $options
         ];
