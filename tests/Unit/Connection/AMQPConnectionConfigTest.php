@@ -4,7 +4,7 @@ namespace PhpAmqpLib\Tests\Unit\Connection;
 
 use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Connection\AMQPConnectionFactory;
-use PhpAmqpLib\Exception\AMQPInvalidFrameException;
+use PhpAmqpLib\Exception\AMQPIOException;
 use PHPUnit\Framework\TestCase;
 
 class AMQPConnectionConfigTest extends TestCase
@@ -47,10 +47,10 @@ class AMQPConnectionConfigTest extends TestCase
     /**
      * @test
      */
-    public function secure_with_incorrect_network_protocol()
+    public function secure_with_incorrect_crypto_method()
     {
-        $this->expectException(AMQPInvalidFrameException::class);
-        $this->expectExceptionMessage('Invalid frame type 21');
+        $this->expectException(AMQPIOException::class);
+        $this->expectExceptionMessage('Can not enable crypto');
 
         $cert_dir = realpath(__DIR__ . "/../../certs");
         $config = new AMQPConnectionConfig();
@@ -61,7 +61,7 @@ class AMQPConnectionConfigTest extends TestCase
         $config->setVhost(VHOST);
 
         $config->setIsSecure(true);
-        $config->setNetworkProtocol("tcp");
+        $config->setSslCryptoMethod(STREAM_CRYPTO_METHOD_ANY_SERVER);
 
         $config->setSslVerify(true);
         // CommonName is different make sure to not check
@@ -77,7 +77,7 @@ class AMQPConnectionConfigTest extends TestCase
     /**
      * @test
      */
-    public function secure_with_correct_network_protocol()
+    public function secure_with_correct_crypto_method()
     {
         $cert_dir = realpath(__DIR__ . "/../../certs");
         $config = new AMQPConnectionConfig();
@@ -91,7 +91,7 @@ class AMQPConnectionConfigTest extends TestCase
         $config->setSslKey($cert_dir . "/client_key.pem");
         $config->setSslCert($cert_dir . "/client_certificate.pem");
 
-        // setIsSecure now also set correct network protocol to ssl
+        // setIsSecure now also set correct crypto method to tls
         $config->setIsSecure(true);
         $config->setSslVerify(true);
 

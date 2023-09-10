@@ -22,7 +22,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param bool $keepalive
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
-     * @param string|null $ssl_protocol
+     * @param string|null $ssl_protocol @deprecated
      * @param AMQPConnectionConfig|null $config
      * @throws \Exception
      */
@@ -45,6 +45,15 @@ class AMQPStreamConnection extends AbstractConnection
         $ssl_protocol = null,
         ?AMQPConnectionConfig $config = null
     ) {
+        if (func_num_args() === 17 || ($ssl_protocol !== null && $ssl_protocol instanceof AMQPConnectionConfig === false)) {
+            trigger_error(
+                '$ssl_protocol parameter is deprecated, use stream_context_set_option($context, \'ssl\', \'crypto_method\', $ssl_protocol) instead (see https://www.php.net/manual/en/function.stream-socket-enable-crypto.php for possible values)',
+                E_USER_DEPRECATED
+            );
+        } elseif ($ssl_protocol instanceof AMQPConnectionConfig) {
+            $config = $ssl_protocol;
+        }
+
         if ($channel_rpc_timeout > $read_write_timeout) {
             throw new \InvalidArgumentException('channel RPC timeout must not be greater than I/O read-write timeout');
         }
@@ -56,8 +65,7 @@ class AMQPStreamConnection extends AbstractConnection
             $read_write_timeout,
             $context,
             $keepalive,
-            $heartbeat,
-            $ssl_protocol
+            $heartbeat
         );
 
         parent::__construct(

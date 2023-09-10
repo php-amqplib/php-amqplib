@@ -12,7 +12,6 @@ class AMQPSSLConnection extends AMQPStreamConnection
      * @param string $vhost
      * @param array $ssl_options
      * @param array $options
-     * @param string $ssl_protocol
      * @param AMQPConnectionConfig|null $config
      * @throws \Exception
      */
@@ -24,7 +23,6 @@ class AMQPSSLConnection extends AMQPStreamConnection
         $vhost = '/',
         $ssl_options = array(),
         $options = array(),
-        $ssl_protocol = 'tls',
         ?AMQPConnectionConfig $config = null
     ) {
         if (empty($ssl_options)) {
@@ -33,13 +31,7 @@ class AMQPSSLConnection extends AMQPStreamConnection
         } else {
             $ssl_context = $this->createSslContext($ssl_options);
         }
-        if (empty($ssl_protocol)) {
-            if (PHP_VERSION_ID >= 70200) {
-                $ssl_protocol = 'tls';
-            } else {
-                $ssl_protocol = 'ssl';
-            }
-        }
+
         parent::__construct(
             $host,
             $port,
@@ -56,7 +48,6 @@ class AMQPSSLConnection extends AMQPStreamConnection
             isset($options['keepalive']) ? $options['keepalive'] : false,
             isset($options['heartbeat']) ? $options['heartbeat'] : 0,
             isset($options['channel_rpc_timeout']) ? $options['channel_rpc_timeout'] : 0.0,
-            $ssl_protocol,
             $config
         );
     }
