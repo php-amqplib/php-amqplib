@@ -89,7 +89,10 @@ abstract class AbstractIO
         $this->setErrorHandler();
         try {
             do {
-                // Setup signal catcher
+                /**
+                 * Setup signal catcher
+                 * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
+                 */
                 $signals = [SIGTERM, SIGQUIT, SIGINT];
                 $signal_occurred = false;
 
