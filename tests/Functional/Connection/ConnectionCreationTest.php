@@ -64,7 +64,7 @@ class ConnectionCreationTest extends AbstractConnectionTest
         $writer->write_short($broker); // broker heartbeat
         $args = new AMQPBufferReader($writer->getvalue());
 
-        $connection = $this->conection_create('stream', HOST, PORT, ['heartbeat' => $client]);
+        $connection = $this->connection_create('stream', HOST, PORT, ['heartbeat' => $client]);
         $method->invoke($connection, $args);
         self::assertEquals($expected, $connection->getHeartbeat());
     }

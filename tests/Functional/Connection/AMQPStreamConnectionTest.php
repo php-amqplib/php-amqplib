@@ -14,7 +14,7 @@ class AMQPStreamConnectionTest extends AbstractConnectionTest
      */
     public function connection_select_blocking_wo_timeout(): void
     {
-        $connection = $this->conection_create('stream');
+        $connection = $this->connection_create('stream');
 
         $start = microtime(true);
         ChannelWaitTest::deferSignal(1);

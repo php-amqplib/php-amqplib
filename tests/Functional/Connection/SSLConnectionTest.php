@@ -17,7 +17,7 @@ class SSLConnectionTest extends AbstractConnectionTest
     public function secure_connection_default_params($options)
     {
         $port = $options['port'] ?? 5671;
-        $connection = $this->conection_create('ssl', HOST, $port, $options);
+        $connection = $this->connection_create('ssl', HOST, $port, $options);
         self::assertTrue($connection->isConnected());
         $channel = $connection->channel();
         self::assertTrue($channel->is_open());
