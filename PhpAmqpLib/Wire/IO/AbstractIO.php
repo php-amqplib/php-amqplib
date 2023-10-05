@@ -6,7 +6,7 @@ use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
-use PhpAmqpLib\Exception\AMQPIOException;
+use PhpAmqpLib\Exception\AMQPIOWaitInterruptedException;
 use PhpAmqpLib\Wire\AMQPWriter;
 
 abstract class AbstractIO
@@ -61,7 +61,7 @@ abstract class AbstractIO
     /** @var array|null */
     protected $originalSignalHandlers = null;
 
-    /** @var bool|null */
+    /** @var int|null */
     protected $gotSignalWhileSelecting = null;
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractIO
 
             // Change signal handler, to notice signals during select
             pcntl_signal($signal, function ($signal) use ($handler) {
-                $this->gotSignalWhileSelecting = true;
+                $this->gotSignalWhileSelecting = $signal;
 
                 // Call original handler as well, to keep original behaviour
                 if (is_callable($handler)) {
@@ -127,18 +127,20 @@ abstract class AbstractIO
                 }
             });
         }
+
+        $this->gotSignalWhileSelecting = null;
     }
 
     /**
      * Cleanup signal catcher
      * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
      *
-     * @return void
+     * @return int|null Signal number if received or null if no signal was received
      */
     protected function afterSelect() {
         // Check whether pcntl is available
         if (false == function_exists('pcntl_signal_get_handler')) {
-            return;
+            return null;
         }
 
         // Reset signal handlers to original ones
@@ -146,8 +148,12 @@ abstract class AbstractIO
             pcntl_signal($signal, isset($this->originalSignalHandlers[$signal]) ? $this->originalSignalHandlers[$signal] : SIG_DFL);
         }
 
+        $got_signal = $this->gotSignalWhileSelecting;
+
         $this->originalSignalHandlers = null;
         $this->gotSignalWhileSelecting = null;
+
+        return $got_signal;
     }
 
     /**
@@ -163,11 +169,12 @@ abstract class AbstractIO
         $this->setErrorHandler();
         try {
             $this->prepareSelect();
-            do {
-                $this->gotSignalWhileSelecting = false;
-                $result = $this->do_select($sec, $usec);
-            } while ($this->gotSignalWhileSelecting && false === $result);
-            $this->afterSelect();
+            $result = $this->do_select($sec, $usec);
+
+            $received_signal = $this->afterSelect();
+            if (null !== $received_signal) {
+                throw new AMQPIOWaitInterruptedException('Got signal while selecting: ' . $received_signal);
+            }
 
             $this->throwOnError();
         } catch (\ErrorException $e) {
