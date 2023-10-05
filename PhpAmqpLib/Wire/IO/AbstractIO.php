@@ -124,7 +124,7 @@ abstract class AbstractIO
                     $handler = isset($original_handlers[$signal]) ? $original_handlers[$signal] : SIG_DFL;
                     pcntl_signal($signal, $handler);
                 }
-            } while ($signal_occurred && $result === false);
+            } while ($signal_occurred && false === $result);
 
             $this->throwOnError();
         } catch (\ErrorException $e) {
