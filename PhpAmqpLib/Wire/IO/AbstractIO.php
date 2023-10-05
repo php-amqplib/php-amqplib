@@ -13,7 +13,7 @@ abstract class AbstractIO
 {
     const BUFFER_SIZE = 8192;
 
-    const SIGNALS_INTERRUPTING_SELECT = [
+    const SIGNALS_INTERRUPTING_WAIT = [
         SIGTERM,
         SIGQUIT,
         SIGINT
@@ -62,7 +62,7 @@ abstract class AbstractIO
     protected $originalSignalHandlers = null;
 
     /** @var int|null */
-    protected $gotSignalWhileSelecting = null;
+    protected $gotSignalWhileWaiting = null;
 
     /**
      * @param int $len
@@ -96,19 +96,19 @@ abstract class AbstractIO
      * @return void
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      */
-    protected function prepareSelect() {
+    protected function prepare_select_signal_catcher() {
         // Check whether pcntl is available
         if (false == function_exists('pcntl_signal_get_handler')) {
             return;
         }
 
-        if (null !== $this->originalSignalHandlers || null !== $this->gotSignalWhileSelecting) {
+        if (null !== $this->originalSignalHandlers || null !== $this->gotSignalWhileWaiting) {
             // This could happen in a race condition -> when a signal is received, while we are in the signal handler
             return;
         }
 
         $this->originalSignalHandlers = [];
-        foreach (self::SIGNALS_INTERRUPTING_SELECT as $signal) {
+        foreach (self::SIGNALS_INTERRUPTING_WAIT as $signal) {
             $handler = pcntl_signal_get_handler($signal);
 
             // Save original handlers
@@ -117,9 +117,9 @@ abstract class AbstractIO
                 $this->originalSignalHandlers[$signal] = $handler;
             }
 
-            // Change signal handler, to notice signals during select
+            // Change signal handler, to notice signals during wait
             pcntl_signal($signal, function ($signal) use ($handler) {
-                $this->gotSignalWhileSelecting = $signal;
+                $this->gotSignalWhileWaiting = $signal;
 
                 // Call original handler as well, to keep original behaviour
                 if (is_callable($handler)) {
@@ -128,7 +128,7 @@ abstract class AbstractIO
             });
         }
 
-        $this->gotSignalWhileSelecting = null;
+        $this->gotSignalWhileWaiting = null;
     }
 
     /**
@@ -137,21 +137,21 @@ abstract class AbstractIO
      *
      * @return int|null Signal number if received or null if no signal was received
      */
-    protected function afterSelect() {
+    protected function check_signal_while_select() {
         // Check whether pcntl is available
         if (false == function_exists('pcntl_signal_get_handler')) {
             return null;
         }
 
         // Reset signal handlers to original ones
-        foreach (self::SIGNALS_INTERRUPTING_SELECT as $signal) {
+        foreach (self::SIGNALS_INTERRUPTING_WAIT as $signal) {
             pcntl_signal($signal, isset($this->originalSignalHandlers[$signal]) ? $this->originalSignalHandlers[$signal] : SIG_DFL);
         }
 
-        $got_signal = $this->gotSignalWhileSelecting;
+        $got_signal = $this->gotSignalWhileWaiting;
 
         $this->originalSignalHandlers = null;
-        $this->gotSignalWhileSelecting = null;
+        $this->gotSignalWhileWaiting = null;
 
         return $got_signal;
     }
@@ -168,12 +168,12 @@ abstract class AbstractIO
         $this->check_heartbeat();
         $this->setErrorHandler();
         try {
-            $this->prepareSelect();
+            $this->prepare_select_signal_catcher();
             $result = $this->do_select($sec, $usec);
 
-            $received_signal = $this->afterSelect();
+            $received_signal = $this->check_signal_while_select();
             if (null !== $received_signal) {
-                throw new AMQPIOWaitInterruptedException('Got signal while selecting: ' . $received_signal);
+                throw new AMQPIOWaitInterruptedException('Got signal while waiting: ' . $received_signal);
             }
 
             $this->throwOnError();
