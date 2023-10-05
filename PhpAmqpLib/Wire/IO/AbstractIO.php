@@ -88,7 +88,41 @@ abstract class AbstractIO
         $this->check_heartbeat();
         $this->setErrorHandler();
         try {
-            $result = $this->do_select($sec, $usec);
+            do {
+                // Setup signal catcher
+                $signals = [SIGTERM, SIGQUIT, SIGINT];
+                $signal_occurred = false;
+
+                $original_handlers = [];
+                foreach ($signals as $signal) {
+                    $handler = pcntl_signal_get_handler($signal);
+
+                    // Save original handlers
+                    if (is_callable($handler)) {
+                        $original_handlers[$signal] = $handler;
+                    }
+
+                    // Change signal handler, to notice signals during select
+                    pcntl_signal($signal, function ($signal) use ($handler, &$signal_occurred) {
+                        $signal_occurred = true;
+
+                        // Call original handler, to keep desired behaviour
+                        if (is_callable($handler)) {
+                            $handler($signal);
+                        }
+                    });
+                }
+
+                // Do actual select
+                $result = $this->do_select($sec, $usec);
+
+                // Cleanup signal catcher
+                foreach ($signals as $signal) {
+                    $handler = isset($original_handlers[$signal]) ? $original_handlers[$signal] : SIG_DFL;
+                    pcntl_signal($signal, $handler);
+                }
+            } while ($signal_occurred);
+
             $this->throwOnError();
         } catch (\ErrorException $e) {
             throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
