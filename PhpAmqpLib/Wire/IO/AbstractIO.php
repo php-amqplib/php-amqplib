@@ -102,12 +102,9 @@ abstract class AbstractIO
             return;
         }
 
-        if (null !== $this->originalSignalHandlers) {
-            throw new AMQPIOException('The originalSignalHandlers property is not null. The afterSelect method might not have been called.');
-        }
-
-        if (null !== $this->gotSignalWhileSelecting) {
-            throw new AMQPIOException('The gotSignalWhileSelecting property is not null. The afterSelect method might not have been called.');
+        if (null !== $this->originalSignalHandlers || null !== $this->gotSignalWhileSelecting) {
+            // This could happen in a race condition -> when a signal is received, while we are in the signal handler
+            return;
         }
 
         $this->originalSignalHandlers = [];
