@@ -101,7 +101,8 @@ abstract class AbstractIO
                     $handler = pcntl_signal_get_handler($signal);
 
                     // Save original handlers
-                    if (is_callable($handler)) {
+                    $original_handlers[$signal] = SIG_DFL;
+                    if (is_callable($handler) || SIG_IGN === $handler) {
                         $original_handlers[$signal] = $handler;
                     }
 
@@ -121,8 +122,7 @@ abstract class AbstractIO
 
                 // Cleanup signal catcher
                 foreach ($signals as $signal) {
-                    $handler = isset($original_handlers[$signal]) ? $original_handlers[$signal] : SIG_DFL;
-                    pcntl_signal($signal, $handler);
+                    pcntl_signal($signal, $original_handlers[$signal]);
                 }
             } while ($signal_occurred && false === $result);
 
