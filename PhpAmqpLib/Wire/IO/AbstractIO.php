@@ -144,7 +144,7 @@ abstract class AbstractIO
             return;
         }
 
-        // Cleanup signal catcher
+        // Reset signal handlers to original ones
         foreach (self::SIGNALS_INTERRUPTING_SELECT as $signal) {
             pcntl_signal($signal, $this->originalSignalHandlers[$signal]);
         }
