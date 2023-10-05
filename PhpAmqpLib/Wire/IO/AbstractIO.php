@@ -6,11 +6,18 @@ use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
+use PhpAmqpLib\Exception\AMQPIOException;
 use PhpAmqpLib\Wire\AMQPWriter;
 
 abstract class AbstractIO
 {
     const BUFFER_SIZE = 8192;
+
+    const SIGNALS_INTERRUPTING_SELECT = [
+        SIGTERM,
+        SIGQUIT,
+        SIGINT
+    ];
 
     /** @var null|AMQPConnectionConfig */
     protected $config;
@@ -51,6 +58,12 @@ abstract class AbstractIO
     /** @var bool */
     protected $canDispatchPcntlSignal = false;
 
+    /** @var array|null */
+    protected $originalSignalHandlers = null;
+
+    /** @var bool|null */
+    protected $gotSignalWhileSelecting = null;
+
     /**
      * @param int $len
      * @return string
@@ -77,6 +90,70 @@ abstract class AbstractIO
     abstract public function close();
 
     /**
+     * Setup signal catcher
+     * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
+     *
+     * @return void
+     * @throws \PhpAmqpLib\Exception\AMQPIOException
+     */
+    protected function prepareSelect() {
+        // Check whether pcntl is available
+        if (false == function_exists('pcntl_signal_get_handler')) {
+            return;
+        }
+
+        if (null !== $this->originalSignalHandlers) {
+            throw new AMQPIOException('The originalSignalHandlers property is not null. The afterSelect method might not have been called.');
+        }
+
+        if (null !== $this->gotSignalWhileSelecting) {
+            throw new AMQPIOException('The gotSignalWhileSelecting property is not null. The afterSelect method might not have been called.');
+        }
+
+        $this->originalSignalHandlers = [];
+        foreach (self::SIGNALS_INTERRUPTING_SELECT as $signal) {
+            $handler = pcntl_signal_get_handler($signal);
+
+            // Save original handlers
+            $this->originalSignalHandlers[$signal] = SIG_DFL;
+            if (is_callable($handler) || SIG_IGN === $handler) {
+                $this->originalSignalHandlers[$signal] = $handler;
+            }
+
+            // Change signal handler, to notice signals during select
+            pcntl_signal($signal, function ($signal) use ($handler) {
+                $this->gotSignalWhileSelecting = true;
+
+                // Call original handler as well, to keep original behaviour
+                if (is_callable($handler)) {
+                    $handler($signal);
+                }
+            });
+        }
+    }
+
+    /**
+     * Cleanup signal catcher
+     * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
+     *
+     * @return void
+     */
+    protected function afterSelect() {
+        // Check whether pcntl is available
+        if (false == function_exists('pcntl_signal_get_handler')) {
+            return;
+        }
+
+        // Cleanup signal catcher
+        foreach (self::SIGNALS_INTERRUPTING_SELECT as $signal) {
+            pcntl_signal($signal, $this->originalSignalHandlers[$signal]);
+        }
+
+        $this->originalSignalHandlers = null;
+        $this->gotSignalWhileSelecting = null;
+    }
+
+    /**
      * @param int|null $sec
      * @param int $usec
      * @return int
@@ -88,42 +165,12 @@ abstract class AbstractIO
         $this->check_heartbeat();
         $this->setErrorHandler();
         try {
-            /**
-             * Setup signal catcher
-             * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
-             */
-            $signals = [SIGTERM, SIGQUIT, SIGINT];
-
-            $original_handlers = [];
-            foreach ($signals as $signal) {
-                $handler = pcntl_signal_get_handler($signal);
-
-                // Save original handlers
-                $original_handlers[$signal] = SIG_DFL;
-                if (is_callable($handler) || SIG_IGN === $handler) {
-                    $original_handlers[$signal] = $handler;
-                }
-
-                // Change signal handler, to notice signals during select
-                pcntl_signal($signal, function ($signal) use ($handler, &$signal_occurred) {
-                    $signal_occurred = true;
-
-                    // Call original handler, to keep desired behaviour
-                    if (is_callable($handler)) {
-                        $handler($signal);
-                    }
-                });
-            }
-
+            $this->prepareSelect();
             do {
-                $signal_occurred = false;
+                $this->gotSignalWhileSelecting = false;
                 $result = $this->do_select($sec, $usec);
-            } while ($signal_occurred && false === $result);
-
-            // Cleanup signal catcher
-            foreach ($signals as $signal) {
-                pcntl_signal($signal, $original_handlers[$signal]);
-            }
+            } while ($this->gotSignalWhileSelecting && false === $result);
+            $this->afterSelect();
 
             $this->throwOnError();
         } catch (\ErrorException $e) {
