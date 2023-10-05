@@ -143,11 +143,7 @@ abstract class AbstractIO
 
         // Reset signal handlers to original ones
         foreach (self::SIGNALS_INTERRUPTING_SELECT as $signal) {
-            if (!isset($this->originalSignalHandlers[$signal])) {
-                continue;
-            }
-
-            pcntl_signal($signal, $this->originalSignalHandlers[$signal]);
+            pcntl_signal($signal, isset($this->originalSignalHandlers[$signal]) ? $this->originalSignalHandlers[$signal] : SIG_DFL);
         }
 
         $this->originalSignalHandlers = null;
