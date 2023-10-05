@@ -88,43 +88,42 @@ abstract class AbstractIO
         $this->check_heartbeat();
         $this->setErrorHandler();
         try {
-            do {
-                /**
-                 * Setup signal catcher
-                 * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
-                 */
-                $signals = [SIGTERM, SIGQUIT, SIGINT];
-                $signal_occurred = false;
+            /**
+             * Setup signal catcher
+             * (Inspired by: https://github.com/php-enqueue/enqueue-dev/blob/master/pkg/amqp-tools/SignalSocketHelper.php)
+             */
+            $signals = [SIGTERM, SIGQUIT, SIGINT];
 
-                $original_handlers = [];
-                foreach ($signals as $signal) {
-                    $handler = pcntl_signal_get_handler($signal);
+            $original_handlers = [];
+            foreach ($signals as $signal) {
+                $handler = pcntl_signal_get_handler($signal);
 
-                    // Save original handlers
-                    $original_handlers[$signal] = SIG_DFL;
-                    if (is_callable($handler) || SIG_IGN === $handler) {
-                        $original_handlers[$signal] = $handler;
+                // Save original handlers
+                $original_handlers[$signal] = SIG_DFL;
+                if (is_callable($handler) || SIG_IGN === $handler) {
+                    $original_handlers[$signal] = $handler;
+                }
+
+                // Change signal handler, to notice signals during select
+                pcntl_signal($signal, function ($signal) use ($handler, &$signal_occurred) {
+                    $signal_occurred = true;
+
+                    // Call original handler, to keep desired behaviour
+                    if (is_callable($handler)) {
+                        $handler($signal);
                     }
+                });
+            }
 
-                    // Change signal handler, to notice signals during select
-                    pcntl_signal($signal, function ($signal) use ($handler, &$signal_occurred) {
-                        $signal_occurred = true;
-
-                        // Call original handler, to keep desired behaviour
-                        if (is_callable($handler)) {
-                            $handler($signal);
-                        }
-                    });
-                }
-
-                // Do actual select
+            do {
+                $signal_occurred = false;
                 $result = $this->do_select($sec, $usec);
-
-                // Cleanup signal catcher
-                foreach ($signals as $signal) {
-                    pcntl_signal($signal, $original_handlers[$signal]);
-                }
             } while ($signal_occurred && false === $result);
+
+            // Cleanup signal catcher
+            foreach ($signals as $signal) {
+                pcntl_signal($signal, $original_handlers[$signal]);
+            }
 
             $this->throwOnError();
         } catch (\ErrorException $e) {
