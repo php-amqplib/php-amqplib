@@ -100,7 +100,7 @@ class AMQPConnectionConfigTest extends TestCase
 
         $connection = AMQPConnectionFactory::create($config);
 
-        $this->assertEquals($connection->isConnected(), true);
+        $this->assertEquals(true, $connection->isConnected());
     }
 
     /**
@@ -122,7 +122,7 @@ class AMQPConnectionConfigTest extends TestCase
 
         $connection = AMQPConnectionFactory::create($config);
 
-        $this->assertEquals($connection->isConnected(), true);
+        $this->assertEquals(true, $connection->isConnected());
     }
 
     /**
