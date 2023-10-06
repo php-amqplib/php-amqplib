@@ -61,7 +61,7 @@ abstract class AbstractIO
     /** @var array|null */
     protected $originalSignalHandlers = null;
 
-    /** @var int|null */
+    /** @var int|false|null */
     protected $gotSignalWhileWaiting = null;
 
     /**
@@ -128,7 +128,7 @@ abstract class AbstractIO
             });
         }
 
-        $this->gotSignalWhileWaiting = null;
+        $this->gotSignalWhileWaiting = false;
     }
 
     /**
