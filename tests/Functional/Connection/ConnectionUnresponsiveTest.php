@@ -24,7 +24,7 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
     public function must_throw_exception_on_completely_blocked_connection($type)
     {
         self::$blocked = false;
-        $connection = $this->conection_create($type);
+        $connection = $this->connection_create($type);
         $channel = $connection->channel();
         $this->assertTrue($channel->is_open());
         $this->queue_bind($channel, $exchange_name = 'test_exchange_broken', $queue_name);
@@ -65,7 +65,7 @@ class ConnectionUnresponsiveTest extends AbstractConnectionTest
         $connection = null;
         $exception = null;
         try {
-            $connection = $this->conection_create(
+            $connection = $this->connection_create(
                 $type,
                 $proxy->getHost(),
                 $proxy->getPort(),
