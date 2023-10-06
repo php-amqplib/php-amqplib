@@ -40,7 +40,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
             'keepalive' => $keepalive,
         );
         /** @var AbstractConnection $connection */
-        $connection = $this->conection_create(
+        $connection = $this->connection_create(
             $type,
             $proxy->getHost(),
             $proxy->getPort(),
@@ -84,7 +84,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
     {
         $proxy = $this->create_proxy();
 
-        $connection = $this->conection_create(
+        $connection = $this->connection_create(
             $type,
             $proxy->getHost(),
             $proxy->getPort()
@@ -234,7 +234,7 @@ class ConnectionClosedTest extends AbstractConnectionTest
         $timeout = 1;
         $proxy = $this->create_proxy();
         /** @var AbstractConnection $connection */
-        $connection = $this->conection_create(
+        $connection = $this->connection_create(
             $type,
             $proxy->getHost(),
             $proxy->getPort(),

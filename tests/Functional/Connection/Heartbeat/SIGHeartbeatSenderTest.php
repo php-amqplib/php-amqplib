@@ -29,7 +29,7 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
 
     protected function setUpCompat()
     {
-        $this->connection = $this->conection_create(
+        $this->connection = $this->connection_create(
             'stream',
             HOST,
             PORT,
