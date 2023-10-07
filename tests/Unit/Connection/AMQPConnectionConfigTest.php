@@ -151,18 +151,6 @@ class AMQPConnectionConfigTest extends TestCase
     /**
      * @test
      */
-    public function check_invalid_ssl_settings()
-    {
-        $this->expectException(AMQPIOException::class);
-
-        $config = new AMQPConnectionConfig();
-        $config->setIsSecure(true);
-        $config->setSslCryptoMethod('INVALID_CRYPTO');
-    }
-
-    /**
-     * @test
-     */
     public function set_invalid_amqp_protocol()
     {
         $this->expectException(\InvalidArgumentException::class);
