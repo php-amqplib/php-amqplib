@@ -14,7 +14,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
 {
     public static $blocked = false;
 
-    protected function conection_create(
+    protected function connection_create(
         string $type = 'stream',
         string $host = HOST,
         int $port = PORT,
@@ -68,7 +68,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
      */
     protected function channel_create($connectionType, $options = [])
     {
-        $connection = $this->conection_create($connectionType, HOST, PORT, $options);
+        $connection = $this->connection_create($connectionType, HOST, PORT, $options);
         $channel = $connection->channel();
         $this->assertTrue($channel->is_open());
 

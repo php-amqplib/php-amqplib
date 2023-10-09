@@ -100,7 +100,7 @@ class AMQPConnectionConfigTest extends TestCase
 
         $connection = AMQPConnectionFactory::create($config);
 
-        $this->assertEquals($connection->isConnected(), true);
+        $this->assertEquals(true, $connection->isConnected());
     }
 
     /**
@@ -122,6 +122,55 @@ class AMQPConnectionConfigTest extends TestCase
 
         $connection = AMQPConnectionFactory::create($config);
 
-        $this->assertEquals($connection->isConnected(), true);
+        $this->assertEquals(true, $connection->isConnected());
+    }
+
+    /**
+     * @test
+     */
+    public function check_invalid_port_number()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Port number must be greater than 0');
+
+        $config = new AMQPConnectionConfig();
+        $config->setPort(-1);
+    }
+
+    /**
+     * @test
+     */
+    public function check_invalid_login_method()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $config = new AMQPConnectionConfig();
+        $config->setLoginMethod('INVALID_METHOD');
+    }
+
+    /**
+     * @test
+     */
+    public function set_invalid_amqp_protocol()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('AMQP protocol can be either "0.9.1" or "8.0"');
+
+        $config = new AMQPConnectionConfig();
+        $protocol = "invalid_protocol";
+        $config->setAMQPProtocol($protocol);
+    }
+
+    /**
+     * @test
+     */
+    public function set_invalid_stream_context()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resource must be valid stream context');
+
+        $config = new AMQPConnectionConfig();
+        $invalidResource = tmpfile();
+        $config->setStreamContext($invalidResource);
     }
 }

@@ -29,12 +29,12 @@ class Bug256Test extends AbstractConnectionTest
 
     protected function setUpCompat()
     {
-        $this->connection = $this->conection_create('socket');
+        $this->connection = $this->connection_create('socket');
         $this->channel = $this->connection->channel();
 
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, true, false);
 
-        $this->connection2 = $this->conection_create('stream');
+        $this->connection2 = $this->connection_create('stream');
         $this->channel2 = $this->connection->channel();
 
         list($this->queueName, ,) = $this->channel2->queue_declare();
