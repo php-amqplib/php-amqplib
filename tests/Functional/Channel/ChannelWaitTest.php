@@ -5,6 +5,8 @@ namespace PhpAmqpLib\Tests\Functional\Channel;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPSocketConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Exception\AMQPNoDataException;
+use PhpAmqpLib\Exception\AMQPTimeoutException;
 use PhpAmqpLib\Message\AMQPMessage;
 use PHPUnit\Framework\TestCase;
 
@@ -38,13 +40,41 @@ class ChannelWaitTest extends TestCase
 
     /**
      * @test
+     * @group signals
+     * @covers AMQPIOReader::wait()
+     */
+    public function should_wait_until_timeout_after_signal(): void
+    {
+        $factory = $this->channelFactory(true, 30, 15);
+        $channel = $factory();
+
+        $exception = null;
+        $started = microtime(true);
+        $this->deferSignal(1);
+        $this->deferSignal(2);
+        try {
+            $result = $channel->wait(null, false, 3);
+        } catch (\Throwable $exception) {
+        }
+
+        $took = microtime(true) - $started;
+        self::assertGreaterThan(2, $took);
+        self::assertLessThan(4, $took);
+        self::assertInstanceOf(AMQPTimeoutException::class, $exception);
+
+        $this->closeChannel($channel);
+        $this->assertNull($result);
+    }
+
+    /**
+     * @test
      * @small
      * @dataProvider provide_channels
      * @param callable $factory
      */
     public function should_throw_timeout_exception($factory)
     {
-        $this->expectException(\PhpAmqpLib\Exception\AMQPTimeoutException::class);
+        $this->expectException(AMQPTimeoutException::class);
 
         $channel = $factory();
         $channel->wait(null, false, 0.01);

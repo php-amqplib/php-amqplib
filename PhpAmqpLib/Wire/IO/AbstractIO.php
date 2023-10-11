@@ -6,6 +6,7 @@ use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Exception\AMQPIOWaitException;
+use PhpAmqpLib\Exception\AMQPRuntimeException;
 use PhpAmqpLib\Wire\AMQPWriter;
 
 abstract class AbstractIO
@@ -55,7 +56,7 @@ abstract class AbstractIO
      * @param int $len
      * @return string
      * @throws \PhpAmqpLib\Exception\AMQPIOException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws AMQPRuntimeException
      * @throws \PhpAmqpLib\Exception\AMQPSocketException
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
@@ -80,8 +81,9 @@ abstract class AbstractIO
      * @param int|null $sec
      * @param int $usec
      * @return int
-     * @throws \PhpAmqpLib\Exception\AMQPIOException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws AMQPIOWaitException
+     * @throws AMQPRuntimeException
+     * @throws AMQPConnectionClosedException
      */
     public function select(?int $sec, int $usec = 0)
     {
@@ -120,7 +122,7 @@ abstract class AbstractIO
      * Set ups the connection.
      * @return void
      * @throws \PhpAmqpLib\Exception\AMQPIOException
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws AMQPRuntimeException
      */
     abstract public function connect();
 
@@ -137,7 +139,7 @@ abstract class AbstractIO
     /**
      * Heartbeat logic: check connection health here
      * @return void
-     * @throws \PhpAmqpLib\Exception\AMQPRuntimeException
+     * @throws AMQPRuntimeException
      */
     public function check_heartbeat()
     {
