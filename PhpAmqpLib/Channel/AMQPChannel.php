@@ -1266,10 +1266,12 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Specifies QoS
-     *
-     * @param int $prefetch_size
-     * @param int $prefetch_count
-     * @param bool $a_global
+     * 
+     * See https://www.rabbitmq.com/consumer-prefetch.html#overview for details
+     * 
+     * @param int $prefetch_size Default is 0 (Alias for unlimited)
+     * @param int $prefetch_count Default is 0 (Alias for unlimited)
+     * @param bool $global Default is false, prefetch size and count are applied to each channel consumer separately
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */

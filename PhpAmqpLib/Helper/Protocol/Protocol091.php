@@ -581,9 +581,13 @@ class Protocol091
     }
 
     /**
-     * @param int $prefetch_size
-     * @param int $prefetch_count
-     * @param bool $global
+     * Specifies QoS
+     * 
+     * See https://www.rabbitmq.com/consumer-prefetch.html#overview for details
+     * 
+     * @param int $prefetch_size Default is 0 (Alias for unlimited)
+     * @param int $prefetch_count Default is 0 (Alias for unlimited)
+     * @param bool $global Default is false, prefetch size and count are applied to each channel consumer separately
      * @return array
      */
     public function basicQos($prefetch_size = 0, $prefetch_count = 0, $global = false)
