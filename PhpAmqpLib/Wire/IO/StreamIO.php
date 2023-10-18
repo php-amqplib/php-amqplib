@@ -251,9 +251,11 @@ class StreamIO extends AbstractIO
             // http://comments.gmane.org/gmane.comp.encryption.openssl.user/4361
             try {
                 // check stream and prevent from high CPU usage
-                $this->select_write();
-                $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
-                $result = fwrite($this->sock, $buffer);
+                $result = 0;
+                if ($this->select_write()) {
+                    $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                    $result = fwrite($this->sock, $buffer);
+                }
                 $this->throwOnError();
             } catch (\ErrorException $e) {
                 $code = $this->last_error['errno'];
