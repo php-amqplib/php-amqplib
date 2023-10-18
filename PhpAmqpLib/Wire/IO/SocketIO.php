@@ -186,9 +186,11 @@ class SocketIO extends AbstractIO
         while ($written < $len) {
             $this->setErrorHandler();
             try {
-                $this->select_write();
-                $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
-                $result = socket_write($this->sock, $buffer);
+                $result = 0;
+                if ($this->select_write()) {
+                    $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                    $result = socket_write($this->sock, $buffer);
+                }
                 $this->throwOnError();
             } catch (\ErrorException $e) {
                 $code = socket_last_error($this->sock);
