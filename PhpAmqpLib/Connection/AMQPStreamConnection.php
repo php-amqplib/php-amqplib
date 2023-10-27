@@ -22,7 +22,7 @@ class AMQPStreamConnection extends AbstractConnection
      * @param bool $keepalive
      * @param int $heartbeat
      * @param float $channel_rpc_timeout
-     * @param string|null $ssl_protocol @deprecated
+     * @param string|AMQPConnectionConfig|null $ssl_protocol @deprecated
      * @param AMQPConnectionConfig|null $config
      * @throws \Exception
      */
