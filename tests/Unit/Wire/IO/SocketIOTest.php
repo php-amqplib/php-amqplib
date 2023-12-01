@@ -27,6 +27,19 @@ class SocketIOTest extends TestCase
     /**
      * @test
      */
+    public function connect_ipv6()
+    {
+        $socketIO = new SocketIO(HOST6, PORT, 20, true, 20, 9);
+        $socketIO->connect();
+        $ready = $socketIO->select(0, 0);
+        $this->assertEquals(0, $ready);
+
+        return $socketIO;
+    }
+
+    /**
+     * @test
+     */
     public function connect_with_invalid_credentials()
     {
         $this->expectException(\PhpAmqpLib\Exception\AMQPIOException::class);

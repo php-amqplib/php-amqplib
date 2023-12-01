@@ -34,10 +34,9 @@ class SocketIO extends AbstractIO
         $write_timeout = null,
         $heartbeat = 0,
         ?AMQPConnectionConfig $config = null
-    )
-    {
+    ) {
         $this->config = $config;
-        $this->host = $this->prepareHost();
+        $this->host = str_replace(['[', ']'], '', $host);
         $this->port = $port;
         $this->read_timeout = (float)$read_timeout;
         $this->write_timeout = (float)($write_timeout ?: $read_timeout);
@@ -45,6 +44,7 @@ class SocketIO extends AbstractIO
         $this->initial_heartbeat = $heartbeat;
         $this->keepalive = $keepalive;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
+        $this->isIpv6 = $this->isIpv6();
 
         /*
             TODO FUTURE enable this check
@@ -316,16 +316,14 @@ class SocketIO extends AbstractIO
         socket_clear_error($this->sock);
     }
 
-    private function prepareHost(): string
+    private function isIpv6(): string
     {
-        $this->host = str_replace(['[', ']'], '', $this->host);
+        $ipv6 = filter_var($this->host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 
-        if (filter_var($this->host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
-            $this->isIpv6 = true;
-        } elseif (checkdnsrr($this->host, 'AAAA')) {
-            $this->isIpv6 = true;
+        if ($ipv6 !== false || checkdnsrr($this->host, 'AAAA')) {
+            return true;
         }
 
-        return $this->host;
+        return false;
     }
 }

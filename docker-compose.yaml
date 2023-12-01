@@ -1,4 +1,10 @@
-version: '3'
+version: '3.4'
+
+x-networks: &networks
+  networks:
+    - default
+    - ip6net
+
 services:
   php:
     build: ./docker/php
@@ -13,6 +19,7 @@ services:
       - rabbitmq
       - proxy
     entrypoint: ['tail', '-f', '/dev/null']
+    <<: *networks
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -24,6 +31,7 @@ services:
         - .:/src
     environment:
         - RABBITMQ_CONFIG_FILE=/src/tests/rabbitmq.conf
+    <<: *networks
 
   proxy:
     image: ghcr.io/shopify/toxiproxy:latest
@@ -32,3 +40,12 @@ services:
       - "5673:5673"
     depends_on:
       - rabbitmq
+    <<: *networks
+
+networks:
+  default:
+  ip6net:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: 2002:db8::/64
