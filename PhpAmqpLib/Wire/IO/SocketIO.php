@@ -15,6 +15,8 @@ class SocketIO extends AbstractIO
     /** @var null|resource */
     private $sock;
 
+    private $isIpv6 = false;
+
     /**
      * @param string $host
      * @param int $port
@@ -32,9 +34,10 @@ class SocketIO extends AbstractIO
         $write_timeout = null,
         $heartbeat = 0,
         ?AMQPConnectionConfig $config = null
-    ) {
+    )
+    {
         $this->config = $config;
-        $this->host = $host;
+        $this->host = $this->prepareHost();
         $this->port = $port;
         $this->read_timeout = (float)$read_timeout;
         $this->write_timeout = (float)($write_timeout ?: $read_timeout);
@@ -60,7 +63,7 @@ class SocketIO extends AbstractIO
      */
     public function connect()
     {
-        $this->sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $this->sock = socket_create(!$this->isIpv6 ? AF_INET : AF_INET6, SOCK_STREAM, SOL_TCP);
 
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->write_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
@@ -311,5 +314,18 @@ class SocketIO extends AbstractIO
     {
         parent::setErrorHandler();
         socket_clear_error($this->sock);
+    }
+
+    private function prepareHost(): string
+    {
+        $this->host = str_replace(['[', ']'], '', $this->host);
+
+        if (filter_var($this->host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+            $this->isIpv6 = true;
+        } elseif (checkdnsrr($this->host, 'AAAA')) {
+            $this->isIpv6 = true;
+        }
+
+        return $this->host;
     }
 }
