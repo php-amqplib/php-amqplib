@@ -59,7 +59,5 @@ class StreamIOTest extends TestCase
         $streamIO->connect();
         $ready = $streamIO->select(0, 0);
         $this->assertEquals(0, $ready);
-
-        return $streamIO;
     }
 }

@@ -15,8 +15,6 @@ class SocketIO extends AbstractIO
     /** @var null|resource */
     private $sock;
 
-    private $isIpv6 = false;
-
     /**
      * @param string $host
      * @param int $port
@@ -44,7 +42,6 @@ class SocketIO extends AbstractIO
         $this->initial_heartbeat = $heartbeat;
         $this->keepalive = $keepalive;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
-        $this->isIpv6 = $this->isIpv6();
 
         /*
             TODO FUTURE enable this check
@@ -63,7 +60,7 @@ class SocketIO extends AbstractIO
      */
     public function connect()
     {
-        $this->sock = socket_create(!$this->isIpv6 ? AF_INET : AF_INET6, SOCK_STREAM, SOL_TCP);
+        $this->sock = socket_create(!$this->isIpv6() ? AF_INET : AF_INET6, SOCK_STREAM, SOL_TCP);
 
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->write_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));

@@ -33,8 +33,6 @@ class SocketIOTest extends TestCase
         $socketIO->connect();
         $ready = $socketIO->select(0, 0);
         $this->assertEquals(0, $ready);
-
-        return $socketIO;
     }
 
     /**
