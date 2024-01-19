@@ -26,7 +26,7 @@ class ConnectionResourceLeakTest extends AbstractConnectionTest
             $connections[] = $connection;
         }
 
-        self::assertSame($max, $this->getResourcesCount() - $previousNumberOfResources);
+        self::assertSame(0, $this->getResourcesCount() - $previousNumberOfResources);
     }
 
     private function getResourcesCount(): int

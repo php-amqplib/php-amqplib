@@ -53,10 +53,6 @@ class StreamIO extends AbstractIO
         }
          */
 
-        if (!is_resource($context) || get_resource_type($context) !== 'stream-context') {
-            $context = stream_context_create();
-        }
-
         $this->host = $host;
         $this->port = $port;
         $this->connection_timeout = $connection_timeout;
@@ -67,15 +63,6 @@ class StreamIO extends AbstractIO
         $this->heartbeat = $heartbeat;
         $this->initial_heartbeat = $heartbeat;
         $this->canDispatchPcntlSignal = $this->isPcntlSignalEnabled();
-
-        stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
-
-        $options = stream_context_get_options($this->context);
-        if (!empty($options['ssl']) && !isset($options['ssl']['crypto_method'])) {
-            if (!stream_context_set_option($this->context, 'ssl', 'crypto_method', STREAM_CRYPTO_METHOD_ANY_CLIENT)) {
-                throw new AMQPIOException("Can not set ssl.crypto_method stream context option");
-            }
-        }
     }
 
     /**
@@ -91,6 +78,7 @@ class StreamIO extends AbstractIO
             $this->port
         );
 
+        $this->setupContext();
         $this->setErrorHandler();
 
         try {
@@ -155,6 +143,22 @@ class StreamIO extends AbstractIO
         }
 
         $this->heartbeat = $this->initial_heartbeat;
+    }
+
+    private function setupContext(): void
+    {
+        if (!is_resource($this->context) || get_resource_type($this->context) !== 'stream-context') {
+            $this->context = stream_context_create();
+        }
+
+        stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
+
+        $options = stream_context_get_options($this->context);
+        if (!empty($options['ssl']) && !isset($options['ssl']['crypto_method'])) {
+            if (!stream_context_set_option($this->context, 'ssl', 'crypto_method', STREAM_CRYPTO_METHOD_ANY_CLIENT)) {
+                throw new AMQPIOException("Can not set ssl.crypto_method stream context option");
+            }
+        }
     }
 
     /**
