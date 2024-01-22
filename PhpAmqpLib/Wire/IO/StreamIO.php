@@ -78,7 +78,7 @@ class StreamIO extends AbstractIO
             $this->port
         );
 
-        $this->setupContext();
+        $context = $this->setupContext();
         $this->setErrorHandler();
 
         try {
@@ -88,7 +88,7 @@ class StreamIO extends AbstractIO
                 $errstr,
                 $this->connection_timeout,
                 STREAM_CLIENT_CONNECT,
-                $this->context
+                $context
             );
             $this->throwOnError();
         } catch (\ErrorException $e) {
@@ -137,7 +137,7 @@ class StreamIO extends AbstractIO
             $this->enable_keepalive();
         }
 
-        $options = stream_context_get_options($this->context);
+        $options = stream_context_get_options($context);
         if (isset($options['ssl']['crypto_method'])) {
             $this->enable_crypto();
         }
@@ -145,20 +145,27 @@ class StreamIO extends AbstractIO
         $this->heartbeat = $this->initial_heartbeat;
     }
 
-    private function setupContext(): void
+    /**
+     * @return resource
+     * @throws AMQPIOException
+     */
+    private function setupContext()
     {
-        if (!is_resource($this->context) || get_resource_type($this->context) !== 'stream-context') {
-            $this->context = stream_context_create();
+        $context = $this->context;
+        if (!is_resource($context) || get_resource_type($context) !== 'stream-context') {
+            $context = stream_context_create();
         }
 
-        stream_context_set_option($this->context, 'socket', 'tcp_nodelay', true);
+        stream_context_set_option($context, 'socket', 'tcp_nodelay', true);
 
-        $options = stream_context_get_options($this->context);
+        $options = stream_context_get_options($context);
         if (!empty($options['ssl']) && !isset($options['ssl']['crypto_method'])) {
-            if (!stream_context_set_option($this->context, 'ssl', 'crypto_method', STREAM_CRYPTO_METHOD_ANY_CLIENT)) {
+            if (!stream_context_set_option($context, 'ssl', 'crypto_method', STREAM_CRYPTO_METHOD_ANY_CLIENT)) {
                 throw new AMQPIOException("Can not set ssl.crypto_method stream context option");
             }
         }
+
+        return $context;
     }
 
     /**
