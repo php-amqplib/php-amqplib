@@ -46,7 +46,7 @@ abstract class AbstractIO
     /** @var int|float */
     protected $last_write;
 
-    /** @var array|null */
+    /** @var array<string, mixed>|null */
     protected $last_error;
 
     /** @var bool */
@@ -159,7 +159,7 @@ abstract class AbstractIO
     /**
      * @throws \PhpAmqpLib\Exception\AMQPHeartbeatMissedException
      */
-    protected function checkBrokerHeartbeat()
+    protected function checkBrokerHeartbeat(): void
     {
         if ($this->heartbeat > 0 && ($this->last_read > 0 || $this->last_write > 0)) {
             $lastActivity = $this->getLastActivity();
@@ -252,20 +252,16 @@ abstract class AbstractIO
      * @param  string $errstr
      * @param  string $errfile
      * @param  int $errline
-     * @param  array $errcontext
      * @return void
      */
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function error_handler($errno, $errstr, $errfile, $errline): void
     {
         // throwing an exception in an error handler will halt execution
         //   set the last error and continue
-        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline', 'errcontext');
+        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline');
     }
 
-    /**
-     * @return bool
-     */
-    protected function isPcntlSignalEnabled()
+    protected function isPcntlSignalEnabled(): bool
     {
         return extension_loaded('pcntl')
             && function_exists('pcntl_signal_dispatch')

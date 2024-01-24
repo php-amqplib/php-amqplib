@@ -23,7 +23,7 @@ class StreamIO extends AbstractIO
      * @param int $port
      * @param float $connection_timeout
      * @param float $read_write_timeout
-     * @param resource|array|null $context
+     * @param resource|null $context
      * @param bool $keepalive
      * @param int $heartbeat
      * @param string|null $ssl_protocol @deprecated
@@ -136,7 +136,7 @@ class StreamIO extends AbstractIO
 
         // php cannot capture signals while streams are blocking
         if ($this->canDispatchPcntlSignal) {
-            stream_set_blocking($this->sock, 0);
+            stream_set_blocking($this->sock, false);
             stream_set_write_buffer($this->sock, 0);
             if (function_exists('stream_set_read_buffer')) {
                 stream_set_read_buffer($this->sock, 0);
@@ -305,7 +305,7 @@ class StreamIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function error_handler($errno, $errstr, $errfile, $errline): void
     {
         $code = $this->extract_error_code($errstr);
         $constants = SocketConstants::getInstance();
@@ -318,7 +318,7 @@ class StreamIO extends AbstractIO
                 return;
         }
 
-        parent::error_handler($code > 0 ? $code : $errno, $errstr, $errfile, $errline, $errcontext);
+        parent::error_handler($code > 0 ? $code : $errno, $errstr, $errfile, $errline);
     }
 
     public function close()
@@ -333,7 +333,8 @@ class StreamIO extends AbstractIO
     }
 
     /**
-     * @inheritdoc
+     * @deprecated
+     * @return null|resource|\Socket
      */
     public function getSocket()
     {
@@ -386,7 +387,7 @@ class StreamIO extends AbstractIO
     /**
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      */
-    protected function enable_keepalive()
+    protected function enable_keepalive(): void
     {
         if (!function_exists('socket_import_stream')) {
             throw new AMQPIOException('Can not enable keepalive: function socket_import_stream does not exist');
