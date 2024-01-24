@@ -21,8 +21,9 @@ abstract class AbstractConnectionTest extends TestCaseCompat
         array $options = array()
     ): AbstractConnection {
         $timeout = $options['timeout'] ?? 1;
+        $lazy = $options['lazy'] ?? false;
         $config = new AMQPConnectionConfig();
-        $config->setIsLazy(false);
+        $config->setIsLazy($lazy);
         if ($type === 'ssl') {
             $config->setIoType(AMQPConnectionConfig::IO_TYPE_STREAM);
             $config->setIsSecure(true);
@@ -49,7 +50,9 @@ abstract class AbstractConnectionTest extends TestCaseCompat
         $config->setSendBufferSize(16384);
 
         $connection = AMQPConnectionFactory::create($config);
-        $this->assertTrue($connection->isConnected());
+        if (!$lazy) {
+            $this->assertTrue($connection->isConnected());
+        }
 
         return $connection;
     }
