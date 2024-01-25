@@ -12,7 +12,7 @@ use PhpAmqpLib\Helper\SocketConstants;
 
 class SocketIO extends AbstractIO
 {
-    /** @var null|resource */
+    /** @var null|resource|\Socket */
     private $sock;
 
     /**
@@ -100,7 +100,8 @@ class SocketIO extends AbstractIO
     }
 
     /**
-     * @inheritdoc
+     * @deprecated
+     * @return null|resource|\Socket
      */
     public function getSocket()
     {
@@ -280,7 +281,7 @@ class SocketIO extends AbstractIO
     /**
      * @throws \PhpAmqpLib\Exception\AMQPIOException
      */
-    protected function enable_keepalive()
+    protected function enable_keepalive(): void
     {
         if (!defined('SOL_SOCKET') || !defined('SO_KEEPALIVE')) {
             throw new AMQPIOException('Can not enable keepalive: SOL_SOCKET or SO_KEEPALIVE is not defined');
@@ -292,7 +293,7 @@ class SocketIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = null)
+    public function error_handler($errno, $errstr, $errfile, $errline): void
     {
         $constants = SocketConstants::getInstance();
         // socket_select warning that it has been interrupted by a signal - EINTR
@@ -301,7 +302,7 @@ class SocketIO extends AbstractIO
             return;
         }
 
-        parent::error_handler($errno, $errstr, $errfile, $errline, $errcontext);
+        parent::error_handler($errno, $errstr, $errfile, $errline);
     }
 
     /**
@@ -313,7 +314,7 @@ class SocketIO extends AbstractIO
         socket_clear_error($this->sock);
     }
 
-    private function isIpv6(): string
+    private function isIpv6(): bool
     {
         $ipv6 = filter_var($this->host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 
