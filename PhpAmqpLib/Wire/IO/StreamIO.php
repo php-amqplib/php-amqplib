@@ -139,7 +139,7 @@ class StreamIO extends AbstractIO
 
         $options = stream_context_get_options($context);
         if (isset($options['ssl']['crypto_method'])) {
-            $this->enable_crypto();
+            $this->enableCrypto();
         }
 
         $this->heartbeat = $this->initial_heartbeat;
@@ -432,16 +432,31 @@ class StreamIO extends AbstractIO
         return 0;
     }
 
-    private function enable_crypto(): void
+    /**
+     * @throws AMQPIOException
+     */
+    private function enableCrypto(): void
     {
         $timeout_at = time() + ($this->read_timeout + $this->write_timeout) * 2; // 2 round-trips during handshake
 
-        do {
-            $enabled = stream_socket_enable_crypto($this->sock, true);
-        } while ($enabled !== true && time() < $timeout_at);
+        try {
+            $this->setErrorHandler();
+            do {
+                $enabled = stream_socket_enable_crypto($this->sock, true);
+                if ($enabled === true) {
+                    return;
+                }
+                $this->throwOnError();
+                usleep(1e3);
+            } while ($enabled === 0 && time() < $timeout_at);
+        } catch (\ErrorException $exception) {
+            throw new AMQPIOException($exception->getMessage(), $exception->getCode(), $exception);
+        } finally {
+            $this->restoreErrorHandler();
+        }
 
         if ($enabled !== true) {
-            throw new AMQPIOException('Can not enable crypto');
+            throw new AMQPIOException('Could not enable socket crypto');
         }
     }
 }
