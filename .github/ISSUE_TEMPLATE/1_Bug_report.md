@@ -5,6 +5,8 @@ about: Report errors and problems
 ---
 
 **Version(s) affected**: x.y.z
+**PHP version**: x.y.z
+**RabbitMQ version**: x.y.z
 
 **Description**  
 <!-- A clear and concise description of the problem. -->
