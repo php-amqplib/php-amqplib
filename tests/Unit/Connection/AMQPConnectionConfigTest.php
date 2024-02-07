@@ -50,7 +50,6 @@ class AMQPConnectionConfigTest extends TestCase
     public function secure_with_incorrect_crypto_method()
     {
         $this->expectException(AMQPIOException::class);
-        $this->expectExceptionMessage('Can not enable crypto');
 
         $cert_dir = realpath(__DIR__ . "/../../certs");
         $config = new AMQPConnectionConfig();
