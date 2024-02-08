@@ -971,6 +971,34 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * Pushes new connection secret to broker
+     *
+     * @param string $new_secret
+     * @param string $reason
+     */
+    protected function x_update_secret($new_secret, $reason = "refresh secret")
+    {
+        $args = new AMQPWriter();
+        $args->write_longstr($new_secret);
+        $args->write_shortstr($reason);
+        $this->send_method_frame(array(10, 70), $args);
+
+        $this->wait(
+            array($this->waitHelper->get_wait('connection.update_secret_ok')),
+            false,
+            $this->connection_timeout
+        );
+    }
+
+    /**
+     * Signals that the secret were successfully updated (by x_update_secret)
+     */
+    protected function connection_update_secret_ok()
+    {
+        $this->debug->debug_msg('Update secret OK!');
+    }
+
+    /**
      * @return AbstractIO
      * @deprecated
      */
