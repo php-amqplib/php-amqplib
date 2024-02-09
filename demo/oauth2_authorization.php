@@ -30,6 +30,8 @@ pcntl_async_signals(true);
 pcntl_signal(SIGALRM, function () use ($connection) {
     echo "Refreshing token...\n";
     $connection->updatePassword(getNextOauth2Token()); // this will fail on 2nd attempt - see getNextOauth2Token
+    sleep(1);
+    $connection->reconnect(); // reconnect should use new token too so this is working for lazy connections too!
     pcntl_alarm(5);
 }, true);
 pcntl_alarm(5);

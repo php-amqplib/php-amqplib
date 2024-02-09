@@ -131,4 +131,12 @@ class AMQPStreamConnection extends AbstractConnection
             $channel_rpc_timeout
         );
     }
+
+    /**
+     * @param string $password
+     */
+    protected function replace_password_in_construct_params($password)
+    {
+        $this->construct_params[3] = $password;
+    }
 }

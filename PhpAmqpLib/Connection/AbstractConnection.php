@@ -323,8 +323,29 @@ abstract class AbstractConnection extends AbstractChannel
      */
     public function updatePassword($password): void
     {
-        // send new secret to broker
-        $this->x_update_secret($password);
+        if ($this->login_method !== 'EXTERNAL') {
+            // password is always latest in response for PLAIN and AMQPPLAIN
+            // for EXTERNAL mechanism this has to be handled by calling user
+            $login_response_parts = explode("\0", $this->login_response);
+            $login_response_parts[count($login_response_parts) - 1] = $password;
+            $this->login_response = implode("\0", $login_response_parts);
+        }
+
+        if ($this->is_connected) {
+            // send new secret to broker if currently connected
+            $this->x_update_secret($password);
+        }
+
+        // for potential cloning
+        $this->replace_password_in_construct_params($password);
+    }
+
+    /**
+     * @param string $password
+     */
+    protected function replace_password_in_construct_params($password)
+    {
+        $this->construct_params[1] = $password;
     }
 
     /**
