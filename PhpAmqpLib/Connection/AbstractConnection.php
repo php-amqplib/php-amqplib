@@ -317,6 +317,38 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * Sets new password for this connection.
+     * Should be used for RabbitMQ's OAuth2 authentication backend to update current token.
+     * @param string $password
+     */
+    public function updatePassword($password): void
+    {
+        if ($this->login_method !== 'EXTERNAL') {
+            // password is always latest in response for PLAIN and AMQPPLAIN
+            // for EXTERNAL mechanism this has to be handled by calling user
+            $login_response_parts = explode("\0", $this->login_response);
+            $login_response_parts[count($login_response_parts) - 1] = $password;
+            $this->login_response = implode("\0", $login_response_parts);
+        }
+
+        if ($this->is_connected) {
+            // send new secret to broker if currently connected
+            $this->x_update_secret($password);
+        }
+
+        // for potential cloning
+        $this->replace_password_in_construct_params($password);
+    }
+
+    /**
+     * @param string $password
+     */
+    protected function replace_password_in_construct_params($password)
+    {
+        $this->construct_params[1] = $password;
+    }
+
+    /**
      * Cloning will use the old properties to make a new connection to the same server
      */
     public function __clone()
@@ -968,6 +1000,34 @@ abstract class AbstractConnection extends AbstractChannel
         $args->write_short($heartbeat);
         $this->send_method_frame(array(10, 31), $args);
         $this->wait_tune_ok = false;
+    }
+
+    /**
+     * Pushes new connection secret to broker
+     *
+     * @param string $new_secret
+     * @param string $reason
+     */
+    protected function x_update_secret($new_secret, $reason = "refresh secret")
+    {
+        $args = new AMQPWriter();
+        $args->write_longstr($new_secret);
+        $args->write_shortstr($reason);
+        $this->send_method_frame(array(10, 70), $args);
+
+        $this->wait(
+            array($this->waitHelper->get_wait('connection.update_secret_ok')),
+            false,
+            $this->connection_timeout
+        );
+    }
+
+    /**
+     * Signals that the secret were successfully updated (by x_update_secret)
+     */
+    protected function connection_update_secret_ok()
+    {
+        $this->debug->debug_msg('Update secret OK!');
     }
 
     /**

@@ -22,6 +22,8 @@ class Wait091
         'connection.close_ok' => '10,51',
         'connection.blocked' => '10,60',
         'connection.unblocked' => '10,61',
+        'connection.update_secret' => '10,70',
+        'connection.update_secret_ok' => '10,71',
         'channel.open' => '20,10',
         'channel.open_ok' => '20,11',
         'channel.flow' => '20,20',

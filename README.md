@@ -117,6 +117,7 @@ please refer to the [official RabbitMQ tutorials](http://www.rabbitmq.com/tutori
 - `amqp_consumer_fanout_{1,2}.php` and `amqp_publisher_fanout.php`: demos fanout exchanges with named queues.
 - `amqp_consumer_pcntl_heartbeat.php`: demos signal-based heartbeat sender usage.
 - `basic_get.php`: demos obtaining messages from the queues by using the _basic get_ AMQP call.
+- `oauth2_authorization.php`: demo for use of OAuth 2.0 authorization using the _update-secret_ AMQP call.
 
 ## Multiple hosts connections ##
 

@@ -172,6 +172,29 @@ class Protocol091
     }
 
     /**
+     * @param string $new_secret
+     * @param string $reason
+     * @return array
+     */
+    public function connectionUpdateSecret($new_secret = '', $reason = '')
+    {
+        $writer = new AMQPWriter();
+        $writer->write_longstr($new_secret);
+        $writer->write_shortstr($reason);
+        return array(10, 70, $writer);
+    }
+
+    /**
+     * @param AMQPReader $reader
+     * @return array
+     */
+    public static function connectionUpdateSecretOk(AMQPReader $reader)
+    {
+        $response = array();
+        return $response;
+    }
+
+    /**
      * @param string $out_of_band
      * @return array
      */
@@ -582,9 +605,9 @@ class Protocol091
 
     /**
      * Specifies QoS
-     * 
+     *
      * See https://www.rabbitmq.com/consumer-prefetch.html#overview for details
-     * 
+     *
      * @param int $prefetch_size Default is 0 (Alias for unlimited)
      * @param int $prefetch_count Default is 0 (Alias for unlimited)
      * @param bool $global Default is false, prefetch size and count are applied to each channel consumer separately
