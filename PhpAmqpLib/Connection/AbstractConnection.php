@@ -317,6 +317,17 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
+     * Sets new password for this connection.
+     * Should be used for RabbitMQ's OAuth2 authentication backend to update current token.
+     * @param string $password
+     */
+    public function updatePassword($password): void
+    {
+        // send new secret to broker
+        $this->x_update_secret($password);
+    }
+
+    /**
      * Cloning will use the old properties to make a new connection to the same server
      */
     public function __clone()
