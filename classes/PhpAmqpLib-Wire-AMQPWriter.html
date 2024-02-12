@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-            <title>php-amqplib</title>
-    
+    <title>php-amqplib</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
@@ -55,36 +54,34 @@
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace">
-    <a href="namespaces/phpamqplib.html" class="">PhpAmqpLib</a>
-</h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpamqplib.html">PhpAmqpLib</a></h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="namespaces/phpamqplib-channel.html" class="">Channel</a>
+                <a href="namespaces/phpamqplib-channel.html">Channel</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-connection.html" class="">Connection</a>
+                <a href="namespaces/phpamqplib-connection.html">Connection</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-exception.html" class="">Exception</a>
+                <a href="namespaces/phpamqplib-exception.html">Exception</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-exchange.html" class="">Exchange</a>
+                <a href="namespaces/phpamqplib-exchange.html">Exchange</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-helper.html" class="">Helper</a>
+                <a href="namespaces/phpamqplib-helper.html">Helper</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-message.html" class="">Message</a>
+                <a href="namespaces/phpamqplib-message.html">Message</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-wire.html" class="">Wire</a>
+                <a href="namespaces/phpamqplib-wire.html">Wire</a>
                 
             </li>
             </ul>
@@ -92,9 +89,7 @@
                         </section>
                 <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace">
-    <a href="packages/PhpAmqpLib.html" class="">PhpAmqpLib</a>
-</h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/PhpAmqpLib.html">PhpAmqpLib</a></h4>
 
                         </section>
             
@@ -122,7 +117,7 @@
     AMQPWriter
 
         <span class="phpdocumentor-element__extends">
-        extends <a href="classes/PhpAmqpLib-Wire-AbstractClient.html"><abbr title="\PhpAmqpLib\Wire\AbstractClient">AbstractClient</abbr></a>
+        extends <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html"><abbr title="\PhpAmqpLib\Wire\AMQPByteStream">AMQPByteStream</abbr></a>
     </span>
     
             <div class="phpdocumentor-element__package">
@@ -159,65 +154,128 @@
 
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -constant -public">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#constant_PLATFORM_64BIT">PLATFORM_64BIT</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_BIT">BIT</a>
     <span>
-        &nbsp;= PHP_INT_SIZE === 8                            </span>
+        &nbsp;= 1                    </span>
 </dt>
 <dd></dd>
 
-                    <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#property_bigIntegers">$bigIntegers</a>
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_LONG">LONG</a>
     <span>
-                        &nbsp;: array&lt;string|int, array&lt;string|int, <a href="classes/PhpAmqpLib-Helper-BigInteger.html"><abbr title="\PhpAmqpLib\Helper\BigInteger">BigInteger</abbr></a>&gt;&gt;            </span>
+        &nbsp;= 4                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_LONGLONG">LONGLONG</a>
+    <span>
+        &nbsp;= 8                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_OCTET">OCTET</a>
+    <span>
+        &nbsp;= 1                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_READ_PHP_INT">READ_PHP_INT</a>
+    <span>
+        &nbsp;= 4                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SHORT">SHORT</a>
+    <span>
+        &nbsp;= 2                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SHORTSTR">SHORTSTR</a>
+    <span>
+        &nbsp;= 1                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SIGNED_LONG">SIGNED_LONG</a>
+    <span>
+        &nbsp;= 4                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_TIMESTAMP">TIMESTAMP</a>
+    <span>
+        &nbsp;= 8                    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -constant -protected">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_PLATFORM_64BIT">PLATFORM_64BIT</a>
+    <span>
+        &nbsp;= PHP_INT_SIZE === 8                    </span>
+</dt>
+<dd></dd>
+
+                <dt class="phpdocumentor-table-of-contents__entry -property -protected">
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#property_bigIntegers">$bigIntegers</a>
+    <span>
+                &nbsp;: array&lt;string|int, array&lt;string|int, <a href="classes/PhpAmqpLib-Helper-BigInteger.html"><abbr title="\PhpAmqpLib\Helper\BigInteger">BigInteger</abbr></a>&gt;&gt;            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#property_bitcount">$bitcount</a>
     <span>
-                        &nbsp;: int            </span>
+                &nbsp;: int            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#property_bits">$bits</a>
     <span>
-                        &nbsp;: array&lt;string|int, mixed&gt;            </span>
+                &nbsp;: array&lt;string|int, mixed&gt;            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#property_isLittleEndian">$isLittleEndian</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#property_isLittleEndian">$isLittleEndian</a>
     <span>
-                        &nbsp;: bool            </span>
+                &nbsp;: bool            </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -property -protected">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#property_out">$out</a>
     <span>
-                        &nbsp;: string            </span>
+                &nbsp;: string            </span>
 </dt>
 <dd></dd>
 
                 <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_getvalue">getvalue()</a>
     <span>
-                                &nbsp;: string    </span>
+                        &nbsp;: string    </span>
 </dt>
 <dd>Get what&#039;s been encoded so far.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write">write()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write a plain PHP string, with no special encoding.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_array">write_array()</a>
     <span>
-                                &nbsp;: self    </span>
+                        &nbsp;: self    </span>
 </dt>
 <dd>Supports the writing of Array types, so that you can implement
 array methods, like Rabbitmq&#039;s HA parameters</dd>
@@ -225,84 +283,84 @@ array methods, like Rabbitmq&#039;s HA parameters</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_bit">write_bit()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write a boolean value.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_bits">write_bits()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write multiple bits as an octet</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_long">write_long()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write an integer as an unsigned 32-bit value</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_longlong">write_longlong()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write a numeric value as an unsigned 64-bit value</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_longstr">write_longstr()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write a string up to 2**32 bytes long.  Assume UTF-8 encoding</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_octet">write_octet()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write an integer as an unsigned 8-bit value</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_short">write_short()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write an integer as an unsigned 16-bit value</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_shortstr">write_shortstr()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write a string up to 255 bytes long after encoding.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_signed_longlong">write_signed_longlong()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_signed_octet">write_signed_octet()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_signed_short">write_signed_short()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_table">write_table()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write PHP array, as table. Input array format: keys are strings,
 values are (type,value) tuples.</dd>
@@ -310,77 +368,77 @@ values are (type,value) tuples.</dd>
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_table_object">write_table_object()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>for compat with method mapping used by AMQPMessage</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_write_timestamp">write_timestamp()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd>Write unix time_t value as 64 bit timestamp</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_convertByteOrder">convertByteOrder()</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_convertByteOrder">convertByteOrder()</a>
     <span>
-                                &nbsp;: string    </span>
+                        &nbsp;: string    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_correctEndianness">correctEndianness()</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_correctEndianness">correctEndianness()</a>
     <span>
-                                &nbsp;: string    </span>
+                        &nbsp;: string    </span>
 </dt>
 <dd>Converts byte-string between native and network byte order, in both directions</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_getBigInteger">getBigInteger()</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getBigInteger">getBigInteger()</a>
     <span>
-                                &nbsp;: <a href="classes/PhpAmqpLib-Helper-BigInteger.html"><abbr title="\PhpAmqpLib\Helper\BigInteger">BigInteger</abbr></a>    </span>
+                        &nbsp;: <a href="classes/PhpAmqpLib-Helper-BigInteger.html"><abbr title="\PhpAmqpLib\Helper\BigInteger">BigInteger</abbr></a>    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_getLongMSB">getLongMSB()</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getLongMSB">getLongMSB()</a>
     <span>
-                                &nbsp;: bool    </span>
+                        &nbsp;: bool    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_getMSB">getMSB()</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getMSB">getMSB()</a>
     <span>
-                                &nbsp;: bool    </span>
+                        &nbsp;: bool    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -protected">
-    <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_isLittleEndian">isLittleEndian()</a>
+    <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_isLittleEndian">isLittleEndian()</a>
     <span>
-                                &nbsp;: bool    </span>
+                        &nbsp;: bool    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_flushbits">flushbits()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                        &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_writeSignedLong">writeSignedLong()</a>
     <span>
-                                &nbsp;: $this    </span>
+                        &nbsp;: $this    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#method_writeValue">writeValue()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                        &nbsp;: mixed    </span>
 </dt>
 <dd></dd>
 
@@ -395,13 +453,100 @@ values are (type,value) tuples.</dd>
             <a href="classes/PhpAmqpLib-Wire-AMQPWriter.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
         </h3>
                     <article class="phpdocumentor-element -constant -public ">
-    <h4 class="phpdocumentor-element__name" id="constant_PLATFORM_64BIT">
-        PLATFORM_64BIT
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#constant_PLATFORM_64BIT" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="constant_BIT">
+        BIT
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_BIT" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
 
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">9</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">BIT</span>
+    = <span class="phpdocumentor-signature__default-value">1</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_LONG">
+        LONG
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_LONG" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">13</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">LONG</span>
+    = <span class="phpdocumentor-signature__default-value">4</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_LONGLONG">
+        LONGLONG
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_LONGLONG" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">16</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">LONGLONG</span>
+    = <span class="phpdocumentor-signature__default-value">8</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_OCTET">
+        OCTET
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_OCTET" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
     <span class="phpdocumentor-element-found-in__line">10</span>
 
@@ -410,7 +555,181 @@ values are (type,value) tuples.</dd>
     
     <code class="phpdocumentor-signature phpdocumentor-code ">
     <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">bool</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">OCTET</span>
+    = <span class="phpdocumentor-signature__default-value">1</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_READ_PHP_INT">
+        READ_PHP_INT
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_READ_PHP_INT" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">15</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">READ_PHP_INT</span>
+    = <span class="phpdocumentor-signature__default-value">4</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_SHORT">
+        SHORT
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SHORT" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">12</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">SHORT</span>
+    = <span class="phpdocumentor-signature__default-value">2</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_SHORTSTR">
+        SHORTSTR
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SHORTSTR" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">11</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">SHORTSTR</span>
+    = <span class="phpdocumentor-signature__default-value">1</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_SIGNED_LONG">
+        SIGNED_LONG
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SIGNED_LONG" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">14</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">SIGNED_LONG</span>
+    = <span class="phpdocumentor-signature__default-value">4</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_TIMESTAMP">
+        TIMESTAMP
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_TIMESTAMP" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">17</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+    <span class="phpdocumentor-signature__type">mixed</span>
+    <span class="phpdocumentor-signature__name">TIMESTAMP</span>
+    = <span class="phpdocumentor-signature__default-value">8</span>
+</code>
+
+
+        <section class="phpdocumentor-description"></section>
+
+        <section class="phpdocumentor-description"></section>
+
+    
+
+</article>
+                    <article class="phpdocumentor-element -constant -protected ">
+    <h4 class="phpdocumentor-element__name" id="constant_PLATFORM_64BIT">
+        PLATFORM_64BIT
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_PLATFORM_64BIT" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">20</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">protected</span>
+    <span class="phpdocumentor-signature__type">bool</span>
     <span class="phpdocumentor-signature__name">PLATFORM_64BIT</span>
     = <span class="phpdocumentor-signature__default-value">PHP_INT_SIZE === 8</span>
 </code>
@@ -438,14 +757,14 @@ values are (type,value) tuples.</dd>
 >
     <h4 class="phpdocumentor-element__name" id="property_bigIntegers">
         $bigIntegers
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#property_bigIntegers" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#property_bigIntegers" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">13</span>
+    <span class="phpdocumentor-element-found-in__line">23</span>
 
     </aside>
 
@@ -534,14 +853,14 @@ values are (type,value) tuples.</dd>
 >
     <h4 class="phpdocumentor-element__name" id="property_isLittleEndian">
         $isLittleEndian
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#property_isLittleEndian" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#property_isLittleEndian" class="headerlink"><i class="fas fa-link"></i></a>
         <span class="phpdocumentor-element__modifiers">
                                 </span>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">18</span>
+    <span class="phpdocumentor-element-found-in__line">28</span>
 
     </aside>
 
@@ -1415,12 +1734,12 @@ values are (type,value) tuples.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_convertByteOrder">
         convertByteOrder()
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_convertByteOrder" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_convertByteOrder" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">35</span>
+    <span class="phpdocumentor-element-found-in__line">45</span>
 
     </aside>
 
@@ -1457,12 +1776,12 @@ values are (type,value) tuples.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_correctEndianness">
         correctEndianness()
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_correctEndianness" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_correctEndianness" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">26</span>
+    <span class="phpdocumentor-element-found-in__line">36</span>
 
     </aside>
 
@@ -1500,12 +1819,12 @@ values are (type,value) tuples.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getBigInteger">
         getBigInteger()
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_getBigInteger" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getBigInteger" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">76</span>
+    <span class="phpdocumentor-element-found-in__line">86</span>
 
     </aside>
 
@@ -1549,12 +1868,12 @@ values are (type,value) tuples.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getLongMSB">
         getLongMSB()
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_getLongMSB" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getLongMSB" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">44</span>
+    <span class="phpdocumentor-element-found-in__line">54</span>
 
     </aside>
 
@@ -1591,12 +1910,12 @@ values are (type,value) tuples.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_getMSB">
         getMSB()
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_getMSB" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getMSB" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">53</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
@@ -1633,12 +1952,12 @@ values are (type,value) tuples.</p>
 >
     <h4 class="phpdocumentor-element__name" id="method_isLittleEndian">
         isLittleEndian()
-        <a href="classes/PhpAmqpLib-Wire-AbstractClient.html#method_isLittleEndian" class="headerlink"><i class="fas fa-link"></i></a>
+        <a href="classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_isLittleEndian" class="headerlink"><i class="fas fa-link"></i></a>
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AbstractClient.php"><a href="files/phpamqplib-wire-abstractclient.html"><abbr title="PhpAmqpLib/Wire/AbstractClient.php">AbstractClient.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Wire/AMQPByteStream.php"><a href="files/phpamqplib-wire-amqpbytestream.html"><abbr title="PhpAmqpLib/Wire/AMQPByteStream.php">AMQPByteStream.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">61</span>
+    <span class="phpdocumentor-element-found-in__line">71</span>
 
     </aside>
 
