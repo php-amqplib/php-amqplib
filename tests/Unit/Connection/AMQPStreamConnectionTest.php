@@ -38,9 +38,11 @@ class AMQPStreamConnectionTest extends TestCase
 
     /**
      * @test
+     * Generate deprecation warning if ssl_protocol is set
      */
     public function trigger_deprecation_is_ssl_protocl_set(): void
     {
+        // this is a workaround for deprecated PHPUnit functions
         set_error_handler(
             static function ($errno, $errstr) {
                 restore_error_handler();
@@ -76,6 +78,7 @@ class AMQPStreamConnectionTest extends TestCase
 
     /**
      * @test
+     * Generate deprecation warning if ssl_protocol is set with named parameters
      */
     public function trigger_deprecation_is_ssl_protocl_set_with_named_params(): void
     {
@@ -83,6 +86,7 @@ class AMQPStreamConnectionTest extends TestCase
             $this->markTestSkipped('Named parameters are available in PHP 8.0+');
         }
 
+        // this is a workaround for deprecated PHPUnit functions
         set_error_handler(
             static function ($errno, $errstr) {
                 restore_error_handler();
