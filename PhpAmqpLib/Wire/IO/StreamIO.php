@@ -245,8 +245,8 @@ class StreamIO extends AbstractIO
         $write_start = microtime(true);
 
         while ($written < $len) {
-			// on Windows, feof() fails when connecting to some (but not all) servers
-            if (!is_resource($this->sock)) {
+            // on Windows, feof() fails when connecting to some (but not all) servers
+            if (!is_resource($this->sock) || (PHP_OS_FAMILY != 'Windows' && feof($this->sock))) {
                 $this->close();
                 $constants = SocketConstants::getInstance();
                 throw new AMQPConnectionClosedException('Broken pipe or closed connection', $constants->SOCKET_EPIPE);
