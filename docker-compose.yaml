@@ -1,45 +1,31 @@
-version: '3.4'
-
 x-networks: &networks
   networks:
     - default
     - ip6net
 
 services:
-  php:
-    build: ./docker/php
-    volumes:
-      - .:/src
-    working_dir: /src
-    environment:
-      - TEST_RABBITMQ_HOST=rabbitmq
-      - TOXIPROXY_HOST=proxy
-      - TOXIPROXY_AMQP_PORT=5673
-    depends_on:
-      - rabbitmq
-      - proxy
-    entrypoint: ['tail', '-f', '/dev/null']
-    <<: *networks
-
-  rabbitmq:
-    image: rabbitmq:3-management
+  php-amqplib-rabbitmq:
+    image:
+      rabbitmq:3-management
     ports:
       - "5671:5671"
       - "5672:5672"
       - "15671:15671"
+      - "15672:15672"
     volumes:
         - .:/src
     environment:
         - RABBITMQ_CONFIG_FILE=/src/tests/rabbitmq.conf
     <<: *networks
 
-  proxy:
-    image: ghcr.io/shopify/toxiproxy:latest
+  php-amqplib-toxiproxy:
+    image:
+      ghcr.io/shopify/toxiproxy:latest
     ports:
       - "8474:8474"
       - "5673:5673"
     depends_on:
-      - rabbitmq
+      - php-amqplib-rabbitmq
     <<: *networks
 
 networks:
