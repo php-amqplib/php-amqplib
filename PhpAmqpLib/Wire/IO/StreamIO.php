@@ -270,7 +270,7 @@ class StreamIO extends AbstractIO
                 }
                 $this->throwOnError();
             } catch (\ErrorException $e) {
-                $code = $this->last_error['errno'];
+                $code = $this->last_error->getCode();
                 $constants = SocketConstants::getInstance();
                 switch ($code) {
                     case $constants->SOCKET_EPIPE:
