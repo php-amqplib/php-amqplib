@@ -93,7 +93,7 @@ abstract class AbstractIO
             $result = $this->do_select($sec, $usec);
             $this->throwOnError();
         } catch (\ErrorException $e) {
-            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e->getPrevious());
         } finally {
             $this->restoreErrorHandler();
         }
