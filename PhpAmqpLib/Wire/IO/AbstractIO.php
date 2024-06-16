@@ -46,7 +46,7 @@ abstract class AbstractIO
     /** @var int|float */
     protected $last_write;
 
-    /** @var array<string, mixed>|null */
+    /** @var \ErrorException|null */
     protected $last_error;
 
     /** @var bool */
@@ -93,7 +93,7 @@ abstract class AbstractIO
             $result = $this->do_select($sec, $usec);
             $this->throwOnError();
         } catch (\ErrorException $e) {
-            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e);
+            throw new AMQPIOWaitException($e->getMessage(), $e->getCode(), $e->getPrevious());
         } finally {
             $this->restoreErrorHandler();
         }
@@ -229,14 +229,10 @@ abstract class AbstractIO
 
     protected function throwOnError(): void
     {
-        if ($this->last_error !== null) {
-            throw new \ErrorException(
-                $this->last_error['errstr'],
-                0,
-                $this->last_error['errno'],
-                $this->last_error['errfile'],
-                $this->last_error['errline']
-            );
+        if ($this->last_error instanceof \ErrorException) {
+            $error = $this->last_error;
+            $this->last_error = null;
+            throw $error;
         }
     }
 
@@ -257,8 +253,8 @@ abstract class AbstractIO
     public function error_handler($errno, $errstr, $errfile, $errline): void
     {
         // throwing an exception in an error handler will halt execution
-        //   set the last error and continue
-        $this->last_error = compact('errno', 'errstr', 'errfile', 'errline');
+        // collect error continue
+        $this->last_error = new \ErrorException($errstr, $errno, 1, $errfile, $errline, $this->last_error);
     }
 
     protected function isPcntlSignalEnabled(): bool
