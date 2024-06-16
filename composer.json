@@ -36,6 +36,7 @@
     },
     "require-dev": {
         "ext-curl": "*",
+        "ext-openssl": "*",
         "phpunit/phpunit": "^7.5|^9.5",
         "squizlabs/php_codesniffer": "^3.6",
         "nategood/httpful": "^0.2.20"
