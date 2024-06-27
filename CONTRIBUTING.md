@@ -24,15 +24,39 @@ We accept contributions via Pull Requests on [Github](https://github.com/php-amq
 
 ## Running Tests
 
-To successfully run the tests you need to first have a stock RabbitMQ broker running locally. Then, run tests like this:
+### Start RabbitMQ
 
-``` bash
-$ vendor/bin/phpunit
-```
-or
-``` bash
-$ make test
-```
+To successfully run the tests you need to first have a stock RabbitMQ broker running locally
 
+* Using `docker compose`
+    ```
+    make docker-test-env
+    ```
+    Note: if you wish to ensure the latest docker images, run this command:
+    ```
+    make DOCKER_FRESH=true clean docker-test-env
+    ```
+* Using the GitHub Actions setup script
+    Note: this has been tested on Ubuntu 22 and Arch Linux
+    ```
+    ./.ci/ubuntu/gha-setup.sh
+    ```
+
+### Run Tests
+
+* Using an environment started via `make docker-test-env`:
+    ```
+    make docker-test
+    ```
+* Using a local RabbitMQ started by `gha-setup.sh`:
+    ``` bash
+    make test
+    ```
+
+### Cleanup / Troubleshooting
+
+If you started your environment using `make docker-test-env`, use `docker compose stop` to stop it.
+
+If you ran tests locally, but then decided to use the docker environment to run tests, you should first run `make clean`
 
 **Happy coding**!

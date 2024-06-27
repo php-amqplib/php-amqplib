@@ -1,6 +1,10 @@
 name: PHPUnit tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   run:
@@ -41,32 +45,19 @@ jobs:
             phpseclib: '^3.0'
             composer: 'composer:v2'
             coverage: none
-    services:
-      rabbitmq:
-        image: rabbitmq:3.11-management
-        ports:
-          - 5671:5671
-          - 5672:5672
-          - 15671:15671
-          - 15672:15672
-        volumes:
-          - ${{ github.workspace }}:/src
-        env:
-          RABBITMQ_CONFIG_FILE: /src/tests/rabbitmq.conf
-      proxy:
-        image: ghcr.io/shopify/toxiproxy:2.5.0
-        ports:
-          - 8474:8474
-          - 5673:5673
 
     name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
     env:
       TOXIPROXY_HOST: localhost
-      TOXIPROXY_AMQP_TARGET: rabbitmq
+      TOXIPROXY_AMQP_TARGET: php-amqplib-rabbitmq
       TOXIPROXY_AMQP_PORT: 5673
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+
+    - name: Start RabbitMQ and Toxiproxy
+      id: start-rabbitmq
+      run: ${{ github.workspace }}/.ci/ubuntu/gha-setup.sh
 
     - name: Install PHP
       uses: shivammathur/setup-php@v2
@@ -78,9 +69,6 @@ jobs:
 
     - name: Check PHP info
       run: php tests/phpinfo.php
-
-    - name: Re-start broker service to pick up rabbitmq.conf
-      run: docker restart ${{ job.services.rabbitmq.id }}
 
     - name: Composer install
       run: composer require --prefer-dist --no-progress --no-suggest phpseclib/phpseclib ${{ matrix.phpseclib }}
@@ -95,6 +83,20 @@ jobs:
     - name: PHPUnit tests + coverage
       run: ./vendor/bin/phpunit --verbose --debug --coverage-clover=coverage.xml
       if: matrix.coverage != 'none'
+
+    - name: Check for errors in RabbitMQ logs
+      run: ${{ github.workspace}}/.ci/ubuntu/gha-log-check.sh
+
+    - name: Maybe collect Toxiproxy logs
+      if: failure()
+      run: docker logs proxy > ${{ github.workspace }}/tests/log/toxiproxy.log
+
+    - name: Maybe upload RabbitMQ logs
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: rabbitmq-logs-php-amqplib-${{ matrix.php }}
+        path: ${{ github.workspace }}/tests/log/
 
     - name: Upload Codecov coverage
       if: matrix.coverage != 'none'

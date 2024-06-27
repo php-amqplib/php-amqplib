@@ -11,5 +11,6 @@ phpDocumentor.phar
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 
+.phpactor.json
 .phpunit.result.cache
 .phpdoc

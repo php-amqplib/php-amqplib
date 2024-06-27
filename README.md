@@ -332,15 +332,7 @@ To run the publishing/consume benchmark type:
 $ make benchmark
 ```
 
-## Tests ##
-
-To successfully run the tests you need to first have a stock RabbitMQ broker running locally.Then, run tests like this:
-
-```bash
-$ make test
-```
-
-## Contributing
+## Tests and Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
