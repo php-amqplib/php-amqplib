@@ -1,5 +1,30 @@
 # Changelog
 
+## [v3.7.0](https://github.com/php-amqplib/php-amqplib/tree/v3.7.0) (2024-07-09)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.6.2...v3.7.0)
+
+**Implemented enhancements:**
+
+- fix: create a new exception for each warning in IO layer with reference to previous [\#1183](https://github.com/php-amqplib/php-amqplib/pull/1183) ([ramunasd](https://github.com/ramunasd))
+
+**Fixed bugs:**
+
+- first error message thrown by stream\_socket\_enable\_crypto\(\) is not propagated to caller [\#1181](https://github.com/php-amqplib/php-amqplib/issues/1181)
+
+**Closed issues:**
+
+- feof\(\) check in /Wire/IO/StreamIO::write\(\) blocks connection [\#1176](https://github.com/php-amqplib/php-amqplib/issues/1176)
+
+**Merged pull requests:**
+
+- AMQPConnectionClosedException is never thrown from checkConnection\(\) [\#1185](https://github.com/php-amqplib/php-amqplib/pull/1185) ([villfa](https://github.com/villfa))
+- chore: deprecate properties related to old protocol mode [\#1182](https://github.com/php-amqplib/php-amqplib/pull/1182) ([ramunasd](https://github.com/ramunasd))
+- Add verbose test output [\#1180](https://github.com/php-amqplib/php-amqplib/pull/1180) ([lukebakken](https://github.com/lukebakken))
+- CI workflow updates [\#1179](https://github.com/php-amqplib/php-amqplib/pull/1179) ([lukebakken](https://github.com/lukebakken))
+- deprecate AMQPSSLConnection class [\#1178](https://github.com/php-amqplib/php-amqplib/pull/1178) ([ramunasd](https://github.com/ramunasd))
+- remove feof\(\) check on connection.  this check fails under Windows wh… [\#1177](https://github.com/php-amqplib/php-amqplib/pull/1177) ([jjdunn](https://github.com/jjdunn))
+
 ## [v3.6.2](https://github.com/php-amqplib/php-amqplib/tree/v3.6.2) (2024-04-15)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.6.1...v3.6.2)
