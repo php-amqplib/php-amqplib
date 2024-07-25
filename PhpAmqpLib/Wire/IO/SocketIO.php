@@ -60,7 +60,7 @@ class SocketIO extends AbstractIO
      */
     public function connect()
     {
-        $this->sock = socket_create(!$this->isIpv6() ? AF_INET : AF_INET6, SOCK_STREAM, SOL_TCP);
+        $this->sock = socket_create($this->selectProtocol(), SOCK_STREAM, SOL_TCP);
 
         list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->write_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
@@ -312,6 +312,15 @@ class SocketIO extends AbstractIO
     {
         parent::setErrorHandler();
         socket_clear_error($this->sock);
+    }
+
+    private function selectProtocol() :int
+    {
+        if (is_null($this->config) || is_null($this->config->getSocketProtocolMode())) {
+            return  $this->isIpv6() ? AF_INET6 : AF_INET;
+        }
+
+        return  $this->config->getSocketProtocolMode();
     }
 
     private function isIpv6(): bool
