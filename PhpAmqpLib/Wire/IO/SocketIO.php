@@ -60,11 +60,11 @@ class SocketIO extends AbstractIO
      */
     public function connect()
     {
-        $this->sock = socket_create($this->selectProtocol(), SOCK_STREAM, SOL_TCP);
+        $this->sock = socket_create($this->getProtocol(), SOCK_STREAM, SOL_TCP);
 
-        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->write_timeout);
+        [$sec, $uSec] = MiscHelper::splitSecondsMicroseconds($this->write_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_SNDTIMEO, array('sec' => $sec, 'usec' => $uSec));
-        list($sec, $uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
+        [$sec, $uSec] = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
         socket_set_option($this->sock, SOL_SOCKET, SO_RCVTIMEO, array('sec' => $sec, 'usec' => $uSec));
 
         $this->setErrorHandler();
@@ -122,7 +122,7 @@ class SocketIO extends AbstractIO
 
         $this->check_heartbeat();
 
-        list($timeout_sec, $timeout_uSec) = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
+        [$timeout_sec, $timeout_uSec] = MiscHelper::splitSecondsMicroseconds($this->read_timeout);
         $read_start = microtime(true);
         $read = 0;
         $data = '';
@@ -314,7 +314,7 @@ class SocketIO extends AbstractIO
         socket_clear_error($this->sock);
     }
 
-    private function selectProtocol() :int
+    private function getProtocol(): int
     {
         if (is_null($this->config) || is_null($this->config->getSocketProtocolMode())) {
             return  $this->isIpv6() ? AF_INET6 : AF_INET;
