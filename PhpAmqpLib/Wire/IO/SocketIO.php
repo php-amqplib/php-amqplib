@@ -316,11 +316,11 @@ class SocketIO extends AbstractIO
 
     private function getProtocol(): int
     {
-        if (is_null($this->config) || is_null($this->config->getSocketProtocolMode())) {
-            return  $this->isIpv6() ? AF_INET6 : AF_INET;
+        if ($this->config && $this->config->getSocketProtocolMode()) {
+            return  $this->config->getSocketProtocolMode();
         }
 
-        return  $this->config->getSocketProtocolMode();
+        return  $this->isIpv6() ? AF_INET6 : AF_INET;
     }
 
     private function isIpv6(): bool
