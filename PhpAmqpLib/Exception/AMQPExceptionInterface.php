@@ -2,6 +2,8 @@
 
 namespace PhpAmqpLib\Exception;
 
-interface AMQPExceptionInterface
+use Throwable;
+
+interface AMQPExceptionInterface extends Throwable
 {
 }
