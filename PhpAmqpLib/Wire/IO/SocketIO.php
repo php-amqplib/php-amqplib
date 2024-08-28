@@ -189,7 +189,12 @@ class SocketIO extends AbstractIO
             try {
                 $result = 0;
                 if ($this->select_write()) {
-                    $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                    // if data is smaller than buffer - no need to cut part of it
+                    if ($len <= self::BUFFER_SIZE) {
+                        $buffer = $data;
+                    } else {
+                        $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                    }
                     $result = socket_write($this->sock, $buffer);
                 }
                 $this->throwOnError();

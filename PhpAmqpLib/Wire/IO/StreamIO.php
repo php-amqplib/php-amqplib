@@ -265,16 +265,17 @@ class StreamIO extends AbstractIO
                 // check stream and prevent from high CPU usage
                 $result = 0;
                 if ($this->select_write()) {
-                    $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                    // if data is smaller than buffer - no need to cut part of it
+                    if ($len <= self::BUFFER_SIZE) {
+                        $buffer = $data;
+                    } else {
+                        $buffer = mb_substr($data, $written, self::BUFFER_SIZE, 'ASCII');
+                    }
                     $result = fwrite($this->sock, $buffer);
                 }
                 $this->throwOnError();
             } catch (\ErrorException $e) {
-                $code = 999;
-                if ($this->last_error != null)
-                {
-                    $code = $this->last_error->getCode();
-                }
+                $code = $e->getCode();
                 $constants = SocketConstants::getInstance();
                 switch ($code) {
                     case $constants->SOCKET_EPIPE:
