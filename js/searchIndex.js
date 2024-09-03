@@ -91,16 +91,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_validate_method_frame"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003Avalidate_header_frame\u0028\u0029",
-            "name": "validate_header_frame",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_validate_header_frame"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003Avalidate_body_frame\u0028\u0029",
-            "name": "validate_body_frame",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_validate_body_frame"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003Avalidate_frame\u0028\u0029",
             "name": "validate_frame",
             "summary": "",
@@ -111,15 +101,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_validate_frame_payload"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003Abuild_method_signature\u0028\u0029",
-            "name": "build_method_signature",
+            "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003AparseMethod\u0028\u0029",
+            "name": "parseMethod",
             "summary": "",
-            "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_build_method_signature"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003Aextract_args\u0028\u0029",
-            "name": "extract_args",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_extract_args"
+            "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#method_parseMethod"
         },                {
             "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003Ashould_dispatch_method\u0028\u0029",
             "name": "should_dispatch_method",
@@ -210,11 +195,6 @@ Search.appendIndex(
             "name": "msg_property_reader",
             "summary": "",
             "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#property_msg_property_reader"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003A\u0024wait_content_reader",
-            "name": "wait_content_reader",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Channel-AbstractChannel.html#property_wait_content_reader"
         },                {
             "fqsen": "\\PhpAmqpLib\\Channel\\AbstractChannel\u003A\u003A\u0024dispatch_reader",
             "name": "dispatch_reader",
@@ -676,6 +656,141 @@ Search.appendIndex(
             "summary": "Maximum\u0020time\u0020to\u0020wait\u0020for\u0020operations\u0020on\u0020this\u0020channel,\u0020in\u0020seconds.",
             "url": "classes/PhpAmqpLib-Channel-AMQPChannel.html#property_channel_rpc_timeout"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame",
+            "name": "Frame",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method___construct"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AgetType\u0028\u0029",
+            "name": "getType",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method_getType"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AgetChannel\u0028\u0029",
+            "name": "getChannel",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method_getChannel"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AgetSize\u0028\u0029",
+            "name": "getSize",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method_getSize"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AgetPayload\u0028\u0029",
+            "name": "getPayload",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method_getPayload"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AisMethod\u0028\u0029",
+            "name": "isMethod",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method_isMethod"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AisHeartbeat\u0028\u0029",
+            "name": "isHeartbeat",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#method_isHeartbeat"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AFRAME_HEADER_SIZE",
+            "name": "FRAME_HEADER_SIZE",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#constant_FRAME_HEADER_SIZE"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003AEND",
+            "name": "END",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#constant_END"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003ATYPE_METHOD",
+            "name": "TYPE_METHOD",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#constant_TYPE_METHOD"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003ATYPE_HEADER",
+            "name": "TYPE_HEADER",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#constant_TYPE_HEADER"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003ATYPE_BODY",
+            "name": "TYPE_BODY",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#constant_TYPE_BODY"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003ATYPE_HEARTBEAT",
+            "name": "TYPE_HEARTBEAT",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#constant_TYPE_HEARTBEAT"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003A\u0024type",
+            "name": "type",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#property_type"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003A\u0024channel",
+            "name": "channel",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#property_channel"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003A\u0024size",
+            "name": "size",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#property_size"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Frame\u003A\u003A\u0024payload",
+            "name": "payload",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Frame.html#property_payload"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method",
+            "name": "Method",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#method___construct"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003AgetClass\u0028\u0029",
+            "name": "getClass",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#method_getClass"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003AgetMethod\u0028\u0029",
+            "name": "getMethod",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#method_getMethod"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003AgetArguments\u0028\u0029",
+            "name": "getArguments",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#method_getArguments"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003AgetSignature\u0028\u0029",
+            "name": "getSignature",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#method_getSignature"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003A\u0024class",
+            "name": "class",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#property_class"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003A\u0024method",
+            "name": "method",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#property_method"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Channel\\Method\u003A\u003A\u0024arguments",
+            "name": "arguments",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Channel-Method.html#property_arguments"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AbstractConnection",
             "name": "AbstractConnection",
             "summary": "",
@@ -1046,11 +1161,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AbstractConnection.html#property_io"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AbstractConnection\u003A\u003A\u0024wait_frame_reader",
-            "name": "wait_frame_reader",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Connection-AbstractConnection.html#property_wait_frame_reader"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AbstractConnection\u003A\u003A\u0024connection_block_handler",
             "name": "connection_block_handler",
             "summary": "",
@@ -1191,6 +1301,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setLoginMethod"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetLoginResponse\u0028\u0029",
+            "name": "getLoginResponse",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_getLoginResponse"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AsetLoginResponse\u0028\u0029",
+            "name": "setLoginResponse",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setLoginResponse"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetLocale\u0028\u0029",
             "name": "getLocale",
             "summary": "",
@@ -1291,6 +1411,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setStreamContext"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetSendBufferSize\u0028\u0029",
+            "name": "getSendBufferSize",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_getSendBufferSize"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AsetSendBufferSize\u0028\u0029",
+            "name": "setSendBufferSize",
+            "summary": "Socket\u0020send\u0020buffer\u0020size.\u0020Set\u00200\u0020to\u0020keep\u0020system\u0020default.",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setSendBufferSize"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AisSignalsDispatchEnabled\u0028\u0029",
             "name": "isSignalsDispatchEnabled",
             "summary": "",
@@ -1330,6 +1460,16 @@ Search.appendIndex(
             "name": "setSslCaCert",
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setSslCaCert"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetSslCaPath\u0028\u0029",
+            "name": "getSslCaPath",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_getSslCaPath"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AsetSslCaPath\u0028\u0029",
+            "name": "setSslCaPath",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setSslCaPath"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetSslCert\u0028\u0029",
             "name": "getSslCert",
@@ -1391,6 +1531,26 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setSslCiphers"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetSslSecurityLevel\u0028\u0029",
+            "name": "getSslSecurityLevel",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_getSslSecurityLevel"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AsetSslSecurityLevel\u0028\u0029",
+            "name": "setSslSecurityLevel",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setSslSecurityLevel"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetSslCryptoMethod\u0028\u0029",
+            "name": "getSslCryptoMethod",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_getSslCryptoMethod"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AsetSslCryptoMethod\u0028\u0029",
+            "name": "setSslCryptoMethod",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setSslCryptoMethod"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AisDebugPackets\u0028\u0029",
             "name": "isDebugPackets",
             "summary": "",
@@ -1411,6 +1571,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_assertGreaterOrEq"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AgetConnectionName\u0028\u0029",
+            "name": "getConnectionName",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_getConnectionName"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AsetConnectionName\u0028\u0029",
+            "name": "setConnectionName",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#method_setConnectionName"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AAUTH_PLAIN",
             "name": "AUTH_PLAIN",
             "summary": "",
@@ -1420,6 +1590,11 @@ Search.appendIndex(
             "name": "AUTH_AMQPPLAIN",
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#constant_AUTH_AMQPPLAIN"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AAUTH_EXTERNAL",
+            "name": "AUTH_EXTERNAL",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#constant_AUTH_EXTERNAL"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003AIO_TYPE_STREAM",
             "name": "IO_TYPE_STREAM",
@@ -1471,6 +1646,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_loginMethod"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024loginResponse",
+            "name": "loginResponse",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_loginResponse"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024locale",
             "name": "locale",
             "summary": "",
@@ -1516,6 +1696,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_streamContext"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024sendBufferSize",
+            "name": "sendBufferSize",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_sendBufferSize"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024dispatchSignals",
             "name": "dispatchSignals",
             "summary": "",
@@ -1535,6 +1720,11 @@ Search.appendIndex(
             "name": "sslCaCert",
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_sslCaCert"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024sslCaPath",
+            "name": "sslCaPath",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_sslCaPath"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024sslCert",
             "name": "sslCert",
@@ -1566,6 +1756,21 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_sslCiphers"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024sslSecurityLevel",
+            "name": "sslSecurityLevel",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_sslSecurityLevel"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024sslCryptoMethod",
+            "name": "sslCryptoMethod",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_sslCryptoMethod"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024connectionName",
+            "name": "connectionName",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html#property_connectionName"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionConfig\u003A\u003A\u0024debugPackets",
             "name": "debugPackets",
             "summary": "Output\u0020all\u0020networks\u0020packets\u0020for\u0020debug\u0020purposes.",
@@ -1591,24 +1796,19 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_getSslOptions"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPConnectionFactory\u003A\u003AgetStreamContext\u0028\u0029",
+            "name": "getStreamContext",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_getStreamContext"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazyConnection",
             "name": "AMQPLazyConnection",
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPLazyConnection.html"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazyConnection\u003A\u003Achannel\u0028\u0029",
-            "name": "channel",
-            "summary": "\u007B\u0040inheritdoc\u007D",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazyConnection.html#method_channel"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazyConnection\u003A\u003AgetIO\u0028\u0029",
-            "name": "getIO",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazyConnection.html#method_getIO"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazyConnection\u003A\u003AconnectOnConstruct\u0028\u0029",
             "name": "connectOnConstruct",
-            "summary": "Should\u0020the\u0020connection\u0020be\u0020attempted\u0020during\u0020construction\u003F",
+            "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPLazyConnection.html#method_connectOnConstruct"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazyConnection\u003A\u003Acreate_connection\u0028\u0029",
@@ -1618,22 +1818,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySocketConnection",
             "name": "AMQPLazySocketConnection",
-            "summary": "Yet\u0020another\u0020lazy\u0020connection.\u0020This\u0020time\u0020using\u0020sockets.\u0020Current\u0020architecture\u0020doesn\u0027t\u0020allow\u0020to\u0020wrap\u0020existing\u0020connections",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazySocketConnection.html"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySocketConnection\u003A\u003Achannel\u0028\u0029",
-            "name": "channel",
-            "summary": "\u007B\u0040inheritdoc\u007D",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazySocketConnection.html#method_channel"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySocketConnection\u003A\u003AgetIO\u0028\u0029",
-            "name": "getIO",
             "summary": "",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazySocketConnection.html#method_getIO"
+            "url": "classes/PhpAmqpLib-Connection-AMQPLazySocketConnection.html"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySocketConnection\u003A\u003AconnectOnConstruct\u0028\u0029",
             "name": "connectOnConstruct",
-            "summary": "Should\u0020the\u0020connection\u0020be\u0020attempted\u0020during\u0020construction\u003F",
+            "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPLazySocketConnection.html#method_connectOnConstruct"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySocketConnection\u003A\u003Acreate_connection\u0028\u0029",
@@ -1646,19 +1836,9 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPLazySSLConnection.html"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySSLConnection\u003A\u003Achannel\u0028\u0029",
-            "name": "channel",
-            "summary": "\u007B\u0040inheritdoc\u007D",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazySSLConnection.html#method_channel"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySSLConnection\u003A\u003AgetIO\u0028\u0029",
-            "name": "getIO",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Connection-AMQPLazySSLConnection.html#method_getIO"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySSLConnection\u003A\u003AconnectOnConstruct\u0028\u0029",
             "name": "connectOnConstruct",
-            "summary": "Should\u0020the\u0020connection\u0020be\u0020attempted\u0020during\u0020construction\u003F",
+            "summary": "",
             "url": "classes/PhpAmqpLib-Connection-AMQPLazySSLConnection.html#method_connectOnConstruct"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\AMQPLazySSLConnection\u003A\u003Acreate_connection\u0028\u0029",
@@ -1755,6 +1935,11 @@ Search.appendIndex(
             "name": "connection",
             "summary": "",
             "url": "classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#property_connection"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Connection\\Heartbeat\\AbstractSignalHeartbeatSender\u003A\u003A\u0024wasActive",
+            "name": "wasActive",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Connection-Heartbeat-AbstractSignalHeartbeatSender.html#property_wasActive"
         },                {
             "fqsen": "\\PhpAmqpLib\\Connection\\Heartbeat\\PCNTLHeartbeatSender",
             "name": "PCNTLHeartbeatSender",
@@ -2818,7 +3003,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\PhpAmqpLib\\Helper\\Protocol\\Protocol091\u003A\u003AbasicQos\u0028\u0029",
             "name": "basicQos",
-            "summary": "",
+            "summary": "Specifies\u0020QoS",
             "url": "classes/PhpAmqpLib-Helper-Protocol-Protocol091.html#method_basicQos"
         },                {
             "fqsen": "\\PhpAmqpLib\\Helper\\Protocol\\Protocol091\u003A\u003AbasicQosOk\u0028\u0029",
@@ -3271,51 +3456,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Package.html#constant_VERSION"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient",
-            "name": "AbstractClient",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003AcorrectEndianness\u0028\u0029",
-            "name": "correctEndianness",
-            "summary": "Converts\u0020byte\u002Dstring\u0020between\u0020native\u0020and\u0020network\u0020byte\u0020order,\u0020in\u0020both\u0020directions",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#method_correctEndianness"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003AconvertByteOrder\u0028\u0029",
-            "name": "convertByteOrder",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#method_convertByteOrder"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003AgetLongMSB\u0028\u0029",
-            "name": "getLongMSB",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#method_getLongMSB"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003AgetMSB\u0028\u0029",
-            "name": "getMSB",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#method_getMSB"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003A\u0024isLittleEndian",
-            "name": "isLittleEndian",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#property_isLittleEndian"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003AgetBigInteger\u0028\u0029",
-            "name": "getBigInteger",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#method_getBigInteger"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003APLATFORM_64BIT",
-            "name": "PLATFORM_64BIT",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#constant_PLATFORM_64BIT"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AbstractClient\u003A\u003A\u0024bigIntegers",
-            "name": "bigIntegers",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AbstractClient.html#property_bigIntegers"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPAbstractCollection",
             "name": "AMQPAbstractCollection",
             "summary": "Iterator\u0020implemented\u0020for\u0020transparent\u0020integration\u0020with\u0020AMQPWriter\u003A\u003Awrite_\u005Barray\u007Ctable\u005D\u0028\u0029",
@@ -3606,6 +3746,131 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPArray.html#method_push"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader",
+            "name": "AMQPBufferReader",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html#method___construct"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader\u003A\u003Aclose\u0028\u0029",
+            "name": "close",
+            "summary": "Close\u0020the\u0020byte\u0020stream.",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html#method_close"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader\u003A\u003Areset\u0028\u0029",
+            "name": "reset",
+            "summary": "Resets\u0020the\u0020object\u0020from\u0020the\u0020injected\u0020param",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html#method_reset"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader\u003A\u003Arawread\u0028\u0029",
+            "name": "rawread",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html#method_rawread"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader\u003A\u003A\u0024buffer",
+            "name": "buffer",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html#property_buffer"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPBufferReader\u003A\u003A\u0024length",
+            "name": "length",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPBufferReader.html#property_length"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream",
+            "name": "AMQPByteStream",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AcorrectEndianness\u0028\u0029",
+            "name": "correctEndianness",
+            "summary": "Converts\u0020byte\u002Dstring\u0020between\u0020native\u0020and\u0020network\u0020byte\u0020order,\u0020in\u0020both\u0020directions",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_correctEndianness"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AconvertByteOrder\u0028\u0029",
+            "name": "convertByteOrder",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_convertByteOrder"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AgetLongMSB\u0028\u0029",
+            "name": "getLongMSB",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getLongMSB"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AgetMSB\u0028\u0029",
+            "name": "getMSB",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getMSB"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003A\u0024isLittleEndian",
+            "name": "isLittleEndian",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#property_isLittleEndian"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AgetBigInteger\u0028\u0029",
+            "name": "getBigInteger",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#method_getBigInteger"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ABIT",
+            "name": "BIT",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_BIT"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AOCTET",
+            "name": "OCTET",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_OCTET"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ASHORTSTR",
+            "name": "SHORTSTR",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SHORTSTR"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ASHORT",
+            "name": "SHORT",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SHORT"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ALONG",
+            "name": "LONG",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_LONG"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ASIGNED_LONG",
+            "name": "SIGNED_LONG",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_SIGNED_LONG"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003AREAD_PHP_INT",
+            "name": "READ_PHP_INT",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_READ_PHP_INT"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ALONGLONG",
+            "name": "LONGLONG",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_LONGLONG"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003ATIMESTAMP",
+            "name": "TIMESTAMP",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_TIMESTAMP"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003APLATFORM_64BIT",
+            "name": "PLATFORM_64BIT",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#constant_PLATFORM_64BIT"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPByteStream\u003A\u003A\u0024bigIntegers",
+            "name": "bigIntegers",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPByteStream.html#property_bigIntegers"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPDecimal",
             "name": "AMQPDecimal",
             "summary": "AMQP\u0020protocol\u0020decimal\u0020value.",
@@ -3641,40 +3906,70 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPDecimal.html#property_e"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader",
-            "name": "AMQPReader",
-            "summary": "This\u0020class\u0020can\u0020read\u0020from\u0020a\u0020string\u0020or\u0020from\u0020a\u0020stream",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html"
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader",
+            "name": "AMQPIOReader",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A__construct\u0028\u0029",
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
             "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method___construct"
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#method___construct"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Areuse\u0028\u0029",
-            "name": "reuse",
-            "summary": "Resets\u0020the\u0020object\u0020from\u0020the\u0020injected\u0020param",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_reuse"
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003Aclose\u0028\u0029",
+            "name": "close",
+            "summary": "Close\u0020the\u0020byte\u0020stream.",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#method_close"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003AgetTimeout\u0028\u0029",
+            "name": "getTimeout",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#method_getTimeout"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003AsetTimeout\u0028\u0029",
+            "name": "setTimeout",
+            "summary": "Sets\u0020the\u0020timeout\u0020\u0028second\u0029",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#method_setTimeout"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003Arawread\u0028\u0029",
+            "name": "rawread",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#method_rawread"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003Await\u0028\u0029",
+            "name": "wait",
+            "summary": "Waits\u0020until\u0020some\u0020data\u0020is\u0020retrieved\u0020from\u0020the\u0020socket.",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#method_wait"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#property_io"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPIOReader\u003A\u003A\u0024timeout",
+            "name": "timeout",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPIOReader.html#property_timeout"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader",
+            "name": "AMQPReader",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Aclose\u0028\u0029",
             "name": "close",
-            "summary": "Closes\u0020the\u0020stream",
+            "summary": "Close\u0020the\u0020byte\u0020stream.",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_close"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Aread\u0028\u0029",
-            "name": "read",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_read"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Await\u0028\u0029",
-            "name": "wait",
-            "summary": "Waits\u0020until\u0020some\u0020data\u0020is\u0020retrieved\u0020from\u0020the\u0020socket.",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_wait"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Arawread\u0028\u0029",
             "name": "rawread",
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_rawread"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Aread\u0028\u0029",
+            "name": "read",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_read"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Aread_bit\u0028\u0029",
             "name": "read_bit",
@@ -3771,6 +4066,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_read_array_object"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003AreadFrameHeader\u0028\u0029",
+            "name": "readFrameHeader",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_readFrameHeader"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003Aread_value\u0028\u0029",
             "name": "read_value",
             "summary": "Reads\u0020the\u0020next\u0020value\u0020as\u0020the\u0020provided\u0020field\u0020type.",
@@ -3781,75 +4081,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_tell"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003AsetTimeout\u0028\u0029",
-            "name": "setTimeout",
-            "summary": "Sets\u0020the\u0020timeout\u0020\u0028second\u0029",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_setTimeout"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003AgetTimeout\u0028\u0029",
-            "name": "getTimeout",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_getTimeout"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003AresetCounters\u0028\u0029",
             "name": "resetCounters",
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#method_resetCounters"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ABIT",
-            "name": "BIT",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_BIT"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003AOCTET",
-            "name": "OCTET",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_OCTET"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ASHORTSTR",
-            "name": "SHORTSTR",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_SHORTSTR"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ASHORT",
-            "name": "SHORT",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_SHORT"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ALONG",
-            "name": "LONG",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_LONG"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ASIGNED_LONG",
-            "name": "SIGNED_LONG",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_SIGNED_LONG"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003AREAD_PHP_INT",
-            "name": "READ_PHP_INT",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_READ_PHP_INT"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ALONGLONG",
-            "name": "LONGLONG",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_LONGLONG"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003ATIMESTAMP",
-            "name": "TIMESTAMP",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#constant_TIMESTAMP"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A\u0024str",
-            "name": "str",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#property_str"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A\u0024str_length",
-            "name": "str_length",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#property_str_length"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A\u0024offset",
             "name": "offset",
@@ -3861,20 +4096,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#property_bitcount"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A\u0024timeout",
-            "name": "timeout",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#property_timeout"
-        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A\u0024bits",
             "name": "bits",
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#property_bits"
-        },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\AMQPReader\u003A\u003A\u0024io",
-            "name": "io",
-            "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-AMQPReader.html#property_io"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\AMQPTable",
             "name": "AMQPTable",
@@ -4176,6 +4401,11 @@ Search.appendIndex(
             "summary": "Set\u0020ups\u0020the\u0020connection.",
             "url": "classes/PhpAmqpLib-Wire-IO-AbstractIO.html#method_connect"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\IO\\AbstractIO\u003A\u003AafterTune\u0028\u0029",
+            "name": "afterTune",
+            "summary": "Set\u0020connection\u0020params\u0020connection\u0020tune\u0028negotiation\u0029.",
+            "url": "classes/PhpAmqpLib-Wire-IO-AbstractIO.html#method_afterTune"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\IO\\AbstractIO\u003A\u003Acheck_heartbeat\u0028\u0029",
             "name": "check_heartbeat",
             "summary": "Heartbeat\u0020logic\u003A\u0020check\u0020connection\u0020health\u0020here",
@@ -4240,6 +4470,11 @@ Search.appendIndex(
             "name": "BUFFER_SIZE",
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-IO-AbstractIO.html#constant_BUFFER_SIZE"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\IO\\AbstractIO\u003A\u003A\u0024config",
+            "name": "config",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-IO-AbstractIO.html#property_config"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\IO\\AbstractIO\u003A\u003A\u0024host",
             "name": "host",
@@ -4361,6 +4596,11 @@ Search.appendIndex(
             "summary": "Begin\u0020tracking\u0020errors\u0020and\u0020set\u0020the\u0020error\u0020handler",
             "url": "classes/PhpAmqpLib-Wire-IO-SocketIO.html#method_setErrorHandler"
         },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\IO\\SocketIO\u003A\u003AisIpv6\u0028\u0029",
+            "name": "isIpv6",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-IO-SocketIO.html#method_isIpv6"
+        },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\IO\\SocketIO\u003A\u003A\u0024sock",
             "name": "sock",
             "summary": "",
@@ -4380,6 +4620,11 @@ Search.appendIndex(
             "name": "connect",
             "summary": "Set\u0020ups\u0020the\u0020connection.",
             "url": "classes/PhpAmqpLib-Wire-IO-StreamIO.html#method_connect"
+        },                {
+            "fqsen": "\\PhpAmqpLib\\Wire\\IO\\StreamIO\u003A\u003AsetupContext\u0028\u0029",
+            "name": "setupContext",
+            "summary": "",
+            "url": "classes/PhpAmqpLib-Wire-IO-StreamIO.html#method_setupContext"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\IO\\StreamIO\u003A\u003Aread\u0028\u0029",
             "name": "read",
@@ -4431,10 +4676,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/PhpAmqpLib-Wire-IO-StreamIO.html#method_extract_error_code"
         },                {
-            "fqsen": "\\PhpAmqpLib\\Wire\\IO\\StreamIO\u003A\u003A\u0024protocol",
-            "name": "protocol",
+            "fqsen": "\\PhpAmqpLib\\Wire\\IO\\StreamIO\u003A\u003AenableCrypto\u0028\u0029",
+            "name": "enableCrypto",
             "summary": "",
-            "url": "classes/PhpAmqpLib-Wire-IO-StreamIO.html#property_protocol"
+            "url": "classes/PhpAmqpLib-Wire-IO-StreamIO.html#method_enableCrypto"
         },                {
             "fqsen": "\\PhpAmqpLib\\Wire\\IO\\StreamIO\u003A\u003A\u0024context",
             "name": "context",
