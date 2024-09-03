@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.7.1](https://github.com/php-amqplib/php-amqplib/tree/v3.7.1) (2024-09-03)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.7.0...v3.7.1)
+
+**Implemented enhancements:**
+
+- Fix wrong stream IO error code, improve write speed [\#1192](https://github.com/php-amqplib/php-amqplib/pull/1192) ([ramunasd](https://github.com/ramunasd))
+- AMQP Exception marker interface is for `Throwable` types [\#1189](https://github.com/php-amqplib/php-amqplib/pull/1189) ([Ocramius](https://github.com/Ocramius))
+
 ## [v3.7.0](https://github.com/php-amqplib/php-amqplib/tree/v3.7.0) (2024-07-09)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.6.2...v3.7.0)
