@@ -207,6 +207,11 @@ class AMQPChannel extends AbstractChannel
         ), false, $this->channel_rpc_timeout);
     }
 
+    public function markClosed()
+    {
+        $this->do_close();
+    }
+
     /**
      * @param AMQPReader $reader
      * @throws AMQPProtocolChannelException
