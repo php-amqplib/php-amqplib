@@ -207,9 +207,19 @@ class AMQPChannel extends AbstractChannel
         ), false, $this->channel_rpc_timeout);
     }
 
-    public function markClosed()
+    /**
+     * Closes a channel if no connection or a connection is closed
+     *
+     * @return bool
+     */
+    public function closeIfDisconnected(): bool
     {
+        if (!$this->connection || $this->connection->isConnected()) {
+            return false;
+        }
+
         $this->do_close();
+        return true;
     }
 
     /**
