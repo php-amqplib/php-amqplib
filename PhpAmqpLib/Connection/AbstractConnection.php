@@ -424,7 +424,7 @@ abstract class AbstractConnection extends AbstractChannel
         $this->frame_queue = new \SplQueue();
         $this->method_queue = [];
         $this->setIsConnected(false);
-        $this->markChannelsClosed();
+        $this->closeChannelsIfDisconnected();
         $this->close_input();
         $this->close_socket();
     }
@@ -1114,9 +1114,9 @@ abstract class AbstractConnection extends AbstractChannel
     }
 
     /**
-     * Mark all available channels as closed
+     * Closes all available channels if disconnected
      */
-    protected function markChannelsClosed()
+    protected function closeChannelsIfDisconnected()
     {
         foreach ($this->channels as $key => $channel) {
             // channels[0] is this connection object, so don't close it yet
@@ -1124,7 +1124,7 @@ abstract class AbstractConnection extends AbstractChannel
                 continue;
             }
 
-            $channel->markClosed();
+            $channel->closeIfDisconnected();
         }
     }
 
