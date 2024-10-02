@@ -208,6 +208,21 @@ class AMQPChannel extends AbstractChannel
     }
 
     /**
+     * Closes a channel if no connection or a connection is closed
+     *
+     * @return bool
+     */
+    public function closeIfDisconnected(): bool
+    {
+        if (!$this->connection || $this->connection->isConnected()) {
+            return false;
+        }
+
+        $this->do_close();
+        return true;
+    }
+
+    /**
      * @param AMQPReader $reader
      * @throws AMQPProtocolChannelException
      */

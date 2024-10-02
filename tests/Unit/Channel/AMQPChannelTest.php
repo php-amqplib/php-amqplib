@@ -9,6 +9,7 @@ use PhpAmqpLib\Tests\Unit\Test\BufferIO;
 use PhpAmqpLib\Tests\Unit\Test\TestChannel;
 use PhpAmqpLib\Tests\Unit\Test\TestConnection;
 use PhpAmqpLib\Wire\AMQPWriter;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AMQPChannelTest extends TestCase
@@ -97,6 +98,72 @@ class AMQPChannelTest extends TestCase
             ->method('write');
 
         $channel->publish_batch();
+    }
+
+    /**
+     * @test
+     */
+    public function close_if_disconnected_false(): void
+    {
+        $mockBuilder = $this->getMockBuilder(TestConnection::class)
+            ->disableOriginalConstructor();
+
+        $methodsToMock = [
+            'isConnected',
+        ];
+
+        if (!method_exists($mockBuilder, 'onlyMethods')) {
+            $mockBuilder->setMethods($methodsToMock);
+        } else {
+            $mockBuilder->onlyMethods($methodsToMock);
+        }
+
+        /** @var MockObject&TestConnection $connectionMock */
+        $connectionMock = $mockBuilder->getMock();
+        $channel = new TestChannel($connectionMock, 1);
+
+        $connectionMock->expects(self::once())
+            ->method('isConnected')
+            ->willReturn(true);
+
+        // Should return `false` because $this->connection->isConnected()
+        $firstResult = $channel->closeIfDisconnected();
+        $this->assertFalse($firstResult);
+    }
+
+    /**
+     * @test
+     */
+    public function close_if_disconnected_true(): void
+    {
+        $mockBuilder = $this->getMockBuilder(TestConnection::class)
+            ->disableOriginalConstructor();
+
+        $methodsToMock = [
+            'isConnected',
+        ];
+
+        if (!method_exists($mockBuilder, 'onlyMethods')) {
+            $mockBuilder->setMethods($methodsToMock);
+        } else {
+            $mockBuilder->onlyMethods($methodsToMock);
+        }
+
+        /** @var MockObject&TestConnection $connectionMock */
+        $connectionMock = $mockBuilder->getMock();
+        $channel = new TestChannel($connectionMock, 1);
+
+        $connectionMock->expects(self::once())
+            ->method('isConnected')
+            ->willReturn(false);
+
+        // Should return true
+        $firstResult = $channel->closeIfDisconnected();
+        $this->assertTrue($firstResult);
+
+        // Should return `false` because no $this->connection
+        $secondResult = $channel->closeIfDisconnected();
+        $this->assertFalse($secondResult);
     }
 
     public function basic_consume_invalid_arguments_provider()
