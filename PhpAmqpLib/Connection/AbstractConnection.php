@@ -182,7 +182,7 @@ abstract class AbstractConnection extends AbstractChannel
         $login_method = 'AMQPLAIN',
         $login_response = null,
         $locale = 'en_US',
-        AbstractIO $io = null,
+        ?AbstractIO $io = null,
         $heartbeat = 0,
         $connection_timeout = 0,
         $channel_rpc_timeout = 0.0,
