@@ -9,7 +9,7 @@ class AMQPTimeoutException extends \RuntimeException implements AMQPExceptionInt
      */
     private $timeout;
 
-    public function __construct($message = '', $timeout = 0, $code = 0, \Exception $previous = null)
+    public function __construct($message = '', $timeout = 0, $code = 0, ?\Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->timeout = $timeout;
