@@ -45,6 +45,10 @@ jobs:
             phpseclib: '^3.0'
             composer: 'composer:v2'
             coverage: none
+          - php: '8.4'
+            phpseclib: '^3.0'
+            composer: 'composer:v2'
+            coverage: none
 
     name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
     env:
