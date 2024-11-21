@@ -1,5 +1,20 @@
 # Changelog
 
+## [v3.7.2](https://github.com/php-amqplib/php-amqplib/tree/v3.7.2) (2024-11-21)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.7.1...v3.7.2)
+
+**Fixed bugs:**
+
+- fix: deprecation warnings with PHP 8.4 [\#1200](https://github.com/php-amqplib/php-amqplib/pull/1200) ([acelaya](https://github.com/acelaya))
+- fix: Mark channels closed when connection is closed [\#1195](https://github.com/php-amqplib/php-amqplib/pull/1195) ([Xfaider48](https://github.com/Xfaider48))
+
+**Closed issues:**
+
+- Deprecation warnings thrown with PHP 8.4 [\#1198](https://github.com/php-amqplib/php-amqplib/issues/1198)
+- error handler in StreamIO::write\(\) assumes last\_error is present [\#1188](https://github.com/php-amqplib/php-amqplib/issues/1188)
+- Breaking changes with pcntl signals on `channel->wait function`, when using `non_blocking: false` [\#1135](https://github.com/php-amqplib/php-amqplib/issues/1135)
+
 ## [v3.7.1](https://github.com/php-amqplib/php-amqplib/tree/v3.7.1) (2024-09-03)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.7.0...v3.7.1)
