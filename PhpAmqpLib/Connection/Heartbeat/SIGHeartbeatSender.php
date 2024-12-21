@@ -20,7 +20,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
     private $signal;
 
     /**
-     * @var int|null the PID (process ID) of the child process sending regular signals to manage heartbeats
+     * @var int the PID (process ID) of the child process sending regular signals to manage heartbeats
      */
     private $childPid;
 
@@ -58,7 +58,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
             posix_kill($this->childPid, SIGKILL);
             pcntl_waitpid($this->childPid, $status);
         }
-        $this->childPid = null;
+        $this->childPid = 0;
     }
 
     private function registerListener(int $interval): void
@@ -84,7 +84,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
                 $slept = sleep($interval);
                 if ($slept !== 0) {
                     // interupted by signal from parent, exit immediately
-                    exit;
+                    die;
                 }
                 posix_kill($parent, $this->signal);
             }
