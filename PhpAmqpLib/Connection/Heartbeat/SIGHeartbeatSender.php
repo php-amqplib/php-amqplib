@@ -56,6 +56,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
         pcntl_signal($this->signal, SIG_IGN);
         if ($this->childPid > 0) {
             posix_kill($this->childPid, SIGKILL);
+            pcntl_waitpid($this->childPid, $status);
         }
         $this->childPid = null;
     }
@@ -80,7 +81,11 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
         $pid = pcntl_fork();
         if(!$pid) {
             while (true){
-                sleep($interval);
+                $slept = sleep($interval);
+                if ($slept !== 0) {
+                    // interupted by signal from parent, exit immediately
+                    exit;
+                }
                 posix_kill($parent, $this->signal);
             }
         } else {
