@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-            <title>php-amqplib</title>
-    
+    <title>php-amqplib</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
     <link rel="icon" href="images/favicon.ico"/>
@@ -55,36 +54,34 @@
 <aside class="phpdocumentor-column -four phpdocumentor-sidebar">
                     <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace">
-    <a href="namespaces/phpamqplib.html" class="">PhpAmqpLib</a>
-</h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="namespaces/phpamqplib.html">PhpAmqpLib</a></h4>
     <ul class="phpdocumentor-list">
                     <li>
-                <a href="namespaces/phpamqplib-channel.html" class="">Channel</a>
+                <a href="namespaces/phpamqplib-channel.html">Channel</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-connection.html" class="">Connection</a>
+                <a href="namespaces/phpamqplib-connection.html">Connection</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-exception.html" class="">Exception</a>
+                <a href="namespaces/phpamqplib-exception.html">Exception</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-exchange.html" class="">Exchange</a>
+                <a href="namespaces/phpamqplib-exchange.html">Exchange</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-helper.html" class="">Helper</a>
+                <a href="namespaces/phpamqplib-helper.html">Helper</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-message.html" class="">Message</a>
+                <a href="namespaces/phpamqplib-message.html">Message</a>
                 
             </li>
                     <li>
-                <a href="namespaces/phpamqplib-wire.html" class="">Wire</a>
+                <a href="namespaces/phpamqplib-wire.html">Wire</a>
                 
             </li>
             </ul>
@@ -92,9 +89,7 @@
                         </section>
                 <section class="phpdocumentor-sidebar__category">
             <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
-                                    <h4 class="phpdocumentor-sidebar__root-namespace">
-    <a href="packages/PhpAmqpLib.html" class="">PhpAmqpLib</a>
-</h4>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace"><a href="packages/PhpAmqpLib.html">PhpAmqpLib</a></h4>
 
                         </section>
             
@@ -168,24 +163,31 @@
 </h3>
 
 <dl class="phpdocumentor-table-of-contents">
-                        <dt class="phpdocumentor-table-of-contents__entry -method -public">
+                    <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a href="classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_create">create()</a>
     <span>
-                                &nbsp;: <a href="classes/PhpAmqpLib-Connection-AbstractConnection.html"><abbr title="\PhpAmqpLib\Connection\AbstractConnection">AbstractConnection</abbr></a>    </span>
+                        &nbsp;: <a href="classes/PhpAmqpLib-Connection-AbstractConnection.html"><abbr title="\PhpAmqpLib\Connection\AbstractConnection">AbstractConnection</abbr></a>    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_getReadWriteTimeout">getReadWriteTimeout()</a>
     <span>
-                                &nbsp;: float    </span>
+                        &nbsp;: float    </span>
 </dt>
 <dd></dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a href="classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_getSslOptions">getSslOptions()</a>
     <span>
-                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
+                        &nbsp;: array&lt;string|int, string&gt;    </span>
+</dt>
+<dd></dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a href="classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_getStreamContext">getStreamContext()</a>
+    <span>
+                        &nbsp;: resource|null    </span>
 </dt>
 <dd></dd>
 
@@ -259,7 +261,7 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/AMQPConnectionFactory.php"><a href="files/phpamqplib-connection-amqpconnectionfactory.html"><abbr title="PhpAmqpLib/Connection/AMQPConnectionFactory.php">AMQPConnectionFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">98</span>
+    <span class="phpdocumentor-element-found-in__line">60</span>
 
     </aside>
 
@@ -303,14 +305,14 @@
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/AMQPConnectionFactory.php"><a href="files/phpamqplib-connection-amqpconnectionfactory.html"><abbr title="PhpAmqpLib/Connection/AMQPConnectionFactory.php">AMQPConnectionFactory.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">107</span>
+    <span class="phpdocumentor-element-found-in__line">69</span>
 
     </aside>
 
     
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
-            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getSslOptions</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html"><abbr title="\PhpAmqpLib\Connection\AMQPConnectionConfig">AMQPConnectionConfig</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$config</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span></code>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getSslOptions</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html"><abbr title="\PhpAmqpLib\Connection\AMQPConnectionConfig">AMQPConnectionConfig</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$config</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span></code>
 
     
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
@@ -327,7 +329,49 @@
     
 
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
-    <span class="phpdocumentor-signature__response_type">array&lt;string|int, mixed&gt;</span>
+    <span class="phpdocumentor-signature__response_type">array&lt;string|int, string&gt;</span>
+            &mdash;
+        
+    
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_getStreamContext">
+        getStreamContext()
+        <a href="classes/PhpAmqpLib-Connection-AMQPConnectionFactory.html#method_getStreamContext" class="headerlink"><i class="fas fa-link"></i></a>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="PhpAmqpLib/Connection/AMQPConnectionFactory.php"><a href="files/phpamqplib-connection-amqpconnectionfactory.html"><abbr title="PhpAmqpLib/Connection/AMQPConnectionFactory.php">AMQPConnectionFactory.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">91</span>
+
+    </aside>
+
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__name">getStreamContext</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html"><abbr title="\PhpAmqpLib\Connection\AMQPConnectionConfig">AMQPConnectionConfig</abbr></a>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$config</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">resource|null</span></code>
+
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$config</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><a href="classes/PhpAmqpLib-Connection-AMQPConnectionConfig.html"><abbr title="\PhpAmqpLib\Connection\AMQPConnectionConfig">AMQPConnectionConfig</abbr></a></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+    <span class="phpdocumentor-signature__response_type">resource|null</span>
             &mdash;
         
     
