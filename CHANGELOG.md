@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.7.3](https://github.com/php-amqplib/php-amqplib/tree/v3.7.3) (2025-02-18)
+
+[Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.7.2...v3.7.3)
+
+**Fixed bugs:**
+
+- fix: stop signal sending from child once interrupted, ensure child process is terminated [\#1205](https://github.com/php-amqplib/php-amqplib/pull/1205) ([ramunasd](https://github.com/ramunasd))
+
 ## [v3.7.2](https://github.com/php-amqplib/php-amqplib/tree/v3.7.2) (2024-11-21)
 
 [Full Changelog](https://github.com/php-amqplib/php-amqplib/compare/v3.7.1...v3.7.2)
