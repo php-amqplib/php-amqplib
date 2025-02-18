@@ -59,5 +59,8 @@
         "branch-alias": {
             "dev-master": "3.0-dev"
         }
+    },
+    "provide": {
+        "ext-amqp": "*"
     }
 }
