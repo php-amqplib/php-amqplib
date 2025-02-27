@@ -50,7 +50,7 @@ Extensions that modify existing methods like `alternate exchanges` are also supp
 Ensure you have [composer](http://getcomposer.org) installed, then run the following command:
 
 ```bash
-$ composer require php-amqplib/php-amqplib
+composer require php-amqplib/php-amqplib
 ```
 
 That will fetch the library and its dependencies inside your vendor folder. Then you can add the following to your
@@ -72,15 +72,15 @@ use PhpAmqpLib\Message\AMQPMessage;
 With RabbitMQ running open two Terminals and on the first one execute the following commands to start the consumer:
 
 ```bash
-$ cd php-amqplib/demo
-$ php amqp_consumer.php
+cd php-amqplib/demo
+php amqp_consumer.php
 ```
 
 Then on the other Terminal do:
 
 ```bash
-$ cd php-amqplib/demo
-$ php amqp_publisher.php some text to publish
+cd php-amqplib/demo
+php amqp_publisher.php some text to publish
 ```
 
 You should see the message arriving to the process on the other Terminal
@@ -88,13 +88,13 @@ You should see the message arriving to the process on the other Terminal
 Then to stop the consumer, send to it the `quit` message:
 
 ```bash
-$ php amqp_publisher.php quit
+php amqp_publisher.php quit
 ```
 
 If you need to listen to the sockets used to connect to RabbitMQ then see the example in the non blocking consumer.
 
 ```bash
-$ php amqp_consumer_non_blocking.php
+php amqp_consumer_non_blocking.php
 ```
 
 ## Change log
@@ -329,7 +329,7 @@ define('AMQP_DEBUG', true);
 To run the publishing/consume benchmark type:
 
 ```bash
-$ make benchmark
+make benchmark
 ```
 
 ## Tests and Contributing
