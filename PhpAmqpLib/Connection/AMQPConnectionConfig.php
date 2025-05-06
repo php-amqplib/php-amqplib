@@ -16,6 +16,24 @@ final class AMQPConnectionConfig
     public const IO_TYPE_STREAM = 'stream';
     public const IO_TYPE_SOCKET = 'socket';
 
+    /**
+     * @var int Use the lowest value between client and broker, disable if the client value is 0.
+     * @deprecated This is the default for BC reasons, but in 4.0.0 the default will change to AUTO and this option may be removed.
+     */
+    public const HEARTBEAT_TUNE_LEGACY = 1;
+
+    /** @var int Use the lowest value between client and broker, ignore 0 values, only disable if both are 0. */
+    public const HEARTBEAT_TUNE_AUTO = 2;
+
+    /** @var int Always use the broker value, ignore the client value, disable if the broker value is 0. */
+    public const HEARTBEAT_TUNE_PREFER_BROKER = 3;
+
+    /** @var int Always use the client value, ignore the broker value, disable if the client value is 0. */
+    public const HEARTBEAT_TUNE_PREFER_CLIENT = 4;
+
+    /** @var int Default value for the heartbeat tune. */
+    public const HEARTBEAT_TUNE_DEFAULT = self::HEARTBEAT_TUNE_LEGACY;
+
     /** @var string */
     private $ioType = self::IO_TYPE_STREAM;
 
@@ -131,6 +149,9 @@ final class AMQPConnectionConfig
 
     /** @var string */
     private $connectionName = '';
+
+    /** @var int */
+    private $heartbeatTune = self::HEARTBEAT_TUNE_DEFAULT;
 
     /**
      * Output all networks packets for debug purposes.
@@ -322,6 +343,24 @@ final class AMQPConnectionConfig
     {
         self::assertGreaterOrEq($heartbeat, 0, 'heartbeat');
         $this->heartbeat = $heartbeat;
+    }
+
+    public function getHeartbeatTune(): int
+    {
+        return $this->heartbeatTune;
+    }
+
+    public function setHeartbeatTune(int $heartbeatTune): void
+    {
+        if (false === in_array($heartbeatTune, [
+            self::HEARTBEAT_TUNE_LEGACY,
+            self::HEARTBEAT_TUNE_AUTO,
+            self::HEARTBEAT_TUNE_PREFER_BROKER,
+            self::HEARTBEAT_TUNE_PREFER_CLIENT,
+        ], true)) {
+            throw new InvalidArgumentException('Unknown heartbeat tune: ' . $heartbeatTune);
+        }
+        $this->heartbeatTune = $heartbeatTune;
     }
 
     public function isKeepalive(): bool

@@ -44,15 +44,35 @@ class ConnectionCreationTest extends AbstractConnectionTest
 
     /**
      * @test
-     * @testWith [0, 0, 0]
-     *           [0, 10, 0]
-     *           [10, 0, 10]
-     *           [10, 20, 10]
-     *           [20, 10, 10]
+     * @testWith [0, 0, 0, null]
+     *           [0, 10, 0, null]
+     *           [10, 0, 10, null]
+     *           [10, 20, 10, null]
+     *           [20, 10, 10, null]
+     *           [0, 0, 0, 1]
+     *           [0, 10, 0, 1]
+     *           [10, 0, 10, 1]
+     *           [10, 20, 10, 1]
+     *           [20, 10, 10, 1]
+     *           [0, 0, 0, 2]
+     *           [0, 10, 10, 2]
+     *           [10, 0, 10, 2]
+     *           [10, 20, 10, 2]
+     *           [20, 10, 10, 2]
+     *           [0, 0, 0, 3]
+     *           [0, 10, 10, 3]
+     *           [10, 0, 0, 3]
+     *           [10, 20, 20, 3]
+     *           [20, 10, 10, 3]
+     *           [0, 0, 0, 4]
+     *           [0, 10, 0, 4]
+     *           [10, 0, 10, 4]
+     *           [10, 20, 10, 4]
+     *           [20, 10, 20, 4]
      * @covers \PhpAmqpLib\Connection\AbstractConnection::__construct()
      * @covers \PhpAmqpLib\Connection\AbstractConnection::connection_tune()
      */
-    public function heartbeat_negotiation(int $client, int $broker, int $expected)
+    public function heartbeat_negotiation(int $client, int $broker, int $expected, ?int $tune)
     {
         $class = new \ReflectionClass(AbstractConnection::class);
         $method = $class->getMethod('connection_tune');
@@ -64,7 +84,12 @@ class ConnectionCreationTest extends AbstractConnectionTest
         $writer->write_short($broker); // broker heartbeat
         $args = new AMQPBufferReader($writer->getvalue());
 
-        $connection = $this->connection_create('stream', HOST, PORT, ['heartbeat' => $client]);
+        $connection = $this->connection_create('stream', HOST, PORT, ['heartbeat' => $client, 'heartbeatTune' => $tune]);
+
+        $property = $class->getProperty('heartbeat');
+        $property->setAccessible(true);
+        $property->setValue($connection, $client);
+
         $method->invoke($connection, $args);
         self::assertEquals($expected, $connection->getHeartbeat());
     }
