@@ -719,7 +719,7 @@ abstract class AbstractConnection extends AbstractChannel
         if (!$this->is_connected) {
             $this->connect();
         }
-        if (isset($this->channels[$channel_id])) {
+        if ($channel_id !== null && isset($this->channels[$channel_id])) {
             return $this->channels[$channel_id];
         }
 
