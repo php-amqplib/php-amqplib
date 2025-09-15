@@ -19,7 +19,7 @@ class MiscHelper
 
     /**
      * Gets a number (either int or float) and returns an array containing its integer part as first element and its
-     * decimal part mutliplied by 10^6. Useful for some PHP stream functions that need seconds and microseconds as
+     * decimal part multiplied by 10^6. Useful for some PHP stream functions that need seconds and microseconds as
      * different arguments
      *
      * @param int|float $number
