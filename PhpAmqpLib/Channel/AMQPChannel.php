@@ -24,7 +24,7 @@ class AMQPChannel extends AbstractChannel
      * @var callable[]
      * @internal Use is_consuming() to check if there is active callbacks
      */
-    public $callbacks = array();
+    public $callbacks = [];
 
     /** @var bool Whether or not the channel has been "opened" */
     protected $is_open = false;
@@ -39,7 +39,7 @@ class AMQPChannel extends AbstractChannel
     protected $stopConsume = false;
 
     /** @var array */
-    protected $alerts = array();
+    protected $alerts = [];
 
     /** @var bool */
     protected $auto_decode;
@@ -57,7 +57,7 @@ class AMQPChannel extends AbstractChannel
     protected $basic_return_callback;
 
     /** @var array Used to keep track of the messages that are going to be batch published. */
-    protected $batch_messages = array();
+    protected $batch_messages = [];
 
     /**
      * If the channel is in confirm_publish mode this array will store all published messages
@@ -65,7 +65,7 @@ class AMQPChannel extends AbstractChannel
      *
      * @var AMQPMessage[]
      */
-    private $published_messages = array();
+    private $published_messages = [];
 
     /** @var int */
     private $next_delivery_tag = 0;
@@ -84,7 +84,7 @@ class AMQPChannel extends AbstractChannel
      * @see basic_publish()
      * @see publish_batch()
      */
-    private $publish_cache = array();
+    private $publish_cache = [];
 
     /**
      * Maximal size of $publish_cache
@@ -148,7 +148,7 @@ class AMQPChannel extends AbstractChannel
         }
         $this->channel_id = $this->connection = null;
         $this->is_open = false;
-        $this->callbacks = array();
+        $this->callbacks = [];
     }
 
     /**
@@ -167,7 +167,7 @@ class AMQPChannel extends AbstractChannel
         $reply_code = $reader->read_short();
         $reply_text = $reader->read_shortstr();
         $details = $reader->read_table();
-        array_push($this->alerts, array($reply_code, $reply_text, $details));
+        array_push($this->alerts, [$reply_code, $reply_text, $details]);
     }
 
     /**
@@ -233,10 +233,10 @@ class AMQPChannel extends AbstractChannel
         $class_id = $reader->read_short();
         $method_id = $reader->read_short();
 
-        $this->send_method_frame(array(20, 41));
+        $this->send_method_frame([20, 41]);
         $this->do_close();
 
-        throw new AMQPProtocolChannelException($reply_code, $reply_text, array($class_id, $method_id));
+        throw new AMQPProtocolChannelException($reply_code, $reply_text, [$class_id, $method_id]);
     }
 
     /**
@@ -258,11 +258,11 @@ class AMQPChannel extends AbstractChannel
     public function flow($active)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->channelFlow($active);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('channel.flow_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     protected function channel_flow(AMQPReader $reader): void
@@ -277,7 +277,7 @@ class AMQPChannel extends AbstractChannel
     protected function x_flow_ok($active)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->channelFlow($active);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
     }
 
     protected function channel_flow_ok(AMQPReader $reader): bool
@@ -300,11 +300,11 @@ class AMQPChannel extends AbstractChannel
         }
 
         list($class_id, $method_id, $args) = $this->protocolWriter->channelOpen($out_of_band);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('channel.open_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     protected function channel_open_ok()
@@ -343,11 +343,11 @@ class AMQPChannel extends AbstractChannel
             $read
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('access.request_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -386,7 +386,7 @@ class AMQPChannel extends AbstractChannel
         $auto_delete = true,
         $internal = false,
         $nowait = false,
-        $arguments = array(),
+        $arguments = [],
         $ticket = null
     ) {
         $ticket = $this->getTicket($ticket);
@@ -403,15 +403,15 @@ class AMQPChannel extends AbstractChannel
             $arguments
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('exchange.declare_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -445,15 +445,15 @@ class AMQPChannel extends AbstractChannel
             $nowait
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('exchange.delete_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -480,7 +480,7 @@ class AMQPChannel extends AbstractChannel
         $source,
         $routing_key = '',
         $nowait = false,
-        $arguments = array(),
+        $arguments = [],
         $ticket = null
     ) {
         $ticket = $this->getTicket($ticket);
@@ -494,15 +494,15 @@ class AMQPChannel extends AbstractChannel
             $arguments
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('exchange.bind_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -529,7 +529,7 @@ class AMQPChannel extends AbstractChannel
         $source,
         $routing_key = '',
         $nowait = false,
-        $arguments = array(),
+        $arguments = [],
         $ticket = null
     ) {
         $ticket = $this->getTicket($ticket);
@@ -543,11 +543,11 @@ class AMQPChannel extends AbstractChannel
             $arguments
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('exchange.unbind_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -574,7 +574,7 @@ class AMQPChannel extends AbstractChannel
         $exchange,
         $routing_key = '',
         $nowait = false,
-        $arguments = array(),
+        $arguments = [],
         $ticket = null
     ) {
         $ticket = $this->getTicket($ticket);
@@ -588,15 +588,15 @@ class AMQPChannel extends AbstractChannel
             $arguments
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('queue.bind_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -621,7 +621,7 @@ class AMQPChannel extends AbstractChannel
         $queue,
         $exchange,
         $routing_key = '',
-        $arguments = array(),
+        $arguments = [],
         $ticket = null
     ) {
         $ticket = $this->getTicket($ticket);
@@ -634,11 +634,11 @@ class AMQPChannel extends AbstractChannel
             $arguments
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('queue.unbind_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -669,7 +669,7 @@ class AMQPChannel extends AbstractChannel
         $exclusive = false,
         $auto_delete = true,
         $nowait = false,
-        $arguments = array(),
+        $arguments = [],
         $ticket = null
     ) {
         $ticket = $this->getTicket($ticket);
@@ -685,15 +685,15 @@ class AMQPChannel extends AbstractChannel
             $arguments
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('queue.declare_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -708,7 +708,7 @@ class AMQPChannel extends AbstractChannel
         $message_count = $reader->read_long();
         $consumer_count = $reader->read_long();
 
-        return array($queue, $message_count, $consumer_count);
+        return [$queue, $message_count, $consumer_count];
     }
 
     /**
@@ -734,15 +734,15 @@ class AMQPChannel extends AbstractChannel
             $nowait
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('queue.delete_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -770,15 +770,15 @@ class AMQPChannel extends AbstractChannel
         $ticket = $this->getTicket($ticket);
         list($class_id, $method_id, $args) = $this->protocolWriter->queuePurge($ticket, $queue, $nowait);
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('queue.purge_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -801,7 +801,7 @@ class AMQPChannel extends AbstractChannel
     public function basic_ack($delivery_tag, $multiple = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicAck($delivery_tag, $multiple);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
     }
 
     /**
@@ -863,7 +863,7 @@ class AMQPChannel extends AbstractChannel
             }
         } else {
             $message = $this->get_and_unset_message($delivery_tag);
-            $this->dispatch_to_handler($handler, array($message));
+            $this->dispatch_to_handler($handler, [$message]);
         }
     }
 
@@ -887,7 +887,7 @@ class AMQPChannel extends AbstractChannel
 
                 return $keys;
             },
-            array()
+            []
         );
 
         return $keys;
@@ -903,7 +903,7 @@ class AMQPChannel extends AbstractChannel
     public function basic_nack($delivery_tag, $multiple = false, $requeue = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicNack($delivery_tag, $multiple, $requeue);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
     }
 
     /**
@@ -918,16 +918,16 @@ class AMQPChannel extends AbstractChannel
     public function basic_cancel($consumer_tag, $nowait = false, $noreturn = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicCancel($consumer_tag, $nowait);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait || $noreturn) {
             unset($this->callbacks[$consumer_tag]);
             return $consumer_tag;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('basic.cancel_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -992,7 +992,7 @@ class AMQPChannel extends AbstractChannel
         $nowait = false,
         $callback = null,
         $ticket = null,
-        $arguments = array()
+        $arguments = []
     ) {
         if (null !== $callback) {
             Assert::isCallable($callback);
@@ -1016,12 +1016,12 @@ class AMQPChannel extends AbstractChannel
             $this->protocolVersion === Wire\Constants091::VERSION ? $arguments : null
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if (false === $nowait) {
-            $consumer_tag = $this->wait(array(
+            $consumer_tag = $this->wait([
                 $this->waitHelper->get_wait('basic.consume_ok')
-            ), false, $this->channel_rpc_timeout);
+            ], false, $this->channel_rpc_timeout);
         }
 
         $this->callbacks[$consumer_tag] = $callback;
@@ -1078,12 +1078,12 @@ class AMQPChannel extends AbstractChannel
         $ticket = $this->getTicket($ticket);
         list($class_id, $method_id, $args) = $this->protocolWriter->basicGet($ticket, $queue, $no_ack);
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('basic.get_ok'),
             $this->waitHelper->get_wait('basic.get_empty')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -1144,7 +1144,7 @@ class AMQPChannel extends AbstractChannel
                 $immediate
             );
 
-            $pkt = $this->prepare_method_frame(array($class_id, $method_id), $args);
+            $pkt = $this->prepare_method_frame([$class_id, $method_id], $args);
             $this->publish_cache[$cache_key] = $pkt->getvalue();
             if (count($this->publish_cache) > $this->publish_cache_max_size) {
                 reset($this->publish_cache);
@@ -1276,14 +1276,14 @@ class AMQPChannel extends AbstractChannel
         }
 
         $this->connection->write($pkt->getvalue());
-        $this->batch_messages = array();
+        $this->batch_messages = [];
     }
 
     /**
      * Specifies QoS
-     * 
+     *
      * See https://www.rabbitmq.com/consumer-prefetch.html#overview for details
-     * 
+     *
      * @param int $prefetch_size Default is 0 (Alias for unlimited)
      * @param int $prefetch_count Default is 0 (Alias for unlimited)
      * @param bool $global Default is false, prefetch size and count are applied to each channel consumer separately
@@ -1298,11 +1298,11 @@ class AMQPChannel extends AbstractChannel
             $a_global
         );
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('basic.qos_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -1322,11 +1322,11 @@ class AMQPChannel extends AbstractChannel
     public function basic_recover($requeue = false)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicRecover($requeue);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('basic.recover_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -1345,7 +1345,7 @@ class AMQPChannel extends AbstractChannel
     public function basic_reject($delivery_tag, $requeue)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->basicReject($delivery_tag, $requeue);
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
     }
 
     /**
@@ -1367,13 +1367,13 @@ class AMQPChannel extends AbstractChannel
         $exchange = $reader->read_shortstr();
         $routing_key = $reader->read_shortstr();
 
-        call_user_func_array($callback, array(
+        call_user_func_array($callback, [
             $reply_code,
             $reply_text,
             $exchange,
             $routing_key,
             $message,
-        ));
+        ]);
     }
 
     /**
@@ -1382,11 +1382,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function tx_commit()
     {
-        $this->send_method_frame(array(90, 20));
+        $this->send_method_frame([90, 20]);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('tx.commit_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -1404,11 +1404,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function tx_rollback()
     {
-        $this->send_method_frame(array(90, 30));
+        $this->send_method_frame([90, 30]);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('tx.rollback_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
@@ -1429,15 +1429,15 @@ class AMQPChannel extends AbstractChannel
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->confirmSelect($nowait);
 
-        $this->send_method_frame(array($class_id, $method_id), $args);
+        $this->send_method_frame([$class_id, $method_id], $args);
 
         if ($nowait) {
             return null;
         }
 
-        $this->wait(array(
+        $this->wait([
             $this->waitHelper->get_wait('confirm.select_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
         $this->next_delivery_tag = 1;
     }
 
@@ -1458,10 +1458,10 @@ class AMQPChannel extends AbstractChannel
      */
     public function wait_for_pending_acks($timeout = 0)
     {
-        $functions = array(
+        $functions = [
             $this->waitHelper->get_wait('basic.ack'),
             $this->waitHelper->get_wait('basic.nack'),
-        );
+        ];
         $timeout = max(0, $timeout);
         while (!empty($this->published_messages)) {
             $this->wait($functions, false, $timeout);
@@ -1478,11 +1478,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function wait_for_pending_acks_returns($timeout = 0)
     {
-        $functions = array(
+        $functions = [
             $this->waitHelper->get_wait('basic.ack'),
             $this->waitHelper->get_wait('basic.nack'),
             $this->waitHelper->get_wait('basic.return'),
-        );
+        ];
 
         $timeout = max(0, $timeout);
         while (!empty($this->published_messages)) {
@@ -1498,11 +1498,11 @@ class AMQPChannel extends AbstractChannel
      */
     public function tx_select()
     {
-        $this->send_method_frame(array(90, 10));
+        $this->send_method_frame([90, 10]);
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('tx.select_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
