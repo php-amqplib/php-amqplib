@@ -44,6 +44,11 @@ abstract class AbstractConnectionTest extends TestCaseCompat
         $config->setPort($port);
         $config->setKeepalive($options['keepalive'] ?? false);
         $config->setHeartbeat($options['heartbeat'] ?? 0);
+
+        if (true === isset($options['heartbeatTune'])) {
+            $config->setHeartbeatTune($options['heartbeatTune']);
+        }
+
         $config->setReadTimeout($timeout);
         $config->setWriteTimeout($timeout);
         $config->setConnectionTimeout($options['connectionTimeout'] ?? $timeout);

@@ -41,7 +41,7 @@ endif
 
 .PHONY: docker-test
 docker-test:
-	docker run --env-file $(CURDIR)/test.env --network php-amqplib_default \
+	docker run --rm --env-file $(CURDIR)/test.env --network php-amqplib_default \
 		--volume $(CURDIR):/src --workdir /src \
 		--user "$$(id -u):$$(id -g)" php-amqplib-php:latest \
 			/bin/sh -c '/usr/bin/composer install && ./vendor/bin/phpunit'
