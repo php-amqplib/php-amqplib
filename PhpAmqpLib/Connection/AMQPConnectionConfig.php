@@ -138,6 +138,15 @@ final class AMQPConnectionConfig
      */
     private $debugPackets = false;
 
+
+    /**
+     * @var int|null $socketProtocolMode Parameter specifies the protocol family to be used by the socket.<br>
+     *    Const AF_INET IPv4 Internet based protocols.<br>
+     *    Const AF_INET6 IPv6 Internet based protocols.<br>
+     *    null Auto select
+     */
+    private $socketProtocolMode = null;
+
     public function getIoType(): string
     {
         return $this->ioType;
@@ -603,5 +612,22 @@ final class AMQPConnectionConfig
     public function setConnectionName(string $connectionName): void
     {
         $this->connectionName = $connectionName;
+    }
+
+    public function getSocketProtocolMode(): ?int
+    {
+        return $this->socketProtocolMode;
+    }
+
+
+    /**
+     * @param int|null $socketProtocolMode Parameter specifies the protocol family to be used by the socket.<br>
+     *    Const AF_INET IPv4 Internet based protocols.<br>
+     *    Const AF_INET6 IPv6 Internet based protocols.<br>
+     *    null Auto select
+     */
+    public function setSocketProtocolMode(?int $socketProtocolMode): void
+    {
+        $this->socketProtocolMode = $socketProtocolMode;
     }
 }
