@@ -428,6 +428,16 @@ class AMQPMessage
     }
 
     /**
+     * Returns the properties content
+     *
+     * @return array
+     */
+    public function getProperties()
+    {
+        return $this->get_properties();
+    }
+
+    /**
      * Sets a property value
      *
      * @param string $name The property name (one of the property definition)
