@@ -24,13 +24,13 @@ class HeadersExchangeTest extends ChannelTestCase
      */
     public function consume_specific_headers()
     {
-        list($queue1) = $this->channel->queue_declare();
+        list($queue1) = $this->channel->queue_declare('', false, true);
         $this->channel->queue_bind($queue1, $this->exchange->name);
 
         $bindArguments = [
             'foo' => 'bar',
         ];
-        list($queue2) = $this->channel->queue_declare();
+        list($queue2) = $this->channel->queue_declare('', false, true);
         $this->channel->queue_bind($queue2, $this->exchange->name, '', false, new AMQPTable($bindArguments));
 
         // publish message without headers - should appear in 1st queue without filters
