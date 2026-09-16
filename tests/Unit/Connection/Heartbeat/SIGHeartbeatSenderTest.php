@@ -68,6 +68,41 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
     }
 
     /**
+     * @test
+     */
+    public function child_exits_when_its_parent_is_gone()
+    {
+        list($testSocket, $parentSocket) = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, 0);
+
+        $parentPid = pcntl_fork();
+        if ($parentPid === 0) {
+            fclose($testSocket);
+            $sender = new SIGHeartbeatSender($this->createConnection(), $this->signal);
+            $sender->register();
+            fwrite($parentSocket, $this->readChildPid($sender) . "\n");
+            fclose($parentSocket);
+            while (true) {
+                usleep(100000);
+            }
+        }
+
+        fclose($parentSocket);
+        $childPid = (int) trim(fgets($testSocket));
+        fclose($testSocket);
+        self::assertGreaterThan(0, $childPid);
+
+        posix_kill($parentPid, SIGKILL);
+        pcntl_waitpid($parentPid, $status);
+
+        $interval = (int) ceil($this->heartbeatTimeout / 2);
+        $exited = $this->waitForProcessToExit($childPid, $interval + 3);
+        posix_kill($childPid, SIGKILL);
+        pcntl_waitpid($childPid, $status, WNOHANG);
+
+        self::assertTrue($exited);
+    }
+
+    /**
      * @return AbstractConnection
      */
     private function createConnection()
@@ -106,5 +141,24 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
         while (microtime(true) < $deadline) {
             usleep(100000);
         }
+    }
+
+    /**
+     * @param int $pid
+     * @param float $seconds
+     * @return bool
+     */
+    private function waitForProcessToExit($pid, $seconds)
+    {
+        $deadline = microtime(true) + $seconds;
+        while (microtime(true) < $deadline) {
+            pcntl_waitpid($pid, $status, WNOHANG);
+            if (!posix_kill($pid, 0)) {
+                return true;
+            }
+            usleep(100000);
+        }
+
+        return false;
     }
 }

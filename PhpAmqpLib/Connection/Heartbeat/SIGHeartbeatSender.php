@@ -86,6 +86,9 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
                     // interupted by signal from parent, exit immediately
                     die;
                 }
+                if (posix_getppid() !== $parent) {
+                    die;
+                }
                 posix_kill($parent, $this->signal);
             }
         } else {
