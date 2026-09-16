@@ -75,19 +75,23 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
         list($testSocket, $parentSocket) = stream_socket_pair(STREAM_PF_UNIX, STREAM_SOCK_STREAM, 0);
 
         $parentPid = pcntl_fork();
+
         if ($parentPid === 0) {
             fclose($testSocket);
             $sender = new SIGHeartbeatSender($this->createConnection(), $this->signal);
             $sender->register();
-            fwrite($parentSocket, $this->readChildPid($sender) . "\n");
+            $forkedChildPid = $this->readChildPid($sender);
+            fwrite($parentSocket, $forkedChildPid . "\n");
             fclose($parentSocket);
+
             while (true) {
                 usleep(100000);
             }
         }
 
         fclose($parentSocket);
-        $childPid = (int) trim(fgets($testSocket));
+        $reportedChildPid = fgets($testSocket);
+        $childPid = (int) trim($reportedChildPid);
         fclose($testSocket);
         self::assertGreaterThan(0, $childPid);
 
@@ -138,6 +142,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
     private function waitFor($seconds)
     {
         $deadline = microtime(true) + $seconds;
+
         while (microtime(true) < $deadline) {
             usleep(100000);
         }
@@ -151,11 +156,14 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
     private function waitForProcessToExit($pid, $seconds)
     {
         $deadline = microtime(true) + $seconds;
+
         while (microtime(true) < $deadline) {
             pcntl_waitpid($pid, $status, WNOHANG);
+
             if (!posix_kill($pid, 0)) {
                 return true;
             }
+
             usleep(100000);
         }
 
