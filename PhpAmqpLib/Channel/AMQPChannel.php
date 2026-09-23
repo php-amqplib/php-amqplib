@@ -167,7 +167,7 @@ class AMQPChannel extends AbstractChannel
         $reply_code = $reader->read_short();
         $reply_text = $reader->read_shortstr();
         $details = $reader->read_table();
-        array_push($this->alerts, array($reply_code, $reply_text, $details));
+        $this->alerts[] = array($reply_code, $reply_text, $details);
     }
 
     /**

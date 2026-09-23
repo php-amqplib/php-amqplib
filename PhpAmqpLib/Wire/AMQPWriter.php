@@ -20,7 +20,7 @@ class AMQPWriter extends AMQPByteStream
     private function flushbits()
     {
         if (!empty($this->bits)) {
-            $this->out .= implode('', array_map('chr', $this->bits));
+            $this->out .= pack('C*', ...$this->bits);
             $this->bits = array();
             $this->bitcount = 0;
         }
