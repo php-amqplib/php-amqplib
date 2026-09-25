@@ -40,6 +40,12 @@ jobs:
           - php: '8.5'
             phpseclib: '^3.0'
             coverage: none
+          - php: '8.1'
+            phpseclib: '^4.0'
+            coverage: none
+          - php: '8.5'
+            phpseclib: '^4.0'
+            coverage: none
 
     name: PHP ${{ matrix.php }} + phpseclib ${{ matrix.phpseclib }}
     env:

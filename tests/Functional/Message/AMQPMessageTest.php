@@ -17,7 +17,7 @@ class AMQPMessageTest extends ChannelTestCase
     public function double_ack_throws_exception()
     {
         $sent = new AMQPMessage('test' . mt_rand());
-        list($queue) = $this->channel->queue_declare();
+        list($queue) = $this->channel->queue_declare('', false, true);
         $this->channel->basic_publish($sent, '', $queue);
 
         $received = $this->channel->basic_get($queue);
@@ -45,7 +45,7 @@ class AMQPMessageTest extends ChannelTestCase
     {
         $message = new AMQPMessage('test' . mt_rand());
         $confirmed = null;
-        list($queue) = $this->channel->queue_declare();
+        list($queue) = $this->channel->queue_declare('', false, true);
         $this->channel->set_ack_handler(
             function (AMQPMessage $message) use (&$confirmed) {
                 $confirmed = $message;
