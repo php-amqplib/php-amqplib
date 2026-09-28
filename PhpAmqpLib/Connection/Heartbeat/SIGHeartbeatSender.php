@@ -86,6 +86,9 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
                     // interupted by signal from parent, exit immediately
                     die;
                 }
+                // parent is gone: an orphan is re-parented to init or a subreaper, so getppid() no longer
+                // matches, and the $parent pid may since have been reused by an unrelated process.
+                // See getppid(2) and https://pubs.opengroup.org/onlinepubs/9799919799/functions/_exit.html
                 if (posix_getppid() !== $parent) {
                     die;
                 }
