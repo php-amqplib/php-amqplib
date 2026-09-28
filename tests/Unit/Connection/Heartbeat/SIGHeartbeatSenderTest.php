@@ -30,6 +30,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
 
     /**
      * @test
+     * @covers \PhpAmqpLib\Connection\Heartbeat\SIGHeartbeatSender::unregister()
      */
     public function unregister_terminates_and_reaps_the_child()
     {
@@ -46,6 +47,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
 
     /**
      * @test
+     * @covers \PhpAmqpLib\Connection\Heartbeat\SIGHeartbeatSender::periodicAlarm()
      */
     public function child_signals_its_parent_once_per_interval()
     {
@@ -65,6 +67,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
 
     /**
      * @test
+     * @covers \PhpAmqpLib\Connection\Heartbeat\SIGHeartbeatSender::periodicAlarm()
      */
     public function child_exits_when_its_parent_is_gone()
     {
