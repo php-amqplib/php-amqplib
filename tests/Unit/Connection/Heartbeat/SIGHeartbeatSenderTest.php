@@ -15,11 +15,7 @@ use PhpAmqpLib\Tests\TestCaseCompat;
  */
 class SIGHeartbeatSenderTest extends TestCaseCompat
 {
-    /** @var int */
-    private $heartbeatTimeout = 2;
-
-    /** @var int */
-    private $signal = SIGUSR1;
+    private const HEARTBEAT_TIMEOUT = 2;
 
     /** @var SIGHeartbeatSender|null */
     private $sender;
@@ -37,7 +33,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
      */
     public function unregister_terminates_and_reaps_the_child()
     {
-        $this->sender = new SIGHeartbeatSender($this->createConnection(), $this->signal);
+        $this->sender = new SIGHeartbeatSender($this->createConnection());
         $this->sender->register();
 
         $childPid = $this->readChildPid($this->sender);
@@ -53,15 +49,15 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
      */
     public function child_signals_its_parent_once_per_interval()
     {
-        $this->sender = new SIGHeartbeatSender($this->createConnection(), $this->signal);
+        $this->sender = new SIGHeartbeatSender($this->createConnection());
         $this->sender->register();
 
         $received = 0;
-        pcntl_signal($this->signal, function () use (&$received) {
+        pcntl_signal(SIGUSR1, function () use (&$received) {
             $received++;
         });
 
-        $interval = (int) ceil($this->heartbeatTimeout / 2);
+        $interval = (int) ceil(self::HEARTBEAT_TIMEOUT / 2);
         $this->waitFor($interval * 2.5);
 
         self::assertGreaterThanOrEqual(2, $received);
@@ -78,7 +74,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
 
         if ($parentPid === 0) {
             fclose($testSocket);
-            $sender = new SIGHeartbeatSender($this->createConnection(), $this->signal);
+            $sender = new SIGHeartbeatSender($this->createConnection());
             $sender->register();
             $forkedChildPid = $this->readChildPid($sender);
             fwrite($parentSocket, $forkedChildPid . "\n");
@@ -98,7 +94,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
         posix_kill($parentPid, SIGKILL);
         pcntl_waitpid($parentPid, $status);
 
-        $interval = (int) ceil($this->heartbeatTimeout / 2);
+        $interval = (int) ceil(self::HEARTBEAT_TIMEOUT / 2);
         $exited = $this->waitForProcessToExit($childPid, $interval + 3);
         posix_kill($childPid, SIGKILL);
         pcntl_waitpid($childPid, $status, WNOHANG);
@@ -116,7 +112,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $connection->method('getHeartbeat')->willReturn($this->heartbeatTimeout);
+        $connection->method('getHeartbeat')->willReturn(self::HEARTBEAT_TIMEOUT);
         $connection->method('isConnected')->willReturn(true);
         $connection->method('isWriting')->willReturn(false);
         $connection->method('getLastActivity')->willReturn(time() + 99);
