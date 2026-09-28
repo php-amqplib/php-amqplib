@@ -86,10 +86,7 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
                     // interupted by signal from parent, exit immediately
                     die;
                 }
-                // parent is gone: an orphan is re-parented to init or a subreaper, so getppid() no longer
-                // matches, and the $parent pid may since have been reused by an unrelated process.
-                // See getppid(2) and https://pubs.opengroup.org/onlinepubs/9799919799/functions/_exit.html
-                if (posix_getppid() !== $parent) {
+                if ($this->isOrphanedFrom($parent)) {
                     die;
                 }
                 posix_kill($parent, $this->signal);
@@ -97,5 +94,21 @@ final class SIGHeartbeatSender extends AbstractSignalHeartbeatSender
         } else {
             $this->childPid = $pid;
         }
+    }
+
+    /**
+     * Whether the process that forked this one has terminated. An orphan is re-parented to init or a subreaper,
+     * so getppid() stops matching the pid captured before the fork, and that pid may since have been reused
+     * by an unrelated process.
+     *
+     * @see https://man7.org/linux/man-pages/man2/getppid.2.html
+     * @see https://pubs.opengroup.org/onlinepubs/9799919799/functions/_exit.html
+     *
+     * @param int $parentPid
+     * @return bool
+     */
+    private function isOrphanedFrom(int $parentPid): bool
+    {
+        return posix_getppid() !== $parentPid;
     }
 }
