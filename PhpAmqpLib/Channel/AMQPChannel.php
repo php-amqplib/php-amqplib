@@ -1024,7 +1024,9 @@ class AMQPChannel extends AbstractChannel
             ), false, $this->channel_rpc_timeout);
         }
 
-        $this->callbacks[$consumer_tag] = $callback;
+        if ($consumer_tag !== null) {
+            $this->callbacks[$consumer_tag] = $callback;
+        }
 
         return $consumer_tag;
     }
