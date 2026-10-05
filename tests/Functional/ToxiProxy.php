@@ -2,7 +2,8 @@
 
 namespace PhpAmqpLib\Tests\Functional;
 
-use Httpful\Request;
+use GuzzleHttp\Client;
+use Psr\Http\Client\ClientInterface;
 
 class ToxiProxy
 {
@@ -21,6 +22,9 @@ class ToxiProxy
     /** @var bool */
     private $isOpen = false;
 
+    /** @var ClientInterface */
+    private $client;
+
     /**
      * @param string $name
      * @param string $host
@@ -31,6 +35,7 @@ class ToxiProxy
         $this->name = $name;
         $this->host = $host;
         $this->api = 'http://' . $host . ':' . $port;
+        $this->client = new Client(['timeout' => 1, 'http_errors' => false]);
     }
 
     public function __destruct()
@@ -53,11 +58,8 @@ class ToxiProxy
             'listen' => ':' . $listen,
         );
         $url = $this->api . '/proxies';
-        $request = Request::post($url, json_encode($payload), 'json');
-        $request->timeout(1);
-        $request->expectsJson();
-        $response = $request->send();
-        if ($response->code !== 201) {
+        $response = $this->client->post($url, ['json' => $payload]);
+        if ($response->getStatusCode() !== 201) {
             throw new \RuntimeException('Cannot create Toxiproxy connection');
         }
         $this->listen = $listen;
@@ -82,38 +84,33 @@ class ToxiProxy
             'attributes' => !empty($attributes) ? $attributes : null,
         ];
         $url = sprintf('%s/proxies/%s/toxics', $this->api, $this->name);
-        $request = Request::post($url, json_encode($payload), 'json');
-        $request->timeout(1);
-        $request->expectsJson();
-        $response = $request->send();
+        $response = $this->client->post($url, ['json' => $payload]);
 
-        if ($response->code !== 200) {
+        if ($response->getStatusCode() !== 200) {
             throw new \RuntimeException('Cannot set Toxiproxy connection mode');
         }
     }
 
     /**
      * Disable(block) proxy connection so no data can be transferred.
-     * @throws \Httpful\Exception\ConnectionErrorException
      */
     public function disable()
     {
         $url = sprintf('%s/proxies/%s', $this->api, $this->name);
-        $response = Request::post($url, json_encode(array('enabled' => false)), 'json')->send();
-        if ($response->code !== 200) {
+        $response = $this->client->post($url, ['json' => ['enabled' => false]]);
+        if ($response->getStatusCode() !== 200) {
             throw new \RuntimeException('Cannot disable Toxiproxy connection');
         }
     }
 
     /**
      * Completely close connection to upstream.
-     * @throws \Httpful\Exception\ConnectionErrorException
      */
     public function close()
     {
         $url = sprintf('%s/proxies/%s', $this->api, $this->name);
-        $response = Request::delete($url)->send();
-        if ($response->code !== 204 && $response->code !== 404) {
+        $response = $this->client->delete($url);
+        if ($response->getStatusCode() !== 204 && $response->getStatusCode() !== 404) {
             throw new \RuntimeException('Cannot close Toxiproxy connection');
         }
     }
