@@ -179,9 +179,9 @@ class AMQPChannel extends AbstractChannel
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
-    public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
+    public function close($reply_code = 0, $reply_text = '', $method_sig = [0, 0])
     {
-        $this->callbacks = array();
+        $this->callbacks = [];
         if ($this->is_open === false || $this->connection === null) {
             $this->do_close();
 
@@ -195,16 +195,16 @@ class AMQPChannel extends AbstractChannel
         );
 
         try {
-            $this->send_method_frame(array($class_id, $method_id), $args);
+            $this->send_method_frame([$class_id, $method_id], $args);
         } catch (\Exception $e) {
             $this->do_close();
 
             throw $e;
         }
 
-        return $this->wait(array(
+        return $this->wait([
             $this->waitHelper->get_wait('channel.close_ok')
-        ), false, $this->channel_rpc_timeout);
+        ], false, $this->channel_rpc_timeout);
     }
 
     /**
