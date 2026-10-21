@@ -13,15 +13,6 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - php: '7.2'
-            phpseclib: '^2.0'
-            coverage: none
-          - php: '7.3'
-            phpseclib: '^3.0'
-            coverage: none
-          - php: '7.4'
-            phpseclib: '^3.0'
-            coverage: 'xdebug'
           - php: '8.0'
             phpseclib: '^3.0'
             coverage: none
@@ -39,11 +30,14 @@ jobs:
             coverage: none
           - php: '8.5'
             phpseclib: '^3.0'
-            coverage: none
+            coverage: 'xdebug'
           - php: '8.1'
             phpseclib: '^4.0'
             coverage: none
           - php: '8.5'
+            phpseclib: '^4.0'
+            coverage: none
+          - php: '8.6'
             phpseclib: '^4.0'
             coverage: none
 
@@ -54,7 +48,7 @@ jobs:
       TOXIPROXY_AMQP_PORT: 5673
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Start RabbitMQ and Toxiproxy
       id: start-rabbitmq
@@ -77,11 +71,11 @@ jobs:
       run: php ./tests/wait_broker.php
 
     - name: PHPUnit tests
-      run: ./vendor/bin/phpunit --verbose --debug
+      run: ./vendor/bin/phpunit --no-coverage
       if: matrix.coverage == 'none'
 
     - name: PHPUnit tests + coverage
-      run: ./vendor/bin/phpunit --verbose --debug --coverage-clover=coverage.xml
+      run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
       if: matrix.coverage != 'none'
 
     - name: Check for errors in RabbitMQ logs
@@ -93,7 +87,7 @@ jobs:
 
     - name: Maybe upload RabbitMQ logs
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: rabbitmq-logs-php-amqplib-${{ matrix.php }}
         path: ${{ github.workspace }}/tests/log/

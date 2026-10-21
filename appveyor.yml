@@ -9,14 +9,18 @@ image: Visual Studio 2017
 ## Build matrix for lowest and highest possible targets
 environment:
   matrix:
-  - dependencies: current
-    PHP_VERSION: 7.2
-  - dependencies: highest
-    PHP_VERSION: 7.3
-  - dependencies: highest
-    PHP_VERSION: 7.4
   - dependencies: highest
     PHP_VERSION: 8.0
+  - dependencies: highest
+    PHP_VERSION: 8.1
+  - dependencies: highest
+    PHP_VERSION: 8.2
+  - dependencies: highest
+    PHP_VERSION: 8.3
+  - dependencies: highest
+    PHP_VERSION: 8.4
+  - dependencies: highest
+    PHP_VERSION: 8.5
   COMPOSER_CACHE: "%USERPROFILE%\\composer"
   RABBITMQ_VERSION: 3.7.17
   ERLANG_VERSION: 10.4

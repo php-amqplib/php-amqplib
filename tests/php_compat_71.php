@@ -34,10 +34,6 @@ class TestCaseCompat extends TestCase
     public static function assertPattern(string $pattern, string $string, string $message = ''): void
     {
         $series = Version::series();
-        if (version_compare($series, '9.5') >= 0) {
-            self::assertMatchesRegularExpression($pattern, $string, $message);
-        } else {
-            self::assertRegExp($pattern, $string, $message);
-        }
+        self::assertMatchesRegularExpression($pattern, $string, $message);
     }
 }

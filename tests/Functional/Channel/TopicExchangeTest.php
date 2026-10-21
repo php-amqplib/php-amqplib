@@ -67,9 +67,6 @@ class TopicExchangeTest extends ChannelTestCase
         $this->channel->basic_publish(new AMQPMessage('foo'), $this->exchange->name);
         $this->channel->basic_publish(new AMQPMessage('bar'), $this->exchange->name);
 
-        $publishedMessagesProperty = new \ReflectionProperty(get_class($this->channel), 'published_messages');
-        $publishedMessagesProperty->setAccessible(true);
-
         $this->channel->wait_for_pending_acks_returns(1);
 
         $msg1 = $channel2->basic_get('tst.queue3');

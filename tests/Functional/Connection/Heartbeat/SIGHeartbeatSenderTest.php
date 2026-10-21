@@ -98,7 +98,7 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
     public function alarm_sig_should_be_registered_when_conn_is_writing()
     {
         $connection = $this->getMockBuilder(AbstractConnection::class)
-            ->setMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
+            ->onlyMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -114,7 +114,7 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
         $sender = new SIGHeartbeatSender($connection, $this->signal);
         $sender->register();
 
-        $timeLeft = $this->heartbeatTimeout + 1;
+        $timeLeft = $this->heartbeatTimeout + 2;
         while ($timeLeft > 0) {
             $timeLeft = sleep($timeLeft);
         }
