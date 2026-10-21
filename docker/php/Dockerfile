@@ -1,6 +1,6 @@
-FROM php:7.2-cli
+FROM php:8.0-cli
 
-ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/download/2.2.16/install-php-extensions /usr/local/bin/
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/download/2.12.1/install-php-extensions /usr/local/bin/
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN install-php-extensions sockets pcntl zip xdebug

@@ -17,30 +17,19 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
 {
     private const HEARTBEAT_TIMEOUT = 2;
 
-    /** @var SIGHeartbeatSender|null */
-    private $sender;
-
-    protected function tearDownCompat()
-    {
-        if ($this->sender !== null) {
-            $this->sender->unregister();
-        }
-        $this->sender = null;
-    }
-
     /**
      * @test
      * @covers \PhpAmqpLib\Connection\Heartbeat\SIGHeartbeatSender::unregister()
      */
     public function unregister_terminates_and_reaps_the_child()
     {
-        $this->sender = new SIGHeartbeatSender($this->createConnection());
-        $this->sender->register();
+        $sender = new SIGHeartbeatSender($this->createConnection());
+        $sender->register();
 
-        $childPid = $this->readChildPid($this->sender);
+        $childPid = $this->readChildPid($sender);
         self::assertGreaterThan(0, $childPid);
 
-        $this->sender->unregister();
+        $sender->unregister();
 
         self::assertSame(-1, pcntl_waitpid($childPid, $status, WNOHANG));
     }
@@ -51,8 +40,8 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
      */
     public function child_signals_its_parent_once_per_interval()
     {
-        $this->sender = new SIGHeartbeatSender($this->createConnection());
-        $this->sender->register();
+        $sender = new SIGHeartbeatSender($this->createConnection());
+        $sender->register();
 
         $received = 0;
         pcntl_signal(SIGUSR1, function () use (&$received) {
@@ -111,7 +100,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
     private function createConnection()
     {
         $connection = $this->getMockBuilder(AbstractConnection::class)
-            ->setMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
+            ->onlyMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

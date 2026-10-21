@@ -53,7 +53,7 @@ class ChannelWaitTest extends TestCase
         $this->deferSignal(1);
         $this->deferSignal(2);
         try {
-            $result = $channel->wait(null, false, 3);
+            $channel->wait(null, false, 3);
         } catch (\Throwable $exception) {
         }
 
@@ -63,7 +63,6 @@ class ChannelWaitTest extends TestCase
         self::assertInstanceOf(AMQPTimeoutException::class, $exception);
 
         $this->closeChannel($channel);
-        $this->assertNull($result);
     }
 
     /**
