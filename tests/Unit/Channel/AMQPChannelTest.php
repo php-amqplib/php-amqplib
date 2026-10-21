@@ -73,11 +73,7 @@ class AMQPChannelTest extends TestCase
             'write',
         ];
 
-        if (!method_exists($mock_builder, 'onlyMethods')) {
-            $mock_builder->setMethods($methods_to_mock);
-        } else {
-            $mock_builder->onlyMethods($methods_to_mock);
-        }
+        $mock_builder->onlyMethods($methods_to_mock);
 
         $connection_mock = $mock_builder->getMock();
         $channel = new TestChannel($connection_mock, 1);
@@ -112,11 +108,7 @@ class AMQPChannelTest extends TestCase
             'isConnected',
         ];
 
-        if (!method_exists($mockBuilder, 'onlyMethods')) {
-            $mockBuilder->setMethods($methodsToMock);
-        } else {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
+        $mockBuilder->onlyMethods($methodsToMock);
 
         /** @var MockObject&TestConnection $connectionMock */
         $connectionMock = $mockBuilder->getMock();
@@ -143,11 +135,7 @@ class AMQPChannelTest extends TestCase
             'isConnected',
         ];
 
-        if (!method_exists($mockBuilder, 'onlyMethods')) {
-            $mockBuilder->setMethods($methodsToMock);
-        } else {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
+        $mockBuilder->onlyMethods($methodsToMock);
 
         /** @var MockObject&TestConnection $connectionMock */
         $connectionMock = $mockBuilder->getMock();
