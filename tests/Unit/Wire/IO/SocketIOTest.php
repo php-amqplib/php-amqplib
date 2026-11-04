@@ -2,6 +2,7 @@
 
 namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
+use PhpAmqpLib\Connection\AMQPConnectionConfig;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Wire\IO\SocketIO;
 use PHPUnit\Framework\TestCase;
@@ -30,6 +31,28 @@ class SocketIOTest extends TestCase
     public function connect_ipv6()
     {
         $socketIO = new SocketIO(HOST6, PORT, 20, true, 20, 9);
+        $socketIO->connect();
+        $ready = $socketIO->select(0, 0);
+        $this->assertEquals(0, $ready);
+    }
+
+    public function force_connect_ipv4()
+    {
+        $config = new AMQPConnectionConfig();
+        $config->setSocketProtocolMode(AF_INET);
+        $socketIO = new SocketIO(HOST, PORT, 20, true, 20, 9, $config);
+        $socketIO->connect();
+        $ready = $socketIO->select(0, 0);
+        $this->assertEquals(0, $ready);
+
+        return $socketIO;
+    }
+
+    public function force_connect_ipv6()
+    {
+        $config = new AMQPConnectionConfig();
+        $config->setSocketProtocolMode(AF_INET6);
+        $socketIO = new SocketIO(HOST6, PORT, 20, true, 20, 9, $config);
         $socketIO->connect();
         $ready = $socketIO->select(0, 0);
         $this->assertEquals(0, $ready);
