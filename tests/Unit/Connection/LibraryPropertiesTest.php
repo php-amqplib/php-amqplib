@@ -25,7 +25,7 @@ class LibraryPropertiesTest extends TestCaseCompat
     public function requiredProperties()
     {
         $connection = $this->getMockBuilder('\PhpAmqpLib\Connection\AMQPStreamConnection')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +51,7 @@ class LibraryPropertiesTest extends TestCaseCompat
     public function propertyTypes()
     {
         $connection = $this->getMockBuilder('\PhpAmqpLib\Connection\AMQPStreamConnection')
-            ->setMethods(null)
+            ->onlyMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 

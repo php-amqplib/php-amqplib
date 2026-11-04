@@ -136,7 +136,7 @@ class ReconnectConnectionTest extends TestCaseCompat
     {
         $this->channel = $this->connection->channel();
         $this->channel->exchange_declare($this->exchange, 'direct', false, false, false);
-        $this->channel->queue_declare($this->queue);
+        $this->channel->queue_declare($this->queue, false, true);
         $this->channel->queue_bind($this->queue, $this->exchange, $this->queue);
     }
 

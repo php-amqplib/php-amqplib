@@ -32,8 +32,8 @@ class Bug40Test extends TestCaseCompat
         $this->channel2 = $this->connection->channel();
 
         $this->channel->exchange_declare($this->exchangeName, 'direct', false, false, false);
-        list($this->queueName1, ,) = $this->channel->queue_declare();
-        list($this->queueName2, ,) = $this->channel->queue_declare();
+        list($this->queueName1, ,) = $this->channel->queue_declare('', false, true);
+        list($this->queueName2, ,) = $this->channel->queue_declare('', false, true);
         $this->channel->queue_bind($this->queueName1, $this->exchangeName, $this->queueName1);
         $this->channel->queue_bind($this->queueName2, $this->exchangeName, $this->queueName2);
     }

@@ -25,13 +25,12 @@ class ConnectionResourceLeakTest extends AbstractConnectionTest
             $connection->close();
             $connections[] = $connection;
         }
-
-        self::assertSame(0, $this->getResourcesCount() - $previousNumberOfResources);
+        // resources from other tests might not be closed yet
+        self::assertLessThanOrEqual($previousNumberOfResources, $this->getResourcesCount());
     }
 
     private function getResourcesCount(): int
     {
         return count(get_resources('stream-context'));
     }
-
 }

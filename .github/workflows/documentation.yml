@@ -11,7 +11,7 @@ jobs:
     name: Regenerate phpDocumentator docs
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         submodules: true
     - name: Setup Graphviz
@@ -19,11 +19,11 @@ jobs:
     - name: Install PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: 7.4
+        php-version: 8.5
         extensions: ctype, dom, hash, iconv, json, libxml, mbstring, simplexml, zlib, xml
         coverage: none
     - name: Download phpDocumentator
-      run: wget -qN https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.1.2/phpDocumentor.phar
+      run: wget -qN https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.10.0/phpDocumentor.phar
     - name: Generate docs
       run: php -d error_reporting=1 ./phpDocumentor.phar run -v --force --defaultpackagename=PhpAmqpLib --title='php-amqplib' -d ./PhpAmqpLib -t ./docs
     - name: Commit changes

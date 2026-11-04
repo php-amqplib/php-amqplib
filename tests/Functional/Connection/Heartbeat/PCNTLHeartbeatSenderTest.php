@@ -97,7 +97,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     public function alarm_sig_should_be_registered_when_conn_is_writing()
     {
         $connection = $this->getMockBuilder(AbstractConnection::class)
-            ->setMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
+            ->onlyMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -128,7 +128,7 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
     public function signal_handler_should_ignore_inactive_lazy_connections()
     {
         $connection = $this->getMockBuilder(AbstractConnection::class)
-            ->setMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity', 'checkHeartBeat'])
+            ->onlyMethods(['isConnected', 'getHeartbeat', 'isWriting', 'getLastActivity', 'checkHeartBeat'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $connection

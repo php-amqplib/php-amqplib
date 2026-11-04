@@ -47,7 +47,7 @@ class DirectExchangeTest extends ChannelTestCase
     public function basic_consume_foo()
     {
         $this->channel->exchange_declare($this->exchange->name, 'direct', false, false, false);
-        list($this->queue->name, ,) = $this->channel->queue_declare();
+        list($this->queue->name, ,) = $this->channel->queue_declare('', false, true);
         $this->channel->queue_bind($this->queue->name, $this->exchange->name, $this->queue->name);
 
         $this->message = (object) [

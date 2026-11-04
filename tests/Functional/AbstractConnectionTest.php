@@ -60,7 +60,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
     protected function queue_bind(AMQPChannel $channel, $exchange_name, &$queue_name)
     {
         $channel->exchange_declare($exchange_name, AMQPExchangeType::DIRECT);
-        list($queue_name, ,) = $channel->queue_declare();
+        list($queue_name, ,) = $channel->queue_declare('', false, true);
         $channel->queue_bind($queue_name, $exchange_name, $queue_name);
     }
 

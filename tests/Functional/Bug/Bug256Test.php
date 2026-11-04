@@ -37,7 +37,7 @@ class Bug256Test extends AbstractConnectionTest
         $this->connection2 = $this->connection_create('stream');
         $this->channel2 = $this->connection->channel();
 
-        list($this->queueName, ,) = $this->channel2->queue_declare();
+        list($this->queueName, ,) = $this->channel2->queue_declare('', false, true);
         $this->channel2->queue_bind($this->queueName, $this->exchangeName, $this->queueName);
     }
 
