@@ -53,7 +53,7 @@ abstract class AbstractIO
     protected $last_unread_data = 0;
 
     /** @var bool */
-    protected $broker_silence_check = false;
+    protected $incoming_heartbeat_check = false;
 
     /** @var \ErrorException|null */
     protected $last_error;
@@ -179,12 +179,12 @@ abstract class AbstractIO
                 throw new AMQPHeartbeatMissedException('Missed server heartbeat');
             }
 
-            // Our own writes (heartbeats, publishes) say nothing about the broker: on a connection
-            // that silently stopped delivering they keep the activity above fresh forever (#1227).
-            // So the broker must also have sent something. A client that never reads, such as a
-            // publisher, leaves the broker's heartbeats unread on the socket; those count too.
-            // Opt-in: a proxy that sends heartbeats only to a client that sends nothing would trip it.
-            if ($this->broker_silence_check && ($now - max($this->last_read, $this->last_unread_data)) > $limit) {
+            // Our own writes (heartbeats, publishes) say nothing about the other side: when nothing
+            // comes back, they keep the activity above fresh forever (#1227). So something must
+            // also have come in. A client that never reads, such as a publisher, leaves the server's
+            // heartbeats unread on the socket; those count too. Opt-in: a proxy that sends heartbeats
+            // only to a client that sends nothing would trip it.
+            if ($this->incoming_heartbeat_check && ($now - max($this->last_read, $this->last_unread_data)) > $limit) {
                 if ($this->hasUnreadData()) {
                     $this->last_unread_data = $now;
 
@@ -197,20 +197,20 @@ abstract class AbstractIO
     }
 
     /**
-     * Also require data from the broker within two heartbeat intervals.
-     * @see \PhpAmqpLib\Connection\AMQPConnectionConfig::enableBrokerSilenceCheck()
+     * Count only incoming data when checking for a missed heartbeat.
+     * @see \PhpAmqpLib\Connection\AMQPConnectionConfig::enableIncomingHeartbeatCheck()
      * @param bool $enabled
      * @return $this
      */
-    public function enableBrokerSilenceCheck(bool $enabled = true)
+    public function enableIncomingHeartbeatCheck(bool $enabled = true)
     {
-        $this->broker_silence_check = $enabled;
+        $this->incoming_heartbeat_check = $enabled;
 
         return $this;
     }
 
     /**
-     * Whether data from the broker is waiting on the socket, checked without blocking or reading.
+     * Whether data from the server is waiting on the socket, checked without blocking or reading.
      * An implementation that cannot tell must return true, so that the connection is kept.
      */
     protected function hasUnreadData(): bool

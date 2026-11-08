@@ -148,7 +148,7 @@ class SocketIO extends AbstractIO
                 continue;
             }
 
-            // Per chunk, like StreamIO: a large frame on a slow link is not silence.
+            // Per chunk, like StreamIO: a large frame on a slow link is not a missed heartbeat.
             $this->last_read = microtime(true);
             $read += mb_strlen($buffer, 'ASCII');
             $data .= $buffer;

@@ -86,7 +86,7 @@ final class AMQPConnectionConfig
     private $dispatchSignals = true;
 
     /** @var bool */
-    private $brokerSilenceCheck = false;
+    private $incomingHeartbeatCheck = false;
 
     /**
      * @var string
@@ -427,22 +427,22 @@ final class AMQPConnectionConfig
         $this->dispatchSignals = $dispatchSignals;
     }
 
-    public function isBrokerSilenceCheckEnabled(): bool
+    public function isIncomingHeartbeatCheckEnabled(): bool
     {
-        return $this->brokerSilenceCheck;
+        return $this->incomingHeartbeatCheck;
     }
 
     /**
-     * Also require data from the broker within two heartbeat intervals, not only activity on the
-     * connection. Detects a broker that went silent while the client keeps writing (its own
-     * heartbeats, publishes). Leave it off behind a proxy that only sends heartbeats to a client
-     * that sends nothing, such as AMQProxy before 3.2.1.
-     * @param bool $brokerSilenceCheck
+     * When checking for a missed heartbeat, count only data received from the server. By default
+     * data the client sends counts too, so a client that keeps sending (its own heartbeats,
+     * publishes) never notices that nothing comes back. Leave it off behind a proxy that sends
+     * heartbeats only to a client that sends nothing, such as AMQProxy before 3.2.1.
+     * @param bool $incomingHeartbeatCheck
      * @return void
      */
-    public function enableBrokerSilenceCheck(bool $brokerSilenceCheck): void
+    public function enableIncomingHeartbeatCheck(bool $incomingHeartbeatCheck): void
     {
-        $this->brokerSilenceCheck = $brokerSilenceCheck;
+        $this->incomingHeartbeatCheck = $incomingHeartbeatCheck;
     }
 
     /**

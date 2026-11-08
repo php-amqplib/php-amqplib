@@ -44,7 +44,7 @@ abstract class AbstractConnectionTest extends TestCaseCompat
         $config->setPort($port);
         $config->setKeepalive($options['keepalive'] ?? false);
         $config->setHeartbeat($options['heartbeat'] ?? 0);
-        $config->enableBrokerSilenceCheck($options['broker_silence_check'] ?? false);
+        $config->enableIncomingHeartbeatCheck($options['incoming_heartbeat_check'] ?? false);
         $config->setReadTimeout($timeout);
         $config->setWriteTimeout($timeout);
         $config->setConnectionTimeout($options['connectionTimeout'] ?? $timeout);

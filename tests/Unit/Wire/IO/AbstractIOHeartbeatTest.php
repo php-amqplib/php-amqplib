@@ -17,7 +17,7 @@ class AbstractIOHeartbeatTest extends TestCase
     /**
      * @test
      */
-    public function broker_silent_while_client_writes_is_a_missed_heartbeat()
+    public function no_incoming_data_while_client_writes_is_a_missed_heartbeat()
     {
         $io = $this->io(10, 0, false);
 
@@ -28,7 +28,7 @@ class AbstractIOHeartbeatTest extends TestCase
     /**
      * @test
      */
-    public function unread_data_from_the_broker_keeps_the_connection()
+    public function unread_data_from_the_server_keeps_the_connection()
     {
         $io = $this->io(10, 0, true);
 
@@ -54,7 +54,7 @@ class AbstractIOHeartbeatTest extends TestCase
     /**
      * @test
      */
-    public function silence_both_ways_is_still_a_missed_heartbeat_without_a_socket_check()
+    public function no_traffic_either_way_is_a_missed_heartbeat_without_a_socket_check()
     {
         $io = $this->io(10, 10, true);
 
@@ -222,7 +222,7 @@ class AbstractIOHeartbeatTest extends TestCase
         };
         $io->afterTune($heartbeat);
         if ($check) {
-            $io->enableBrokerSilenceCheck();
+            $io->enableIncomingHeartbeatCheck();
         }
         $now = microtime(true);
         $io->setTimes($now - $secondsSinceRead, $now - $secondsSinceWrite);

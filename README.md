@@ -311,26 +311,26 @@ $sender->unregister();
 
 ```
 
-## Detecting a Silent Broker ##
+## Incoming Heartbeat Check ##
 
-By default a connection counts as alive while anything moves on it, in either direction. A client that keeps writing
-(its heartbeats, publishes) to a broker that stopped answering, for example after the network silently dropped,
-never sees `AMQPHeartbeatMissedException`. To also require data from the broker within two heartbeat intervals,
-enable the check:
+By default a connection counts as alive while data moves in either direction. A client that keeps sending (its own
+heartbeats, publishes) never gets `AMQPHeartbeatMissedException`, even when nothing has come back for minutes, for
+example after the network dropped traffic without closing the connection. To count only incoming data, enable the
+check:
 
 ```php
 <?php
 
 $config = new AMQPConnectionConfig();
 $config->setHeartbeat(30);
-$config->enableBrokerSilenceCheck(true);
+$config->enableIncomingHeartbeatCheck(true);
 $connection = AMQPConnectionFactory::create($config);
 
 ```
 
-RabbitMQ keeps sending heartbeats to a client that only publishes, and unread data on the socket counts, so such a
-client keeps its connection. Leave the check off behind a proxy that sends heartbeats only to a client that sends
-nothing, such as AMQProxy before 3.2.1.
+RabbitMQ keeps sending heartbeats to a client that only publishes, and data waiting unread on the socket counts as
+incoming, so such a client keeps its connection. Leave the check off behind a proxy that sends heartbeats only to a
+client that sends nothing, such as AMQProxy before 3.2.1.
 
 ## Debugging ##
 
