@@ -85,6 +85,9 @@ final class AMQPConnectionConfig
     /** @var bool */
     private $dispatchSignals = true;
 
+    /** @var bool */
+    private $brokerSilenceCheck = false;
+
     /**
      * @var string
      * @deprecated
@@ -422,6 +425,24 @@ final class AMQPConnectionConfig
     public function enableSignalDispatch(bool $dispatchSignals): void
     {
         $this->dispatchSignals = $dispatchSignals;
+    }
+
+    public function isBrokerSilenceCheckEnabled(): bool
+    {
+        return $this->brokerSilenceCheck;
+    }
+
+    /**
+     * Also require data from the broker within two heartbeat intervals, not only activity on the
+     * connection. Detects a broker that went silent while the client keeps writing (its own
+     * heartbeats, publishes). Leave it off behind a proxy that only sends heartbeats to a client
+     * that sends nothing, such as AMQProxy before 3.2.1.
+     * @param bool $brokerSilenceCheck
+     * @return void
+     */
+    public function enableBrokerSilenceCheck(bool $brokerSilenceCheck): void
+    {
+        $this->brokerSilenceCheck = $brokerSilenceCheck;
     }
 
     /**

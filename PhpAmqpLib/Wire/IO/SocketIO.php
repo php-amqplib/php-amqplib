@@ -148,6 +148,8 @@ class SocketIO extends AbstractIO
                 continue;
             }
 
+            // Per chunk, like StreamIO: a large frame on a slow link is not silence.
+            $this->last_read = microtime(true);
             $read += mb_strlen($buffer, 'ASCII');
             $data .= $buffer;
         }
@@ -253,6 +255,7 @@ class SocketIO extends AbstractIO
         $this->sock = null;
         $this->last_read = 0;
         $this->last_write = 0;
+        $this->last_unread_data = 0;
     }
 
     /**
@@ -270,6 +273,32 @@ class SocketIO extends AbstractIO
         $except = null;
 
         return socket_select($read, $write, $except, $sec, $usec);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function hasUnreadData(): bool
+    {
+        if (!is_resource($this->sock) && !is_a($this->sock, \Socket::class)) {
+            return true;
+        }
+
+        $read = array($this->sock);
+        $write = null;
+        $except = null;
+        $this->setErrorHandler();
+        try {
+            $result = socket_select($read, $write, $except, 0, 0);
+            $this->throwOnError();
+        } catch (\ErrorException $e) {
+            // Could not tell: keep the connection, as before this check existed.
+            return true;
+        } finally {
+            $this->restoreErrorHandler();
+        }
+
+        return $result !== 0;
     }
 
     /**

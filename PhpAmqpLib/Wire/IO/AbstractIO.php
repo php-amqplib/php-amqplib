@@ -46,6 +46,15 @@ abstract class AbstractIO
     /** @var int|float */
     protected $last_write;
 
+    /**
+     * When unread data from the broker was last seen waiting on the socket.
+     * @var int|float
+     */
+    protected $last_unread_data = 0;
+
+    /** @var bool */
+    protected $broker_silence_check = false;
+
     /** @var \ErrorException|null */
     protected $last_error;
 
@@ -164,11 +173,49 @@ abstract class AbstractIO
         if ($this->heartbeat > 0 && ($this->last_read > 0 || $this->last_write > 0)) {
             $lastActivity = $this->getLastActivity();
             $now = microtime(true);
-            if (($now - $lastActivity) > $this->heartbeat * 2 + 1) {
+            $limit = $this->heartbeat * 2 + 1;
+            if (($now - $lastActivity) > $limit) {
+                $this->close();
+                throw new AMQPHeartbeatMissedException('Missed server heartbeat');
+            }
+
+            // Our own writes (heartbeats, publishes) say nothing about the broker: on a connection
+            // that silently stopped delivering they keep the activity above fresh forever (#1227).
+            // So the broker must also have sent something. A client that never reads, such as a
+            // publisher, leaves the broker's heartbeats unread on the socket; those count too.
+            // Opt-in: a proxy that sends heartbeats only to a client that sends nothing would trip it.
+            if ($this->broker_silence_check && ($now - max($this->last_read, $this->last_unread_data)) > $limit) {
+                if ($this->hasUnreadData()) {
+                    $this->last_unread_data = $now;
+
+                    return;
+                }
                 $this->close();
                 throw new AMQPHeartbeatMissedException('Missed server heartbeat');
             }
         }
+    }
+
+    /**
+     * Also require data from the broker within two heartbeat intervals.
+     * @see \PhpAmqpLib\Connection\AMQPConnectionConfig::enableBrokerSilenceCheck()
+     * @param bool $enabled
+     * @return $this
+     */
+    public function enableBrokerSilenceCheck(bool $enabled = true)
+    {
+        $this->broker_silence_check = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Whether data from the broker is waiting on the socket, checked without blocking or reading.
+     * An implementation that cannot tell must return true, so that the connection is kept.
+     */
+    protected function hasUnreadData(): bool
+    {
+        return true;
     }
 
     /**

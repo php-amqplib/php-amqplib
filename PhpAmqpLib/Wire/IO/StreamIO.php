@@ -347,6 +347,7 @@ class StreamIO extends AbstractIO
         $this->sock = null;
         $this->last_read = 0;
         $this->last_write = 0;
+        $this->last_unread_data = 0;
     }
 
     /**
@@ -377,6 +378,32 @@ class StreamIO extends AbstractIO
         }
 
         return stream_select($read, $write, $except, $sec, $usec);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function hasUnreadData(): bool
+    {
+        if (!is_resource($this->sock)) {
+            return true;
+        }
+
+        $read = array($this->sock);
+        $write = null;
+        $except = null;
+        $this->setErrorHandler();
+        try {
+            $result = stream_select($read, $write, $except, 0, 0);
+            $this->throwOnError();
+        } catch (\ErrorException $e) {
+            // Could not tell: keep the connection, as before this check existed.
+            return true;
+        } finally {
+            $this->restoreErrorHandler();
+        }
+
+        return $result !== 0;
     }
 
     /**
