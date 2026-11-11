@@ -220,7 +220,7 @@ abstract class AbstractConnection extends AbstractChannel
 
                 // Skip the length
                 $responseValue = $login_response->getvalue();
-                $this->login_response = mb_substr($responseValue, 4, mb_strlen($responseValue, 'ASCII') - 4, 'ASCII');
+                $this->login_response = mb_substr($responseValue, 4, null, 'ASCII');
             } else {
                 throw new \InvalidArgumentException('Unknown login method: ' . $login_method);
             }
