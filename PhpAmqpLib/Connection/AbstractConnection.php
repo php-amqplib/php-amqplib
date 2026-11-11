@@ -204,6 +204,9 @@ abstract class AbstractConnection extends AbstractChannel
         $this->login_method = $login_method;
         $this->locale = $locale;
         $this->io = $io;
+        if ($this->config && $this->config->isIncomingHeartbeatCheckEnabled()) {
+            $this->io->enableIncomingHeartbeatCheck();
+        }
         $this->heartbeat = max(0, (int)$heartbeat);
         $this->connection_timeout = $connection_timeout;
         $this->channel_rpc_timeout = $channel_rpc_timeout;

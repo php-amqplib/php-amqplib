@@ -46,6 +46,15 @@ abstract class AbstractIO
     /** @var int|float */
     protected $last_write;
 
+    /**
+     * When unread data from the broker was last seen waiting on the socket.
+     * @var int|float
+     */
+    protected $last_unread_data = 0;
+
+    /** @var bool */
+    protected $incoming_heartbeat_check = false;
+
     /** @var \ErrorException|null */
     protected $last_error;
 
@@ -164,11 +173,49 @@ abstract class AbstractIO
         if ($this->heartbeat > 0 && ($this->last_read > 0 || $this->last_write > 0)) {
             $lastActivity = $this->getLastActivity();
             $now = microtime(true);
-            if (($now - $lastActivity) > $this->heartbeat * 2 + 1) {
+            $limit = $this->heartbeat * 2 + 1;
+            if (($now - $lastActivity) > $limit) {
+                $this->close();
+                throw new AMQPHeartbeatMissedException('Missed server heartbeat');
+            }
+
+            // Our own writes (heartbeats, publishes) say nothing about the other side: when nothing
+            // comes back, they keep the activity above fresh forever (#1227). So something must
+            // also have come in. A client that never reads, such as a publisher, leaves the server's
+            // heartbeats unread on the socket; those count too. Opt-in: a proxy that sends heartbeats
+            // only to a client that sends nothing would trip it.
+            if ($this->incoming_heartbeat_check && ($now - max($this->last_read, $this->last_unread_data)) > $limit) {
+                if ($this->hasUnreadData()) {
+                    $this->last_unread_data = $now;
+
+                    return;
+                }
                 $this->close();
                 throw new AMQPHeartbeatMissedException('Missed server heartbeat');
             }
         }
+    }
+
+    /**
+     * Count only incoming data when checking for a missed heartbeat.
+     * @see \PhpAmqpLib\Connection\AMQPConnectionConfig::enableIncomingHeartbeatCheck()
+     * @param bool $enabled
+     * @return $this
+     */
+    public function enableIncomingHeartbeatCheck(bool $enabled = true)
+    {
+        $this->incoming_heartbeat_check = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * Whether data from the server is waiting on the socket, checked without blocking or reading.
+     * An implementation that cannot tell must return true, so that the connection is kept.
+     */
+    protected function hasUnreadData(): bool
+    {
+        return true;
     }
 
     /**

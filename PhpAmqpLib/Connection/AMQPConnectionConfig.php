@@ -85,6 +85,9 @@ final class AMQPConnectionConfig
     /** @var bool */
     private $dispatchSignals = true;
 
+    /** @var bool */
+    private $incomingHeartbeatCheck = false;
+
     /**
      * @var string
      * @deprecated
@@ -422,6 +425,24 @@ final class AMQPConnectionConfig
     public function enableSignalDispatch(bool $dispatchSignals): void
     {
         $this->dispatchSignals = $dispatchSignals;
+    }
+
+    public function isIncomingHeartbeatCheckEnabled(): bool
+    {
+        return $this->incomingHeartbeatCheck;
+    }
+
+    /**
+     * When checking for a missed heartbeat, count only data received from the server. By default
+     * data the client sends counts too, so a client that keeps sending (its own heartbeats,
+     * publishes) never notices that nothing comes back. Leave it off behind a proxy that sends
+     * heartbeats only to a client that sends nothing, such as AMQProxy before 3.2.1.
+     * @param bool $incomingHeartbeatCheck
+     * @return void
+     */
+    public function enableIncomingHeartbeatCheck(bool $incomingHeartbeatCheck): void
+    {
+        $this->incomingHeartbeatCheck = $incomingHeartbeatCheck;
     }
 
     /**
