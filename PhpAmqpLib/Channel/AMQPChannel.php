@@ -1281,9 +1281,9 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Specifies QoS
-     * 
+     *
      * See https://www.rabbitmq.com/consumer-prefetch.html#overview for details
-     * 
+     *
      * @param int $prefetch_size Default is 0 (Alias for unlimited)
      * @param int $prefetch_count Default is 0 (Alias for unlimited)
      * @param bool $global Default is false, prefetch size and count are applied to each channel consumer separately
@@ -1635,5 +1635,13 @@ class AMQPChannel extends AbstractChannel
     public function stopConsume()
     {
         $this->stopConsume = true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function onConnectionClosed(): void
+    {
+        $this->do_close();
     }
 }

@@ -347,9 +347,7 @@ abstract class AbstractChannel
                 // no data ready for non-blocking actions - stop and exit
                 break;
             } catch (AMQPConnectionClosedException $exception) {
-                if ($this instanceof AMQPChannel) {
-                    $this->do_close();
-                }
+                $this->onConnectionClosed();
                 throw $exception;
             }
 
@@ -498,5 +496,12 @@ abstract class AbstractChannel
         if (is_callable($handler)) {
             call_user_func_array($handler, $arguments);
         }
+    }
+
+    /**
+     * Called when a connection-closed exception is cought. Override in subclass that need to perform cleanup.
+     */
+    protected function onConnectionClosed(): void
+    {
     }
 }
