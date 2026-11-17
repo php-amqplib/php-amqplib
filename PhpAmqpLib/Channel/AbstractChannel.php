@@ -20,6 +20,7 @@ use PhpAmqpLib\Helper\Protocol\Wait091;
 use PhpAmqpLib\Message\AMQPMessage;
 use PhpAmqpLib\Wire;
 use PhpAmqpLib\Wire\AMQPReader;
+use PhpAmqpLib\Wire\AMQPWriter;
 
 abstract class AbstractChannel
 {
@@ -43,9 +44,8 @@ abstract class AbstractChannel
      * Higher level queue for methods
      * @var array
      */
-    protected $method_queue = array();
+    protected array $method_queue = [];
 
-    /** @var bool */
     protected $auto_decode = false;
 
     /** @var Wire\Constants */
@@ -54,8 +54,7 @@ abstract class AbstractChannel
     /** @var \PhpAmqpLib\Helper\DebugHelper */
     protected $debug;
 
-    /** @var null|AbstractConnection */
-    protected $connection;
+    protected ?AbstractConnection $connection = null;
 
     /**
      * @var string
@@ -63,8 +62,7 @@ abstract class AbstractChannel
      */
     protected $protocolVersion;
 
-    /** @var int */
-    protected $maxBodySize;
+    protected int $maxBodySize = 0;
 
     /** @var Protocol080|Protocol091 */
     protected $protocolWriter;
@@ -75,8 +73,7 @@ abstract class AbstractChannel
     /** @var MethodMap080|MethodMap091 */
     protected $methodMap;
 
-    /** @var int|null */
-    protected $channel_id;
+    protected ?int $channel_id = null;
 
     /** @var Wire\AMQPBufferReader */
     protected $msg_property_reader;
@@ -142,20 +139,19 @@ abstract class AbstractChannel
     /**
      * @return int|null
      */
-    public function getChannelId()
+    public function getChannelId(): ?int
     {
         return $this->channel_id;
     }
 
     /**
-     * @param int $max_bytes Max message body size for this channel
+     * @param int|null $max_bytes Max message body size for this channel
      * @return $this
      */
-    public function setBodySizeLimit($max_bytes)
+    public function setBodySizeLimit(?int $max_bytes): self
     {
-        $max_bytes = (int) $max_bytes;
-
-        if ($max_bytes > 0) {
+        $max_bytes = (int)$max_bytes;
+        if ($max_bytes >= 0) {
             $this->maxBodySize = $max_bytes;
         }
 
@@ -165,7 +161,7 @@ abstract class AbstractChannel
     /**
      * @return AbstractConnection|null
      */
-    public function getConnection()
+    public function getConnection(): ?AbstractConnection
     {
         return $this->connection;
     }
@@ -173,7 +169,7 @@ abstract class AbstractChannel
     /**
      * @return array
      */
-    public function getMethodQueue()
+    public function getMethodQueue(): array
     {
         return $this->method_queue;
     }
@@ -181,7 +177,7 @@ abstract class AbstractChannel
     /**
      * @return bool
      */
-    public function hasPendingMethods()
+    public function hasPendingMethods(): bool
     {
         return !empty($this->method_queue);
     }
@@ -215,17 +211,17 @@ abstract class AbstractChannel
         $this->dispatch_reader->reset($args);
 
         if ($amqpMessage === null) {
-            return call_user_func(array($this, $amqp_method), $this->dispatch_reader);
+            return $this->$amqp_method($this->dispatch_reader);
         }
 
-        return call_user_func(array($this, $amqp_method), $this->dispatch_reader, $amqpMessage);
+        return $this->$amqp_method($this->dispatch_reader, $amqpMessage);
     }
 
     /**
      * @param int|float|null $timeout
      * @return Frame
      */
-    protected function next_frame($timeout = 0): Frame
+    protected function next_frame(int|float|null $timeout = 0): Frame
     {
         $this->debug->debug_msg('waiting for a new frame');
 
@@ -240,7 +236,7 @@ abstract class AbstractChannel
      * @param array $method_sig
      * @param \PhpAmqpLib\Wire\AMQPWriter|string $args
      */
-    protected function send_method_frame($method_sig, $args = '')
+    protected function send_method_frame(array $method_sig, $args = ''): void
     {
         if ($this->connection === null) {
             throw new AMQPChannelClosedException('Channel connection is closed.');
@@ -257,7 +253,7 @@ abstract class AbstractChannel
      * @param \PhpAmqpLib\Wire\AMQPWriter $pkt
      * @return \PhpAmqpLib\Wire\AMQPWriter
      */
-    protected function prepare_method_frame($method_sig, $args = '', $pkt = null)
+    protected function prepare_method_frame(array $method_sig, $args = '', $pkt = null): AMQPWriter
     {
         return $this->connection->prepare_channel_method_frame($this->channel_id, $method_sig, $args, $pkt);
     }
@@ -298,7 +294,7 @@ abstract class AbstractChannel
             $this->validate_frame($frame, Frame::TYPE_BODY);
             $bodyReceivedBytes += $frame->getSize();
 
-            if (is_int($this->maxBodySize) && $bodyReceivedBytes > $this->maxBodySize) {
+            if ($this->maxBodySize > 0 && $bodyReceivedBytes > $this->maxBodySize) {
                 $message->setIsTruncated(true);
                 continue;
             }
@@ -367,7 +363,7 @@ abstract class AbstractChannel
 
             // Wasn't what we were looking for? save it for later
             $this->debug->debug_method_signature('Queueing for later: %s', $method_sig);
-            $this->method_queue[] = array($method_sig, $method->getArguments(), $amqpMessage);
+            $this->method_queue[] = [$method_sig, $method->getArguments(), $amqpMessage];
 
             if ($non_blocking) {
                 break;
@@ -379,10 +375,10 @@ abstract class AbstractChannel
      * @param array|null $allowed_methods
      * @return array
      */
-    protected function process_deferred_methods($allowed_methods)
+    protected function process_deferred_methods(?array $allowed_methods = null): array
     {
         $dispatch = false;
-        $queued_method = array();
+        $queued_method = [];
 
         foreach ($this->method_queue as $qk => $qm) {
             $this->debug->debug_msg('checking queue method ' . $qk);
@@ -397,14 +393,14 @@ abstract class AbstractChannel
             }
         }
 
-        return array('dispatch' => $dispatch, 'queued_method' => $queued_method);
+        return ['dispatch' => $dispatch, 'queued_method' => $queued_method];
     }
 
     /**
      * @param array $queued_method
      * @return mixed
      */
-    protected function dispatch_deferred_method($queued_method)
+    protected function dispatch_deferred_method(array $queued_method)
     {
         $this->debug->debug_method_signature('Executing queued method: %s', $queued_method[0]);
 
@@ -466,7 +462,7 @@ abstract class AbstractChannel
      * @param string $method_sig
      * @return bool
      */
-    protected function should_dispatch_method($allowed_methods, $method_sig)
+    protected function should_dispatch_method(?array $allowed_methods, string $method_sig): bool
     {
         return $allowed_methods === null
             || in_array($method_sig, $allowed_methods, true)
@@ -477,7 +473,7 @@ abstract class AbstractChannel
      * @param string $method_sig
      * @return AMQPMessage|null
      */
-    protected function maybe_wait_for_content($method_sig)
+    protected function maybe_wait_for_content(string $method_sig): ?AMQPMessage
     {
         $amqpMessage = null;
         if ($this->constants->isContentMethod($method_sig)) {
@@ -491,10 +487,10 @@ abstract class AbstractChannel
      * @param callable $handler
      * @param array $arguments
      */
-    protected function dispatch_to_handler($handler, array $arguments = [])
+    protected function dispatch_to_handler($handler, array $arguments = []): void
     {
         if (is_callable($handler)) {
-            call_user_func_array($handler, $arguments);
+            $handler(...$arguments);
         }
     }
 
