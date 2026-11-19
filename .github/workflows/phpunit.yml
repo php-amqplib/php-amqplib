@@ -94,7 +94,7 @@ jobs:
 
     - name: Upload Codecov coverage
       if: matrix.coverage != 'none'
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: './coverage.xml'
