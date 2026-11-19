@@ -109,7 +109,7 @@ class AMQPChannel extends AbstractChannel
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException
      * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
      */
-    public function __construct($connection, $channel_id = null, $auto_decode = true, $channel_rpc_timeout = 0)
+    public function __construct(AbstractConnection $connection, ?int $channel_id = null, bool $auto_decode = true, int|float $channel_rpc_timeout = 0)
     {
         if ($channel_id == null) {
             $channel_id = $connection->get_free_channel_id();
@@ -133,7 +133,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * @return bool
      */
-    public function is_open()
+    public function is_open(): bool
     {
         return $this->is_open;
     }
@@ -141,7 +141,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * Tear down this object, after we've agreed to close with the server.
      */
-    protected function do_close()
+    protected function do_close(): void
     {
         if ($this->channel_id !== null) {
             unset($this->connection->channels[$this->channel_id]);
@@ -179,7 +179,7 @@ class AMQPChannel extends AbstractChannel
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
-    public function close($reply_code = 0, $reply_text = '', $method_sig = array(0, 0))
+    public function close(int $reply_code = 0, string $reply_text = '', array $method_sig = array(0, 0))
     {
         $this->callbacks = array();
         if ($this->is_open === false || $this->connection === null) {
@@ -255,7 +255,7 @@ class AMQPChannel extends AbstractChannel
      * @throws \PhpAmqpLib\Exception\AMQPTimeoutException if the specified operation timeout was exceeded
      * @return mixed
      */
-    public function flow($active)
+    public function flow(bool $active)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->channelFlow($active);
         $this->send_method_frame(array($class_id, $method_id), $args);
@@ -274,7 +274,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * @param bool $active
      */
-    protected function x_flow_ok($active)
+    protected function x_flow_ok(bool $active)
     {
         list($class_id, $method_id, $args) = $this->protocolWriter->channelFlow($active);
         $this->send_method_frame(array($class_id, $method_id), $args);
@@ -293,7 +293,7 @@ class AMQPChannel extends AbstractChannel
      * @throws \PhpAmqpLib\Exception\AMQPConnectionClosedException
      * @return mixed
      */
-    protected function x_open($out_of_band = '')
+    protected function x_open(string $out_of_band = '')
     {
         if ($this->is_open) {
             return null;
@@ -853,7 +853,7 @@ class AMQPChannel extends AbstractChannel
      * @param bool $multiple
      * @param callable $handler
      */
-    protected function internal_ack_handler($delivery_tag, $multiple, $handler)
+    protected function internal_ack_handler(int $delivery_tag, bool $multiple, ?callable $handler): void
     {
         if ($multiple) {
             $keys = $this->get_keys_less_or_equal($this->published_messages, $delivery_tag);
@@ -956,7 +956,7 @@ class AMQPChannel extends AbstractChannel
     /**
      * @return bool
      */
-    public function is_consuming()
+    public function is_consuming(): bool
     {
         return !empty($this->callbacks);
     }
@@ -1281,9 +1281,9 @@ class AMQPChannel extends AbstractChannel
 
     /**
      * Specifies QoS
-     * 
+     *
      * See https://www.rabbitmq.com/consumer-prefetch.html#overview for details
-     * 
+     *
      * @param int $prefetch_size Default is 0 (Alias for unlimited)
      * @param int $prefetch_count Default is 0 (Alias for unlimited)
      * @param bool $global Default is false, prefetch size and count are applied to each channel consumer separately
@@ -1575,7 +1575,7 @@ class AMQPChannel extends AbstractChannel
      * @throws AMQPChannelClosedException
      * @throws AMQPConnectionBlockedException
      */
-    private function checkConnection()
+    private function checkConnection(): void
     {
         if ($this->connection === null || !$this->connection->isConnected()) {
             throw new AMQPChannelClosedException('Channel connection is closed.');
@@ -1632,8 +1632,16 @@ class AMQPChannel extends AbstractChannel
      * Stop AMQPChannel::consume() loop. Useful for signal handlers and other interrupts.
      * @since 3.2.0
      */
-    public function stopConsume()
+    public function stopConsume(): void
     {
         $this->stopConsume = true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function onConnectionClosed(): void
+    {
+        $this->do_close();
     }
 }
