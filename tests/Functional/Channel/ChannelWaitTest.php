@@ -41,7 +41,7 @@ class ChannelWaitTest extends TestCase
     /**
      * @test
      * @group signals
-     * @covers AMQPIOReader::wait()
+     * @covers PhpAmqpLib\Wire\AMQPIOReader::wait()
      */
     public function should_wait_until_timeout_after_signal(): void
     {
