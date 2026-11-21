@@ -5,15 +5,14 @@ namespace PhpAmqpLib\Tests\Functional\Connection\Heartbeat;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
 /**
  * @group connection
  * @group signals
  * @requires extension pcntl
- * @requires PHP 7.1
  */
-class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
+class PCNTLHeartbeatSenderTest extends AbstractConnectionTestCase
 {
     /** @var AbstractConnection */
     protected $connection;
@@ -145,12 +144,14 @@ class PCNTLHeartbeatSenderTest extends AbstractConnectionTest
 
         $reflection = new \ReflectionClass($sender);
         $wasActive = $reflection->getProperty('wasActive');
-        $wasActive->setAccessible(true);
         $conn = $reflection->getProperty('connection');
-        $conn->setAccessible(true);
         $method = $reflection->getMethod('handleSignal');
-        $method->setAccessible(true);
 
+        if (PHP_VERSION_ID < 80100) {
+            $wasActive->setAccessible(true);
+            $conn->setAccessible(true);
+            $method->setAccessible(true);
+        }
 
         $method->invoke($sender, 10);
         self::assertFalse($wasActive->getValue($sender));

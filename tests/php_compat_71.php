@@ -36,4 +36,14 @@ class TestCaseCompat extends TestCase
         $series = Version::series();
         self::assertMatchesRegularExpression($pattern, $string, $message);
     }
+
+    protected function getClassProperty(string $class, string $property): \ReflectionProperty
+    {
+        $property = new \ReflectionProperty($class, $property);
+        if (PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
+
+        return $property;
+    }
 }

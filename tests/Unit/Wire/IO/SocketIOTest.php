@@ -4,12 +4,12 @@ namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Wire\IO\SocketIO;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
 /**
  * @group connection
  */
-class SocketIOTest extends TestCase
+class SocketIOTest extends TestCaseCompat
 {
     /**
      * @test
@@ -99,8 +99,7 @@ class SocketIOTest extends TestCase
     public function select_must_throw_io_exception()
     {
         $this->expectException(AMQPConnectionClosedException::class);
-        $property = new \ReflectionProperty(SocketIO::class, 'sock');
-        $property->setAccessible(true);
+        $property = $this->getClassProperty(SocketIO::class, 'sock');
 
         $socket = new SocketIO('0.0.0.0', PORT, 0.1, false, 0.1, 0);
         $property->setValue($socket, null);

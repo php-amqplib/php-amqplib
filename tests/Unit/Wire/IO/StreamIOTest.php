@@ -4,12 +4,12 @@ namespace PhpAmqpLib\Tests\Unit\Wire\IO;
 
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Wire\IO\StreamIO;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
 /**
  * @group connection
  */
-class StreamIOTest extends TestCase
+class StreamIOTest extends TestCaseCompat
 {
     /**
      * @test
@@ -38,8 +38,7 @@ class StreamIOTest extends TestCase
     public function select_must_throw_io_exception()
     {
         $this->expectException(AMQPConnectionClosedException::class);
-        $property = new \ReflectionProperty(StreamIO::class, 'sock');
-        $property->setAccessible(true);
+        $property = $this->getClassProperty(StreamIO::class, 'sock');
 
         $resource = fopen('php://temp', 'r');
         fclose($resource);

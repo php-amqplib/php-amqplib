@@ -6,9 +6,9 @@ use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Exception\AMQPOutOfBoundsException;
 use PhpAmqpLib\Exception\AMQPOutOfRangeException;
 use PhpAmqpLib\Wire;
-use PHPUnit\Framework\TestCase;
+use PhpAmqpLib\Tests\TestCaseCompat;
 
-class AMQPCollectionTest extends TestCase
+class AMQPCollectionTest extends TestCaseCompat
 {
     /**
      * @test
@@ -664,15 +664,13 @@ class AMQPCollectionTest extends TestCase
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty(Wire\AMQPAbstractCollection::class, 'protocol');
-        $r->setAccessible(true);
+        $r = $this->getClassProperty(Wire\AMQPAbstractCollection::class, 'protocol');
         $r->setValue(null, $proto);
     }
 
     protected function getEncodedRawData(Wire\AMQPAbstractCollection $c, $recursive = true)
     {
-        $r = new \ReflectionProperty($c, 'data');
-        $r->setAccessible(true);
+        $r = $this->getClassProperty(Wire\AMQPAbstractCollection::class, 'data');
         $data = $r->getValue($c);
         unset($r);
 

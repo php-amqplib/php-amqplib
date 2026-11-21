@@ -68,7 +68,7 @@ class AMQPMessageTest extends TestCase
         $message->getDeliveryTag();
     }
 
-    public function propertiesData()
+    public static function propertiesData()
     {
         return [
             [

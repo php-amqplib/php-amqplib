@@ -123,21 +123,21 @@ class ChannelWaitTest extends TestCase
         $this->assertTrue($receivedAck);
     }
 
-    public function provide_channels()
+    public static function provide_channels()
     {
         if (!defined('HOST')) {
             $this->markTestSkipped('Unkown RabbitMQ host');
         }
 
         return [
-            [$this->channelFactory(true, 0.1, 0)],
-            [$this->channelFactory(false, 0.1, 0)],
-            [$this->channelFactory(true, 3, 1)],
-            [$this->channelFactory(false, 3, 1)],
+            [self::channelFactory(true, 0.1, 0)],
+            [self::channelFactory(false, 0.1, 0)],
+            [self::channelFactory(true, 3, 1)],
+            [self::channelFactory(false, 3, 1)],
         ];
     }
 
-    protected function channelFactory($stream = true, $connectionTimeout = 1, $heartBeat = 0)
+    protected static function channelFactory($stream = true, $connectionTimeout = 1, $heartBeat = 0)
     {
         $factory = function () use ($stream, $connectionTimeout, $heartBeat) {
             try {
@@ -176,7 +176,7 @@ class ChannelWaitTest extends TestCase
                     );
                 }
             } catch (\ErrorException $exception) {
-                $this->markTestSkipped('Cannot connect to RabbitMQ: ' . $exception->getMessage());
+                self::markTestSkipped('Cannot connect to RabbitMQ: ' . $exception->getMessage());
             }
 
             $channel = $connection->channel();

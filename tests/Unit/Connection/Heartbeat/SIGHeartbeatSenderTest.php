@@ -115,8 +115,7 @@ class SIGHeartbeatSenderTest extends TestCaseCompat
 
     private function readChildPid(SIGHeartbeatSender $sender): int
     {
-        $property = new \ReflectionProperty(SIGHeartbeatSender::class, 'childPid');
-        $property->setAccessible(true);
+        $property = $this->getClassProperty(SIGHeartbeatSender::class, 'childPid');
 
         return $property->getValue($sender);
     }

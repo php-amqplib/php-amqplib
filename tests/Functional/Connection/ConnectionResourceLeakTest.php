@@ -3,12 +3,12 @@
 namespace Functional\Connection;
 
 use PhpAmqpLib\Connection\AbstractConnection;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
 /**
  * @group connection
  */
-class ConnectionResourceLeakTest extends AbstractConnectionTest
+class ConnectionResourceLeakTest extends AbstractConnectionTestCase
 {
     /**
      * @test

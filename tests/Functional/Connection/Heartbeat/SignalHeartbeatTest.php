@@ -6,15 +6,14 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\Heartbeat\PCNTLHeartbeatSender;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
 /**
  * @group connection
  * @group signals
  * @requires extension pcntl
- * @requires PHP 7.1
  */
-class SignalHeartbeatTest extends AbstractConnectionTest
+class SignalHeartbeatTest extends AbstractConnectionTestCase
 {
     /** @var AbstractConnection */
     protected $connection;

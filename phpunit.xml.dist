@@ -34,7 +34,8 @@
     </testsuite>
   </testsuites>
   <php>
-    <ini name="error_reporting" value="E_ALL ^ E_USER_DEPRECATED"/>
+    <!-- E_ALL ^ E_USER_DEPRECATED -->
+    <ini name="error_reporting" value="14335"/>
     <ini name="display_errors" value="1" />
   </php>
   <logging>

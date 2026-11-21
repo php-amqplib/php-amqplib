@@ -8,9 +8,9 @@ use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Exception\AMQPExceptionInterface;
 use PhpAmqpLib\Exception\AMQPTimeoutException;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
-class ConnectionAuthTest extends AbstractConnectionTest
+class ConnectionAuthTest extends AbstractConnectionTestCase
 {
     /** @var Client */
     private $httpClient;

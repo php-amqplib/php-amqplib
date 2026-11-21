@@ -2,10 +2,10 @@
 
 namespace PhpAmqpLib\Tests\Functional\Connection;
 
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 use PhpAmqpLib\Tests\Functional\Channel\ChannelWaitTest;
 
-class AMQPStreamConnectionTest extends AbstractConnectionTest
+class AMQPStreamConnectionTest extends AbstractConnectionTestCase
 {
     /**
      * @test
