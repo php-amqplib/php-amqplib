@@ -2,13 +2,13 @@
 
 namespace PhpAmqpLib\Tests\Functional\Connection;
 
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
 /**
  * @group connection
  * @requires OS Linux|Darwin
  */
-class SSLConnectionTest extends AbstractConnectionTest
+class SSLConnectionTest extends AbstractConnectionTestCase
 {
     /**
      * @test
@@ -36,7 +36,7 @@ class SSLConnectionTest extends AbstractConnectionTest
         $this->secure_connection_default_params($options);
     }
 
-    public function secure_connection_params()
+    public static function secure_connection_params()
     {
         $sets = [];
 

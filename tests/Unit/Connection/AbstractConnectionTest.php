@@ -41,7 +41,9 @@ class AbstractConnectionTest extends TestCase
 
         $reflection = new \ReflectionClass($connection);
         $property = $reflection->getProperty('login_response');
-        $property->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $property->setAccessible(true);
+        }
         self::assertEquals($response, $property->getValue($connection));
     }
 

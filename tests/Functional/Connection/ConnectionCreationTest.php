@@ -4,16 +4,16 @@ namespace PhpAmqpLib\Tests\Functional\Connection;
 
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 use PhpAmqpLib\Wire\AMQPBufferReader;
 use PhpAmqpLib\Wire\AMQPWriter;
 
 /**
  * @group connection
  */
-class ConnectionCreationTest extends AbstractConnectionTest
+class ConnectionCreationTest extends AbstractConnectionTestCase
 {
-    public function hostDataProvider(): array
+    public static function hostDataProvider(): array
     {
         return array(
             'plain' => array(
@@ -56,7 +56,9 @@ class ConnectionCreationTest extends AbstractConnectionTest
     {
         $class = new \ReflectionClass(AbstractConnection::class);
         $method = $class->getMethod('connection_tune');
-        $method->setAccessible(true);
+        if (PHP_VERSION_ID < 80100) {
+            $method->setAccessible(true);
+        }
 
         $writer = new AMQPWriter();
         $writer->write_short(0);

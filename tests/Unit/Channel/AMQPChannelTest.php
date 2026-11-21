@@ -154,7 +154,7 @@ class AMQPChannelTest extends TestCase
         $this->assertFalse($secondResult);
     }
 
-    public function basic_consume_invalid_arguments_provider()
+    public static function basic_consume_invalid_arguments_provider()
     {
         return [
             [

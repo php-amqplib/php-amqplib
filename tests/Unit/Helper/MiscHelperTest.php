@@ -33,7 +33,7 @@ class MiscHelperTest extends TestCaseCompat
         self::assertEquals('test', MiscHelper::methodSig('test'));
     }
 
-    public function splitSecondsMicrosecondsData(): array
+    public static function splitSecondsMicrosecondsData(): array
     {
         return [
             [0, [0, 0]],
@@ -50,7 +50,7 @@ class MiscHelperTest extends TestCaseCompat
         ];
     }
 
-    public function hexdumpData(): array
+    public static function hexdumpData(): array
     {
         return [
             [['FM', false, false, true], '/000\s+46 4d\s+FM/'],

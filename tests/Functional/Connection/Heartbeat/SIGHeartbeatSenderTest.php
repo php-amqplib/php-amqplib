@@ -5,16 +5,15 @@ namespace PhpAmqpLib\Tests\Functional\Connection\Heartbeat;
 use PhpAmqpLib\Connection\AbstractConnection;
 use PhpAmqpLib\Connection\Heartbeat\SIGHeartbeatSender;
 use PhpAmqpLib\Exception\AMQPRuntimeException;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
 /**
  * @group connection
  * @group signals
  * @group sig
  * @requires extension pcntl
- * @requires PHP 7.1
  */
-class SIGHeartbeatSenderTest extends AbstractConnectionTest
+class SIGHeartbeatSenderTest extends AbstractConnectionTestCase
 {
     /** @var AbstractConnection */
     protected $connection;
@@ -130,8 +129,7 @@ class SIGHeartbeatSenderTest extends AbstractConnectionTest
      */
      public function child_process_must_be_terminated_after_unregister()
      {
-         $property = new \ReflectionProperty(get_class($this->sender), 'childPid');
-         $property->setAccessible(true);
+         $property = $this->getClassProperty(get_class($this->sender), 'childPid');
 
          $this->sender->register();
          $pid = $property->getValue($this->sender);

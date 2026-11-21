@@ -10,7 +10,7 @@ use PhpAmqpLib\Connection\AMQPConnectionFactory;
 use PhpAmqpLib\Exchange\AMQPExchangeType;
 use PhpAmqpLib\Tests\TestCaseCompat;
 
-abstract class AbstractConnectionTest extends TestCaseCompat
+abstract class AbstractConnectionTestCase extends TestCaseCompat
 {
     public static $blocked = false;
 
@@ -142,7 +142,7 @@ namespace PhpAmqpLib\Wire\IO;
 
 function fwrite()
 {
-    if (\PhpAmqpLib\Tests\Functional\AbstractConnectionTest::$blocked) {
+    if (\PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase::$blocked) {
         return 0;
     }
 
@@ -153,7 +153,7 @@ namespace PhpAmqpLib\Wire\IO;
 
 function socket_write()
 {
-    if (\PhpAmqpLib\Tests\Functional\AbstractConnectionTest::$blocked) {
+    if (\PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase::$blocked) {
         return 0;
     }
 

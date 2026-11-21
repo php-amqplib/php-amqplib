@@ -7,13 +7,13 @@ use PhpAmqpLib\Exception\AMQPChannelClosedException;
 use PhpAmqpLib\Exception\AMQPConnectionClosedException;
 use PhpAmqpLib\Exception\AMQPHeartbeatMissedException;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 use PhpAmqpLib\Tests\Functional\ToxiProxy;
 
 /**
  * @group connection
  */
-class ConnectionClosedTest extends AbstractConnectionTest
+class ConnectionClosedTest extends AbstractConnectionTestCase
 {
     /**
      * Try to wait for incoming data on blocked and closed connection.

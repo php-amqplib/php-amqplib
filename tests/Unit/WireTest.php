@@ -462,7 +462,7 @@ class WireTest extends TestCaseCompat
         );
     }
 
-    public function bitWrData()
+    public static function bitWrData()
     {
         return [
             [true],
@@ -470,7 +470,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function octetWrData()
+    public static function octetWrData()
     {
         $data = [];
         for ($i = 0; $i <= 255; $i++) {
@@ -480,7 +480,7 @@ class WireTest extends TestCaseCompat
         return $data;
     }
 
-    public function signedOctetWrData()
+    public static function signedOctetWrData()
     {
         $data = [];
         for ($i = -128; $i <= 127; $i++) {
@@ -490,7 +490,7 @@ class WireTest extends TestCaseCompat
         return $data;
     }
 
-    public function signedShortWrData()
+    public static function signedShortWrData()
     {
         return [
             [-32768],
@@ -500,7 +500,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function longWrData()
+    public static function longWrData()
     {
         $max = PHP_INT_SIZE === 8 ? 4294967295 : PHP_INT_MAX;
 
@@ -525,7 +525,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function signedLongWrData()
+    public static function signedLongWrData()
     {
         return [
             [-2147483648],
@@ -551,7 +551,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function longlongWrData()
+    public static function longlongWrData()
     {
         return [
             [0],
@@ -577,7 +577,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function signedLonglongWrData()
+    public static function signedLonglongWrData()
     {
         $min = defined('PHP_INT_MIN') ? PHP_INT_MIN : ~PHP_INT_MAX;
         return [
@@ -617,7 +617,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function shortstrWrData()
+    public static function shortstrWrData()
     {
         return [
             ['a'],
@@ -625,7 +625,7 @@ class WireTest extends TestCaseCompat
         ];
     }
 
-    public function longstrWrData()
+    public static function longstrWrData()
     {
         return [
             ['a'],
@@ -643,7 +643,9 @@ class WireTest extends TestCaseCompat
         $writer = new AMQPWriter();
         if ($reflection) {
             $m = new \ReflectionMethod($writer, $write_method);
-            $m->setAccessible(true);
+            if (PHP_VERSION_ID < 80100) {
+                $m->setAccessible(true);
+            }
             $m->invoke($writer, $value);
         } else {
             $writer->{$write_method}($value);
@@ -652,7 +654,9 @@ class WireTest extends TestCaseCompat
         $reader = new AMQPBufferReader($writer->getvalue());
         if ($reflection) {
             $m = new \ReflectionMethod($reader, $read_method);
-            $m->setAccessible(true);
+            if (PHP_VERSION_ID < 80100) {
+                $m->setAccessible(true);
+            }
             $readValue = $m->invoke($reader);
         } else {
             $readValue = $reader->{$read_method}();
@@ -667,8 +671,7 @@ class WireTest extends TestCaseCompat
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty(AMQPAbstractCollection::class, 'protocol');
-        $r->setAccessible(true);
+        $r = $this->getClassProperty(AMQPAbstractCollection::class, 'protocol');
         $r->setValue(null, $proto);
     }
 }

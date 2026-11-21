@@ -4,12 +4,12 @@ namespace PhpAmqpLib\Tests\Functional\Connection;
 
 use PhpAmqpLib\Exception;
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 
 /**
  * @group connection
  */
-class ConnectionUnresponsiveTest extends AbstractConnectionTest
+class ConnectionUnresponsiveTest extends AbstractConnectionTestCase
 {
     /**
      * Use mocked write functions to simulate completely blocked connections.

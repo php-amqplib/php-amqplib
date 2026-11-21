@@ -3,13 +3,13 @@
 namespace PhpAmqpLib\Tests\Functional\Bug;
 
 use PhpAmqpLib\Message\AMQPMessage;
-use PhpAmqpLib\Tests\Functional\AbstractConnectionTest;
+use PhpAmqpLib\Tests\Functional\AbstractConnectionTestCase;
 use PhpAmqpLib\Wire\AMQPTable;
 
 /**
  * @group connection
  */
-class Bug256Test extends AbstractConnectionTest
+class Bug256Test extends AbstractConnectionTestCase
 {
     protected $exchangeName = 'test_exchange';
 

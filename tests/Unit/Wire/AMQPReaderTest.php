@@ -16,8 +16,7 @@ class AMQPReaderTest extends TestCaseCompat
 
     protected function setProtoVersion($proto)
     {
-        $r = new \ReflectionProperty(AMQPAbstractCollection::class, 'protocol');
-        $r->setAccessible(true);
+        $r = $this->getClassProperty(AMQPAbstractCollection::class, 'protocol');
         $r->setValue(null, $proto);
     }
 
