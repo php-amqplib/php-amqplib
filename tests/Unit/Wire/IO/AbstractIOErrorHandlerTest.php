@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
  * meanwhile, often by other code in the process (a signal handler, a coroutine), must not
  * become one.
  *
- * @group connection
  * @see https://github.com/php-amqplib/php-amqplib/issues/1243
  * @covers \PhpAmqpLib\Wire\IO\AbstractIO::setErrorHandler()
  */
@@ -21,6 +20,7 @@ class AbstractIOErrorHandlerTest extends TestCase
      */
     public function deprecation_goes_to_the_previous_handler()
     {
+        $thrownException = null;
         $seen = [];
         set_error_handler(function ($errno, $errstr) use (&$seen) {
             $seen[] = $errstr;
@@ -29,12 +29,19 @@ class AbstractIOErrorHandlerTest extends TestCase
         });
         try {
             $this->io()->guard(function () {
+                // external error handler must catch this deprecation
                 trigger_error('old API', E_USER_DEPRECATED);
+                // socket error must be handled internally as AMQPIOException
+                $sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+                socket_connect($sock, 'host', 80);
             });
+        } catch (\Throwable $exception) {
+            $thrownException = $exception;
         } finally {
             restore_error_handler();
         }
 
+        $this->assertInstanceOf(\ErrorException::class, $thrownException);
         $this->assertSame(['old API'], $seen);
     }
 
@@ -98,9 +105,40 @@ class AbstractIOErrorHandlerTest extends TestCase
     }
 
     /**
-     * @return AbstractIO
+     * Nested setErrorHandler / restoreErrorHandler must not lose the
+     * deprecation-chaining behaviour on either level.
+     *
+     * @test
      */
-    private function io()
+    public function nested_handler_still_forwards_deprecations()
+    {
+        $seen = [];
+        set_error_handler(function ($errno, $errstr) use (&$seen) {
+            $seen[] = $errstr;
+
+            return true;
+        });
+        try {
+            $io = $this->io();
+            $io->guard(function () use ($io) {
+                // Outer level
+                $io->guard(function () {
+                    // Inner level – deprecation fires here
+                    trigger_error('nested deprecation', E_USER_DEPRECATED);
+                });
+
+                trigger_error('deprecation', E_USER_DEPRECATED);
+            });
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertCount(2, $seen);
+        $this->assertSame('nested deprecation', $seen[0]);
+        $this->assertSame('deprecation', $seen[1]);
+    }
+
+    private function io(): AbstractIO
     {
         return new class extends AbstractIO {
             public function __construct()
