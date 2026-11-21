@@ -220,11 +220,34 @@ abstract class AbstractIO
 
     /**
      * Begin tracking errors and set the error handler
+     *
+     * Deprecations (E_DEPRECATED, E_USER_DEPRECATED) are forwarded to the
+     * previously installed handler (or PHP's standard handler) so that
+     * unrelated deprecations don't fail the I/O call.
+     *
+     * @see https://github.com/php-amqplib/php-amqplib/issues/1243
      */
     protected function setErrorHandler(): void
     {
         $this->last_error = null;
-        set_error_handler(array($this, 'error_handler'));
+        $previous = null;
+        $previous = set_error_handler(function ($errno, $errstr, $errfile = '', $errline = 0) use (&$previous) {
+            // A deprecation raised meanwhile, often by other code in the process (a signal
+            // handler, a coroutine), is not an I/O error. Hand it to whoever would have handled
+            // it without us, instead of failing the call with it (#1243).
+            if ($errno & (E_DEPRECATED | E_USER_DEPRECATED)) {
+                if ($previous === null || !is_callable($previous)) {
+                    return false;
+                }
+
+                // As when PHP calls it: only an explicit false lets the standard handler run too.
+                return call_user_func($previous, $errno, $errstr, $errfile, $errline) !== false;
+            }
+
+            $handled = $this->error_handler($errno, $errstr, $errfile, $errline);
+
+            return $handled === null ? true : $handled;
+        });
     }
 
     protected function throwOnError(): void
@@ -250,7 +273,7 @@ abstract class AbstractIO
      * @param  int $errline
      * @return void
      */
-    public function error_handler($errno, $errstr, $errfile, $errline): void
+    protected function error_handler($errno, $errstr, $errfile, $errline): void
     {
         // throwing an exception in an error handler will halt execution
         // collect error continue

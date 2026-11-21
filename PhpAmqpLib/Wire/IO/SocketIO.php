@@ -298,7 +298,7 @@ class SocketIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    public function error_handler($errno, $errstr, $errfile, $errline): void
+    protected function error_handler($errno, $errstr, $errfile, $errline): void
     {
         $constants = SocketConstants::getInstance();
         // socket_select warning that it has been interrupted by a signal - EINTR
