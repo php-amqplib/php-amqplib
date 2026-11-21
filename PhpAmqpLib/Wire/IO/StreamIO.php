@@ -322,7 +322,7 @@ class StreamIO extends AbstractIO
     /**
      * @inheritdoc
      */
-    public function error_handler($errno, $errstr, $errfile, $errline): void
+    protected function error_handler($errno, $errstr, $errfile, $errline): void
     {
         $code = $this->extract_error_code($errstr);
         $constants = SocketConstants::getInstance();
